@@ -50,6 +50,8 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>
       <Route path='/projects/:Name/:_id/register' component={Register}/>
+      <Route path='/projects/:pledge/:_id/:challengeId/joined' component={ProjectJoined}/>
+      <Route path='/projects/:pledge/:_id/:challengeId' component={Project}/>
       <Route path='/pages/:tabb/:pledge/:_id' component={Project}/>
       <Route path='/charity/:charityId' component={CharityProfile}/>
       <Route path='/' component={UserTabs}/>

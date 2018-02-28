@@ -35,7 +35,7 @@ export default class Share extends React.Component{
   handleFacebook = () => {
     window.FB.ui({
       method: 'send',
-      link: window.location.href,
+      link: this.props.url,
     });
   }
 
@@ -85,7 +85,7 @@ export default class Share extends React.Component{
                 Send an SMS
               </li>
               <CopyToClipboard onCopy={() => this.setState({copied: true})}
-                text={window.location.href}
+                text={this.props.url}
                 >
                 <li style={styles.line} >
                   <FontIcon style={styles.icon} className={'far fa-copy'}/>
@@ -108,7 +108,7 @@ export default class Share extends React.Component{
                 Send a Facebook Message
               </li>
               <CopyToClipboard onCopy={() => this.setState({copied: true})}
-                text={window.location.href}
+                text={this.props.url}
                 >
                 <li style={styles.line} >
                   <FontIcon style={styles.icon} className={'far fa-copy'}/>

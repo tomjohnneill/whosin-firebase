@@ -128,14 +128,28 @@ export default class ProjectJoined extends React.Component{
       var project = doc.data()
       project._id = doc.id
       this.setState({project: project, loading: false, charity: {}})
+      this.setState({event: {
+              title: project.Name,
+             description: project.Summary,
+             location: project.Location,
+             startTime: project['Start Time'],
+             endTime: project['End Time']
+      }})
     });
-        this.setState({event: {
-                title: 'Sample Event',
-               description: 'This is the sample event provided as an example only',
-               location: 'Portland, OR',
-               startTime: '2016-09-16T20:15:00-04:00',
-               endTime: '2016-09-16T21:45:00-04:00'
-        }})
+
+    if (this.props.params.challengeId) {
+      this.setState({loading: true})
+      db.collection("Project").doc(this.props.params._id)
+      .collection("Challenge").doc(this.props.params.challengeId).get().then((doc) => {
+        var challenge = doc.data()
+        challenge['_id'] = doc.id
+        db.collection("User").doc(challenge.User).get().then((userDoc) => {
+          this.setState({loading: false, challenge: challenge, challengeUser: userDoc.data()})
+        })
+
+      })
+    }
+
 
   }
 
@@ -165,7 +179,12 @@ export default class ProjectJoined extends React.Component{
           </div>
           <div style={{textAlign: 'left'}}>
             <div style={{fontSize: '24px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16, marginTop: 16}}>
-              Nice, you're all done.
+              {
+                this.state.challenge ?
+                `Nice, we'll let ${this.state.challengeUser.Name} know you said yes.`
+                :
+                "Nice, you're all done."
+              }
             </div>
             <div style={{marginBottom: '16px', fontWeight: 'lighter'}}>
               See you on XXX date, don't forget to let them know if you can't make it.

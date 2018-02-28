@@ -214,30 +214,37 @@ export default class Project extends React.Component {
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
-      this.setState({loading: false, project: project, charity: {}})
+      this.setState({ project: project, charity: {}})
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
             charity._id = charityDoc.id
-            this.setState({ charity: charity})
+            this.setState({ charity: charity, loading: false})
           })
       }
     });
 
     if (fire.auth().currentUser) {
-      db.collection("Engagement").where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
-        var data = []
-        querySnapshot.forEach((doc) => {
-          console.log(doc.data())
-          var elem = doc.data()
-          elem['_id'] = doc.id
-          data.push(elem)
-        });
-        if (data.length > 0) {
+      db.collection("Engagement").where("User", "==", fire.auth().currentUser.uid)
+      .where("Project", "==", this.props.params._id).get().then((querySnapshot) => {
+        if (querySnapshot.size > 0) {
           this.setState({joined: true})
         } else {
           this.setState({joined: false})
         }
+      })
+    }
+
+    if (this.props.params.challengeId) {
+      this.setState({loading: true})
+      db.collection("Project").doc(this.props.params._id)
+      .collection("Challenge").doc(this.props.params.challengeId).get().then((doc) => {
+        var challenge = doc.data()
+        challenge['_id'] = doc.id
+        db.collection("User").doc(challenge.User).get().then((userDoc) => {
+          this.setState({loading: false, challenge: challenge, challengeUser: userDoc.data()})
+        })
+
       })
     }
 
@@ -435,6 +442,8 @@ export default class Project extends React.Component {
           <MediaQuery minDeviceWidth={700}>
               <DesktopProject params={this.props.params} project={this.state.project}
                 joined={this.state.joined}
+                challenge = {this.state.challenge}
+                challengeUser={this.state.challengeUser}
                 charity={this.state.charity} questions={this.state.questions}/>
           </MediaQuery>
 

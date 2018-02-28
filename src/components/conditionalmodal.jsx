@@ -21,6 +21,9 @@ import People from 'material-ui/svg-icons/social/people';
 import LocationOn from 'material-ui/svg-icons/communication/location-on';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import FontIcon from 'material-ui/FontIcon';
+import fire from '../fire';
+
+let db = fire.firestore()
 
 const styles = {
   option : {
@@ -40,6 +43,27 @@ export default  class ConditionalModal extends React.Component {
     this.setState({slider: v})
   }
 
+  createTarget = () => {
+    db.collection("Project").doc(this.props.project._id).collection("Target").add({
+      Threshold: Math.round(this.props.project['Target People']/2),
+      User: fire.auth().currentUser.uid,
+      Project: this.props.project._id,
+      Status: 'Pending'
+    })
+  }
+
+  createChallenge = () => {
+    db.collection("Project").doc(this.props.project._id).collection("Challenge").add({
+      Threshold: 2,
+      User: fire.auth().currentUser.uid,
+      Project: this.props.project._id,
+      Status: 'Pending'
+    })
+    .then((docRef) => {
+      this.setState({challengeId: docRef.id, type: 'friends'})
+    })
+  }
+
   handleSwitchType = (e) => {
     e.preventDefault()
     var login = this.state.login
@@ -52,9 +76,14 @@ export default  class ConditionalModal extends React.Component {
 
   }
 
+  handleTargetClick = () => {
+    this.createTarget()
+    this.setState({targetCreated: true})
+  }
+
   handleFriendsClick = (e) => {
     e.preventDefault()
-    this.setState({type: 'friends'})
+    this.createChallenge()
   }
 
   render() {
@@ -87,8 +116,9 @@ export default  class ConditionalModal extends React.Component {
                  </Subheader>
                  <Share
                    Name={this.props.project.Name}
-                   smsbody={encodeURIComponent("I'm thinking of going to this event, can you come with me? ") + window.location.href}
-                   emailbody={`Hi%20there%2C%0A%0AI%20just%20agreed%20to%20go%20to%20this%20event%3A%20%22${this.props.project.Name}%22%2C%20but%20don%27t%20really%20want%20to%20go%20to%20it%20by%20myself.%20%0A%0AIf%20you%20come%20with%20me%2C%20we%20could%20both%20do%20something%20good.%20You%20can%20read%20a%20bit%20more%20about%20it%20here%3A%0A%0A${window.location.href}%0A%0AThanks!%0A%0A` + "name"}
+                   url={window.location.href + '/' + this.state.challengeId}
+                   smsbody={encodeURIComponent("I'm thinking of going to this event, can you come with me? ") + window.location.href + '/' + this.state.challengeId}
+                   emailbody={`Hi%20there%2C%0A%0AI%20just%20agreed%20to%20go%20to%20this%20event%3A%20%22${this.props.project.Name}%22%2C%20but%20don%27t%20really%20want%20to%20go%20to%20it%20by%20myself.%20%0A%0AIf%20you%20come%20with%20me%2C%20we%20could%20both%20do%20something%20good.%20You%20can%20read%20a%20bit%20more%20about%20it%20here%3A%0A%0A${window.location.href + '/' + this.state.challengeId}%0A%0AThanks!%0A%0A` + "name"}
                    />
                </div>
 
@@ -115,8 +145,8 @@ export default  class ConditionalModal extends React.Component {
                   />
                   <ListItem
                     leftAvatar={<Avatar icon={<FontIcon className='fas fa-bullseye' />} backgroundColor={yellow600} />}
-                    onTouchTap={this.handleMultipleChoiceClick}
-                    primaryText="25 people sign up"
+                    onTouchTap={this.handleTargetClick}
+                    primaryText={`${Math.round(this.props.project['Target People']/2)} people sign up`}
 
                   />
 

@@ -237,6 +237,18 @@ export default class DesktopProject extends React.Component {
 
   }
 
+  deleteEngagement = () => {
+    console.log('remove engagement')
+      db.collection("Engagement").where("Project", "==", this.props.project._id)
+      .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
+          querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+          })
+      })
+    .catch(error => {this.setState({error: error}); console.log(error)})
+    this.forceUpdate()
+  }
+
   createEngagement = () => {
     console.log(this.props.project)
     console.log(fire.auth().currentUser)
@@ -255,17 +267,29 @@ export default class DesktopProject extends React.Component {
     .catch(error => {this.setState({error: error}); console.log(error)})
   }
 
+  addChallengeMember = () => {
+    var challengeRef = db.collection("Project").doc(this.props.project._id).collection("Challenge").doc(this.props.challenge._id)
+    challengeRef.get().then((data) => {
+      var challengeMembers = data.data().challengeMembers ? data.data().challengeMembers : []
+      challengeMembers.push(fire.auth().currentUser.uid)
+      challengeRef.update({challengeMembers: challengeMembers})
+    })
+  }
+
   setModal = () => {
     let modal = this.state.modalOpen
     this.setState({modalOpen: !modal})
   }
 
   handleModal = (e) => {
-    if (localStorage.getItem('worktoolsToken')) {
+    if (fire.auth().currentUser) {
       if (this.props.questions) {
         browserHistory.push(window.location.href + '/questions')
       } else {
         this.createEngagement()
+        if (this.props.challenge) {
+          this.addChallengeMember()
+        }
         browserHistory.push(window.location.href + '/joined')
       }
 
@@ -316,10 +340,6 @@ export default class DesktopProject extends React.Component {
     browserHistory.push(`/projects/${ this.props.pledge.slug }/${ this.props.pledge._id }/edit` )
   }
 
-  handleUnpledge(_id, title, e) {
-    e.preventDefault()
-
-  }
 
   descriptionMarkup() {
     return {__html: this.state.project.Description ?
@@ -358,7 +378,7 @@ export default class DesktopProject extends React.Component {
 
   handleUnJoin = (e) => {
     e.preventDefault()
-
+    this.deleteEngagement()
   }
 
   removeEngagement = (e) => {
@@ -490,7 +510,25 @@ export default class DesktopProject extends React.Component {
                           </div>
                         </div>
                       </div>
-                      {!this.props.joined ?
+                      {!this.props.joined && this.props.challenge ?
+                        <div>
+                          <div style={{marginBottom: 10}}>
+                          <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
+                            {`Accept ${this.props.challengeUser.Name}'s challenge:`}
+
+                        </span>
+                        <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
+                        </div>
+                        <RaisedButton
+
+                           primary={true} fullWidth={true}
+                            labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                           label='Join Now' onTouchTap={this.handleModal} />
+                         </div>
+
+                         :
+                         !this.props.joined ?
+
 
                         <div>
                       <RaisedButton secondary={true} fullWidth={true}
