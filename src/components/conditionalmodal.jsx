@@ -36,7 +36,7 @@ export default  class ConditionalModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {login: true, loading: false, slider: 50, type: null}
+    this.state = {login: true, loading: false, slider: 50, type: null, shared: false}
   }
 
   handleSlider = (e, v) => {
@@ -86,6 +86,12 @@ export default  class ConditionalModal extends React.Component {
     this.createChallenge()
   }
 
+  handleButtonClicked = () => {
+    console.log('button clicked')
+    this.setState({shared: true})
+    console.log(this.state)
+  }
+
   render() {
     console.log(window.navigator)
 
@@ -109,12 +115,13 @@ export default  class ConditionalModal extends React.Component {
 
 
 
-             {this.state.type === 'friends' ?
+             {this.state.type === 'friends' && !this.state.shared ?
                <div>
                  <Subheader style={{fontFamily: 'Permanent Marker', fontSize: '24px', textAlign: 'left', padding: 0}}>
                    Go on then, ask them:
                  </Subheader>
                  <Share
+                   buttonClicked={this.handleButtonClicked}
                    Name={this.props.project.Name}
                    url={window.location.href + '/' + this.state.challengeId}
                    smsbody={encodeURIComponent("I'm thinking of going to this event, can you come with me? ") + window.location.href + '/' + this.state.challengeId}
@@ -131,6 +138,21 @@ export default  class ConditionalModal extends React.Component {
               </div>
 
               :
+
+              this.state.shared ?
+
+              <div style={{paddingBottom: 16, textAlign: 'left'}}>
+                <Subheader style={{fontFamily: 'Permanent Marker', fontSize: '24px', textAlign: 'left', padding: 0}}>
+                  Thanks for sharing
+                </Subheader>
+                <span style={{textAlign: 'left', marginBottom: 16}}>
+                  We can't actually check if you did, so we're just assuming <br/><br/>
+                If your friends join the project, we'll let you know.
+                </span>
+              </div>
+
+              :
+
 
 
               <div>

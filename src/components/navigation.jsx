@@ -10,6 +10,7 @@ import IconButton from 'material-ui/IconButton';
 import MediaQuery from 'react-responsive';
 import Settings from 'material-ui/svg-icons/action/settings';
 import InfoOutline from 'material-ui/svg-icons/action/info';
+import SignupModal from './signupmodal.jsx';
 //import MessagingButton from '/imports/ui/components/messagingbutton.jsx';
 import fire from '../fire';
 
@@ -92,6 +93,7 @@ export default class Navigation extends React.Component {
   componentDidMount(props) {
     if (fire.auth().currentUser) {
       db.collections("User").doc(fire.auth().currentUser.uid).get().then((data) => {
+        console.log(data.data())
         this.setState({userPicture: data.data().Picture})
       })
     }
@@ -219,16 +221,24 @@ export default class Navigation extends React.Component {
 
         <AppBar
           showMenuIconButton={false}
-          style={window.location.pathname === '/' && localStorage.getItem('worktoolsToken') ? style.loggedInAppBar : style.appBar}
-          className={this.props.location === '/' && localStorage.getItem('worktoolsToken') ? 'loggedInAppBar' :'appbar'}
+          style={window.location.pathname === '/' && fire.auth().currentUser ? style.loggedInAppBar : style.appBar}
+          className={this.props.location === '/' && fire.auth().currentUser ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
+                              {fire.auth().currentUser ?
                               <IconButton onTouchTap={() => browserHistory.push('/profile')}
                                 style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
                                 <Avatar src={this.state.userPicture}/>
-                              </IconButton>
+                              </IconButton> :
+                              <RaisedButton label='Login' primary={true}
+                                onClick={this.handleModal}
+                                 labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
+                                      letterSpacing: '0.6px', fontWeight: 'bold'}}
+
+                                />
+                              }
                             <MediaQuery minDeviceWidth = {700}>
-                              {localStorage.getItem('worktoolsToken') && !window.location.pathname.includes('create-project') ?
+                              {fire.auth().currentUser && !window.location.pathname.includes('create-project') ?
                               <RaisedButton
                                 style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                                 buttonStyle={{height: '36px'}}
@@ -259,6 +269,11 @@ export default class Navigation extends React.Component {
           />
           */}
        </div>
+       <SignupModal
+         open={this.state.modalOpen}
+         changeOpen={this.handleModalChangeOpen}
+         />
+
       </div>
     );
   }

@@ -25,6 +25,7 @@ import ProjectCreated from './components/create-project/projectcreated.jsx';
 import Why from './components/why.jsx';
 import Register from './components/feedback/register.jsx';
 import MiniWhy from './components/create-project/miniwhy.jsx';
+import CantCome from './components/cantcome.jsx';
 
 const rootElement = document.getElementById('root');
 
@@ -49,6 +50,7 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>
+      <Route path='/projects/:pledge/:_id/declined' component={CantCome}/>
       <Route path='/projects/:Name/:_id/register' component={Register}/>
       <Route path='/projects/:pledge/:_id/:challengeId/joined' component={ProjectJoined}/>
       <Route path='/projects/:pledge/:_id/:challengeId' component={Project}/>

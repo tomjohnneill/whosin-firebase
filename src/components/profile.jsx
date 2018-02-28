@@ -59,7 +59,7 @@ class PhotoUpload extends React.Component {
                 var body = {
                   'Picture': imageUrl
                 }
-                db.collections("User").doc(this.props.userId).update(body)
+                db.collection("User").doc(this.props.userId).update(body)
                 this.props.changeImage(imageUrl)
             }
         }.bind(this)
@@ -214,6 +214,7 @@ export default class Profile extends React.Component {
       userId = fire.auth().currentUser.uid
       publicProfile = false
     } else {
+      console.log(fire.auth().currentUser)
       userId = null
     }
     this.setState({userId: userId, publicProfile: publicProfile})
@@ -273,7 +274,7 @@ export default class Profile extends React.Component {
                   src={this.state.user.Picture ? this.state.user.Picture : null}/>
                 :
                 !this.state.publicProfile ?
-                <PhotoUpload changeImage={this.chamgeImage} userId={this.state.userId}/>
+                <PhotoUpload changeImage={this.changeImage} userId={this.state.userId}/>
                 :
                 <div style={{height: '200px', width: '200px', backgroundColor: '#DDDDDD'}}/>
                 }

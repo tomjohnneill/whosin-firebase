@@ -11,6 +11,10 @@ import Featured from './featured.jsx';
 import {changeImageAddress} from './desktopproject.jsx';
 import AllProjects from './allprojects.jsx';
 import MediaQuery from 'react-responsive';
+import fire from '../fire';
+
+let db = fire.firestore()
+
 
 const styles = {
   selectedTab: {
@@ -116,7 +120,33 @@ export default class UserTabs extends React.Component {
     console.log(this.state)
     return (
       <div>
-        {localStorage.getItem('worktoolsToken') ?
+        <MediaQuery maxDeviceWidth={700}>
+          <img
+            style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
+            src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ab09077f-2b0d-471a-8e67-d338081bdc56', '1500xauto')}/>
+          <div style={{position: 'absolute',top:'-51px',  height: '100%', minWidth: 320,
+            width: '30%',
+            left: '5%'
+            , background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.75), rgba(0,0,0,0))',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          paddingLeft: '20px', paddingRight: '20px', boxSizing: 'border-box'}}>
+            <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'
+              , justifyContent: 'center', width: '300px'}}>
+              <h2 style={{color: 'white'}}>Plant vegetables in Dalston Curve Garden</h2>
+              <span style={{fontWeight: 'lighter', color: 'white'}}>
+                Children don't know where their food comes from, come and show them
+              </span>
+              <div style={{display: 'flex', paddingTop: '30px'}}>
+                <RaisedButton labelStyle={styles.button} primary={true} label='See More'/>
+                <RaisedButton labelStyle={styles.button} style={{marginLeft: '16px'}} secondary ={true} label='Another'/>
+              </div>
+            </div>
+          </div>
+
+          <div style={{height: '100px', position: 'absolute', width: '100%', bottom: '51px',
+            background: 'linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))'}}/>
+        </MediaQuery>
+        {fire.auth().currentUser ?
           <div>
             <img
               style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}

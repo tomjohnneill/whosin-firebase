@@ -41,7 +41,7 @@ const Feature = (props) => (
       </div>
       <div style={{position: 'absolute', bottom: '0px', fontSize: '14px', color: '#4A90E2'}}>
         <FlatButton labelStyle={{color: '#4A90E2'}}
-          label='See More' onTouchTap={(e) => {browserHistory.push('/projects/' + props.project.Name + '/' + props.project.id)}}/>
+          label='See More' onTouchTap={(e) => {browserHistory.push('/projects/' + props.project.Name + '/' + props.project._id)}}/>
       </div>
     </div>
     <div style={{flex: 3}}>
@@ -74,22 +74,15 @@ export default class ProjectList extends React.Component{
       })
       .then(response => response.json())
       .then(data => {
-        if (localStorage.getItem('worktoolsToken')) {
-          var token = localStorage.getItem('worktoolsToken')
-          var userId = localStorage.getItem('worktoolsID')
+        if (fire.auth().currentUser) {
+          var userId = fire.auth().currentUser.uid
 
 
           var body = {
             'Location': data.city + ', ' + data.country_name
           };
-              fetch(`https://api.worktools.io/api/User/${userId}/?api_token=${token}`, {
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                method: 'PATCH',
-                body: JSON.stringify(body)
-              })
+            db.collection("User").doc(userId).update(body)
+
             }
         } )
 
@@ -185,106 +178,7 @@ export default class ProjectList extends React.Component{
 
                 </MediaQuery>
                 <MediaQuery maxDeviceWidth={700}>
-                  <div style={{paddingLeft: '18px', paddingRight: '18px', paddingBottom: '64px'}}>
-                    <Subheader style={{fontSize: '25px', letterSpacing: '-0.6px', lineHeight: '30px', color: '#484848',
-                    fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px', fontFamily: 'Open Sans'}}>
-                      Popular projects
-                    </Subheader>
-                    {this.state.loading ?
-                      <List>
-                        <GridList
-                          className = 'flexthis'
-                          cols={2}
-                          cellHeight={220}
-                          padding={12}>
-                          {placeholderTiles.map((id) => (
-                            <GridTile
-                              key={id}
-                              children={
-                                <div>
-                                  <div
-                                    style={{cursor: 'pointer', height: '100%', width: 'auto'
-                                      , display: 'flex', flexDirection: 'column'}}>
-                                  <div style={{width: '100%', height: '110px', maxWidth: '100%', backgroundColor: grey200}}/>
-                                  <div style={{height: '12px' , backgroundColor: '#dbdbdb', width: '100%', marginTop: '6px'}}/>
-                                  <LinearProgress style={{marginTop: '10px', marginBottom: '6px'}} color={amber500} mode="determinate"
-                                       value={0} />
-                                     <div style={{height: '19px', width: '100%', backgroundColor: '#efefef'
-                                       , marginBottom: '0px'}}/>
-                                     <div style={{height: '19px', width: '60%', backgroundColor: '#efefef'
-                                         , marginTop: '3px', marginBottom: '6px'}}/>
-                                </div>
-                                </div>
-                              }
-                              />
-                          ))
-
-                        }
-                        </GridList>
-                      </List>
-
-                      :
-                    <List>
-                <GridList
-                  cols={2}
-
-            cellHeight={220}
-            padding={12}>
-            {this.state.projects ? this.state.projects.map((project) => (
-
-              <GridTile
-                key={project._id}
-
-            children={
-                <Link to={'/projects/' + project.Name + '/' + project._id}>
-                  <div onTouchTap={(e) => this.handleTap(project._id, project.Name)} style={{cursor: 'pointer', height: '100%', width: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-
-
-                  <img style={{width: '100%', height: '50%', maxWidth: '100%',
-                    borderRadius: '2px', objectFit: 'cover', backgroundColor: grey200}}
-                    src={project['Featured Image'] ? changeImageAddress(project['Featured Image'], 'autox150'): null} />
-
-                  <div style={{color: '#484848',
-                  fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', width: '100%', marginTop: '6px'}}>
-                    <b style={{color: '#FF9800'}}>{project.projectCount}</b> people,  <b style={{color: '#FF9800'}}>10</b> days to go...
-                  </div>
-
-                  <LinearProgress style={{marginRight: '16px', marginLeft: '16px', marginTop: '10px', marginBottom: '6px'}} color={amber500} mode="determinate"
-                       value={6} />
-                  <div style={{color: '#484848',
-                  fontWeight: 700, fontSize: '19px', lineHeight: '22px', maxHeight: '66px', letterSpacing: '-0.8px'
-                  , overflow: 'hidden', fontFamily: 'Open Sans', textOverflow: 'ellipsis', width: '100%'}}>
-                    {project.Name}
-                  </div>
-
-                  </div>
-                </Link>
-                }
-            />
-
-        )) : null}
-              </GridList>
-                </List>
-              }
-                <Divider/>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', textAlign: 'center'}}>
-                  <Subheader style={{fontSize: '25px', letterSpacing: '1px', lineHeight: '30px', color: '#484848',
-                  fontWeight: 700, paddingTop: '16px', marginBottom: '16px', paddingLeft: '0px', fontFamily: 'Open Sans'}}>
-                    Get started today
-                  </Subheader>
-                  <div>
-                    Start your own project and...
-                  </div>
-                  <div>
-                    <RaisedButton
-                      style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-                      buttonStyle={{height: '36px'}}
-                       labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
-                            letterSpacing: '0.6px', fontWeight: 'bold'}}
-                       label='Start a project' onTouchTap={this.handleCreatePledge}/>
-                  </div>
-                </div>
-                </div>
+                  <div/>
               </MediaQuery>
         </div>
       )

@@ -32,6 +32,7 @@ import Place from 'material-ui/svg-icons/maps/place';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
 import Badge from 'material-ui/Badge';
+import {Spiral} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import fire from '../fire';
@@ -379,6 +380,7 @@ export default class DesktopProject extends React.Component {
   handleUnJoin = (e) => {
     e.preventDefault()
     this.deleteEngagement()
+    browserHistory.push(window.location.pathname + '/declined')
   }
 
   removeEngagement = (e) => {
@@ -618,16 +620,18 @@ export default class DesktopProject extends React.Component {
                 <CardText  children = {
                     <div>
                         <div >
+                          {this.state.charity.logo ?
+                            <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
+                              src ={this.state.charity.logo }/>
+                            :
+                            <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
+                          }
 
-                          <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
-                            src = 'https://pbs.twimg.com/profile_images/527359343239245824/HKrgEYEh_400x400.png'/>
-                          <p style={{margin: 0, fontWeight: 'bold'}}>
+                          <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
                               {this.props.charity.Name}
                             </p>
-                        <p style={{margin: 0, paddingBottom: '16px'}}>
-                            2nd project
-                          </p>
-                          <div style={{borderBottom: 'solid 0.5px #dddddd', width: '100%'}}/>
+
+
                         </div>
                          <div style={{marginBottom: '30px'}} dangerouslySetInnerHTML={this.descriptionMarkup()}/>
                            <div className="fb-like" href={this.state.project.FacebookURL}

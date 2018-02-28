@@ -22,6 +22,12 @@ exports.addOneToPeople = functions.firestore
       })
     })
 
+    return (null)
+    // perform desired operations ...
+});
+
+exports.removeOneToPeople = functions.firestore
+  .document('Engagement/{engagementId}')
   .onDelete(event => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
@@ -37,7 +43,6 @@ exports.addOneToPeople = functions.firestore
     })
 
     return (null)
-    // perform desired operations ...
 });
 
 

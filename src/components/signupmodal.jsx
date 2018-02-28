@@ -64,7 +64,12 @@ export default  class SignupModal extends React.Component {
                 Name: this.state.name
               }
             )
-            .then(data => this.props.onComplete())
+            .then(data =>
+              {
+                if (this.props.onComplete) {
+                  this.props.onComplete()
+                }
+              })
           } else {
             // No user is signed in.
           }
@@ -86,13 +91,9 @@ export default  class SignupModal extends React.Component {
   handleLogin = () => {
     fire.auth().onAuthStateChanged(user => {
       if (user) {
-        db.collection('User').doc(user.uid).set(
-          {
-            Email: user.email,
-            Name: this.state.name
-          }
-        )
-        .then(data => this.props.onComplete())
+        if (this.props.onComplete) {
+          this.props.onComplete()
+        }
       } else {
         // No user is signed in.
       }

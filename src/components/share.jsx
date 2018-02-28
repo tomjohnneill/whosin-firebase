@@ -33,6 +33,7 @@ export default class Share extends React.Component{
   }
 
   handleFacebook = () => {
+        this.props.buttonClicked('facebook')
     window.FB.ui({
       method: 'send',
       link: this.props.url,
@@ -40,10 +41,12 @@ export default class Share extends React.Component{
   }
 
   handleEmail = () => {
+    this.props.buttonClicked('email')
     window.location.href = `mailto:?subject=${this.props.Name}&body=` + this.props.emailbody
   }
 
   handleSMS = () => {
+    this.props.buttonClicked('sms')
     var ua = navigator.userAgent.toLowerCase();
     var url;
 
@@ -54,9 +57,11 @@ export default class Share extends React.Component{
 
     console.log (url);
     window.location.href = url
+
   }
 
   handleWhatsapp = () => {
+    this.props.buttonClicked('whatsapp')
     window.location.href = 'whatsapp://send?text=' + this.props.smsbody
   }
 
@@ -84,7 +89,9 @@ export default class Share extends React.Component{
                 <FontIcon style={styles.icon} className={'far fa-comment'}/>
                 Send an SMS
               </li>
-              <CopyToClipboard onCopy={() => this.setState({copied: true})}
+              <CopyToClipboard onCopy={() => {this.setState({copied: true});
+                this.props.buttonClicked('link')
+              }}
                 text={this.props.url}
                 >
                 <li style={styles.line} >
@@ -107,7 +114,9 @@ export default class Share extends React.Component{
                 <FontIcon color={'#0084ff'} style={styles.icon} className={'fab fa-facebook-messenger'}/>
                 Send a Facebook Message
               </li>
-              <CopyToClipboard onCopy={() => this.setState({copied: true})}
+              <CopyToClipboard onCopy={() => {this.setState({copied: true});
+                this.props.buttonClicked('link')
+              }}
                 text={this.props.url}
                 >
                 <li style={styles.line} >
