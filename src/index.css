@@ -1,0 +1,124 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans';
+    color: #484848
+}
+
+.react-add-to-calendar__button {
+  background-color: #65A1e7;
+  color: white;
+  padding: 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.5)
+}
+
+.react-add-to-calendar__dropdown {
+
+    width: 181.25px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.5) ;
+    box-sizing: border-box;
+    padding-left: 6px;
+    padding-top: 1px;
+
+}
+
+
+
+li {
+  list-style-type: none;
+}
+
+ul {
+  padding: 0
+}
+
+a {
+  text-decoration: none;
+  color:inherit;
+}
+
+.flexthis {
+  display: flex
+}
+
+.appbar {
+  display: flex
+}
+
+div.appbar div{
+  display: flex;
+}
+
+div.appbar span{
+  display: flex;
+}
+
+div.tab > div:first-child{
+  display: flex;
+  }
+
+#block {
+  display: block
+}
+
+
+/* CSS for card flipping */
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 800px;
+}
+
+#card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
+
+#card > span {
+  margin: 0;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden,
+}
+
+#card > div {
+  position: absolute;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden,
+}
+
+#card .front {
+
+}
+#card .back {
+
+  transform: rotateY( 180deg );
+}
+
+#card.flipped {
+  transform: rotateY( 180deg );
+}
+
+#card { transform-origin: right center; }
+
+#card.flipped {
+  transform: translateX( -100% ) rotateY( -180deg );
+}
+
+.paper {
+  height: 100%
+}
+
+.isthistheone {
+  height: 100%
+}
