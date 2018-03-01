@@ -490,6 +490,14 @@ export default class Project extends React.Component {
 
 
             </div>
+            <div style={{position: 'sticky'}}>
+              <SignupModal
+                _id={this.props.params._id}
+                title={this.props.params.project}
+                open={this.state.modalOpen}
+                changeOpen={this.handleModalChangeOpen}
+              onComplete={this.setLoggedIn}/>
+          </div>
 
 
 
@@ -593,12 +601,7 @@ export default class Project extends React.Component {
 
           </MediaQuery>
 
-          <SignupModal
-            _id={this.props.params._id}
-            title={this.props.params.project}
-            open={this.state.modalOpen}
-            changeOpen={this.handleModalChangeOpen}
-          onComplete={this.setLoggedIn}/>
+
 
         <JoiningModal
           _id={this.props.params._id}

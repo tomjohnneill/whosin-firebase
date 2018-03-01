@@ -26,6 +26,11 @@ import Why from './components/why.jsx';
 import Register from './components/feedback/register.jsx';
 import MiniWhy from './components/create-project/miniwhy.jsx';
 import CantCome from './components/cantcome.jsx';
+import asyncComponent from './AsyncComponent'
+
+const EmailTemplateBuilder = asyncComponent(() =>
+    import('./components/admin/emailtemplatebuilder.jsx').then(module => module.default)
+)
 
 const rootElement = document.getElementById('root');
 
@@ -34,6 +39,7 @@ const rootElement = document.getElementById('root');
 
       <IndexRoute component={ UserTabs } />
       <Route path='/why' component={Why}/>
+      <Route path='/admin/emailtemplate' component={EmailTemplateBuilder}/>
       <Route path='/auth/linkedin/' component={LinkedInAuth}/>
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>

@@ -146,16 +146,18 @@ export default class OrganisationLookup extends React.Component{
     var story = JSON.parse(localStorage.getItem('story'))
     var coverPhoto = localStorage.getItem('coverPhoto')
     var times = JSON.parse(localStorage.getItem('times'))
+    var startTime = new Date(times['Start Time'])
+    var endTime = new Date(times['End Time'])
     var body = {
       'Name': story.title,
       'Description': story.story,
       'Target People': basics.min,
       'Maximum People': basics.max,
       'Featured Image': coverPhoto,
-      'Deadline': basics.deadline,
+      'Deadline': new Date(basics.deadline),
       'Location': basics.address,
-      'Start Time': times['Start Time'],
-      'End Time': times['End Time']
+      'Start Time': startTime,
+      'End Time': endTime
     }
     console.log(body)
     console.log(JSON.stringify(body))

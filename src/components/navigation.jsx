@@ -175,7 +175,8 @@ export default class Navigation extends React.Component {
 
   handleModal = (e) => {
     this.setState({open: false})
-    this.setState({modalOpen: true})
+    this.setState({modalOpen: !this.state.modalOpen})
+
   }
 
   setModal = () => {
