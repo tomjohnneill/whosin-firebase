@@ -1,5 +1,5 @@
 import React , {PropTypes} from 'react';
-import {grey200, grey500, grey100, amber500, grey300, lightBlue50} from 'material-ui/styles/colors'
+import {grey200, grey500, grey100, amber500, grey300, lightBlue50, blue500, yellow600} from 'material-ui/styles/colors'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
@@ -35,6 +35,7 @@ import Badge from 'material-ui/Badge';
 import {Spiral} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
+import {List, ListItem} from 'material-ui/List';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -43,6 +44,7 @@ const Loading = () => (
   <div/>
 )
 
+const style = {margin: 5};
 
 const styles = {
   box: {
@@ -124,11 +126,9 @@ explanation: {
     backgroundColor: 'white',
     color: '#FF9800',
     textTransform: 'none',
-    fontSize: '20px',
     letterSpacing: '0.4px',
-    fontFamily: 'Permanent Marker',
     lineHeight: '16px',
-
+    fontWeight: 700,
     paddingLeft: '20px',
     paddingRight: '20px',
   },
@@ -138,14 +138,19 @@ explanation: {
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',
-
-    fontSize: '16px',
     letterSpacing: '0.4px',
     lineHeight: '16px',
     paddingLeft: '20px',
     paddingRight: '20px',
 
   },
+  contactIcon: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column'
+  }
 }
 
 
@@ -230,7 +235,7 @@ export default class DesktopProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0
-      , loading: true, selected: 'story', inkBarLeft: '38.875px', conditionalStatus: false}
+      , loading: true, selected: 'story', inkBarLeft: '30px', conditionalStatus: false}
   }
 
   componentDidMount(props) {
@@ -256,8 +261,11 @@ export default class DesktopProject extends React.Component {
     db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
       var body = {
         "Project": this.props.project._id,
+        "Project Name": this.props.project.Name,
         "User": fire.auth().currentUser.uid,
         "Name": doc.data().Name,
+        "Email": doc.data().Email,
+        "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
         "Location": doc.data().Location ? doc.data().Location : null
       }
       console.log(body)
@@ -383,9 +391,11 @@ export default class DesktopProject extends React.Component {
     browserHistory.push(window.location.pathname + '/declined')
   }
 
-  removeEngagement = (e) => {
-
+  handleChangeTab = (value) => {
+    this.setState({selected: value})
   }
+
+
 
   render () {
 
@@ -436,21 +446,6 @@ export default class DesktopProject extends React.Component {
                             </div>
                           </div>
                         </div>
-
-                        <div>
-
-                          <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px', marginTop: '16px', width: '100%', boxSizing: 'border-box'}}>
-                            <Place style={{marginRight: '16px'}} color={grey500}/>
-                            <div style={{backgroundColor: '#efefef', height: '12px', width: '60%'}}/>
-                          </div>
-
-
-                          <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px', marginTop: '12px', width: '100%', boxSizing: 'border-box'}}>
-                            <AccessTime style={{marginRight: '16px'}} color={grey500}/>
-                            <div style={{backgroundColor: '#efefef', height: '12px', width: '30%'}}/>
-                          </div>
-
-                        </div>
                       </div>
 
                     }/>
@@ -477,11 +472,11 @@ export default class DesktopProject extends React.Component {
                 ref='variableBox'
                 style={{display: 'flex',
                     alignItems: 'center', flexDirection: 'row'}}>
-              <div style={{flex: 538, height: '320px', width: '60%'}}>
-                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')} style={{height: '320px', width: '100%'
+              <div style={{flex: 538, height: '370px', width: '60%'}}>
+                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')} style={{borderRadius: 4, height: '370px', width: '100%'
                   , objectFit: 'cover'}}/>
               </div>
-              <div style={{ height: '320px', width: '383px'}}>
+              <div style={{ width: '383px', height: this.props.challenge || this.props.joined ? '370px' : null}}>
                 <CardTitle
                   style={{height: '100%', paddingTop: '0px', paddingLeft: '32px',  overflowX:'hidden', paddingBottom: '1px'}}
                   children={
@@ -503,13 +498,10 @@ export default class DesktopProject extends React.Component {
 
 
                         </div>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                          <div style={styles.number}>
-                            {this.state.project['End Date'] ? dateDiffInDays(new Date(),this.state.project['End Date']) : 10}
-                          </div>
-                          <div style={{fontWeight: 'lighter'}}>
-                            days to go...
-                          </div>
+                        <div style={{fontWeight: 'lighter', textAlign: 'left', marginTop: 6}}>
+                          <b style={{fontSize: '18px'}}>
+                            {this.state.project['Deadline'] ? dateDiffInDays(new Date(),this.state.project['End Date']) : 10}
+                          </b> days to go...
                         </div>
                       </div>
                       {!this.props.joined && this.props.challenge ?
@@ -533,20 +525,22 @@ export default class DesktopProject extends React.Component {
 
 
                         <div>
-                      <RaisedButton secondary={true} fullWidth={true}
-                        labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold',
-                          fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                        label="I'll do it if..."
-                        onTouchTap={this.handleConditionalModal}
-                        />
+                          <ConditionalModal
+                            _id={this.props.params._id}
+                            title={this.props.params.project}
+                            project = {this.state.project ? this.state.project : null}
+                              open={this.state.conditionalOpen}
+                              changeOpen={this.handleConditionalChangeOpen}
+                              />
 
 
-                    <RaisedButton
 
-                       primary={true} fullWidth={true}
-                        labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                       label="Join Now" onTouchTap={this.handleModal} />
-                     </div>
+                          <RaisedButton
+
+                             primary={true} fullWidth={true}
+                              labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                             label="Join Now" onTouchTap={this.handleModal} />
+                           </div>
                      :
                      <RaisedButton
 
@@ -607,7 +601,7 @@ export default class DesktopProject extends React.Component {
 
 
 
-              onChange={this.handleConsoleLog}
+              onChange={this.handleChangeTab}
               tabTemplateStyle={{backgroundColor: 'white'}}
 
               >
@@ -619,7 +613,7 @@ export default class DesktopProject extends React.Component {
                 label='The Story'>
                 <CardText  children = {
                     <div>
-                        <div >
+                        <Link to={`/charity/${this.state.charity._id}`} >
                           {this.state.charity.logo ?
                             <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
                               src ={this.state.charity.logo }/>
@@ -632,7 +626,7 @@ export default class DesktopProject extends React.Component {
                             </p>
 
 
-                        </div>
+                        </Link>
                          <div style={{marginBottom: '30px'}} dangerouslySetInnerHTML={this.descriptionMarkup()}/>
                            <div className="fb-like" href={this.state.project.FacebookURL}
                           width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
@@ -653,49 +647,61 @@ export default class DesktopProject extends React.Component {
 
                 </CardText>
               </Tab>
-              {this.props.details && this.props.details.length > 0 ?
+
               <Tab
+                value='aboutus'
                 style={{width: 'auto'}}
-                value='actions'
-                buttonStyle={this.state.selected === 'story' ? styles.selectedTab : styles.tab}
+                buttonStyle={this.state.selected === 'aboutus' ? styles.selectedTab : styles.tab}
                 onTouchTap={this.changeAnchorEl}
-                label={
-                  badgeFill > 0 ?
-                  <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <div style={{marginRight: '12px'}}>Actions
+                label='About Us'>
+                <div style={{padding: 16}}>
+                  <h2>{this.state.charity.Name}</h2>
+                  <div style={{fontWeight: 'lighter', fontSize: '14px', marginBottom: 20}}>
+                    {this.state.charity.Description}
+                  </div>
+                  {this.state.charity.Facebook || this.state.charity.Twitter || this.state.charity.Instagram ?
+                    <div>
+                      <Divider/>
+
+                      <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
+                      <div style={{display: 'flex', width: '100%'}}>
+                        {this.state.charity.Facebook ?
+                        <span style={styles.contactIcon}>
+                          <Avatar
+                            icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
+                            color={'white'}
+                            backgroundColor={'#3b5998'}
+                            size={50}
+                            style={style}
+                          />
+                        {this.state.charity.Facebook}
+                      </span> : null }
+                        {this.state.charity.Twitter ?
+                        <span style={styles.contactIcon}>
+                          <Avatar
+                            icon={<FontIcon className="fab fa-twitter fa-2x" />}
+                            color={'white'}
+                            backgroundColor={'#00aced'}
+                            size={50}
+                            style={style}
+                          />
+                        {this.state.charity.Twitter}
+                      </span> : null }
+                        {this.state.charity.Instagram ?
+                        <span style={styles.contactIcon}>
+                          <Avatar
+                            icon={<FontIcon className="fab fa-instagram fa-2x" />}
+                            color={'white'}
+                            backgroundColor={'#fb3958'}
+                            size={50}
+                            style={style}
+                          />
+                        {this.state.charity.Instagram}
+                        </span> : null}
                       </div>
-                  <Badge
-                    badgeStyle={{position: 'inherit'}}
-                    secondary={true}
-                    style={{padding: '0px'}}
-                    badgeContent={badgeFill}
-                    />
-                  </div> :
-                  "Actions"
-                }>
-
-                <Divider/>
-                <div style={{marginBottom: '200px'}}>
-
-
-
-                </div>
-
-
-
-              </Tab> : null}
-              <Tab
-                value='feedback'
-                style={{width: 'auto'}}
-                buttonStyle={this.state.selected === 'feedback' ? styles.selectedTab : styles.tab}
-                onTouchTap={this.changeAnchorEl}
-                label='Feedback'>
-                <div>
-                  {/*
-                    <OrgFeedback
-                      pledgedUsers={this.props.pledge.pledgedUsers}
-                      pledgeId={this.props.params._id} pledgeCreatorId={this.props.pledge.creatorId}/>
-                    */}
+                    </div>
+                    : null
+                  }
                 </div>
               </Tab>
 
@@ -744,13 +750,7 @@ export default class DesktopProject extends React.Component {
               onComplete={this.onComplete}
               />
 
-          <ConditionalModal
-            _id={this.props.params._id}
-            title={this.props.params.project}
-            project = {this.state.project ? this.state.project : null}
-              open={this.state.conditionalOpen}
-              changeOpen={this.handleConditionalChangeOpen}
-              />
+
 
 
 

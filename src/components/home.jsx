@@ -23,7 +23,6 @@ import fire from '../fire';
 
 let db = fire.firestore()
 
-var commonPassword = require('common-password');
 
 const styles = {
   number: {
@@ -130,11 +129,6 @@ export default class Home extends React.Component{
   }
 
   handlePassword = (e, newValue) => {
-    if (commonPassword(newValue)) {
-      this.setState({badPassword: true})
-    } else {
-      this.setState({badPassword: false})
-    }
     this.setState({password: newValue})
   }
 

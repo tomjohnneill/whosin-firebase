@@ -41,14 +41,12 @@ const styles = {
   },
 };
 
-const worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken')
-  : '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
 class AllDone extends React.Component {
   render() {
     return (
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-                  flexDirection: 'column', padding: '20px'}}>
+                  flexDirection: 'column', padding: '20px', boxSizing: 'border-box', maxWidth: '400px', maxHeight: '400px'}}>
         <h2>Thanks!</h2>
 
         This will be really helpful for other organisations to know how reliable each volunteer is.
@@ -60,7 +58,7 @@ class AllDone extends React.Component {
 export default class Register extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, counter:0, left: 0, top: 0, finished: false}
+    this.state = {loading: true, counter:0, left: '50%', top: 0, finished: false}
   }
 
   componentDidMount(props) {
@@ -89,7 +87,7 @@ export default class Register extends React.Component {
 
   returnToStart = () => {
     setTimeout(() => {
-      this.setState({ left:0,top:0, turnedUp: null });
+      this.setState({ left:'50%',top:0, turnedUp: null });
       this.setState({finished: false,counter: this.state.counter + 1, })
     }, 200);
   }
@@ -133,22 +131,23 @@ export default class Register extends React.Component {
   render() {
     console.log(this.state)
     return (
-      <div>
+      <div style={{width: '100vw', height: '100vh', overflow: 'hidden'}}>
         <h2 style={{marginTop: 10, marginBottom: 10, fontSize: '20px'}}>Did this person turn up?</h2>
         {this.state.loading ?
           null :
           <div>
+            <div>
             <Swipeable
               onSwipedLeft={this.handleSwipeLeft}
               onSwipedRight={this.handleSwipeRight}
               onSwiping={this.handleSwiping}
               onSwipingLeft={this.handleSwipingLeft}
               onSwipingRight={this.handleSwipingRight}
-              style={{position: 'relative'}}
+              style={{position: 'relative', left: '50%', transform: 'translate(-50%, 0%)'}}
               >
               <Card style={{display: this.state.finished ? 'none': 'flex', justifyContent: 'center', alignItems: 'center',
-                flexDirection: 'column', margin: '10px', borderRadius: '4px',
-                position: 'absolute', left: this.state.left, top: this.state.top}}>
+                flexDirection: 'column', borderRadius: '4px',
+                position: 'absolute', left: this.state.left, transform: 'translate(-50%, 0%)', top: this.state.top}}>
                 {this.state.counter === this.state.engagements.length ?
                   null :
 
@@ -156,11 +155,12 @@ export default class Register extends React.Component {
                   <img
                     alt={`${this.state.engagements[this.state.counter].Name}`}
                     src={this.state.engagements[this.state.counter]['Volunteer Picture']}
-                    style={{height: '95vw', width: '95vw', objectFit: 'cover', position: 'relative'}}
+                    style={{height: '95vw', width: '95vw', maxWidth: '400px', maxHeight: '400px',
+                       objectFit: 'cover', position: 'relative'}}
                     />
                   {this.state.turnedUp === true ?
 
-              <div style={{height: '95vw', width: '95vw', position: 'absolute'
+              <div style={{height: '95vw', width: '95vw', maxWidth: '400px', maxHeight: '400px', position: 'absolute'
                     , display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: 'rgba(59,158,116,0.5)'
                     , zIndex: 3, top: 0}}>
@@ -168,7 +168,7 @@ export default class Register extends React.Component {
                   </div>
                   :
                   this.state.turnedUp === false ?
-                  <div style={{height: '95vw', width: '95vw', position: 'absolute'
+                  <div style={{height: '95vw', width: '95vw', maxWidth: '400px', position: 'absolute'
                         , display: 'flex', alignItems: 'center', justifyContent: 'center',
                         backgroundColor: 'rgba(182,48,43,0.5)'
                         , zIndex: 3, top: 0}}>
@@ -195,15 +195,15 @@ export default class Register extends React.Component {
 
           </Swipeable>
           <Card style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-            flexDirection: 'column', margin: '10px', borderRadius: '4px', zIndex: -1,
-            position: 'absolute', left:0 , top: 98.2}}>
+            flexDirection: 'column', borderRadius: '4px', zIndex: -1,width: '95vw', maxWidth: '400px'
+            , boxSizing: 'border-box', position: 'absolute', left: '50%', transform: 'translate(-50%, 0%)' , top: 98.2}}>
             {this.state.counter + 1 >= this.state.engagements.length ?
               <AllDone/> :
             <span>
               <img
                 alt={`${this.state.engagements[this.state.counter +1].Name}`}
                 src={this.state.engagements[this.state.counter + 1]['Volunteer Picture']}
-                style={{height: '95vw', width: '95vw', objectFit: 'cover', position: 'relative'}}
+                style={{height: '95vw', width: '95vw', maxWidth: '400px', maxHeight: '400px', objectFit: 'cover', position: 'relative'}}
                 />
               <div style={{textAlign: 'left', padding: 16}}>
                   <b>{this.state.engagements[this.state.counter+ 1]['Volunteer Name']}</b>
@@ -213,7 +213,7 @@ export default class Register extends React.Component {
             </span>
             }
           </Card>
-          <div style={{position: 'absolute', top: 'calc(100vw + 180px)', width: '100%'}}>
+          <div style={{position: 'fixed', bottom: 10, width: '100%'}}>
             {this.state.counter < this.state.engagements.length ?
               <div style={{display: 'flex',
                   alignItems: 'center', justifyContent: 'center'}}>
@@ -233,6 +233,7 @@ export default class Register extends React.Component {
               :
               null
             }
+          </div>
           </div>
         </div>
       }

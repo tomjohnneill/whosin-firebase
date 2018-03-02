@@ -36,7 +36,7 @@ export default  class ConditionalModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {login: true, loading: false, slider: 50, type: null, shared: false}
+    this.state = {login: true, loading: false, slider: 50, type: null, shared: false, targetCreated: false}
   }
 
   handleSlider = (e, v) => {
@@ -97,27 +97,26 @@ export default  class ConditionalModal extends React.Component {
 
     return (
       <div>
-        <Dialog
-          open={this.props.open ? true : false}
-          modal={false}
-          onRequestClose={this.props.changeOpen}
-          contentStyle={{width: '90%', maxWidth: '450px'}}
-          >
+
           {this.state.loading  ?
-          <div style={{width: '100%', height: '100%', position: 'absolute', top: '0px',left: '0px',zIndex: '20', boxSizing: 'border-box', backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{width: '100%', height: '100%', position: 'absolute', top: '0px',
+            left: '0px',zIndex: '20', boxSizing: 'border-box', backgroundColor: 'rgba(255,255,255,0.8)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <CircularProgress/>
           </div>
           : null }
 
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '16px', textAlign: 'center'}} >
+          <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center'}} >
             <div style={{width: '100%'}}>
-              <div style={{height: '12px'}}/>
 
 
 
-             {this.state.type === 'friends' && !this.state.shared ?
-               <div>
-                 <Subheader style={{fontFamily: 'Permanent Marker', fontSize: '24px', textAlign: 'left', padding: 0}}>
+             {this.state.type === 'friends' && !this.state.shared && !this.state.targetCreated ?
+               <div style={{fontWeight: 200, textAlign: 'left',
+                     borderRadius: 6, marginBottom: 15,
+                   marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
+                   borderLeft: '3px solid rgb(33, 150, 243)', paddingLeft: 16}}>
+                 <Subheader style={{color: 'inherit', fontFamily: 'Permanent Marker', fontSize: '24px', paddingLeft: 0}}>
                    Go on then, ask them:
                  </Subheader>
                  <Share
@@ -141,13 +140,31 @@ export default  class ConditionalModal extends React.Component {
 
               this.state.shared ?
 
-              <div style={{paddingBottom: 16, textAlign: 'left'}}>
-                <Subheader style={{fontFamily: 'Permanent Marker', fontSize: '24px', textAlign: 'left', padding: 0}}>
+              <div style={{fontWeight: 200, textAlign: 'left',
+                    borderRadius: 6, marginBottom: 15,
+                  marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
+                  borderLeft: '3px solid rgb(33, 150, 243)', padding: 16}}>
+                <Subheader style={{color: 'inherit', fontFamily: 'Permanent Marker', fontSize: '24px', paddingLeft: 0}}>
                   Thanks for sharing
                 </Subheader>
                 <span style={{textAlign: 'left', marginBottom: 16}}>
                   We can't actually check if you did, so we're just assuming <br/><br/>
                 If your friends join the project, we'll let you know.
+                </span>
+              </div>
+              :
+
+              this.state.targetCreated ?
+
+              <div style={{fontWeight: 200, textAlign: 'left',
+                    borderRadius: 6, marginBottom: 15,
+                  marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
+                  borderLeft: '3px solid rgb(33, 150, 243)', padding: 16}}>
+                <Subheader style={{color: 'inherit', fontFamily: 'Permanent Marker', fontSize: '24px', paddingLeft: 0}}>
+                  OK, cool
+                </Subheader>
+                <span style={{textAlign: 'left', marginBottom: 16}}>
+                  We'll sign you up if it happens
                 </span>
               </div>
 
@@ -157,8 +174,13 @@ export default  class ConditionalModal extends React.Component {
 
               <div>
 
-                <List style={{fontWeight: 200, textAlign: 'left', textTransform: 'lowercase'}}>
-                  <Subheader style={{fontFamily: 'Permanent Marker', fontSize: '24px'}}>I'll do it if...</Subheader>
+                <List style={{fontWeight: 200, textAlign: 'left', textTransform: 'lowercase',
+                      borderRadius: 6, marginBottom: 15,
+                    marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
+                    borderLeft: '3px solid rgb(33, 150, 243)', paddingLeft: 16}}>
+                  <Subheader style={{color: 'inherit', fontFamily: 'Permanent Marker', fontSize: '24px', paddingLeft: 0}}>
+                    I'll sign up if...
+                  </Subheader>
                   <ListItem
                     leftAvatar={<Avatar icon={<People/>} backgroundColor={blue500} />}
                     onTouchTap={this.handleFriendsClick}
@@ -181,8 +203,6 @@ export default  class ConditionalModal extends React.Component {
              </div>
 
            </div>
-
-        </Dialog>
       </div>
     )
   }

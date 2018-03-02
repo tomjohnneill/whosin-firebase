@@ -9,7 +9,7 @@ import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
 import {Spiral, Tick} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -316,11 +316,13 @@ export default class Profile extends React.Component {
                 <div style={{textAlign: 'left', marginTop: '6px'}}>
                   {this.state.user.Location} - Joined in 2018
                 </div>
-                <div style={{display: 'flex', alignItems: 'left', marginTop: '6px', marginBottom: '50px'}}>
+                <div style={{display: 'flex', alignItems: 'left', marginTop: 16, marginBottom: '50px'}}>
                   {this.state.publicProfile ? null :
-                  <FlatButton label='Edit Profile' labelStyle={{padding: '10px', color: '#65A1e7', fontFamily: 'Permanent Marker',
+                  <RaisedButton
+                    secondary={true}
+                    label='Edit Profile' labelStyle={{padding: '10px',fontFamily: 'Permanent Marker',
                       fontSize: '20px'}}
-                      icon={<FontIcon className="fas fa-pencil-alt" style={{color: '#65A1e7'}}/>}
+                      icon={<FontIcon className="fas fa-pencil-alt" style={{color: 'white'}}/>}
                        />
                    }
 

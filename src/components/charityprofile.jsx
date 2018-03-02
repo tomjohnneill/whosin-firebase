@@ -6,32 +6,40 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
+import {Spiral} from './icons.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
 import CharityProjectList from './charityprojectlist.jsx';
+import fire from '../fire';
+
+let db = fire.firestore()
 
 const styles = {
   selectedTab: {
-    height: '36px',
-    display: 'flex',
+    height: '60px',
     backgroundColor: 'white',
-    color: '#0068B2',
-    fontWeight: 700,
-    fontSize: '12px',
+    color: '#FF9800',
+    textTransform: 'none',
+    fontSize: '16px',
     letterSpacing: '0.4px',
     lineHeight: '16px',
-    fontFamily: 'Open Sans',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    fontWeight: 600
   },
   tab: {
-    height: '36px',
-    display: 'flex',
+    height: '60px',
     fontFamily: 'Open Sans',
     backgroundColor: 'white',
     color: '#484848',
-    fontWeight: 700,
-    fontSize: '12px',
+    textTransform: 'none',
+
+    fontSize: '16px',
     letterSpacing: '0.4px',
     lineHeight: '16px',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+
   }
 }
 
@@ -44,7 +52,7 @@ export function changeImageAddress(file, size) {
 export default class CharityProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {user: {}, loading: true, slideIndex: 0, left: '10%'}
+    this.state = {user: {}, loading: true, slideIndex: 0, left: '10%', selected: 'projects'}
   }
 
   handleClick(index, e) {
@@ -53,15 +61,13 @@ export default class CharityProfile extends React.Component {
   }
 
   componentDidMount(props) {
-    fetch('https://api.worktools.io/api/Charity/' + this.props.params.charityId + '/?api_token=05a797cd-8b31-4abe-b63b-adbf0952e2c7')
-      .then(response => response.json())
-      .then(data => this.setState({charity: data[0], loading: false}))
-      .catch(error => this.setState({error, loading: false}))
+    db.collection("Charity").doc(this.props.params.charityId).get().then((doc) => {
+      var charity = doc.data()
+      charity['_id'] = doc.id
+      this.setState({charity: charity, loading: false})
+    })
 
-    fetch('https://api.worktools.io/api/Review/?api_token=05a797cd-8b31-4abe-b63b-adbf0952e2c7&Charity=' +
-                this.props.params.charityId)
-      .then(response => response.json())
-      .then(data => this.setState({reviews: data}))
+
   }
 
   handleChange = (value) => {
@@ -113,55 +119,85 @@ export default class CharityProfile extends React.Component {
 
   }
 
+  changeAnchorEl = (e) => {
+    console.log('handleMultipleChoiceClick')
+    e.preventDefault()
+    console.log(e)
+    var rect = e.target.getBoundingClientRect()
+    console.log(rect)
+    this.setState({inkBarLeft: (rect.width-100)/2  + rect.x - (window.document.body.clientWidth - 1000) /2,
+    })
+  }
+
+  handleTwoTabClick = (value) => {
+    this.setState({selected: value})
+  }
+
   render() {
     console.log(this.state)
     return (
-      <div>
+      <div >
         {this.state.loading ?
           <div>
             Loading ...
           </div>
           :
-          <div>
-            <div style={{width: '100%', height: '250px', display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center',
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 30}}>
+            <div style={{width: '100%', maxWidth: '1000px',
               backgroundColor: 'white'}}>
-              <div style={{backgroundColor: 'white'}}>
-                <img style={{height: 'auto', width: '100%', position: 'relative', top: '0px', left:'0px'}} src={this.state.user.Picture ? this.state.user.Picture : 'https://farm9.staticflickr.com/8461/8048823381_0fbc2d8efb.jpg'}/>
-                <div style={{position: 'absolute', top: '24%', left: '20%', borderRadius: '6px'
-                      , backgroundColor: 'rgba(255,255,255,0.95)', width: '60%', height: '100px',
-                      display: 'flex', alignItems: 'center'}}>
-                      <img style={{width: '80px', height: 'auto', paddingLeft: '12px', borderRadius: '6px'}}
-                        src='https://d3kkowhate9mma.cloudfront.net/d1589100-7f08-4552-a2bc-31482174913a'/>
-                      <div style={{paddingLeft: '12px', fontSize: 'large', fontFamily: 'Open Sans', fontWeight: 600}}>
-                      {this.state.charity.Name}
-                      </div>
+              <div style={{width: '250px', marginBottom: 30, textAlign: 'left'}}>
+                <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
+                <b style={{display: 'inline-block'}}>{this.state.charity.Name}</b>
+
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <div>
 
                 </div>
+                <div>
+
+                </div>
+              </div>
+              <Tabs
+                  tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
+                  value={this.props.params.tab}
+                  onChange={this.handleTwoTabClick}
+                  inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
+                  left:this.state.inkBarLeft, width: '100px'}}
+                >
+                  <Tab label="Projects"
+                    style={{width: 'auto', fontSize: '16px'}}
+                      onTouchTap={this.changeAnchorEl}
+                        buttonStyle={this.state.selected === 'projects' ? styles.selectedTab : styles.tab}
+                     value="projects">
+                    <CharityProjectList charityId={this.props.params.charityId}/>
+                  </Tab>
+                  <Tab
+                    style={{width: 'auto', fontSize: '16px'}}
+                    onTouchTap={this.changeAnchorEl}
+                    buttonStyle={this.state.selected === 'about' ? styles.selectedTab : styles.tab}
+                     label="About"  value="about">
+                    <div/>
+                  </Tab>
+                  <Tab
+                    style={{width: 'auto', fontSize: '16px'}}
+                    onTouchTap={this.changeAnchorEl}
+                    buttonStyle={this.state.selected === 'supporters' ? styles.selectedTab : styles.tab}
+                     label="Supporters"  value="supporters">
+                    <div/>
+                  </Tab>
+                  <Tab
+                    style={{width: 'auto', fontSize: '16px'}}
+                    onTouchTap={this.changeAnchorEl}
+                    buttonStyle={this.state.selected === 'reviews' ? styles.selectedTab : styles.tab}
+                     label="Reviews"  value="reviews">
+                    <div/>
+                  </Tab>
+                </Tabs>
 
             </div>
 
 
-
-            </div>
-
-            <Tabs
-              style={{borderBottom: '1px solid #e4e4e4', boxShadow: '0 1px 5px rgba(0, 0, 0, 0.1) '}}
-              tabItemContainerStyle={{height: '36px', backgroundColor: 'white'}}
-                value={this.props.params.tab}
-                onChange={this.handleTwoTabClick}
-                inkBarStyle={{zIndex: 2, backgroundColor: '#0068B2',
-                left: this.state.left, width: '30%'}}
-              >
-                <Tab label="Projects"  buttonStyle={this.state.slideIndex === 0 ? styles.selectedTab : styles.tab}
-                   value="projects">
-                  <CharityProjectList charityId={this.props.params.charityId}/>
-                </Tab>
-                <Tab label="Supporters" buttonStyle={this.state.slideIndex === 1 ?
-                  styles.selectedTab : styles.tab}  value="supporters">
-                  <div/>
-                </Tab>
-              </Tabs>
 
 
 

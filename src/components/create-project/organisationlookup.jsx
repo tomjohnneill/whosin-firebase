@@ -151,6 +151,7 @@ export default class OrganisationLookup extends React.Component{
     var body = {
       'Name': story.title,
       'Description': story.story,
+      'Summary': story.summary,
       'Target People': basics.min,
       'Maximum People': basics.max,
       'Featured Image': coverPhoto,

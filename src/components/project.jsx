@@ -349,8 +349,11 @@ export default class Project extends React.Component {
     db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
       var body = {
         "Project": this.state.project._id,
+        "Project Name": this.state.project.Name,
         "User": fire.auth().currentUser.uid,
         "Name": doc.data().Name,
+        "Email": doc.data().Email,
+        "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
         "Location": doc.data().Location ? doc.data().Location : null
       }
       console.log(body)

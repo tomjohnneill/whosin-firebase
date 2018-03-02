@@ -26,6 +26,7 @@ import Why from './components/why.jsx';
 import Register from './components/feedback/register.jsx';
 import MiniWhy from './components/create-project/miniwhy.jsx';
 import CantCome from './components/cantcome.jsx';
+import ProjectReview from './components/feedback/projectreview.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -55,6 +56,7 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
+      <Route path='/projects/:pledge/:_id/leave-project-review' component={ProjectReview}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>
       <Route path='/projects/:pledge/:_id/declined' component={CantCome}/>
       <Route path='/projects/:Name/:_id/register' component={Register}/>
