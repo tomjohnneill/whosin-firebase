@@ -4,9 +4,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {  browserHistory } from 'react-router';
 import AutoComplete from 'material-ui/AutoComplete';
 import scriptLoader from 'react-async-script-loader';
-import PlacesAutocomplete from 'react-places-autocomplete';
 import DatePicker from 'material-ui/DatePicker';
 import MediaQuery from 'react-responsive';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Chip from 'material-ui/Chip';
 
 const styles = {
   textfield: {
@@ -17,54 +19,23 @@ const styles = {
     margin: '0px',
     padding: '6px',
     fontWeight: 500
-  }
+  },
+  chip: {
+        margin: 4,
+        cursor: 'pointer'
+      },
+  selectedChip: {
+    margin: 4
+  },
+      wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
 }
 
-const defaultStyles = {
-  root: {
-    position: 'relative',
-    paddingBottom: '0px',
-    fontSize: '16px',
-    fontFamily: 'Open Sans'
-  },
-  input: {
-    display: 'inline-block',
-    width: '100%',
-    padding: '10px',
-    fontSize: '16px',
-    boxSizing: 'border-box',
-    borderRadius: '6px',
-    border: '1px solid rgb(133, 137, 135)',
-    fontFamily: 'Open Sans'
-  },
-  autocompleteContainer: {
-    position: 'absolute',
-    top: '100%',
-    backgroundColor: 'white',
-    border: '1px solid #555555',
-    width: '100%',
-    zIndex: '5',
-    fontFamily: 'Open Sans'
-  },
-  autocompleteItem: {
-    backgroundColor: '#ffffff',
-    padding: '10px',
-    color: '#555555',
-    cursor: 'pointer',
-  },
-  autocompleteItemActive: {
-    backgroundColor: '#fafafa'
-  },
-}
-
-const options = {
-  location: window.google ?
-    new window.google.maps.LatLng(51.5, 0.12)
-  :null,
-  radius: 10000,
-}
-
-
+var categories = ['Environment', 'Refugees', 'Equality', 'Poverty', 'Education', 'Healthcare',
+                    'Disabilities', 'Young People', 'Old People', 'Isolation', 'Animals', 'Outdoor',
+                    'Mental Health']
 
 export class Form extends React.Component {
   constructor(props) {
@@ -72,50 +43,18 @@ export class Form extends React.Component {
     var basics = JSON.parse(localStorage.getItem('basics'))
     this.state = {
       searchText: '', places: [], loading: true,
-      address: basics ? basics.address : '',
       min: basics? basics.min : null,
       max: basics ? basics.max : null,
-      deadline: basics? parseISOString(basics.deadline): null
+      deadline: basics? parseISOString(basics.deadline): null,
+      tags: basics && basics.tags ? basics.tags: [],
+      allTags: categories
     }
   }
 
 
-  debounce = function(func, wait, immediate) {
-  	var timeout;
-  	return function() {
-  		var context = this, args = arguments;
-  		var later = function() {
-  			timeout = null;
-  			if (!immediate) func.apply(context, args);
-  		};
-  		var callNow = immediate && !timeout;
-  		clearTimeout(timeout);
-  		timeout = setTimeout(later, wait);
-  		if (callNow) func.apply(context, args);
-  	};
-  };
-
-  onChange = (address) => this.setState({ address })
-
-  handleUpdateInput = (searchText) => {
-    this.setState({
-        searchText: searchText,
-      });
-    fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/xml?input=${encodeURIComponent(this.state.searchText)}&types=establishment&location=51.5074,0.1278&radius=10000&key=AIzaSyAw-u3Xed8r9dRXJI47oW8eDuDN8VpikJE` )
-    .then(response => response.json())
-    .then(function(data) {
-      console.log(data)
-      var places = data.predictions.map(a => a.description)
-      this.setState({rawPlaces: data.predictions})
-
-      this.setState({places: places})
-    }.bind(this))
-    .catch(error => this.setState({error: error}))
-  };
-
   handleNext = (e) => {
     e.preventDefault()
-    var basics = {address: this.state.address, min: this.state.min, max: this.state.max, deadline: this.state.deadline}
+    var basics = {min: this.state.min, max: this.state.max, deadline: this.state.deadline, tags: this.state.tags}
     var basicString = JSON.stringify(basics)
     localStorage.setItem('basics', basicString)
     browserHistory.push('/create-project/2')
@@ -133,25 +72,40 @@ export class Form extends React.Component {
     this.setState({deadline: date})
   }
 
+  handleRequestDelete = (key) => {
+    const chipToDelete = this.state.tags.indexOf(key);
+    var newTags = this.state.tags
+    newTags.splice(chipToDelete, 1);
+
+    var allTags = this.state.allTags
+    allTags.push(key)
+    console.log(allTags)
+    this.setState({tags: newTags, allTags: allTags});
+
+  };
+
+  handleAddTag = (key) => {
+    const chipToDelete = this.state.allTags.indexOf(key);
+    var newAllTags = this.state.allTags
+    newAllTags.splice(chipToDelete, 1);
+    this.setState({allTags: newAllTags});
+
+    var tags = this.state.tags
+    tags.push(key)
+    this.setState({tags: tags})
+
+
+  }
+
+  handleChangeType = (event, index, value) => this.setState({type: value});
+
   render() {
-    const inputProps = {
-    value: this.state.address,
-    onChange: this.onChange,
-    placeholder: 'Location'
-    }
 
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
         <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
           Let's start with the basics</p>
-        <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
-          <p style={styles.header}>
-            Where is this happenning?
-          </p>
-          <PlacesAutocomplete value={this.state.address}
-            styles={defaultStyles} options={options} inputProps={inputProps} />
 
-        </div>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <p style={styles.header}>
             How many people are you looking for?
@@ -198,9 +152,42 @@ export class Form extends React.Component {
                hintText="Deadline" textFieldStyle={styles.textfield}/>
 
         </div>
+        <div style={{width: '100%',  paddingBottom: '32px',
+           boxSizing: 'border-box'}}>
+          <p style={styles.header}>
+            Which categories best describe your project?
+          </p>
+
+          <div style={styles.wrapper}>
+            {this.state.tags.map((tag) => (
+              <Chip
+                key={tag}
+                style={styles.selectedChip}
+                backgroundColor={'#65A1e7'}
+                onRequestDelete={() => this.handleRequestDelete(tag)}
+              >
+                {tag}
+              </Chip>
+            ))}
+          </div>
+
+
+          <div style={styles.wrapper}>
+            {this.state.allTags.map((tag) => (
+              <Chip
+                key={tag}
+                style={styles.chip}
+                onTouchTap={() => this.handleAddTag(tag)}
+              >
+                {tag}
+              </Chip>
+            ))}
+          </div>
+
+        </div>
         <RaisedButton label='NEXT' backgroundColor='#E55749'
           onClick={this.handleNext}
-          disabled={!this.state.deadline || !this.state.min || !this.state.address}
+          disabled={!this.state.deadline || !this.state.min }
           labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
       </div>
     )

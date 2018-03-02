@@ -4,7 +4,6 @@ import Place from 'material-ui/svg-icons/maps/place';
 import {grey200, grey500, grey100, amber500, grey300, lightBlue50} from 'material-ui/styles/colors'
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
 import {Spiral, Tick} from './icons.jsx'
@@ -32,7 +31,7 @@ const styles = {
 var worktoolsToken = localStorage.getItem('worktoolsToken') !== 'undefined' ? localStorage.getItem('worktoolsToken') :
   '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
-class PhotoUpload extends React.Component {
+export class PhotoUpload extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -202,29 +201,29 @@ export default class Profile extends React.Component {
   }
 
   componentDidMount(props) {
+    fire.auth().onAuthStateChanged((user) => {
+          var userId
+          var publicProfile = true
+          if (this.props.params._id) {
+            userId = this.props.params._id
+            if (user.uid === this.props.params._id) {
+              publicProfile = false
+            }
+          } else if (user) {
+            userId = user.uid
+            publicProfile = false
+          } else {
+            userId = null
+          }
+          this.setState({userId: userId, publicProfile: publicProfile})
+          console.log(this.state)
 
-    var userId
-    var publicProfile = true
-    if (this.props.params._id) {
-      userId = this.props.params._id
-      if (fire.auth().currentUser && fire.auth().currentUser.uid === this.props.params._id) {
-        publicProfile = false
-      }
-    } else if (fire.auth().currentUser) {
-      userId = fire.auth().currentUser.uid
-      publicProfile = false
-    } else {
-      console.log(fire.auth().currentUser)
-      userId = null
-    }
-    this.setState({userId: userId, publicProfile: publicProfile})
-    console.log(this.state)
-
-    db.collection("User").doc(userId).get().then((doc) => {
-      var user = doc.data()
-      user._id = doc.id
-      this.setState({user: user, loading: false, engagements: [], reviews: []})
-    });
+          db.collection("User").doc(userId).get().then((doc) => {
+            var user = doc.data()
+            user._id = doc.id
+            this.setState({user: user, loading: false, engagements: [], reviews: []})
+          });
+        })
 
 
   }
@@ -322,6 +321,7 @@ export default class Profile extends React.Component {
                     secondary={true}
                     label='Edit Profile' labelStyle={{padding: '10px',fontFamily: 'Permanent Marker',
                       fontSize: '20px'}}
+                      onTouchTap={() => browserHistory.push('/profile/edit')}
                       icon={<FontIcon className="fas fa-pencil-alt" style={{color: 'white'}}/>}
                        />
                    }

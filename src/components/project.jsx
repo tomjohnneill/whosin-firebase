@@ -39,6 +39,7 @@ import AccessTime from 'material-ui/svg-icons/device/access-time';
 import Place from 'material-ui/svg-icons/maps/place';
 import FacebookProvider, { Like } from 'react-facebook';
 import {WhosIn} from './desktopproject.jsx';
+import ConditionalModal from './conditionalmodal.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -451,7 +452,7 @@ export default class Project extends React.Component {
           </MediaQuery>
 
           <MediaQuery maxDeviceWidth = {700}>
-          <Card style={{backgroundColor: 'white', maxWidth: '700px', padding: '30px', fontSize: '14px'}}>
+          <Card style={{backgroundColor: 'white', maxWidth: '700px', padding: '16px', fontSize: '14px'}}>
 
             <div >
             <p style={{fontSize: '18px', fontWeight: 'bold', textAlign: 'left', margin: 0}}>
@@ -482,14 +483,49 @@ export default class Project extends React.Component {
             </div>
 
               <div style={{display: 'flex', justifyContent: 'center', position: 'sticky'}}>
+                {!this.state.joined && this.state.challenge ?
+                  <div>
+                    <div style={{marginBottom: 10}}>
+                    <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
+                      {`Accept ${this.state.challengeUser.Name}'s challenge:`}
 
-
+                  </span>
+                  <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
+                  </div>
                   <RaisedButton
 
-                     primary={true} fullWidth={true} labelStyle={{letterSpacing: '0.6px', fontSize: '18px', fontWeight: 700,
-                        fontWeight: 'bold', fontFamily: 'Permanent Marker'}}
-                      label="Join Now"
-                      onTouchTap={this.handleModal} />
+                     primary={true} fullWidth={true}
+                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                     label='Join Now' onTouchTap={this.handleModal} />
+                   </div>
+
+                   :
+                   !this.state.joined ?
+
+
+                  <div style={{width: '100%'}}>
+                    <ConditionalModal
+                      _id={this.props.params._id}
+                      title={this.props.params.project}
+                      project = {this.state.project ? this.state.project : null}
+                        open={this.state.conditionalOpen}
+                        changeOpen={this.handleConditionalChangeOpen}
+                        />
+
+
+
+                    <RaisedButton
+
+                       primary={true} fullWidth={true}
+                        labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                       label="Join Now" onTouchTap={this.handleModal} />
+                     </div>
+                :
+                <RaisedButton
+
+                   fullWidth={true}
+                   labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                  label="I can't come" onTouchTap={this.handleUnJoin} />}
 
 
             </div>

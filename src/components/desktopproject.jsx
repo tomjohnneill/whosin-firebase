@@ -395,6 +395,35 @@ export default class DesktopProject extends React.Component {
     this.setState({selected: value})
   }
 
+  handleEditProject = (e) => {
+    e.preventDefault()
+    localStorage.removeItem('basics')
+    localStorage.removeItem('times')
+    localStorage.removeItem('story')
+    localStorage.removeItem('coverPhoto')
+    var basics = {
+      min: this.state.project['Target People'],
+      max: this.state.proejct['Maximum People'],
+      deadline: this.state.project['Deadline'],
+      tags: this.state.project.Tags
+    }
+    var times = {
+      'Start Time': this.state.project['Start Time'],
+      'End Time': this.state.project['End Time'],
+      address: this.state.project.Location
+    }
+    var story = {
+      title: this.state.project.Name,
+      story: this.state.project.Description,
+      summary: this.state.project.Summary
+    }
+    var coverPhoto = this.state.project['Featured Image']
+    localStorage.setItem('basics', JSON.stringify(basics))
+    localStorage.setItem('times', JSON.stringify(times))
+    localStorage.setItem('story', JSON.stringify(story))
+    localStorage.setItem('coverPhoto', coverPhoto)
+    browserHistory.push('/create-project/1')
+  }
 
 
   render () {
@@ -460,9 +489,19 @@ export default class DesktopProject extends React.Component {
                   justifyContent: 'center'}}>
                   <div style={{width: '100%', maxWidth: '1000px'}}>
                   <div >
-                  <p style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', margin: 0}}>
+                    <div style={{display: 'flex'}}>
+                  <p style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', margin: 0, flex: 1}}>
                     {this.state.project.Name}
                   </p>
+                  {this.state.project.Creator === fire.auth().currentUser.uid ?
+                  <div style={{width: '120px' }}>
+                    <RaisedButton label='Edit Project'
+                      secondary={true}
+                      onClick={this.handleEditProject}
+                      labelStyle={{textTransform: 'none', fontWeight: 700}}/>
+                  </div> : null
+                  }
+                  </div>
                   <p style={{fontSize: '18px', fontWeight: 'light', textAlign: 'left'}}>
                     {this.state.project.Summary}
                   </p>

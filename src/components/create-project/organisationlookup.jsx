@@ -149,6 +149,7 @@ export default class OrganisationLookup extends React.Component{
     var startTime = new Date(times['Start Time'])
     var endTime = new Date(times['End Time'])
     var body = {
+      "Creator": fire.auth().currentUser.uid,
       'Name': story.title,
       'Description': story.story,
       'Summary': story.summary,
@@ -156,9 +157,10 @@ export default class OrganisationLookup extends React.Component{
       'Maximum People': basics.max,
       'Featured Image': coverPhoto,
       'Deadline': new Date(basics.deadline),
-      'Location': basics.address,
+      'Location': times.address,
       'Start Time': startTime,
-      'End Time': endTime
+      'End Time': endTime,
+      'Tags': basics.tags
     }
     console.log(body)
     console.log(JSON.stringify(body))

@@ -84,21 +84,32 @@ export default class Navigation extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {open: false, changePasswordOpen: false, modalOpen: false};
+    this.state = {open: false, changePasswordOpen: false, modalOpen: false, loading: true};
     this.logout = this.logout.bind(this);
 
   }
 
 
   componentDidMount(props) {
+    console.log(fire.auth())
+    fire.auth().onAuthStateChanged((user) => {
+      if (user = null) {
+
+      } else {
+        db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
+          console.log(data.data())
+          this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
+        })
+      }
+    })
+
     if (fire.auth().currentUser) {
-      db.collections("User").doc(fire.auth().currentUser.uid).get().then((data) => {
+      console.log(fire.auth().currentUser)
+      db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
         console.log(data.data())
-        this.setState({userPicture: data.data().Picture})
+        this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
       })
     }
-
-
   }
 
 
@@ -214,7 +225,8 @@ export default class Navigation extends React.Component {
     browserHistory.push('/create-project/0')
   }
 
-  renderLayout() {
+  render() {
+    console.log(this.state)
 
   return(
 
@@ -226,18 +238,18 @@ export default class Navigation extends React.Component {
           className={this.props.location === '/' && fire.auth().currentUser ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
-                              {fire.auth().currentUser ?
-                              <IconButton onTouchTap={() => browserHistory.push('/profile')}
-                                style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
-                                <Avatar src={this.state.userPicture}/>
-                              </IconButton> :
-                              <RaisedButton label='Login' primary={true}
-                                onClick={this.handleModal}
-                                 labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
-                                      letterSpacing: '0.6px', fontWeight: 'bold'}}
+                              {this.state.loading ? null :
+                                this.state.user ?
+                                <IconButton onTouchTap={() => browserHistory.push('/profile')}
+                                  style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
+                                  <Avatar src={this.state.userPicture}/>
+                                </IconButton> :
+                                <RaisedButton label='Login' primary={true}
+                                  onClick={this.handleModal}
+                                   labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
+                                        letterSpacing: '0.6px', fontWeight: 'bold'}}
 
-                                />
-                              }
+                                  />}
                             <MediaQuery minDeviceWidth = {700}>
                               {fire.auth().currentUser && !window.location.pathname.includes('create-project') ?
                               <RaisedButton
@@ -278,14 +290,5 @@ export default class Navigation extends React.Component {
       </div>
     );
   }
-  render () {
 
-
-    return(
-    <div>
-      {this.renderLayout()}
-
-    </div>
-  )
-  }
 }

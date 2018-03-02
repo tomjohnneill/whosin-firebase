@@ -5,6 +5,7 @@ import MediaQuery from 'react-responsive';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {  browserHistory } from 'react-router';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 const styles = {
   textfield: {
@@ -18,7 +19,50 @@ const styles = {
   }
 }
 
+const defaultStyles = {
+  root: {
+    position: 'relative',
+    paddingBottom: '0px',
+    fontSize: '16px',
+    fontFamily: 'Open Sans'
+  },
+  input: {
+    display: 'inline-block',
+    width: '100%',
+    padding: '10px',
+    fontSize: '16px',
+    boxSizing: 'border-box',
+    borderRadius: '6px',
+    border: '1px solid rgb(133, 137, 135)',
+    fontFamily: 'Open Sans'
+  },
+  autocompleteContainer: {
+    position: 'absolute',
+    top: '100%',
+    backgroundColor: 'white',
+    border: '1px solid #555555',
+    width: '100%',
+    zIndex: '5',
+    fontFamily: 'Open Sans'
+  },
+  autocompleteItem: {
+    backgroundColor: '#ffffff',
+    padding: '10px',
+    color: '#555555',
+    cursor: 'pointer',
+  },
+  autocompleteItemActive: {
+    backgroundColor: '#fafafa'
+  },
+}
 
+
+const options = {
+  location: window.google ?
+    new window.google.maps.LatLng(51.5, 0.12)
+  :null,
+  radius: 10000,
+}
 
 function disableDates(date) {
   var basics = JSON.parse(localStorage.getItem('basics'))
@@ -35,9 +79,44 @@ class Form extends React.Component {
       startDate: times? parseISOString(times['Start Time']): null,
       endDate: times? parseISOString(times['End Time']): null,
       startTime: times? parseISOString(times['Start Time']): null,
-      endTime: times? parseISOString(times['End Time']): null
+      endTime: times? parseISOString(times['End Time']): null,
+      address: times ? times.address : '',
     }
   }
+
+  debounce = function(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
+  onChange = (address) => this.setState({ address })
+
+  handleUpdateInput = (searchText) => {
+    this.setState({
+        searchText: searchText,
+      });
+    fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/xml?input=${encodeURIComponent(this.state.searchText)}&types=establishment&location=51.5074,0.1278&radius=10000&key=AIzaSyAw-u3Xed8r9dRXJI47oW8eDuDN8VpikJE` )
+    .then(response => response.json())
+    .then(function(data) {
+      console.log(data)
+      var places = data.predictions.map(a => a.description)
+      this.setState({rawPlaces: data.predictions})
+
+      this.setState({places: places})
+    }.bind(this))
+    .catch(error => this.setState({error: error}))
+  };
+
 
 
   handleNext = (e) => {
@@ -58,7 +137,8 @@ class Form extends React.Component {
 
     var times =
       {'Start Time': startDate,
-        'End Time': endDate}
+        'End Time': endDate,
+      'address': this.state.address}
     var timeString = JSON.stringify(times)
     localStorage.setItem('times', timeString)
     browserHistory.push('/create-project/3')
@@ -93,11 +173,23 @@ class Form extends React.Component {
 
   render() {
     console.log(this.state)
-
+    const inputProps = {
+        value: this.state.address,
+        onChange: this.onChange,
+        placeholder: 'Location'
+      }
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
         <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
-          So when is this going to happen?</p>
+          If this is an event, can you give some details?</p>
+          <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
+            <p style={styles.header}>
+              Where is this happenning?
+            </p>
+            <PlacesAutocomplete value={this.state.address}
+              styles={defaultStyles} options={options} inputProps={inputProps} />
+
+          </div>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <div style={{width: '100%',  paddingBottom: '32px',
              boxSizing: 'border-box'}}>
@@ -179,11 +271,15 @@ class Form extends React.Component {
         <RaisedButton label='NEXT' backgroundColor='#E55749'
           onClick={this.handleNext}
           style={{marginRight: 16}}
-          disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime}
+          disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
           labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
+            style={{marginRight: 127}}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+      <RaisedButton label='Skip' secondary={true}
+          onClick={() => browserHistory.push('/create-project/3')}
+            labelStyle={{color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
       </div>
     )
   }

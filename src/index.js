@@ -27,6 +27,7 @@ import Register from './components/feedback/register.jsx';
 import MiniWhy from './components/create-project/miniwhy.jsx';
 import CantCome from './components/cantcome.jsx';
 import ProjectReview from './components/feedback/projectreview.jsx';
+import EditProfile from './components/editprofile.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -44,6 +45,7 @@ const rootElement = document.getElementById('root');
       <Route path='/auth/linkedin/' component={LinkedInAuth}/>
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>
+      <Route path='/profile/edit' component={EditProfile}/>
       <Route path='/form/formbuilder' component={FormBuilder}/>
       <Route path='/step/stepper' component={CreateProject}/>
       <Route path='/auto/autocomplete' component={CharityAutocomplete}/>
