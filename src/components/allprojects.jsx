@@ -9,12 +9,16 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import {grey200, grey500, grey100, amber500} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List';
+import Search from 'material-ui/svg-icons/action/search';
 import Divider from 'material-ui/Divider';
+
 import fire from '../fire';
 
 let db = fire.firestore()
 
 var placeholderTiles = [0,1,2,3,4,5,6,7]
+
+
 
 const styles = {
   button : {
@@ -31,10 +35,12 @@ export default class AllProjects extends React.Component {
   }
 
   componentDidMount(props) {
+
+
     db.collection("Project").get().then((querySnapshot) => {
       var data = []
       querySnapshot.forEach((doc) => {
-        console.log(doc.data())
+
         var elem = doc.data()
         elem['_id'] = doc.id
         data.push(elem)
@@ -45,23 +51,40 @@ export default class AllProjects extends React.Component {
 
   }
 
+  handleSearch = (e, input) => {
+    const client = window.algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const index = client.initIndex('projects');
+    var query = e.target.value
+    index
+        .search({
+            query
+        })
+        .then(responses => {
+            // Response from Algolia:
+            // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
+            this.setState({projects: responses.hits});
+        });
+  }
+
   render() {
+
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
-          <div style={{position: 'sticky', top: '0px', display: 'flex', paddingLeft: 100, zIndex: 10, paddingRight: 100
+          <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 100, zIndex: 10, paddingRight: 100
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
             <RaisedButton style={{marginRight: '20px', height: '36px'}} label='Dates' secondary={true} labelStyle={styles.button}/>
-            <RaisedButton  style={{marginRight: '20px', height: '36px'}} label='Type' secondary={true} labelStyle={styles.button}/>
-            <TextField/>
+            <Search style={{marginRight: 6}}/>
+            <TextField onChange={this.handleSearch}/>
           </div>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
-          <div style={{position: 'sticky', top: '0px', display: 'flex', paddingLeft: 16, zIndex: 10, paddingRight: 10
+          <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 16, zIndex: 10, paddingRight: 10
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
-            <RaisedButton style={{marginRight: '20px', height: '36px'}} label='Dates' secondary={true} labelStyle={styles.button}/>
-            <RaisedButton  style={{marginRight: '20px', height: '36px'}} label='Type' secondary={true} labelStyle={styles.button}/>
-            <TextField/>
+            <RaisedButton style={{marginRight: '20px', height: '36px'}}
+              label='Dates' secondary={true} labelStyle={styles.button}/>
+            <Search style={{marginRight: 6}}/>
+            <TextField onChange={this.handleSearch}/>
           </div>
         </MediaQuery>
         <div>

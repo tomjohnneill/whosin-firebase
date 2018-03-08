@@ -14,6 +14,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Checkbox from 'material-ui/Checkbox';
 import {PhotoUpload} from './profile.jsx';
 import Snackbar from 'material-ui/Snackbar';
+import FirebaseAuth from './auth/firebaseauth.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -315,7 +316,7 @@ export default class EditProfile extends React.Component {
                     onTouchTap={this.changeAnchorEl}
                     buttonStyle={this.state.selected === 'supporters' ? styles.selectedTab : styles.tab}
                      label="Verification"  value="supporters">
-                    <div/>
+                    <FirebaseAuth/>
                   </Tab>
                 </Tabs>
             </div>

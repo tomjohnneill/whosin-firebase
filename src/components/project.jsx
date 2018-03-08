@@ -40,6 +40,7 @@ import Place from 'material-ui/svg-icons/maps/place';
 import FacebookProvider, { Like } from 'react-facebook';
 import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
+import {Spiral} from './icons.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -49,6 +50,7 @@ const Loading = () => (
   <div/>
 )
 
+const style = {margin: 5};
 
 const styles = {
   box: {
@@ -122,18 +124,18 @@ const styles = {
 explanation: {
   fontSize: '8pt',
   color: grey500
-},selectedTab: {
+} ,
+selectedTab: {
     height: '36px',
     backgroundColor: 'white',
     color: '#FF9800',
     textTransform: 'none',
-    fontSize: '20px',
     letterSpacing: '0.4px',
-    fontFamily: 'Permanent Marker',
     lineHeight: '16px',
-
+    fontWeight: 700,
     paddingLeft: '20px',
     paddingRight: '20px',
+    zIndex: 4
   },
   tab: {
     height: '36px',
@@ -141,13 +143,11 @@ explanation: {
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',
-
-    fontSize: '16px',
     letterSpacing: '0.4px',
     lineHeight: '16px',
     paddingLeft: '20px',
     paddingRight: '20px',
-
+    zIndex: 4
   },
 }
 
@@ -171,7 +171,9 @@ var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getIt
 
 export default class Project extends React.Component {
   constructor(props) {
+
     super(props);
+    console.log(this.props)
     var worktoolsToken = localStorage.getItem('worktoolsToken')
     var loggedIn
     if (worktoolsToken) {
@@ -180,14 +182,14 @@ export default class Project extends React.Component {
       loggedIn = false
     }
     this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0, loading:true, loggedIn: loggedIn,
-      charity: {}, inkBarLeft: '20px'}
+      charity: {}, inkBarLeft: '20px', selected: 'story', challengeExists: false}
   }
 
   loadFbLoginApi() {
 
        window.fbAsyncInit = function() {
            window.FB.init({
-               appId      : '1924574794468253',
+               appId      : '535993046799422',
                cookie     : true,  // enable cookies to allow the server to access
                // the session
                xfbml      : true,  // parse social plugins on this page
@@ -208,11 +210,14 @@ export default class Project extends React.Component {
 
 
   componentDidMount(props) {
+    if (this.props.location.query.project) {
+          window.history.replaceState({}, 'Title', '/projects/p/' + this.props.location.query.project)
+    }
 
     this.loadFbLoginApi()
     this.setState({ loading: true });
 
-    db.collection("Project").doc(this.props.params._id).get().then((doc) => {
+    db.collection("Project").doc(this.props.location.query.project ? this.props.location.query.project : this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
       this.setState({ project: project, charity: {}})
@@ -225,21 +230,33 @@ export default class Project extends React.Component {
       }
     });
 
-    if (fire.auth().currentUser) {
-      db.collection("Engagement").where("User", "==", fire.auth().currentUser.uid)
-      .where("Project", "==", this.props.params._id).get().then((querySnapshot) => {
-        if (querySnapshot.size > 0) {
-          this.setState({joined: true})
-        } else {
-          this.setState({joined: false})
-        }
-      })
-    }
+    fire.auth().onAuthStateChanged((user) => {
+      if (user !== null) {
+        db.collection("Engagement").where("User", "==", fire.auth().currentUser.uid)
+        .where("Project", "==", this.props.location.query.project ? this.props.location.query.project : this.props.params._id).get().then((querySnapshot) => {
+          if (querySnapshot.size > 0) {
+            this.setState({joined: true})
+          } else {
+            this.setState({joined: false})
+          }
+        })
 
-    if (this.props.params.challengeId) {
+        db.collection("Project").doc(this.props.params._id).collection("Challenge")
+        .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
+          console.log(querySnapshot)
+          if (querySnapshot.size > 0) {
+            this.setState({challengeExists: true})
+          } else {
+            this.setState({challengeExists: false})
+          }
+        })
+      }
+    })
+
+    if (this.props.params.challengeId || this.props.location.query.challenge) {
       this.setState({loading: true})
-      db.collection("Project").doc(this.props.params._id)
-      .collection("Challenge").doc(this.props.params.challengeId).get().then((doc) => {
+      db.collection("Project").doc(this.props.location.query.project ? this.props.location.query.project : this.props.params._id)
+      .collection("Challenge").doc(this.props.location.query.challenge ? this.props.location.query.challenge : this.props.params.challengeId).get().then((doc) => {
         var challenge = doc.data()
         challenge['_id'] = doc.id
         db.collection("User").doc(challenge.User).get().then((userDoc) => {
@@ -258,9 +275,6 @@ export default class Project extends React.Component {
   }
 
 
-  handleTabClick = (tab) => {
-    console.log(tab)
-  }
 
   handleModal = (e) => {
     this.setState({modalOpen: true})
@@ -355,7 +369,8 @@ export default class Project extends React.Component {
         "Name": doc.data().Name,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
-        "Location": doc.data().Location ? doc.data().Location : null
+        "Location": doc.data().Location ? doc.data().Location : null,
+        "created": new Date()
       }
       console.log(body)
       db.collection("Engagement").add(body)
@@ -365,13 +380,29 @@ export default class Project extends React.Component {
     .catch(error => {this.setState({error: error}); console.log(error)})
   }
 
+  deleteEngagement = () => {
+    console.log('remove engagement')
+      db.collection("Engagement").where("Project", "==", this.state.project._id)
+      .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
+          querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+          })
+      })
+    .catch(error => {this.setState({error: error}); console.log(error)})
+    this.forceUpdate()
+  }
+
+  handleChangeTab = (value) => {
+    this.setState({selected: value})
+  }
+
+  handleUnJoin = (e) => {
+    e.preventDefault()
+    this.deleteEngagement()
+    browserHistory.push(window.location.pathname + '/declined')
+  }
 
   render () {
-
-    var badgeFill = 1
-    var tabLength = 2
-
-
     console.log(this.state)
 
     return (
@@ -446,6 +477,7 @@ export default class Project extends React.Component {
           <MediaQuery minDeviceWidth={700}>
               <DesktopProject params={this.props.params} project={this.state.project}
                 joined={this.state.joined}
+                challengeExists={this.state.challengeExists}
                 challenge = {this.state.challenge}
                 challengeUser={this.state.challengeUser}
                 charity={this.state.charity} questions={this.state.questions}/>
@@ -483,7 +515,7 @@ export default class Project extends React.Component {
             </div>
 
               <div style={{display: 'flex', justifyContent: 'center', position: 'sticky'}}>
-                {!this.state.joined && this.state.challenge ?
+                {!this.state.joined && this.state.challenge?
                   <div>
                     <div style={{marginBottom: 10}}>
                     <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
@@ -504,21 +536,26 @@ export default class Project extends React.Component {
 
 
                   <div style={{width: '100%'}}>
+
                     <ConditionalModal
-                      _id={this.props.params._id}
+                      _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
                       title={this.props.params.project}
+                      onConditionalComplete={() => this.setState({challengeExists: true})}
                       project = {this.state.project ? this.state.project : null}
                         open={this.state.conditionalOpen}
+                        challengeExists={this.state.challengeExists}
                         changeOpen={this.handleConditionalChangeOpen}
                         />
 
 
 
+                      {!this.state.challengeExists && !this.state.challenge ?
                     <RaisedButton
 
                        primary={true} fullWidth={true}
                         labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
                        label="Join Now" onTouchTap={this.handleModal} />
+                     : null}
                      </div>
                 :
                 <RaisedButton
@@ -531,7 +568,7 @@ export default class Project extends React.Component {
             </div>
             <div style={{position: 'sticky'}}>
               <SignupModal
-                _id={this.props.params._id}
+                _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
                 title={this.props.params.project}
                 open={this.state.modalOpen}
                 changeOpen={this.handleModalChangeOpen}
@@ -540,19 +577,17 @@ export default class Project extends React.Component {
 
 
 
-            {/*
-            <div style={{color: 'rgba(0, 0, 0, 0.54)', padding: '16px', fontSize: '14px'}}>
-              All or nothing - either all {this.state.pledge.target} of us, or none of us do this.
-            </div>
-            */}
-            <Divider/>
-
 
             <Tabs
-              style={{marginTop: 16,borderBottom: '1px solid #e4e4e4'}}
+              ref='tabs'
+              style={{borderBottom: '1px solid #e4e4e4'}}
               tabItemContainerStyle={{ backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
+
+
                 inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
                 left:this.state.inkBarLeft, width: '60px'}}
+
+
               tabTemplateStyle={{backgroundColor: 'white'}}
               >
               <Tab
@@ -561,20 +596,22 @@ export default class Project extends React.Component {
                 value='story'
                 onTouchTap={this.changeAnchorEl}
                 label='The Story'>
+                <CardText  children = {
+                    <div>
+                        <Link to={`/charity/${this.state.charity._id}`} >
+                          {this.state.charity.logo ?
+                            <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
+                              src ={this.state.charity.logo }/>
+                            :
+                            <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
+                          }
 
-                    <div style={{marginTop: 16}}>
-                        <div >
-
-                          <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
-                            src = 'https://pbs.twimg.com/profile_images/527359343239245824/HKrgEYEh_400x400.png'/>
-                          <p style={{margin: 0, fontWeight: 'bold'}}>
+                          <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
                               {this.state.charity.Name}
                             </p>
-                        <p style={{margin: 0, paddingBottom: '16px'}}>
-                            2nd project
-                          </p>
-                          <div style={{borderBottom: 'solid 0.5px #dddddd', width: '100%'}}/>
-                        </div>
+
+
+                        </Link>
                          <div style={{marginBottom: '30px'}} dangerouslySetInnerHTML={this.descriptionMarkup()}/>
                            <div className="fb-like" href={this.state.project.FacebookURL}
                           width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
@@ -584,42 +621,77 @@ export default class Project extends React.Component {
                             Start a project of your own
                           </div>
                           <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                            <RaisedButton label="Let's Go"
+                            <RaisedButton label="Go"
                               onTouchTap={this.handleLetsGo}
                               style={{borderRadius: '4px', float: 'right'}}
-                              labelStyle={{fontFamily: 'Permanent Marker', padding: 0}}/>
+                              labelStyle={{fontFamily: 'Permanent Marker'}}/>
                           </div>
                         </div>
                     </div>
+                  }>
 
+                </CardText>
               </Tab>
-
               <Tab
+                value='aboutus'
                 style={{width: 'auto'}}
-                buttonStyle={this.state.selected === 'story' ? styles.selectedTab : styles.tab}
+                buttonStyle={this.state.selected === 'aboutus' ? styles.selectedTab : styles.tab}
                 onTouchTap={this.changeAnchorEl}
-                label='Feedback'>
+                label='About Us'>
                 <div>
-                  {/*
-                    <OrgFeedback
-                      pledgedUsers={this.state.pledge.pledgedUsers}
-                      pledgeId={this.state.params._id} pledgeCreatorId={this.state.pledge.creatorId}/>
-                      */}
+                  <div style={{padding: 16}}>
+                    Hello
+                    <h2>{this.state.charity.Name}</h2>
+                    <div style={{fontWeight: 'lighter', fontSize: '14px', marginBottom: 20}}>
+                      {this.state.charity.Description}
+                    </div>
+                    {this.state.charity.Facebook || this.state.charity.Twitter || this.state.charity.Instagram ?
+                      <div>
+                        <Divider/>
 
+                        <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
+                        <div style={{display: 'flex', width: '100%'}}>
+                          {this.state.charity.Facebook ?
+                          <span style={styles.contactIcon}>
+                            <Avatar
+                              icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
+                              color={'white'}
+                              backgroundColor={'#3b5998'}
+                              size={50}
+                              style={style}
+                            />
+                          {this.state.charity.Facebook}
+                        </span> : null }
+                          {this.state.charity.Twitter ?
+                          <span style={styles.contactIcon}>
+                            <Avatar
+                              icon={<FontIcon className="fab fa-twitter fa-2x" />}
+                              color={'white'}
+                              backgroundColor={'#00aced'}
+                              size={50}
+                              style={style}
+                            />
+                          {this.state.charity.Twitter}
+                        </span> : null }
+                          {this.state.charity.Instagram ?
+                          <span style={styles.contactIcon}>
+                            <Avatar
+                              icon={<FontIcon className="fab fa-instagram fa-2x" />}
+                              color={'white'}
+                              backgroundColor={'#fb3958'}
+                              size={50}
+                              style={style}
+                            />
+                          {this.state.charity.Instagram}
+                          </span> : null}
+                        </div>
+                      </div>
+                      : null
+                    }
+                  </div>
                 </div>
               </Tab>
 
-              {this.state.project.stripe && this.state.project.stripe.plans ?
-              <Tab
-                buttonStyle={{textTransform: 'none', color: 'rgba(0, 0, 0, 0.54)', backgroundColor: 'white',
-                                }}
-                label='Support'>
-                <div>
-
-
-
-                </div>
-              </Tab> : null}
             </Tabs>
 
             <div style={{boxSizing: 'border-box'}}>
@@ -643,7 +715,7 @@ export default class Project extends React.Component {
 
 
         <JoiningModal
-          _id={this.props.params._id}
+          _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
           Name={this.state.project.Name}
           title={this.props.params.project}
             open={this.state.joiningOpen}

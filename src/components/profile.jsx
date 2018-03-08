@@ -28,8 +28,6 @@ const styles = {
   }
 }
 
-var worktoolsToken = localStorage.getItem('worktoolsToken') !== 'undefined' ? localStorage.getItem('worktoolsToken') :
-  '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
 export class PhotoUpload extends React.Component {
   constructor(props) {
@@ -141,7 +139,7 @@ class RecentlySupported extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("Engagement").where("User", "==", this.props.userId).get().then((querySnapshot) => {
+    db.collection("Engagement").where("User", "==", this.props.userId).orderBy("created", "desc").limit(10).get().then((querySnapshot) => {
       var data = []
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
@@ -174,9 +172,9 @@ class RecentlySupported extends React.Component {
                 <div style={{width: '250px'}}>
                   <Spiral style={{height: '58px'}}/>
                 <div>
-                  <b>{project['Charity Name']}</b> <br/>
+
                   {project['Project Name']}<br/>
-                  Date
+                {project.created.toLocaleString('en-GB', { timeZone: 'UTC' , weekday: 'long', day: 'numeric', month: 'long'})}
                 </div>
                 </div>
                 <div style={{flex: 1}}>
@@ -197,7 +195,7 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {user: {}, loading: true, slideIndex: 0}
-
+    console.log(this.props)
   }
 
   componentDidMount(props) {
@@ -206,7 +204,7 @@ export default class Profile extends React.Component {
           var publicProfile = true
           if (this.props.params._id) {
             userId = this.props.params._id
-            if (user.uid === this.props.params._id) {
+            if (user && user.uid === this.props.params._id) {
               publicProfile = false
             }
           } else if (user) {
@@ -235,7 +233,7 @@ export default class Profile extends React.Component {
   };
 
   handleListClick(engagement, e) {
-    browserHistory.push('/pages/projects/' + 'eng' + '/' + engagement.Project)
+    browserHistory.push('/projects/' + 'eng' + '/' + engagement.Project)
   }
 
   changeImage = (imageUrl) => {
@@ -247,9 +245,6 @@ export default class Profile extends React.Component {
 
   render() {
     console.log(this.state)
-
-    var worktoolsToken = localStorage.getItem('worktoolsToken') ?
-      localStorage.getItem('worktoolsToken') : '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
     return (
       <div className='block'>
@@ -327,7 +322,7 @@ export default class Profile extends React.Component {
                    }
 
                 </div>
-                <RecentlySupported worktoolsToken={worktoolsToken} userId={this.state.userId}/>
+                <RecentlySupported userId={this.state.userId}/>
 
               </div>
               <div style={{maxWidth: '50px', width: '5%'}}/>

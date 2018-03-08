@@ -24,6 +24,11 @@ const styles = {
     height: '40px',
 
   },
+  unfilledTextField: {
+    backgroundColor: 'rgba(101, 161, 231, 0.15)',
+    height: '40px',
+    borderRadius: 6
+  },
   header : {
     margin: '0px',
     padding: '6px',
@@ -115,7 +120,7 @@ export default class OrganisationLookup extends React.Component{
     this.setState({loading: true})
     fetch(`https://charitybase.uk/api/v0.2.0/charities?search=${string}&fields=beta.activities,favicon,mainCharity,charityNumber,contact&limit=1`)
     .then(response => response.json())
-    .then(data => {this.setState({loading: false, details: data.charities ? data.charities[0] : {}});
+    .then(data => {this.setState({details: data.charities ? data.charities[0] : {}});
       var charity = data.charities[0]
       this.setState({
         activities: charity.beta ? charity.beta.activities : null,
@@ -125,7 +130,8 @@ export default class OrganisationLookup extends React.Component{
         address: charity.contact ? charity.contact.address.toString() : null,
         postcode: charity.contact ? charity.contact.postcode : null,
         charityNumber: charity.charityNumber,
-        logo: charity.favicon
+        logo: charity.favicon,
+        loading: false
       })
     }
   )
@@ -146,8 +152,8 @@ export default class OrganisationLookup extends React.Component{
     var story = JSON.parse(localStorage.getItem('story'))
     var coverPhoto = localStorage.getItem('coverPhoto')
     var times = JSON.parse(localStorage.getItem('times'))
-    var startTime = new Date(times['Start Time'])
-    var endTime = new Date(times['End Time'])
+    var startTime = times ? new Date(times['Start Time']) : null
+    var endTime = times ? new Date(times['End Time']) : null
     var body = {
       "Creator": fire.auth().currentUser.uid,
       'Name': story.title,
@@ -157,10 +163,11 @@ export default class OrganisationLookup extends React.Component{
       'Maximum People': basics.max,
       'Featured Image': coverPhoto,
       'Deadline': new Date(basics.deadline),
-      'Location': times.address,
+      'Location': times ? times.address : null,
       'Start Time': startTime,
       'End Time': endTime,
-      'Tags': basics.tags
+      'Tags': basics.tags,
+      "created": new Date()
     }
     console.log(body)
     console.log(JSON.stringify(body))
@@ -185,6 +192,7 @@ export default class OrganisationLookup extends React.Component{
       db.collection("Charity").doc(this.state.charityNumber.toString()).set(charityBody, {merge: true})
       .then(docRef => {
         body.Charity = this.state.charityNumber.toString()
+        body['Charity Name'] = this.state.searchText
         db.collection("Project").add(body)
         .then(newProject => {
           console.log(newProject)
@@ -197,21 +205,32 @@ export default class OrganisationLookup extends React.Component{
       db.collection("Charity").add(charityBody)
       .then(docRef => {
         body.Charity = docRef.id
-        db.collection("Project").add(body)
-        .then(newProject => {
-          console.log(newProject)
-          browserHistory.push('/create-project/' + newProject.id)
-        })
+        body['Charity Name'] = docRef.data().Name
+        if (localStorage.getItem('editProject')) {
+          db.collection("Project").doc(localStorage.getItem('editProject')).update(body)
+          .then(newProject => {
+            console.log(newProject)
+            browserHistory.push('/create-project/' + newProject.id)
+          })
+        } else {
+          db.collection("Project").add(body)
+          .then(newProject => {
+            console.log(newProject)
+            browserHistory.push('/create-project/' + newProject.id)
+          })
+        }
+
           })
       .catch(error => {this.setState({error: error}); console.log(error)})
     }
 
-    /*
+
     localStorage.removeItem('basics')
     localStorage.removeItem('story')
     localStorage.removeItem('times')
     localStorage.removeItem('coverPhoto')
-    */
+    localStorage.removeItem('editProject')
+
   }
 
   handleFill = (e) => {
@@ -314,7 +333,7 @@ export default class OrganisationLookup extends React.Component{
                   hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                   key='name'
                   onChange={this.changeCharityInfo.bind(this, 'name')}
-                  style={styles.whiteTextfield}/>
+                  style={this.state.details.name ? styles.whiteTextfield : styles.unfilledTextField}/>
               </div>
 
 
@@ -332,7 +351,7 @@ export default class OrganisationLookup extends React.Component{
                       hintText={'Phone'}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='location3'
-                      style={styles.whiteTextfield}/>
+                      style={this.state.details.phone ? styles.whiteTextfield : styles.unfilledTextField}/>
 
                     <TextField fullWidth={true}
                       inputStyle={{borderRadius: '6px', border: '1px solid #858987',
@@ -343,7 +362,7 @@ export default class OrganisationLookup extends React.Component{
                       hintText={'Address'}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='location3'
-                      style={styles.whiteTextfield}/>
+                      style={this.state.address ? styles.whiteTextfield : styles.unfilledTextField}/>
 
                     <TextField fullWidth={true}
                       inputStyle={{borderRadius: '6px', border: '1px solid #858987',
@@ -354,7 +373,7 @@ export default class OrganisationLookup extends React.Component{
                       hintText={'Postcode'}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='location3'
-                      style={styles.whiteTextfield}/>
+                      style={this.state.postcode ? styles.whiteTextfield : styles.unfilledTextField}/>
 
 
                 </div>
@@ -390,7 +409,7 @@ export default class OrganisationLookup extends React.Component{
                   key='activities'
                   rows={3}
                   multiLine={true}
-                  style={styles.whiteTextfield}/>
+                  style={this.state.activities ? styles.whiteTextfield : styles.unfilledTextField}/>
               </div>
 
               <div style={{display: 'flex'}}>
@@ -407,7 +426,7 @@ export default class OrganisationLookup extends React.Component{
                   defaultValue={this.state.email}
                   hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                   key='location2'
-                  style={styles.whiteTextfield}/>
+                  style={this.state.email ? styles.whiteTextfield : styles.unfilledTextField}/>
                 <p style={styles.header}>
                   Facebook
                 </p>

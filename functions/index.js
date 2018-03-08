@@ -6,7 +6,7 @@ admin.initializeApp(functions.config().firebase);
 
 let db = admin.firestore()
 
-var mailgun = require('mailgun-js')({apiKey: 'key-dfe410401ff096a0f1764383dfb5e89a', domain: 'mg.intervention-tools.com'})
+var mailgun = require('mailgun-js')({apiKey: 'key-dfe410401ff096a0f1764383dfb5e89a', domain: 'mg.whosin.io'})
 
 exports.addOneToPeople = functions.firestore
   .document('Engagement/{engagementId}')
@@ -72,16 +72,16 @@ exports.sendSignUpEmail = functions.firestore
             email = email.replace("{{ projectName }}", ProjectData.Name)
             email = email.replace('{{ Name }}', newValue.Name)
             email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
-            email = email.replace("{{ startTime }}", ProjectData['Start Time'].toLocaleString())
+            email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
             email = email.replace("{{ location }}", ProjectData['Location'])
             email = email.replace("{{ schemaScript }}", ProjectData['Location'])
             console.log(email)
             console.log(user.Email)
             let data = {
-                from: "Who's In? Confirmation <alerts@intervention-tools.com>",
+                from: "Who's In? Confirmation <alerts@whosin.io>",
                 subject: `${ProjectData.Name}`,
                 html: email,
-                'h:Reply-To': 'alerts@intervention-tools.com',
+                'h:Reply-To': 'alerts@whosin.io',
                 to: user.Email
               }
               mailgun.messages().send(data, function (error, body) {
@@ -111,13 +111,13 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
                   email = email.replace("{{%20projectUrl }}", `https://whos-in-firebase.firebaseapp.com/projects/${ProjectData.Name}/${ProjectData._id}`)
                   email = email.replace("{{ projectName }}", ProjectData.Name)
                   email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
-                  email = email.replace("{{ startTime }}", ProjectData['Start Time'].toLocaleString())
+                  email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
                   email = email.replace("{{ location }}", ProjectData['Location'])
                   let data = {
-                      from: "Who's In? Reminder <alerts@intervention-tools.com>",
+                      from: "Who's In? Reminder <alerts@whosin.io>",
                       subject: `${ProjectData.Name}`,
                       html: email,
-                      'h:Reply-To': 'alerts@intervention-tools.com',
+                      'h:Reply-To': 'alerts@whosin.io',
                       to: userDoc.data().Email
                     }
                     mailgun.messages().send(data, function (error, body) {
@@ -135,6 +135,84 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
     })
 
     res.status(200).send('Done');
+});
+
+var algoliasearch = require('algoliasearch')
+const ALGOLIA_ID = functions.config().algolia.app_id;
+const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
+const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
+
+const ALGOLIA_INDEX_NAME = 'projects';
+const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+
+exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onCreate(event => {
+    // Get the note document
+    const project = event.data.data();
+
+    // Add an 'objectID' field which Algolia requires
+    project.objectID = event.params.projectId;
+
+    // Write to the algolia index
+    const index = client.initIndex(ALGOLIA_INDEX_NAME);
+    return index.saveObject(project);
+});
+
+var site = 'https://whos-in-firebase.firebaseapp.com'
+
+function buildHtmlWithProject (post, id) {
+  const string = `<!DOCTYPE html><head>
+    <title>' + post.Name + ' | Example Website</title>
+    <meta property="og:title" content="${post.Name}">
+    <meta property="twitter:title" content="${post.Name}">
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="${post.Sumary ? post.Summary : post.Description}" />
+    <meta property="og:image" content="${post['Featured Image']}" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="https://example.com/favicon.png">
+    </head><body>
+    <script>window.location="${site}/projects/?project=${id}";</script>
+    </body></html>`;
+  return string;
+}
+
+exports.project = functions.https.onRequest((req, res) => {
+  const path = req.path.split('/');
+  const projectId = path[3];
+  console.log(projectId)
+  db.collection("Project").doc(projectId).get().then((doc) => {
+    const htmlString = buildHtmlWithProject(doc.data(), doc.id);
+    res.status(200).end(htmlString);
+  })
+});
+
+function buildHtmlWithChallenge (id, post, challenge, challengeId) {
+  const string = `<!DOCTYPE html><head>
+    <title>' + post.Name + ' | Example Website</title>
+    <meta property="og:title" content="${post.Name}">
+    <meta property="twitter:title" content="${post.Name}">
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="${post.Sumary ? post.Summary : post.Description}" />
+    <meta property="og:image" content="${post['Featured Image']}" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="https://example.com/favicon.png">
+    </head><body>
+    <script>window.location="${site}/projects/?project=${id}&challenge=${challengeId}";</script>
+    </body></html>`;
+  return string;
+}
+
+exports.challenge = functions.https.onRequest((req, res) => {
+  const path = req.path.split('/');
+  console.log(path)
+  const projectId = path[3];
+  const challengeId = path[4]
+  db.collection("Project").doc(projectId).get().then((doc) => {
+    db.collection("Project").doc(projectId).collection("Challenge")
+      .doc(challengeId).get().then((challengeDoc) => {
+        const htmlString = buildHtmlWithChallenge(doc.id, doc.data(), challengeDoc.data(), challengeDoc.id);
+        res.status(200).end(htmlString);
+    })
+  })
 });
 
 // // Create and Deploy Your First Cloud Functions

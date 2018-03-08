@@ -2,11 +2,13 @@ import React from 'react'
 import {changeImageAddress, dateDiffInDays} from './desktopproject.jsx'
 import {Spiral} from './icons.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import {grey500} from 'material-ui/styles/colors'
 import AddToCalendar from 'react-add-to-calendar';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
 import FlatButton from 'material-ui/FlatButton';
 import {Link} from 'react-router';
+import MediaQuery from 'react-responsive';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -27,7 +29,7 @@ const styles = {
   }
 }
 
-class YouMightLike extends React.Component {
+export class YouMightLike extends React.Component {
   constructor(props) {
     super(props)
     this.state = {loading: false, potentialProjects: []}
@@ -76,20 +78,20 @@ class YouMightLike extends React.Component {
       });
       this.setState({potentialProjects: potentialProjects, loading: false})
     })
-
+    console.log(potentialProjects)
   }
 
   render() {
     return(
-      <div style={{paddingLeft: 'auto', paddingRight: 'auto', display: 'flex', marginTop: '60px'
+      <div style={{paddingLeft: 'auto', paddingRight: 'auto', marginTop: '60px'
             }}>
 
         {this.state.loading ?
           <div/> :
           this.state.potentialProjects.map((project) => (
-            <div style={{width: '60%'}}>
+            <div style={{width: '60%', minWidth: '300px'}}>
                   <Link to={`/projects/${project.Name}/${project._id}`}>
-                <div >
+                <div style={{marginTop: 16}}>
                 <p style={{fontSize: '18px', fontWeight: 'bold', textAlign: 'left', margin: 0, marginBottom: '24px'}}>
                   {project.Name}
                 </p>
@@ -116,17 +118,9 @@ class YouMightLike extends React.Component {
                       <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate" value={6} />
                     </div>
                     <div>
-                      <div style={{display: 'flex', paddingTop: '6px'}}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={styles.bottomBit}>
-                            Where
-                          </div>
-                        </div>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={styles.bottomBit}>
-                            Type
-                          </div>
-                        </div>
+                      <div style={{display: 'flex', paddingTop: '6px', color: grey500,
+                      marginTop: '-5px'}}>
+                          {project.Location}
                       </div>
                     </div>
                   <div>
@@ -194,15 +188,18 @@ export default class CantCome extends React.Component{
       <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
         {this.state.loading ?
           <div/> :
-        <div style={{maxWidth: '1000px', width: '100%', marginTop: 30}}>
+        <div style={{maxWidth: '1000px', width: '100%', marginTop: 30, marginLeft: 16, marginRight: 16}}>
           <div style={{fontSize: '32px', fontWeight: 700, textAlign: 'left', marginBottom: 16, marginTop: 16}}>
             We're sorry you can't come, but thanks for letting us know
           </div>
           <div style={{display: 'flex', marginTop: 50}}>
-            <div style={{flex: 2, marginRight: 30}}>
+            <MediaQuery minDeviceWidth={700}>
+              <div style={{flex: 2, marginRight: 30}}>
 
-              <Spiral color={'#FF9800'}/>
-            </div>
+                <Spiral color={'#FF9800'}/>
+
+              </div>
+            </MediaQuery>
             <div style={{flex: 5}}>
               <div style={{fontSize: '20px', textAlign: 'left', marginBottom: 16}}>
                 {this.state.project.Name}
@@ -226,8 +223,6 @@ export default class CantCome extends React.Component{
             <div style={{width: '60%', borderBottom: 'solid 1px #DDDDDD'}}/>
 
 
-            <YouMightLike project={this.state.project}/>
-            <YouMightLike project={this.state.project}/>
             <YouMightLike project={this.state.project}/>
 
 

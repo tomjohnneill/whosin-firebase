@@ -164,6 +164,7 @@ export default class ProjectReview extends React.Component {
                 </div>
 
                 <RaisedButton primary={true} labelStyle={{fontWeight: 700, textTransform: 'none'}}
+                  onClick={this.handleSubmit}
                   label='Submit' />
             </div>
           </div>

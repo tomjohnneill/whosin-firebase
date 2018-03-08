@@ -208,7 +208,7 @@ export default class UploadPhoto extends React.Component{
                                     labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
                                     primary={true}
                                     />
-                                  <b style={{marginTop: '20px'}}>or drag one in</b>
+                                  <div style={{marginTop: '20px', fontWeight: 700}}>or drag one in</div>
                                 </div>
                             }
 

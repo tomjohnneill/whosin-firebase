@@ -123,7 +123,7 @@ export default class UserTabs extends React.Component {
         <MediaQuery maxDeviceWidth={700}>
           <img
             style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
-            src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ab09077f-2b0d-471a-8e67-d338081bdc56', '1500xauto')}/>
+            src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ab09077f-2b0d-471a-8e67-d338081bdc56', '750xauto')}/>
           <div style={{position: 'absolute',top:'-51px',  height: '100%', minWidth: 320,
             width: '30%',
             left: '5%'
@@ -137,8 +137,8 @@ export default class UserTabs extends React.Component {
                 Children don't know where their food comes from, come and show them
               </span>
               <div style={{display: 'flex', paddingTop: '30px'}}>
-                <RaisedButton labelStyle={styles.button} primary={true} label='See More'/>
-                <RaisedButton labelStyle={styles.button} style={{marginLeft: '16px'}} secondary ={true} label='Another'/>
+                <RaisedButton labelStyle={styles.button} primary={true}
+                  onClick={() => browserHistory.push('/projects/p/7CLWqTZVGWjvJQ5YCvwG')} label='Join Now'/>
               </div>
             </div>
           </div>
@@ -146,7 +146,8 @@ export default class UserTabs extends React.Component {
           <div style={{height: '100px', position: 'absolute', width: '100%', bottom: '51px',
             background: 'linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))'}}/>
         </MediaQuery>
-        {fire.auth().currentUser ?
+
+        <MediaQuery minDeviceWidth={700}>
           <div>
             <img
               style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
@@ -164,8 +165,8 @@ export default class UserTabs extends React.Component {
                   Children don't know where their food comes from, come and show them
                 </span>
                 <div style={{display: 'flex', paddingTop: '30px'}}>
-                  <RaisedButton labelStyle={styles.button} primary={true} label='See More'/>
-                  <RaisedButton labelStyle={styles.button} style={{marginLeft: '16px'}} secondary ={true} label='Another'/>
+                <RaisedButton labelStyle={styles.button} primary={true}
+                   onClick={() => browserHistory.push('/projects/p/7CLWqTZVGWjvJQ5YCvwG')} label='Join Now'/>
                 </div>
               </div>
             </div>
@@ -173,11 +174,6 @@ export default class UserTabs extends React.Component {
             <div style={{height: '100px', position: 'absolute', width: '100%', bottom: '51px',
               background: 'linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))'}}/>
           </div>
-        :
-      <Home/>
-        }
-
-        <MediaQuery minDeviceWidth={700}>
         <Tabs
           className='tab'
           style={{ paddingLeft: '100px', paddingRight: '100px'}}

@@ -27,28 +27,30 @@ export function changeImageAddress(file, size) {
 }
 
 const Feature = (props) => (
-  <div style={{flex: 1, display: 'flex', height: '245px', paddingLeft: '25px'
-    ,paddingTop: '75px'
-    , paddingRight: '25px'}}>
-    <div style={{flex: 5, position: 'relative'}}>
-      <div style={{fontSize: '24px', paddingBottom: '30px', paddingRight: '50px', lineHeight: 1.2}}>
-        {props.project.Name}
+  <Link to={`/projects/${props.project.Name}/${props.project._id}`}>
+    <div style={{flex: 1, display: 'flex', height: '245px', paddingLeft: '25px'
+      ,paddingTop: '75px'
+      , paddingRight: '25px'}}>
+      <div style={{flex: 5, position: 'relative'}}>
+        <div style={{fontSize: '24px', paddingBottom: '30px', paddingRight: '50px', lineHeight: 1.2}}>
+          {props.project.Name}
+        </div>
+        <div style={{fontSize: '14px', textOverflow: 'ellipsis', display: '-webkit-box', boxSizing: 'border-box'
+          , WebkitBoxOrient: 'vertical', WebkitLineClamp: 5, lineHeight: 1.2, maxHeight: 85, overflow: 'hidden',
+          paddingRight: '50px'}}>
+          {props.project.Description}
+        </div>
+        <div style={{position: 'absolute', bottom: '0px', fontSize: '14px', color: '#4A90E2'}}>
+          <FlatButton labelStyle={{color: '#4A90E2'}}
+            label='See More' onTouchTap={(e) => {browserHistory.push('/projects/' + props.project.Name + '/' + props.project._id)}}/>
+        </div>
       </div>
-      <div style={{fontSize: '14px', textOverflow: 'ellipsis', display: '-webkit-box', boxSizing: 'border-box'
-        , WebkitBoxOrient: 'vertical', WebkitLineClamp: 5, lineHeight: 1.2, maxHeight: 85, overflow: 'hidden',
-        paddingRight: '50px'}}>
-        {props.project.Description}
-      </div>
-      <div style={{position: 'absolute', bottom: '0px', fontSize: '14px', color: '#4A90E2'}}>
-        <FlatButton labelStyle={{color: '#4A90E2'}}
-          label='See More' onTouchTap={(e) => {browserHistory.push('/projects/' + props.project.Name + '/' + props.project._id)}}/>
+      <div style={{flex: 3}}>
+        <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
+          src={props.project['Featured Image']}/>
       </div>
     </div>
-    <div style={{flex: 3}}>
-      <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
-        src={props.project['Featured Image']}/>
-    </div>
-  </div>
+  </Link>
 )
 
 export default class ProjectList extends React.Component{

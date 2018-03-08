@@ -7,6 +7,8 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import LinearProgress from 'material-ui/LinearProgress';
 import FlatButton from 'material-ui/FlatButton';
 import {Link} from 'react-router';
+import {YouMightLike} from './cantcome.jsx';
+import MediaQuery from 'react-responsive';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -27,149 +29,6 @@ const styles = {
   }
 }
 
-class YouMightLike extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {loading: false, potentialProjects: []}
-  }
-
-  componentDidMount(props) {
-    var potentialProjects = []
-
-    db.collection("Project").where("Charity", "==", this.props.project.Charity)
-    .get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        var elem = doc.data()
-        elem['_id'] = doc.id
-        if (doc.id !== this.props.project._id) {
-          potentialProjects.push(elem)
-        }
-      });
-      this.setState({potentialProjects: potentialProjects, loading: false})
-    })
-
-    /*
-    if (this.props.project.Type) {
-      db.collection("Project").where("Type", "==", this.props.project.Type)
-      .get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          var elem = doc.data()
-          elem['_id'] = doc.id
-          if (doc.id !== this.props.project._id) {
-            potentialProjects.push(elem)
-          }
-        });
-        this.setState({potentialProjects: potentialProjects})
-      })
-    }
-
-    */
-
-    db.collection("Project").where("Start Time", ">", this.props.project['Start Time'] + 518400000)
-    .get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        var elem = doc.data()
-        elem['_id'] = doc.id
-        if (doc.id !== this.props.project._id) {
-          potentialProjects.push(elem)
-        }
-      });
-      this.setState({potentialProjects: potentialProjects, loading: false})
-    })
-
-  }
-
-  render() {
-    return(
-      <div style={{paddingLeft: 'auto', paddingRight: 'auto', display: 'flex', marginTop: '60px'
-            }}>
-
-        {this.state.loading ?
-          <div/> :
-          this.state.potentialProjects.map((project) => (
-            <div style={{width: '60%'}}>
-                  <Link to={`/projects/${project.Name}/${project._id}`}>
-                <div >
-                <p style={{fontSize: '18px', fontWeight: 'bold', textAlign: 'left', margin: 0, marginBottom: '24px'}}>
-                  {project.Name}
-                </p>
-
-              </div>
-
-            <div
-              ref='variableBox'
-              style={{display: 'flex',
-                  alignItems: 'center', flexDirection: 'row'}}>
-            <div style={{height: '130px', width: '95px'}}>
-              <img src={changeImageAddress(project['Featured Image'], '150xauto')}
-                style={{height: '130px', width: '95px', objectFit: 'cover'}}
-                />
-            </div>
-            <div style={{ height: '130px', flex: 1}}>
-              <CardTitle
-                style={{height: '100%', paddingTop: '0px', paddingLeft: '32px',  overflowX:'hidden', paddingBottom: '0px'}}
-                children={
-                  <div style={{justifyContent: 'space-between', display: 'flex', flexDirection: 'column', height: '100%'}}>
-                    <div>
-                      <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>50 people are in</p>
-                      <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '0px', marginBottom: '6px'}}>65 people needed</p>
-                      <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate" value={6} />
-                    </div>
-                    <div>
-                      <div style={{display: 'flex', paddingTop: '6px'}}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={styles.bottomBit}>
-                            Where
-                          </div>
-                        </div>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={styles.bottomBit}>
-                            Type
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <div>
-
-                      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                        <div style={styles.number}>
-                          {project['End Date'] ? dateDiffInDays(new Date(),project['End Date']) : 10}
-                        </div>
-                        <div style={{fontWeight: 'lighter', marginLeft: '6px'}}>
-                          days to go...
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                    </div>
-                  </div>
-                }/>
-
-            </div>
-
-            </div>
-            <p style={{fontSize: '14px', fontWeight: 'light', textAlign: 'left'}}>
-              {project.Summary}
-            </p>
-            <div style={{dispay: 'flex'}}>
-              <span style={{fontFamily: 'Permanent Marker', color: '#FF9800' }}>
-                Who's In?
-              </span>
-              <FlatButton style={{marginLeft: '16px'}}
-                label='Read More' labelStyle={{color: '#65A1e7', textTransform: 'none'}}/>
-
-            </div>
-            <div style={{height: '20px', borderBottom: 'solid 1px #DDDDDD', width: '100%', marginBottom: 1}}/>
-            </Link>
-            </div>
-          ))
-
-        }
-      </div>
-    )
-
-  }
-}
 
 export default class ProjectJoined extends React.Component{
   constructor(props) {
@@ -215,22 +74,39 @@ export default class ProjectJoined extends React.Component{
       <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
         {this.state.loading ?
           <div/> :
-        <div style={{maxWidth: '1000px', width: '100%', marginTop: 30}}>
+        <div style={{maxWidth: '1000px', width: '100%', marginTop: 30, padding: 10}}>
+          <MediaQuery minDeviceWidth={700}>
+            <div style={{display: 'flex'}}>
+              <div style={{flex: 2, marginRight: 30}}>
 
-          <div style={{display: 'flex'}}>
-            <div style={{flex: 2, marginRight: 30}}>
-
-              <Tick color={'#3B9E74'}/>
-            </div>
-            <div style={{flex: 5}}>
-              <div style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
-                {this.state.project.Name}
+                <Tick color={'#3B9E74'}/>
               </div>
-              <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')}
-                style={{width: '100%', height: '220px', objectFit: 'cover'}}
-                />
+              <div style={{flex: 5}}>
+                <div style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
+                  {this.state.project.Name}
+                </div>
+                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')}
+                  style={{width: '100%', height: '220px', objectFit: 'cover'}}
+                  />
+              </div>
             </div>
-          </div>
+          </MediaQuery>
+          <MediaQuery maxDeviceWidth={700}>
+            <div style={{display: 'flex'}}>
+              <div style={{flex: 1, marginRight: 30}}>
+
+                <Tick color={'#3B9E74'}/>
+              </div>
+              <div style={{flex: 5}}>
+                <div style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
+                  {this.state.project.Name}
+                </div>
+              </div>
+            </div>
+            <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')}
+              style={{width: '100%', height: '220px', objectFit: 'cover'}}
+              />
+          </MediaQuery>
           <div style={{textAlign: 'left'}}>
             <div style={{fontSize: '24px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16, marginTop: 16}}>
               {
@@ -259,9 +135,6 @@ export default class ProjectJoined extends React.Component{
 
 
             <YouMightLike project={this.state.project}/>
-            <YouMightLike project={this.state.project}/>
-            <YouMightLike project={this.state.project}/>
-
 
 
           </div>

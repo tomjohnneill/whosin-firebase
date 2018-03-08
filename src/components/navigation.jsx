@@ -36,6 +36,15 @@ const style = {
     backgroundColor: 'white',
     borderBottom: '1px solid #DBDBDB'
   },
+  whyAppBar: {
+    margin: '0px',
+    boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
+    paddingLeft: '16px',
+    position: 'fixed',
+    top: 0,
+    backgroundColor: 'white',
+    borderBottom: '1px solid #DBDBDB'
+  },
   loggedInAppBar : {
     margin: '0px',
     boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
@@ -93,7 +102,7 @@ export default class Navigation extends React.Component {
   componentDidMount(props) {
     console.log(fire.auth())
     fire.auth().onAuthStateChanged((user) => {
-      if (user = null) {
+      if (user === null) {
 
       } else {
         db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
@@ -222,7 +231,16 @@ export default class Navigation extends React.Component {
 
   handleCreateProject = (e) => {
     e.preventDefault()
-    browserHistory.push('/create-project/0')
+    if (fire.auth().currentUser) {
+      browserHistory.push('/create-project/0')
+    } else {
+      this.setState({modalOpen: true})
+    }
+
+  }
+
+  handleComplete = () => {
+    this.setState({modalOpen: false})
   }
 
   render() {
@@ -234,7 +252,7 @@ export default class Navigation extends React.Component {
 
         <AppBar
           showMenuIconButton={false}
-          style={window.location.pathname === '/' && fire.auth().currentUser ? style.loggedInAppBar : style.appBar}
+          style={window.location.pathname === '/why' ? style.whyAppBar : window.location.pathname === '/' && fire.auth().currentUser ? style.loggedInAppBar : style.appBar}
           className={this.props.location === '/' && fire.auth().currentUser ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -251,7 +269,7 @@ export default class Navigation extends React.Component {
 
                                   />}
                             <MediaQuery minDeviceWidth = {700}>
-                              {fire.auth().currentUser && !window.location.pathname.includes('create-project') ?
+                              {!window.location.pathname.includes('create-project') ?
                               <RaisedButton
                                 style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                                 buttonStyle={{height: '36px'}}
@@ -262,6 +280,9 @@ export default class Navigation extends React.Component {
                                :
                                null}
                             </MediaQuery>
+                            {!this.state.user ?
+                              'Log In'
+                            : null}
                             </div>}
           title={
             <div className='flexthis' style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -285,6 +306,7 @@ export default class Navigation extends React.Component {
        <SignupModal
          open={this.state.modalOpen}
          changeOpen={this.handleModalChangeOpen}
+         onComplete = {this.handleComplete}
          />
 
       </div>

@@ -235,7 +235,8 @@ export default class DesktopProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0
-      , loading: true, selected: 'story', inkBarLeft: '30px', conditionalStatus: false}
+      , loading: true, selected: 'story', inkBarLeft: '30px', conditionalStatus: false,
+    challengeExists: false}
   }
 
   componentDidMount(props) {
@@ -256,6 +257,7 @@ export default class DesktopProject extends React.Component {
   }
 
   createEngagement = () => {
+
     console.log(this.props.project)
     console.log(fire.auth().currentUser)
     db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
@@ -266,7 +268,8 @@ export default class DesktopProject extends React.Component {
         "Name": doc.data().Name,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
-        "Location": doc.data().Location ? doc.data().Location : null
+        "Location": doc.data().Location ? doc.data().Location : null,
+        "created": new Date()
       }
       console.log(body)
       db.collection("Engagement").add(body)
@@ -403,7 +406,7 @@ export default class DesktopProject extends React.Component {
     localStorage.removeItem('coverPhoto')
     var basics = {
       min: this.state.project['Target People'],
-      max: this.state.proejct['Maximum People'],
+      max: this.state.project['Maximum People'],
       deadline: this.state.project['Deadline'],
       tags: this.state.project.Tags
     }
@@ -422,13 +425,15 @@ export default class DesktopProject extends React.Component {
     localStorage.setItem('times', JSON.stringify(times))
     localStorage.setItem('story', JSON.stringify(story))
     localStorage.setItem('coverPhoto', coverPhoto)
+    localStorage.setItem('editProject', this.state.project._id)
     browserHistory.push('/create-project/1')
   }
 
 
   render () {
 
-
+    console.log(this.props)
+    console.log(this.state)
     var badgeFill = 1
 
 
@@ -493,8 +498,13 @@ export default class DesktopProject extends React.Component {
                   <p style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', margin: 0, flex: 1}}>
                     {this.state.project.Name}
                   </p>
-                  {this.state.project.Creator === fire.auth().currentUser.uid ?
-                  <div style={{width: '120px' }}>
+                  {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                  <div style={{width: '250px' }}>
+                    <RaisedButton label='Admin View'
+                      secondary={true}
+                      style={{marginRight: 16}}
+                      onClick={() => browserHistory.push(window.location.pathname + '/admin')}
+                      labelStyle={{textTransform: 'none', fontWeight: 700}}/>
                     <RaisedButton label='Edit Project'
                       secondary={true}
                       onClick={this.handleEditProject}
@@ -566,12 +576,25 @@ export default class DesktopProject extends React.Component {
                         <div>
                           <ConditionalModal
                             _id={this.props.params._id}
+                            challengeExists={this.props.challengeExists}
+                            onConditionalComplete={() => this.setState({challengeExists: true})}
                             title={this.props.params.project}
                             project = {this.state.project ? this.state.project : null}
                               open={this.state.conditionalOpen}
                               changeOpen={this.handleConditionalChangeOpen}
                               />
-
+                            {!this.state.challengeExists && !this.props.challengeExists && !this.props.challenge ?
+                              <div>
+                            <div style={{
+                                width: '100%',
+                                textAlign: 'center',
+                                borderBottom: '1px solid #000',
+                                lineHeight: '0.1em',
+                                margin: '10px 0 20px'
+                              }}><span style={{
+                                background: 'white',
+                                padding: '0 10px'
+                              }}>or</span></div>
 
 
                           <RaisedButton
@@ -579,6 +602,7 @@ export default class DesktopProject extends React.Component {
                              primary={true} fullWidth={true}
                               labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
                              label="Join Now" onTouchTap={this.handleModal} />
+                         </div> : null}
                            </div>
                      :
                      <RaisedButton

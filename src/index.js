@@ -28,6 +28,7 @@ import MiniWhy from './components/create-project/miniwhy.jsx';
 import CantCome from './components/cantcome.jsx';
 import ProjectReview from './components/feedback/projectreview.jsx';
 import EditProfile from './components/editprofile.jsx';
+import AdminView from './components/admin/adminview.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -56,7 +57,9 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/4' component={UploadPhoto}/>
       <Route path='/create-project/summary/1' component={FirstSummary}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
+      <Route path='/projects/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
+      <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/leave-project-review' component={ProjectReview}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>

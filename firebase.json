@@ -18,6 +18,34 @@
     ],
     "rewrites": [
       {
+        "source": "/projects/*/*/joined",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/projects/*/*/questions",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/projects/*/*/leave-project-review",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/projects/*/*/declined",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/projects/*/*/register",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/projects/*/*",
+        "function": "project"
+      },
+      {
+        "source": "/projects/*/*/*",
+        "function": "challenge"
+      }
+      ,{
         "source": "**",
         "destination": "/index.html"
       }

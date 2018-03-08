@@ -1,5 +1,5 @@
 import React , {PropTypes} from 'react';
-
+import SignupModal from './signupmodal.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import MediaQuery from 'react-responsive';
 import Dialog from 'material-ui/Dialog';
@@ -36,7 +36,7 @@ export default  class ConditionalModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {login: true, loading: false, slider: 50, type: null, shared: false, targetCreated: false}
+    this.state = {login: true, loading: false, slider: 50, type: null, shared: false, targetCreated: false, modalOpen: false}
   }
 
   handleSlider = (e, v) => {
@@ -83,13 +83,30 @@ export default  class ConditionalModal extends React.Component {
 
   handleFriendsClick = (e) => {
     e.preventDefault()
-    this.createChallenge()
+    if (fire.auth().currentUser) {
+      this.createChallenge()
+      if (this.props.onConditionalComplete) {
+        this.props.onConditionalComplete()
+      }
+    } else {
+      this.setState({modalOpen: true})
+    }
+
+  }
+
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
   }
 
   handleButtonClicked = () => {
     console.log('button clicked')
     this.setState({shared: true})
     console.log(this.state)
+  }
+
+  onComplete = () => {
+    this.setState({modalOpen: false})
+    this.createChallenge()
   }
 
   render() {
@@ -111,7 +128,9 @@ export default  class ConditionalModal extends React.Component {
 
 
 
-             {this.state.type === 'friends' && !this.state.shared && !this.state.targetCreated ?
+             {(this.state.type === 'friends' && !this.state.shared
+               && !this.state.targetCreated) || this.props.challengeExists ?
+
                <div style={{fontWeight: 200, textAlign: 'left',
                      borderRadius: 6, marginBottom: 15,
                    marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
@@ -187,12 +206,14 @@ export default  class ConditionalModal extends React.Component {
                     primaryText="2 of my Friends Come"
 
                   />
+                {/*
                   <ListItem
                     leftAvatar={<Avatar icon={<FontIcon className='fas fa-bullseye' />} backgroundColor={yellow600} />}
                     onTouchTap={this.handleTargetClick}
                     primaryText={`${Math.round(this.props.project['Target People']/2)} people sign up`}
 
                   />
+                  */}
 
                 </List>
 
@@ -203,6 +224,16 @@ export default  class ConditionalModal extends React.Component {
              </div>
 
            </div>
+           <div style={{marginBottom: this.state.modalOpen ? 16 : 0}}>
+             <SignupModal
+
+               _id={this.props.project._id}
+               title={this.props.project.Name}
+               open={this.state.modalOpen}
+               changeOpen={this.handleModalChangeOpen}
+             onComplete={this.onComplete}/>
+           </div>
+
       </div>
     )
   }
