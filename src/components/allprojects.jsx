@@ -31,6 +31,7 @@ const styles = {
 export default class AllProjects extends React.Component {
   constructor(props) {
     super(props)
+    console.log(this.props)
     this.state = {loading: true}
   }
 
@@ -73,18 +74,18 @@ export default class AllProjects extends React.Component {
         <MediaQuery minDeviceWidth={700}>
           <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 100, zIndex: 10, paddingRight: 100
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
-            <RaisedButton style={{marginRight: '20px', height: '36px'}} label='Dates' secondary={true} labelStyle={styles.button}/>
+
             <Search style={{marginRight: 6}}/>
-            <TextField onChange={this.handleSearch}/>
+            <TextField hintText={'Search'} onChange={this.handleSearch}/>
           </div>
+
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
           <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 16, zIndex: 10, paddingRight: 10
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
-            <RaisedButton style={{marginRight: '20px', height: '36px'}}
-              label='Dates' secondary={true} labelStyle={styles.button}/>
+
             <Search style={{marginRight: 6}}/>
-            <TextField onChange={this.handleSearch}/>
+            <TextField hintText={'Search'} onChange={this.handleSearch}/>
           </div>
         </MediaQuery>
         <div>
@@ -101,21 +102,25 @@ export default class AllProjects extends React.Component {
               textAlign: 'left'}}>
                 {this.state.projects.map((project) => (
                   <Link to={`/projects/${project['Name']}/${project._id}`}>
-                    <div style={{width: '230px', height: '250px', margin: 20}}>
+                    <div style={{width: '230px', height: '280px', margin: 20}}>
                       <img src={changeImageAddress(project['Featured Image'], '250xauto')}
                         style={{width: '100%', height: '180px',objectFit: 'cover', borderRadius: '4px'}}/>
-                      <span style={{display: 'inline-block',fontWeight: 100, textTransform: 'uppercase'}}>
-                        {project.Location ? project.Location.replace(/(([^\s]+\s\s*){3})(.*)/,"$1…") : null}
+                      <span style={{display: 'inline-block',fontWeight: 100, color: grey500, fontSize: '12px', textTransform: 'uppercase'}}>
+                        {project.Location ? project.Location.replace(/(([^\s]+\s\s*){3})(.*)/,"$1…") : 'Online'}
                       </span>
+                      <div style={{color: '#484848',
+                      fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', width: '100%', marginTop: '6px'}}>
+                        <b style={{color: '#FF9800'}}>{project['People Pledged']}</b> people,  <b style={{color: '#FF9800'}}>10</b> days to go...
+                      </div>
                       <LinearProgress
                         min={0}
                         mode={'determinate'}
-                        max={10}
-                        value={Math.random()*10}
-                        color={'#65A1e7'}
+                        max={project['Target People']}
+                        value={project['People Pledged']}
+                        color={amber500}
                         style={{marginTop: 6, marginBottom: 6}}
                         />
-                      <span style={{fontWeight: 600, display: 'inline-block'}}>
+                      <span style={{fontWeight: 700, display: 'inline-block'}}>
                         {project.Name}
                       </span>
                     </div>

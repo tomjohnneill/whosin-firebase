@@ -159,9 +159,15 @@ export default class EditProfile extends React.Component {
           null
           :
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 30}}>
-            <div style={{width: '100%', maxWidth: '1000px',
+            <div style={{width: '100%', maxWidth: '1000px', position: 'relative',
               backgroundColor: 'white'}}>
-              <h2 style={{textAlign: 'left'}}>Your Profile</h2>
+              <h2 style={{textAlign: 'left', position: 'relative'}}>Your Profile</h2>
+              <div style={{position: 'absolute', right: 0, top:20}}>
+                <RaisedButton
+                  label='Back to Profile'
+                  labelStyle={{fontWeight: 700, textTransform: 'none'}}
+                  secondary={true} onClick={() => browserHistory.push('/profile')}/>
+              </div>
               <Tabs
                   tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
                   value={this.props.params.tab}

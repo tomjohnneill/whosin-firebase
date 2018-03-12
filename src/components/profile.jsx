@@ -88,6 +88,10 @@ export class PhotoUpload extends React.Component {
                   border: '1px solid rgb(133, 137, 135)',
                   borderRadius: 6,
                   color: grey500,
+                  padding: 16,
+                  boxSizing: 'border-box',
+                  width: 250,
+                  marginBottom: 16
 
                 }
 

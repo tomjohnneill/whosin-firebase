@@ -256,32 +256,68 @@ export default class Navigation extends React.Component {
           className={this.props.location === '/' && fire.auth().currentUser ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
-                              {this.state.loading ? null :
-                                this.state.user ?
-                                <IconButton onTouchTap={() => browserHistory.push('/profile')}
-                                  style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
-                                  <Avatar src={this.state.userPicture}/>
-                                </IconButton> :
-                                <RaisedButton label='Login' primary={true}
-                                  onClick={this.handleModal}
-                                   labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
-                                        letterSpacing: '0.6px', fontWeight: 'bold'}}
 
-                                  />}
                             <MediaQuery minDeviceWidth = {700}>
                               {!window.location.pathname.includes('create-project') ?
-                              <RaisedButton
-                                style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-                                buttonStyle={{height: '36px'}}
-                                 labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center',
-                                      letterSpacing: '0.6px', fontWeight: 'bold'}}
-                                labelClassName
-                                 label={<span className='flexthis'>Start a Project</span>} onTouchTap={this.handleCreateProject}/>
+                                <div style={{display: 'flex'}}>
+                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    onTouchTap={() => browserHistory.push('/why')}
+                                    >
+                                    FAQ
+                                  </div>
+                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    onTouchTap={() => browserHistory.push('/why')}
+                                    >
+                                    About Us
+                                  </div>
+                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    onTouchTap={() => browserHistory.push('/why')}
+                                    >
+                                    Organisations
+                                  </div>
+                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    onTouchTap={() => browserHistory.push('/projects')}
+                                    >
+                                    Projects
+                                  </div>
+                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    onTouchTap={() => browserHistory.push('/why')}
+                                    >
+                                    Why Start a Project?
+                                  </div>
+                                <RaisedButton
+                                  style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                                  buttonStyle={{height: '36px'}}
+                                   labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center',
+                                        letterSpacing: '0.6px', fontWeight: 'bold'}}
+                                  labelClassName
+                                   label={<span className='flexthis'>Start a Project</span>} onTouchTap={this.handleCreateProject}/>
+                               </div>
                                :
                                null}
                             </MediaQuery>
+                            {this.state.loading ? null :
+                              this.state.user ?
+                              <IconButton onTouchTap={() => browserHistory.push('/profile')}
+                                style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
+                                <Avatar src={this.state.userPicture}/>
+                              </IconButton> :
+                              <RaisedButton label='Login' primary={true}
+                                onClick={this.handleModal}
+                                 labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
+                                      letterSpacing: '0.6px', fontWeight: 'bold'}}
+
+                                />}
                             {!this.state.user ?
-                              'Log In'
+                              <div
+                                onTouchTap={this.setModal}
+                                style={{cursor: 'pointer', paddingLeft: 10, paddingRight: 10}}>Log In
+                                </div>
                             : null}
                             </div>}
           title={

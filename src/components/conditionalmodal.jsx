@@ -143,7 +143,7 @@ export default  class ConditionalModal extends React.Component {
                    Name={this.props.project.Name}
                    url={window.location.href + '/' + this.state.challengeId}
                    smsbody={encodeURIComponent("I'm thinking of going to this event, can you come with me? ") + window.location.href + '/' + this.state.challengeId}
-                   emailbody={`Hi%20there%2C%0A%0AI%20just%20agreed%20to%20go%20to%20this%20event%3A%20%22${this.props.project.Name}%22%2C%20but%20don%27t%20really%20want%20to%20go%20to%20it%20by%20myself.%20%0A%0AIf%20you%20come%20with%20me%2C%20we%20could%20both%20do%20something%20good.%20You%20can%20read%20a%20bit%20more%20about%20it%20here%3A%0A%0A${window.location.href + '/' + this.state.challengeId}%0A%0AThanks!%0A%0A` + "name"}
+                   emailbody={`Hi%20there%2C%0A%0AI%20just%20agreed%20to%20go%20to%20this%20event%3A%20%22${this.props.project.Name}%22%2C%20but%20don%27t%20really%20want%20to%20go%20to%20it%20by%20myself.%20%0A%0AIf%20you%20come%20with%20me%2C%20we%20could%20both%20do%20something%20good.%20You%20can%20read%20a%20bit%20more%20about%20it%20here%3A%0A%0A${encodeURIComponent(window.location.href + '/' + this.state.challengeId)}%0A%0AThanks!%0A%0A` + "name"}
                    />
                </div>
 

@@ -79,7 +79,12 @@ export default  class SignupModal extends React.Component {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
-            // ...
+            if (errorCode == 'auth/weak-password') {
+              alert('The password is too weak.');
+            } else {
+              alert(errorMessage);
+            }
+                      // ...
           });
 
 
@@ -103,6 +108,11 @@ export default  class SignupModal extends React.Component {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          alert(errorMessage);
+        }
         // ...
       });
   }
@@ -224,7 +234,6 @@ export default  class SignupModal extends React.Component {
                   <div style={{paddingBottom: '16px'}}>
                     Login
                   </div>
-
 
                   <div style={{width: '100%',paddingBottom: '16px',
                     boxSizing: 'border-box'}}>

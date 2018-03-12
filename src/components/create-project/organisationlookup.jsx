@@ -288,6 +288,7 @@ export default class OrganisationLookup extends React.Component{
                 <RaisedButton label='Smart Fill' backgroundColor='#E55749'
                   onTouchTap={this.handleFill}
                   fullWidth={true}
+                  disabled={!this.state.searchText}
                   labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
                 <FlatButton style={{marginTop: '16px'}} label='Fill in by hand' labelStyle={{color: '#4A90E2', textTransform: 'none'}}
                   onTouchTap={(e) => {this.setState({stage: 1, loading: false, details: {}})}}
@@ -454,7 +455,7 @@ export default class OrganisationLookup extends React.Component{
                   key='location2'
                   style={styles.whiteTextfield}/>
                 </div>
-                <div style={{flex: 1, padding: '6px'}}>
+                <div style={{flex: 1, padding: '6px', marginBottom: 60}}>
                   <p style={styles.header}>
                     Website
                   </p>

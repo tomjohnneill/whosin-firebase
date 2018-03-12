@@ -210,7 +210,10 @@ export class WhosIn extends React.Component{
           this.state.engagements.map((eng) => (
             <Link to={'/profile/' + eng.User}>
             <ul style={{textAlign: 'left', alignItems: 'center', borderBottom: '1px solid #DDDDDD', height: '60px', fontSize: '10px', display: 'flex'}}>
-              <Avatar src={eng['Volunteer Picture']}/>
+              {eng['Volunteer Picture'] ?
+
+              <Avatar src={eng['Volunteer Picture']}/>:
+                <Avatar>{eng['Name'].substring(0,1)}</Avatar>}
               <div style={{flex: 2, paddingLeft: '24px',display: 'flex', alignItems: 'center'}}>
                 <div>
                   <b>{eng['Name']}</b> <br/>
@@ -302,7 +305,11 @@ export default class DesktopProject extends React.Component {
         if (this.props.challenge) {
           this.addChallengeMember()
         }
-        browserHistory.push(window.location.href + '/joined')
+        if (window.location.pathname.includes('/joined')) {
+          browserHistory.push(window.location.pathname)
+        } else {
+          browserHistory.push(window.location.pathname + '/joined')
+        }
       }
 
     } else {

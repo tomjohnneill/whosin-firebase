@@ -113,9 +113,13 @@ export class YouMightLike extends React.Component {
                 children={
                   <div style={{justifyContent: 'space-between', display: 'flex', flexDirection: 'column', height: '100%'}}>
                     <div>
-                      <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>50 people are in</p>
-                      <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '0px', marginBottom: '6px'}}>65 people needed</p>
-                      <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate" value={6} />
+                      <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>{project['People Pledged']} people are in</p>
+                      <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '0px', marginBottom: '6px'}}>{project['Target People']} people needed</p>
+                      <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'}
+                        mode="determinate" value={project['People Pledged']}
+                        min={0}
+                        max={project['Target People']}
+                         />
                     </div>
                     <div>
                       <div style={{display: 'flex', paddingTop: '6px', color: grey500,

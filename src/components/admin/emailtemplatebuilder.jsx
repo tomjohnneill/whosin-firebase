@@ -13,18 +13,22 @@ export default class EmailTemplateBuilder extends React.Component {
       autoHideDuration: 4000,
       message: 'Event added to your calendar',
       open: false,
-      mergeTags: []
+      mergeTags: [],
+      loading: true
     };
   }
 
   componentDidMount (props) {
     var dateObj = new Date(Date.now() + 86400000 /2)
     console.log(dateObj)
-      db.collection("Project").where("Start Time", "<", dateObj).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          console.log(doc.data())
-        })
+    if (this.props.params.templateId) {
+        db.collection("emailTemplates").doc(this.props.params.templateId).get().then((doc) => {
+        this.setState({loading: false, sample: JSON.parse(doc.data().design)})
+        console.log(this.state.sample)
       })
+    } else {
+      this.setState({loading: false})
+    }
   }
 
     exportHtml = () => {
@@ -70,6 +74,15 @@ export default class EmailTemplateBuilder extends React.Component {
       this.setState({name: e.target.value})
     }
 
+    onDesignLoad = (data) => {
+      console.log('onDesignLoad', data)
+    }
+
+    onLoad = () => {
+  // this.editor.addEventListener('onDesignLoad', this.onDesignLoad)
+  this.editor.loadDesign(this.state.sample ? this.state.sample : {})
+}
+
   render() {
     return(
       <div>
@@ -79,9 +92,13 @@ export default class EmailTemplateBuilder extends React.Component {
           <button onClick={this.exportHtml}>Export HTML</button>
         </div>
         <TextField onChange={this.handleNameChange} value={this.state.name} onKeyPress={this.handleNamePress}/>
+        {this.state.loading ? null :
         <EmailEditor
+          onLoad={this.onLoad}
+          onDesignLoad={this.onDesignLoad}
           ref={editor => this.editor = editor}
         />
+        }
 
       <div style={{display: 'flex', width: '1000px'}}>
         <div style={{flex: 1}}>

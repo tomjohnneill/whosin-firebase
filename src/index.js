@@ -29,6 +29,10 @@ import CantCome from './components/cantcome.jsx';
 import ProjectReview from './components/feedback/projectreview.jsx';
 import EditProfile from './components/editprofile.jsx';
 import AdminView from './components/admin/adminview.jsx';
+import VolunteerStars from './components/feedback/volunteerstars.jsx';
+import ReviewOverview from './components/feedback/project-review-overview.jsx';
+import ShortReview from './components/feedback/shortreview.jsx';
+import AllProjects from './components/allprojects.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -43,9 +47,11 @@ const rootElement = document.getElementById('root');
       <IndexRoute component={ UserTabs } />
       <Route path='/why' component={Why}/>
       <Route path='/admin/emailtemplate' component={EmailTemplateBuilder}/>
+      <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
       <Route path='/auth/linkedin/' component={LinkedInAuth}/>
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>
+      <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
       <Route path='/form/formbuilder' component={FormBuilder}/>
       <Route path='/step/stepper' component={CreateProject}/>
@@ -61,7 +67,10 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
-      <Route path='/projects/:pledge/:_id/leave-project-review' component={ProjectReview}/>
+      <Route path='/projects/:pledge/:_id/review/project' component={ReviewOverview}/>
+      <Route path='/projects/:pledge/:_id/review/project/long' component={ProjectReview}/>
+      <Route path='/projects/:pledge/:_id/review/project/short' component={ShortReview}/>
+      <Route path='/projects/:Name/:_id/review/:userId' component={VolunteerStars}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>
       <Route path='/projects/:pledge/:_id/declined' component={CantCome}/>
       <Route path='/projects/:Name/:_id/register' component={Register}/>

@@ -137,6 +137,54 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
     res.status(200).send('Done');
 });
 
+exports.reviewReminder = functions.https.onRequest((req, res) => {
+    var dateObj = new Date(Date.now() - 86400000 /2)
+    db.collection("emailTemplates").doc('eEqHHHsWFjQc4dlK4qqU').get().then((emailDoc) => {
+      db.collection("Project").where("End Time", "<", dateObj).get().then((querySnapshot) => {
+        db.collection("User").doc()
+        querySnapshot.forEach((project) => {
+          if (!project.data().reviewReminded) {
+            var ProjectData = project.data()
+            ProjectData['_id'] = project.id
+            console.log(ProjectData.Name)
+            let email = emailDoc.data().html
+            email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${ProjectData.Name}/${ProjectData._id}`)
+            let data = {
+                from: "Who's In? Feedback <reminders@whosin.io>",
+                subject: `${ProjectData.Name}`,
+                html: email,
+                'h:Reply-To': 'reminders@whosin.io',
+                to: userDoc.data().Email
+              }
+              mailgun.messages().send(data, function (error, body) {
+                console.log(body)
+              })
+          }
+          db.collection("Project").doc(project.id).update({
+            reviewReminded: true
+          })
+        })
+      })
+    })
+    res.status(200).send('Done');
+});
+
+exports.addOneToPeople = functions.firestore
+  .document('User Review/{reviewId}')
+  .onCreate(event => {
+    // Get an object representing the document
+    // e.g. {'name': 'Marie', 'age': 66}
+    var newValue = event.data.data();
+
+    // access a particular field as you would any JS property
+    var Project = newValue.Project;
+
+
+
+    return (null)
+    // perform desired operations ...
+});
+
 var algoliasearch = require('algoliasearch')
 const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
