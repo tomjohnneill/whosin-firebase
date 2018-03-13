@@ -7,6 +7,7 @@ import Project from './components/project.jsx';
 import Home from './components/home.jsx';
 import Profile from './components/profile.jsx';
 import CharityProfile from './components/charityprofile.jsx';
+import CharitiesList from './components/charitieslist.jsx';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import UserTabs from './components/tabs.jsx'
 import CharityAutocomplete from './components/charityautocomplete.jsx';
@@ -51,6 +52,7 @@ const rootElement = document.getElementById('root');
       <Route path='/auth/linkedin/' component={LinkedInAuth}/>
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>
+      <Route path='/organisations' component={CharitiesList}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
       <Route path='/form/formbuilder' component={FormBuilder}/>

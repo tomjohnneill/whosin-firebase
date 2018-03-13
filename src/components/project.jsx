@@ -360,12 +360,16 @@ export default class Project extends React.Component {
   }
 
   createEngagement = () => {
+
+    console.log(this.state.project)
     console.log(fire.auth().currentUser)
     db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
       var body = {
         "Project": this.state.project._id,
         "Project Name": this.state.project.Name,
         "User": fire.auth().currentUser.uid,
+        "Project Photo": this.state.project['Featured Image'],
+        "Charity": this.state.project['Charity Name'],
         "Name": doc.data().Name,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
@@ -373,8 +377,14 @@ export default class Project extends React.Component {
         "created": new Date()
       }
       console.log(body)
-      db.collection("Engagement").add(body)
-      .then(data => console.log(data))
+      db.collection("Engagement").where("Project", "==", this.state.project._id)
+      .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
+          if (querySnapshot.size === 0) {
+            db.collection("Engagement").add(body)
+            .then(data => console.log(data))
+          }
+      })
+
     })
 
     .catch(error => {this.setState({error: error}); console.log(error)})

@@ -269,14 +269,22 @@ export default class DesktopProject extends React.Component {
         "Project Name": this.props.project.Name,
         "User": fire.auth().currentUser.uid,
         "Name": doc.data().Name,
+        "Project Photo": this.props.project['Featured Image'],
+        "Charity": this.props.project['Charity Name'],
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
         "Location": doc.data().Location ? doc.data().Location : null,
         "created": new Date()
       }
       console.log(body)
-      db.collection("Engagement").add(body)
-      .then(data => console.log(data))
+      db.collection("Engagement").where("Project", "==", this.props.project._id)
+      .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
+          if (querySnapshot.size === 0) {
+            db.collection("Engagement").add(body)
+            .then(data => console.log(data))
+          }
+      })
+
     })
 
     .catch(error => {this.setState({error: error}); console.log(error)})
@@ -379,7 +387,12 @@ export default class DesktopProject extends React.Component {
 
   handleLetsGo = (e) => {
     e.preventDefault()
-    browserHistory.push('/create-project/0')
+    if (fire.auth().currentUser) {
+      browserHistory.push('/create-project/0')
+    } else {
+      this.setModal()
+    }
+
   }
 
   changeAnchorEl = (e) => {

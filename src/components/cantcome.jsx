@@ -66,18 +66,20 @@ export class YouMightLike extends React.Component {
     }
 
     */
+    if (this.props.project['Start Time']) {
+      db.collection("Project").where("Start Time", ">", this.props.project['Start Time'])
+      .get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          var elem = doc.data()
+          elem['_id'] = doc.id
+          if (doc.id !== this.props.project._id) {
+            potentialProjects.push(elem)
+          }
+        });
+        this.setState({potentialProjects: potentialProjects, loading: false})
+      })
+    }
 
-    db.collection("Project").where("Start Time", ">", this.props.project['Start Time'])
-    .get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        var elem = doc.data()
-        elem['_id'] = doc.id
-        if (doc.id !== this.props.project._id) {
-          potentialProjects.push(elem)
-        }
-      });
-      this.setState({potentialProjects: potentialProjects, loading: false})
-    })
     console.log(potentialProjects)
   }
 

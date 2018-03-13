@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
 import {orange500} from 'material-ui/styles/colors';
+import UploadPhoto from './uploadphoto.jsx';
 
 const styles = {
   textfield: {
@@ -52,7 +53,7 @@ class StoryForm extends React.Component {
     var story = {title: this.state.title, story: this.state.story, summary: this.state.summary}
     var storyString = JSON.stringify(story)
     localStorage.setItem('story', storyString)
-    browserHistory.push('/create-project/4')
+    browserHistory.push('/create-project/summary/1')
   }
 
 
@@ -141,12 +142,13 @@ class StoryForm extends React.Component {
         </div>
         <RaisedButton label='NEXT' backgroundColor='#E55749'
           onClick={this.handleNext}
-          disabled={!this.state.story || !this.state.summary || !this.state.title}
+          disabled={!this.state.story || !this.state.summary || !this.state.title || !localStorage.getItem('coverPhoto')}
           labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
         <div style={{width: '16px', display: 'inline-block'}}/>
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+          <div style={{height: '60px'}}/>
       </div>
     )
   }
@@ -159,14 +161,13 @@ export default class Story extends React.Component{
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
-          <div style={{display: 'flex', paddingLeft: '100px', paddingTop: '50px', paddingRight: '100px'}}>
+          <div style={{display: 'flex', paddingLeft: '100px', paddingTop: '50px'}}>
             <div style={{width: '500px', display: 'flex'
               , justifyContent: 'center'}} className='basics-container'>
               <StoryForm/>
             </div>
-            <div style={{flex: 1, paddingLeft: '50px', boxSizing: 'border-box'}} className='basics-image'>
-              <img src={changeImageAddress('https://s3.eu-west-2.amazonaws.com/idle-photos/foodbank.jpg', '1000xauto')}
-                style={{width: '100%', height: '70vh', objectFit: 'cover', borderRadius: '10px'}}/>
+            <div style={{flex: 1, boxSizing: 'border-box', paddingLeft: '100px'}} className='basics-image'>
+              <UploadPhoto/>
             </div>
           </div>
         </MediaQuery>

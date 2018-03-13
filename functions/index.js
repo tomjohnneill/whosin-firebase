@@ -68,7 +68,7 @@ exports.sendSignUpEmail = functions.firestore
           {
             var ProjectData = doc.data()
             ProjectData['_id'] = doc.id
-            email = email.replace("{{ projectUrl }}", `https://whos-in-firebase.firebaseapp.com/projects/${ProjectData.Name}/${ProjectData._id}`)
+            email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
             email = email.replace("{{ projectName }}", ProjectData.Name)
             email = email.replace('{{ Name }}', newValue.Name)
             email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
@@ -108,7 +108,7 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
                   ProjectData['_id'] = project.id
                   console.log(ProjectData.Name)
                   let email = emailDoc.data().html
-                  email = email.replace("{{%20projectUrl }}", `https://whos-in-firebase.firebaseapp.com/projects/${ProjectData.Name}/${ProjectData._id}`)
+                  email = email.replace("{{%20projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
                   email = email.replace("{{ projectName }}", ProjectData.Name)
                   email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
                   email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
@@ -169,6 +169,7 @@ exports.reviewReminder = functions.https.onRequest((req, res) => {
     res.status(200).send('Done');
 });
 
+/*
 exports.addOneToPeople = functions.firestore
   .document('User Review/{reviewId}')
   .onCreate(event => {
@@ -184,6 +185,7 @@ exports.addOneToPeople = functions.firestore
     return (null)
     // perform desired operations ...
 });
+*/
 
 var algoliasearch = require('algoliasearch')
 const ALGOLIA_ID = functions.config().algolia.app_id;

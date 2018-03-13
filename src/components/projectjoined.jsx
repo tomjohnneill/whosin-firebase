@@ -117,7 +117,12 @@ export default class ProjectJoined extends React.Component{
               }
             </div>
             <div style={{marginBottom: '16px', fontWeight: 'lighter'}}>
-              See you on {!this.state.loading && this.state.project['Start Time'] ? this.state.project['Start Time'].toLocaleString('en-gb', {month: 'long', day: 'numeric'}) : null}, don't forget to let them know if you can't make it.
+              {
+                this.state.project['Start Time'] ?
+                <div>
+                  See you on {!this.state.loading && this.state.project['Start Time'] ? this.state.project['Start Time'].toLocaleString('en-gb', {month: 'long', day: 'numeric'}) : null}, don't forget to let them know if you can't make it.
+                </div>
+                : null}
             </div>
 
             <div style={{marginTop: '30px'}}>

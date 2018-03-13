@@ -69,7 +69,7 @@ export default class CharityProjectList extends React.Component {
                           value={project['People Pledged'] === null ? 0 : project['People Pledged']} />
 
                         <div style={{paddingTop: 10, paddingBottom: 6, marginTop: 70, color: grey500}}>
-                            {project['Start Time'].toLocaleString('en-gb')}
+                            {project['Start Time'] ? project['Start Time'].toLocaleString('en-gb') : null}
                           </div>
                           <div style={{paddingTop: 0, paddingBottom: 10, color: grey500}}>
                             {project.Location}

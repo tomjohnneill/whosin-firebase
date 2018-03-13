@@ -62,6 +62,7 @@ export default class UploadPhoto extends React.Component{
 
         console.log(changeImageAddress(imageUrl, '250xauto'))
         this.setState({imageUrl: imageUrl})
+        localStorage.setItem('coverPhoto', imageUrl)
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -107,7 +108,7 @@ export default class UploadPhoto extends React.Component{
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
-          <div style={{width: '100%', boxSizing: 'border-box', display: 'flex', paddingLeft: '100px', paddingTop: '50px', paddingRight: '100px', justifyContent: 'center', alignItems: 'center'}}>
+          <div style={{boxSizing: 'border-box', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <div style={{width: '500px', display: 'flex'
               , justifyContent: 'center'}} className='basics-container'>
               <div className='form' style={{textAlign: 'left', width: '100%'}}>
@@ -121,8 +122,8 @@ export default class UploadPhoto extends React.Component{
                      style={{}}>
                         {({ isDragActive, isDragReject }) => {
                           let styles = {
-                            width: '60vw',
-                            height: '60vh',
+                            width: '40vw',
+                            height: '40vh',
                             textAlign: 'center',
                             justifyContent: 'center',
                             display: 'flex',
@@ -219,13 +220,7 @@ export default class UploadPhoto extends React.Component{
                         }}
                       </Dropzone>
                 </div>
-                <RaisedButton label='NEXT' backgroundColor='#E55749'
-                  onTouchTap={this.handleNext}
-                  labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
-                <div style={{display: 'inline-block', width: '16px'}}/>
-                  <RaisedButton label='Previous' backgroundColor='#C5C8C7'
-                      onTouchTap={this.handlePrevious}
-                      labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+
               </div>
             </div>
             <div style={{flex: 1, paddingLeft: '50px', boxSizing: 'border-box'}} className='basics-image'>
@@ -335,13 +330,7 @@ export default class UploadPhoto extends React.Component{
               }
 
               </div>
-              <RaisedButton label='NEXT' backgroundColor='#E55749'
-                onTouchTap={this.handleNext}
-                labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
-              <div style={{display: 'inline-block', width: '16px'}}/>
-                <RaisedButton label='Previous' backgroundColor='#C5C8C7'
-                    onTouchTap={this.handlePrevious}
-                    labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+
             </div>
           </div>
 

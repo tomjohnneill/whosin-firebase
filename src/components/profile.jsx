@@ -177,7 +177,7 @@ class RecentlySupported extends React.Component {
                   <Spiral style={{height: '58px'}}/>
                 <div>
 
-                  {project['Project Name']}<br/>
+                  <b>{project['Project Name']}</b><br/>
                 {project.created.toLocaleString('en-GB', { timeZone: 'UTC' , weekday: 'long', day: 'numeric', month: 'long'})}
                 </div>
                 </div>

@@ -274,7 +274,7 @@ export default class Navigation extends React.Component {
                                   </div>
                                   <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
-                                    onTouchTap={() => browserHistory.push('/why')}
+                                    onTouchTap={() => browserHistory.push('/organisations')}
                                     >
                                     Organisations
                                   </div>

@@ -187,6 +187,7 @@ export default class UserTabs extends React.Component {
                 Newsletter
               </div>
               <TextField fullWidth={true}
+                onChange={(e, nv) => this.setState({emailSignup: e.target.value})}
                 inputStyle={{borderRadius: '2px', border: '1px solid #858987',
                   paddingLeft: '12px',  boxSizing: 'border-box'}}
                 underlineShow={false}
@@ -196,7 +197,9 @@ export default class UserTabs extends React.Component {
                 key='email'
                 style={styles.textfield}/>
               <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
-                <RaisedButton label='Subscribe' backgroundColor='#E55749' labelStyle={{textTransform: 'none', color: 'white'}}/>
+                <RaisedButton label='Subscribe'
+                  onClick={() => db.collection("Newsletter").add({email: this.state.emailSignup})}
+                  backgroundColor='#E55749' labelStyle={{textTransform: 'none', color: 'white'}}/>
               </div>
             </div>
             <div style={{flex: 2}}>
