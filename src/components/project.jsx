@@ -370,6 +370,7 @@ export default class Project extends React.Component {
         "User": fire.auth().currentUser.uid,
         "Project Photo": this.state.project['Featured Image'],
         "Charity": this.state.project['Charity Name'],
+        "Charity Number": this.props.project.Charity,
         "Name": doc.data().Name,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,

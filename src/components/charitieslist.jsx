@@ -4,6 +4,7 @@ import MediaQuery from 'react-responsive';
 import TextField from 'material-ui/TextField';
 import Search from 'material-ui/svg-icons/action/search';
 import {GridList, GridTile} from 'material-ui/GridList';
+import {World, Tick} from './icons.jsx';
 
 import {Link, browserHistory} from 'react-router';
 import fire from '../fire';
@@ -85,13 +86,20 @@ export default class CharitiesList extends React.Component{
           textAlign: 'left'}}>
             {this.state.charities.map((charity) => (
               <Link to={`/charity/${charity._id}`}>
-                <div style={{width: '230px', height: '280px', margin: 20}}>
-                  <span style={{fontWeight: 700, display: 'inline-block'}}>
+                <div style={{width: '280px', height: '332px', margin: 20}}>
+                  <span style={{fontWeight: 700, marginBottom: 6, display: 'inline-block', height: '45px', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, overflow: 'hidden', textOverflow: 'ellipsis'}}>
                     {charity.Name}
                   </span>
-                  <img src={charity['Featured Image'] ? charity['Featured Image'] : "https://farm9.staticflickr.com/8461/8048823381_0fbc2d8efb.jpg"}
+                  {charity['Featured Image'] ?
+                  <img src={charity['Featured Image']}
                     style={{width: '100%', height: '180px',objectFit: 'cover', borderRadius: '4px'}}/>
-                  <span style={{display: 'inline-block'}}>
+                  :
+                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: '100%', height: '180px', borderRadius: '4px', backgroundColor: 'rgb(247,247,247)'}}>
+                    <World style={{height: '40px', width: '40px'}} fill={'#E55749'}/>
+                  </div>
+                }
+                  <span style={{marginTop: 6, display: 'inline-block', height: '90px', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 4, textOverflow: 'ellipsis'}}>
                     {charity.Summary}
                   </span>
                 </div>

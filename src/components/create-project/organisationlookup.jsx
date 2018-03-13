@@ -186,7 +186,8 @@ export default class OrganisationLookup extends React.Component{
       'Charity Number': this.state.charityNumber ? this.state.charityNumber : null,
       'Facebook': this.state.facebook ? this.state.facebook : null,
       'Instagram': this.state.instagram ? this.state.instagram : null,
-      'Twitter': this.state.twitter ? this.state.twitter: null
+      'Twitter': this.state.twitter ? this.state.twitter: null,
+      "Owner": fire.auth().currentUser.uid
     }
     if (this.state.charityNumber) {
       db.collection("Charity").doc(this.state.charityNumber.toString()).set(charityBody, {merge: true})

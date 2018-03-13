@@ -182,7 +182,7 @@ class RecentlySupported extends React.Component {
                 </div>
                 </div>
                 <div style={{flex: 1}}>
-                  <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                  <img style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: 2}}
                     src={project['Project Photo']}/>
                 </div>
               </div>

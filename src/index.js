@@ -34,6 +34,7 @@ import VolunteerStars from './components/feedback/volunteerstars.jsx';
 import ReviewOverview from './components/feedback/project-review-overview.jsx';
 import ShortReview from './components/feedback/shortreview.jsx';
 import AllProjects from './components/allprojects.jsx';
+import EditCharity from './components/editcharity.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -80,6 +81,7 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id/:challengeId' component={Project}/>
       <Route path='/pages/:tabb/:pledge/:_id' component={Project}/>
       <Route path='/charity/:charityId' component={CharityProfile}/>
+      <Route path='/charity/:charityId/edit' component={EditCharity}/>
       <Route path='/' component={UserTabs}/>
       <Route path='/:tab' component={UserTabs}/>
 

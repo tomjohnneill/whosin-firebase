@@ -32,7 +32,7 @@ import Place from 'material-ui/svg-icons/maps/place';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
 import Badge from 'material-ui/Badge';
-import {Spiral} from './icons.jsx';
+import {Spiral, World} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
@@ -271,6 +271,7 @@ export default class DesktopProject extends React.Component {
         "Name": doc.data().Name,
         "Project Photo": this.props.project['Featured Image'],
         "Charity": this.props.project['Charity Name'],
+        "Charity Number": this.props.project.Charity,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
         "Location": doc.data().Location ? doc.data().Location : null,
@@ -697,11 +698,14 @@ export default class DesktopProject extends React.Component {
                 <CardText  children = {
                     <div>
                         <Link to={`/charity/${this.state.charity._id}`} >
-                          {this.state.charity.logo ?
-                            <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
-                              src ={this.state.charity.logo }/>
+                          {this.state.charity['Featured Image'] ?
+                            <img style={{height: '90px', marginBottom: 10,  width: 'auto', objectFit: 'cover'}}
+                              src ={this.state.charity['Featured Image'] }/>
                             :
-                            <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              width: '120px', height: '90px', marginBottom: 10, borderRadius: '4px', backgroundColor: 'rgb(247,247,247)'}}>
+                              <World style={{height: '30px', width: '30px'}} fill={'#E55749'}/>
+                            </div>
                           }
 
                           <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
