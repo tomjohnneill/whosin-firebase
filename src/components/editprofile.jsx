@@ -130,6 +130,12 @@ export default class EditProfile extends React.Component {
     }
 
 
+    changeImage = (imageUrl) => {
+      var user = this.state.user
+      user['Picture'] = imageUrl
+      this.setState({user: user})
+    }
+
   updateCheck(type) {
     var privacy = this.state.user.privacy
     var user = this.state.user

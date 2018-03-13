@@ -548,25 +548,16 @@ export default class Project extends React.Component {
 
                   <div style={{width: '100%'}}>
 
-                    <ConditionalModal
-                      _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
-                      title={this.props.params.project}
-                      onConditionalComplete={() => this.setState({challengeExists: true})}
-                      project = {this.state.project ? this.state.project : null}
-                        open={this.state.conditionalOpen}
-                        challengeExists={this.state.challengeExists}
-                        changeOpen={this.handleConditionalChangeOpen}
-                        />
 
 
 
-                      {!this.state.challengeExists && !this.state.challenge ?
+
                     <RaisedButton
 
                        primary={true} fullWidth={true}
                         labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
                        label="Join Now" onTouchTap={this.handleModal} />
-                     : null}
+
                      </div>
                 :
                 <RaisedButton
@@ -711,7 +702,15 @@ export default class Project extends React.Component {
               <li>
 
                 <WhosIn project={this.state.project}/>
-
+                  <ConditionalModal
+                    _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
+                    title={this.props.params.project}
+                    onConditionalComplete={() => this.setState({challengeExists: true})}
+                    project = {this.state.project ? this.state.project : null}
+                      open={this.state.conditionalOpen}
+                      challengeExists={this.state.challengeExists}
+                      changeOpen={this.handleConditionalChangeOpen}
+                      />
               </li>
             </div>
 

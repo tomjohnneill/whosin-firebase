@@ -32,7 +32,7 @@ import Place from 'material-ui/svg-icons/maps/place';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
 import Badge from 'material-ui/Badge';
-import {Spiral, World} from './icons.jsx';
+import {Spiral, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
@@ -181,8 +181,82 @@ export function dateDiffInDays(a, b) {
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
 
+function readableTimeDiff(a, b) {
+  try{
+    var diff = Math.abs(a - b)
+    console.log(diff)
+    if (diff/1000 < 60) {
+      return `${Math.round(diff/1000)} seconds ago`
+    } else if (diff/1000/60 < 60) {
+      return `${Math.round(diff/1000/60)} minutes ago`
+    } else if (diff/1000/60/60 < 24) {
+      return `${Math.round(diff/1000/60/60)} hours ago`
+    } else if (diff/1000/60/60/24/14 < 2) {
+      return `${Math.round(diff/1000/3600/24)} days ago`
+    } else {
+      return `${Math.round(diff/1000/3600/24/7)} weeks ago`
+    }
+  }
+  catch(err) {
+    return null
+  }
+}
+
 var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken') :
   '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
+
+class CompletedModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <Dialog
+          modal={false}
+          open={this.props.open}
+          onRequestClose={this.props.handleClose}
+        >
+        <div style={{maxWidth: '1000px', width: '100%', marginTop: 30}}>
+
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 2, marginRight: 30}}>
+
+              <Tick color={'#3B9E74'}/>
+            </div>
+            <div style={{flex: 5}}>
+              <div style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
+                {this.props.project.Name}
+              </div>
+              <img src={changeImageAddress(this.props.project['Featured Image'], '750xauto')}
+                style={{width: '100%', height: '220px', objectFit: 'cover'}}
+                />
+            </div>
+          </div>
+          <div style={{textAlign: 'left'}}>
+            <div style={{width: '60%'}}>
+              <div style={{display: 'inline-block',fontSize: '24px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16, marginTop: 16}}>
+                Nice, you've started a project.
+              </div>
+              <div style={{float: 'right', height: '64.8px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+
+              </div>
+            </div>
+            <div style={{marginBottom: '16px', fontWeight: 'lighter'}}>
+              Now the fun really starts.
+            </div>
+            <div style={{marginTop: '30px'}}>
+
+
+            </div>
+          </div>
+        </div>
+        </Dialog>
+      </div>
+    )
+  }
+}
 
 export class WhosIn extends React.Component{
   constructor(props) {
@@ -213,7 +287,7 @@ export class WhosIn extends React.Component{
               {eng['Volunteer Picture'] ?
 
               <Avatar src={eng['Volunteer Picture']}/>:
-                <Avatar>{eng['Name'].substring(0,1)}</Avatar>}
+                <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>}
               <div style={{flex: 2, paddingLeft: '24px',display: 'flex', alignItems: 'center'}}>
                 <div>
                   <b>{eng['Name']}</b> <br/>
@@ -221,7 +295,7 @@ export class WhosIn extends React.Component{
               </div>
               </div>
               <div style={{flex: 1, display: 'flex', alignItems: 'center'}}>
-                2 minutes ago
+                {eng['created'] ? readableTimeDiff(new Date(), eng['created']) : null}
               </div>
             </ul>
             </Link>
@@ -239,12 +313,16 @@ export default class DesktopProject extends React.Component {
     super(props);
     this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0
       , loading: true, selected: 'story', inkBarLeft: '30px', conditionalStatus: false,
-    challengeExists: false}
+    challengeExists: false, completedOpen: false}
   }
 
   componentDidMount(props) {
     this.setState({project: this.props.project, charity: this.props.charity, loading: false})
-
+    console.log(window.location.pathname.substr(window.location.pathname.length - 7))
+    if (window.location.pathname.substr(window.location.pathname.length - 10) === '/completed') {
+      console.log('project is completed')
+      setTimeout(function() { this.setState({completedOpen: true}); }.bind(this), 2000);
+    }
   }
 
   deleteEngagement = () => {
@@ -270,7 +348,7 @@ export default class DesktopProject extends React.Component {
         "User": fire.auth().currentUser.uid,
         "Name": doc.data().Name,
         "Project Photo": this.props.project['Featured Image'],
-        "Charity": this.props.project['Charity Name'],
+        "Charity": this.props.project['Charity Name'] ? this.props.project['Charity Name'] : null,
         "Charity Number": this.props.project.Charity,
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
@@ -352,6 +430,11 @@ export default class DesktopProject extends React.Component {
     this.setState({joiningOpen: false})
 
 
+  }
+
+  handleCompletedModalChangeOpen = () => {
+    this.setState({completedOpen: false})
+    browserHistory.push(window.location.pathname.replace('/completed', ''))
   }
 
   handleDecline(e) {
@@ -595,15 +678,7 @@ export default class DesktopProject extends React.Component {
 
 
                         <div>
-                          <ConditionalModal
-                            _id={this.props.params._id}
-                            challengeExists={this.props.challengeExists}
-                            onConditionalComplete={() => this.setState({challengeExists: true})}
-                            title={this.props.params.project}
-                            project = {this.state.project ? this.state.project : null}
-                              open={this.state.conditionalOpen}
-                              changeOpen={this.handleConditionalChangeOpen}
-                              />
+
                             {!this.state.challengeExists && !this.props.challengeExists && !this.props.challenge ?
                               <div>
                             <div style={{
@@ -623,7 +698,11 @@ export default class DesktopProject extends React.Component {
                              primary={true} fullWidth={true}
                               labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
                              label="Join Now" onTouchTap={this.handleModal} />
-                         </div> : null}
+                         </div> : <RaisedButton
+                            style={{marginTop: 16}}
+                            primary={true} fullWidth={true}
+                             labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                            label='Join Now' onTouchTap={this.handleModal} />}
                            </div>
                      :
                      <RaisedButton
@@ -811,7 +890,18 @@ export default class DesktopProject extends React.Component {
 
                 <WhosIn project={this.props.project}/>
 
+
               </li>
+              <ConditionalModal
+                _id={this.props.params._id}
+                challengeExists={this.props.challengeExists}
+                onConditionalComplete={() => this.setState({challengeExists: true})}
+                title={this.props.params.project}
+                project = {this.state.project ? this.state.project : null}
+                  open={this.state.conditionalOpen}
+                  changeOpen={this.handleConditionalChangeOpen}
+                  />
+                <div style={{height: 60}}/>
             </div>
 
 
@@ -828,6 +918,11 @@ export default class DesktopProject extends React.Component {
             changeOpen={this.handleModalChangeOpen}
           onComplete={this.onComplete}/>
 
+        <CompletedModal
+            open={this.state.completedOpen}
+            handleClose={this.handleCompletedModalChangeOpen}
+            project={this.state.project}
+            />
 
           <JoiningModal
             _id={this.props.params._id}

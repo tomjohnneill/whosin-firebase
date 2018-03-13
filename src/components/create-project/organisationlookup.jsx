@@ -211,13 +211,13 @@ export default class OrganisationLookup extends React.Component{
           db.collection("Project").doc(localStorage.getItem('editProject')).update(body)
           .then(newProject => {
             console.log(newProject)
-            browserHistory.push('/create-project/' + newProject.id)
+            browserHistory.push('/projects/p/' + newProject.id + '/completed')
           })
         } else {
           db.collection("Project").add(body)
           .then(newProject => {
             console.log(newProject)
-            browserHistory.push('/create-project/' + newProject.id)
+            browserHistory.push('/projects/p/' + newProject.id + '/completed')
           })
         }
 

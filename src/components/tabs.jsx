@@ -92,6 +92,29 @@ export default class UserTabs extends React.Component {
   }
 
   componentDidMount() {
+    fetch('https://ident.me/.json')
+    .then(response => response.json())
+
+    // Get location from ip address
+
+    .then(function(data) {
+      var ip = data
+      console.log(data)
+      return fetch('https://freegeoip.net/json/' + data.address)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (fire.auth().currentUser) {
+        var userId = fire.auth().currentUser.uid
+
+
+        var body = {
+          'Location': data.city + ', ' + data.country_name
+        };
+          db.collection("User").doc(userId).update(body)
+
+          }
+      } )
     this.setState({value: this.props.params.tab})
   }
 

@@ -100,6 +100,8 @@ export default class Navigation extends React.Component {
 
 
   componentDidMount(props) {
+
+
     console.log(fire.auth())
     fire.auth().onAuthStateChanged((user) => {
       if (user === null) {
@@ -260,12 +262,6 @@ export default class Navigation extends React.Component {
                             <MediaQuery minDeviceWidth = {700}>
                               {!window.location.pathname.includes('create-project') ?
                                 <div style={{display: 'flex'}}>
-                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
-                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
-                                    onTouchTap={() => browserHistory.push('/why')}
-                                    >
-                                    FAQ
-                                  </div>
                                   <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/why')}

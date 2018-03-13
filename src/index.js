@@ -69,6 +69,7 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
+      <Route path='/projects/:pledge/:_id/completed' component={Project}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/review/project' component={ReviewOverview}/>
       <Route path='/projects/:pledge/:_id/review/project/long' component={ProjectReview}/>
@@ -88,7 +89,7 @@ const rootElement = document.getElementById('root');
       <Route path='/profile/:_id' component={Profile}/>
       <Route path='/create-project/:_id' component={ProjectCreated}/>
 
-      <Route path="*" component={ Home } />
+      <Route path="*" component={ UserTabs } />
       </Route>
 
 
