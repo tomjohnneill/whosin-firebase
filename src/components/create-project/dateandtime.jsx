@@ -5,7 +5,7 @@ import MediaQuery from 'react-responsive';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {  browserHistory } from 'react-router';
-import PlacesAutocomplete from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 const styles = {
   textfield: {
@@ -121,27 +121,37 @@ class Form extends React.Component {
 
   handleNext = (e) => {
     e.preventDefault()
-    var startTime = this.state.startTime
-    var startHours = startTime.getHours()
-    var startMinutes = startTime.getMinutes()
-    var startDate = this.state.startDate
-    startDate.setHours(startHours)
-    startDate.setMinutes(startMinutes)
+    geocodeByAddress(this.state.address)
+     .then(results => getLatLng(results[0]))
+     .then(latLng => {
+       console.log('Success', latLng)
+       var startTime = this.state.startTime
+       var startHours = startTime.getHours()
+       var startMinutes = startTime.getMinutes()
+       var startDate = this.state.startDate
+       startDate.setHours(startHours)
+       startDate.setMinutes(startMinutes)
 
-    var endTime = this.state.endTime
-    var endHours = endTime.getHours()
-    var endMinutes = endTime.getMinutes()
-    var endDate = this.state.endDate
-    endDate.setHours(endHours)
-    endDate.setMinutes(endMinutes)
+       var endTime = this.state.endTime
+       var endHours = endTime.getHours()
+       var endMinutes = endTime.getMinutes()
+       var endDate = this.state.endDate
+       endDate.setHours(endHours)
+       endDate.setMinutes(endMinutes)
 
-    var times =
-      {'Start Time': startDate,
-        'End Time': endDate,
-      'address': this.state.address}
-    var timeString = JSON.stringify(times)
-    localStorage.setItem('times', timeString)
-    browserHistory.push('/create-project/3')
+       var times =
+         {'Start Time': startDate,
+           'End Time': endDate,
+         'address': this.state.address,
+          'location': latLng}
+       var timeString = JSON.stringify(times)
+       localStorage.setItem('times', timeString)
+       browserHistory.push('/create-project/3')
+
+     })
+     .catch(error => alert('Error', error))
+
+
   }
 
   handleSetStartDate = (e, date) => {

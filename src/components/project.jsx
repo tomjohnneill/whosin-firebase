@@ -37,10 +37,10 @@ import JoiningModal from './joiningmodal.jsx';
 import Badge from 'material-ui/Badge';
 import AccessTime from 'material-ui/svg-icons/device/access-time';
 import Place from 'material-ui/svg-icons/maps/place';
-import FacebookProvider, { Like } from 'react-facebook';
 import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral} from './icons.jsx';
+import {MyMapComponent} from './desktopproject.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -498,7 +498,7 @@ export default class Project extends React.Component {
           <Card style={{backgroundColor: 'white', maxWidth: '700px', padding: '16px', fontSize: '14px'}}>
 
             <div >
-            <p style={{fontSize: '18px', fontWeight: 'bold', textAlign: 'left', margin: 0}}>
+            <p style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', margin: 0, color: 'rgb(72, 72, 72)'}}>
               {this.state.project.Name}
             </p>
             <p style={{fontSize: '16px', fontWeight: 'lighter', textAlign: 'left'}}>
@@ -506,24 +506,52 @@ export default class Project extends React.Component {
             </p>
           </div>
 
+          <div style={{width: '100%', position: 'relative'}}>
           <img src={this.state.project['Featured Image']}
-            style={{height: '175px', width: '100%', objectFit: 'cover', marginTop: '16px'}}/>
+            style={{height: '175px', width: '100%', objectFit: 'cover', marginTop: '10px', borderRadius: 4}}/>
 
-          <div style={{textAlign: 'left'}}>
-              <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>{this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} people are in</p>
-              <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '4px'}}>{this.state.project['Target People']} people needed</p>
-              <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate" value={6} />
-              <div style={{display: 'flex', paddingTop: '16px'}}>
+          {this.state.project['Start Time'] ?
+          <div style={{background: 'linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.8))', width: '100%', height: '50px', position: 'absolute',
+              zIndex: 3, bottom: 0, left: 0, color: 'white', textAlign: 'left', paddingLeft: 24, boxSizing: 'border-box',
+            fontWeight: 700, display: 'flex', alignItems: 'center'}}
+            className='dateOverlay'>
+            <FontIcon style={{marginRight: 16}} className="far fa-calendar-alt" color={'white'} />
+            {this.state.project['Start Time'].toLocaleString('en-gb', {weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+          </div> :
+          null}
+          </div>
 
-                    <div style={styles.bottomBit}>{this.state.project.Location}</div>
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <div style={{textAlign: 'left', flex: 1}}>
+                <p style={{fontWeight: '600',  textAlign: 'left', marginTop: '10px', marginBottom: 0}}>
+                  {this.state.project['People Pledged'] ? this.state.project['People Pledged'] : 0} people are in
+                </p>
+                <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '4px'}}>{this.state.project['Target People']} people needed</p>
+
+          </div>
+          <div style={{marginTop: '18px', marginBottom: 16, flex: 1}}>
+            <b>10</b> days to go...
+          </div>
+        </div>
+              <LinearProgress  style={{height: '5px', borderRadius: '1.5px', marginBottom: 16}} color={'#00ABE8'} mode="determinate" value={6} />
 
 
 
-              </div>
-              <div style={{marginTop: '16px', marginBottom: 16}}>
-                <b>10</b> days to go...
-              </div>
-            </div>
+
+
+              {this.state.project.Geopoint ?
+                <div style={{marginBottom: 16}}>
+                  <MyMapComponent
+                    Geopoint={this.state.project.Geopoint}
+                    address={this.state.project.Location}
+                    isMarkerShown
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                    loadingElement={<div style={{ height: `100%` , borderRadius: 6}} />}
+                    containerElement={<div style={{ height: `100px`}} />}
+                    mapElement={<div style={{ height: `100%`, borderRadius: 6 }} />} />
+                </div>
+              : null}
+
 
               <div style={{display: 'flex', justifyContent: 'center', position: 'sticky'}}>
                 {!this.state.joined && this.state.challenge?
@@ -582,7 +610,7 @@ export default class Project extends React.Component {
 
             <Tabs
               ref='tabs'
-              style={{borderBottom: '1px solid #e4e4e4'}}
+              style={{borderBottom: '1px solid #e4e4e4', marginTop: 16}}
               tabItemContainerStyle={{ backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
 
 

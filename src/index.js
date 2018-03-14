@@ -35,6 +35,7 @@ import ReviewOverview from './components/feedback/project-review-overview.jsx';
 import ShortReview from './components/feedback/shortreview.jsx';
 import AllProjects from './components/allprojects.jsx';
 import EditCharity from './components/editcharity.jsx';
+import About from './components/about.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
@@ -54,6 +55,7 @@ const rootElement = document.getElementById('root');
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/organisations' component={CharitiesList}/>
+      <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
       <Route path='/form/formbuilder' component={FormBuilder}/>

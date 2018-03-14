@@ -167,6 +167,7 @@ export default class OrganisationLookup extends React.Component{
       'Start Time': startTime,
       'End Time': endTime,
       'Tags': basics.tags,
+      "Geopoint": times ? times.location : null,
       "created": new Date()
     }
     console.log(body)
@@ -197,7 +198,7 @@ export default class OrganisationLookup extends React.Component{
         db.collection("Project").add(body)
         .then(newProject => {
           console.log(newProject)
-          browserHistory.push('/create-project/' + newProject.id)
+          browserHistory.push('/projects/p/' + newProject.id + '/completed')
         })
           })
       .catch(error => {this.setState({error: error}); console.log(error)})

@@ -36,9 +36,12 @@ import {Spiral, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
+import MediaQuery from 'react-responsive';
+import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import fire from '../fire';
 
 let db = fire.firestore()
+const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel")
 
 const Loading = () => (
   <div/>
@@ -204,6 +207,22 @@ function readableTimeDiff(a, b) {
 
 var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken') :
   '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
+
+export const MyMapComponent = withGoogleMap((props) =>
+  <GoogleMap
+    defaultZoom={10}
+    defaultCenter={props.Geopoint}
+  >
+  <MarkerWithLabel
+      position={props.Geopoint}
+      labelAnchor={new window.google.maps.Point(0, 0)}
+      labelStyle={{backgroundColor: 'rgba(255,255,255,0.7)', padding: 4, borderRadius: 2}}
+    >
+      <div>{props.address}</div>
+    </MarkerWithLabel>
+    {props.isMarkerShown && <Marker position={props.Geopoint} />}
+  </GoogleMap>
+)
 
 class CompletedModal extends React.Component {
   constructor(props) {
@@ -625,9 +644,21 @@ export default class DesktopProject extends React.Component {
                 ref='variableBox'
                 style={{display: 'flex',
                     alignItems: 'center', flexDirection: 'row'}}>
-              <div style={{flex: 538, height: '370px', width: '60%'}}>
-                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')} style={{borderRadius: 4, height: '370px', width: '100%'
+              <div style={{flex: 538, height: '370px', width: '60%', position: 'relative'}}>
+                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')}
+                  style={{borderRadius: 4, height: '370px', width: '100%', position: 'relative'
                   , objectFit: 'cover'}}/>
+
+                {this.state.project['Start Time'] ?
+                <div style={{background: 'linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.8))', width: '100%', height: '50px', position: 'absolute',
+                    zIndex: 3, bottom: 0, left: 0, color: 'white', textAlign: 'left', paddingLeft: 24, boxSizing: 'border-box',
+                  fontWeight: 700, display: 'flex', alignItems: 'center'}}
+                  className='dateOverlay'>
+                  <FontIcon style={{marginRight: 16}} className="far fa-calendar-alt" color={'white'} />
+                  {this.state.project['Start Time'].toLocaleString('en-gb', {weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+                </div> :
+                null}
+
               </div>
               <div style={{ width: '383px', height: this.props.challenge || this.props.joined ? '370px' : null}}>
                 <CardTitle
@@ -635,27 +666,40 @@ export default class DesktopProject extends React.Component {
                   children={
                     <div style={{justifyContent: 'space-between', display: 'flex', flexDirection: 'column', height: '100%'}}>
                       <div>
-                        <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>{this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} people are in</p>
-                        <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '4px'}}>{this.state.project['Target People']} people needed</p>
+                        <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>
+                          {this.state.project['People Pledged'] ? this.state.project['People Pledged'] : 0} people are in
+                        </p>
+                        <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '4px'}}>
+                          {this.state.project['Target People']} people needed
+                        </p>
                         <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate"
                           min={0} max={this.state.project['Target People']}
                           value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
-                        <div style={{display: 'flex', paddingTop: '16px'}}>
-                          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                            <div style={styles.bottomBit}>
 
-                              <div>{this.state.project.Location}</div>
-                            </div>
-                          </div>
-
-
-
-                        </div>
-                        <div style={{fontWeight: 'lighter', textAlign: 'left', marginTop: 6}}>
+                        <div style={{fontWeight: 'lighter', textAlign: 'left', marginTop: 10, marginBottom: 16}}>
                           <b style={{fontSize: '18px'}}>
                             {this.state.project['Deadline'] ? dateDiffInDays(new Date(),this.state.project['End Date']) : 10}
                           </b> days to go...
                         </div>
+
+                        {this.state.project.Geopoint ?
+                          <div style={{marginBottom: 16}}>
+                            <MyMapComponent
+                              Geopoint={this.state.project.Geopoint}
+                              address={this.state.project.Location}
+                              isMarkerShown
+                              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                              loadingElement={
+                                <div>
+                                <MediaQuery minDeviceWidth={700}>
+                                  <div style={{ height: `100%` , borderRadius: 20}} />
+                                </MediaQuery>
+                                </div>}
+                              containerElement={<div style={{ height: `200px`}} />}
+                              mapElement={<div style={{ height: `100%`, borderRadius: 20 }} />} />
+                          </div>
+                        : null}
+
                       </div>
                       {!this.props.joined && this.props.challenge ?
                         <div>
@@ -681,16 +725,6 @@ export default class DesktopProject extends React.Component {
 
                             {!this.state.challengeExists && !this.props.challengeExists && !this.props.challenge ?
                               <div>
-                            <div style={{
-                                width: '100%',
-                                textAlign: 'center',
-                                borderBottom: '1px solid #000',
-                                lineHeight: '0.1em',
-                                margin: '10px 0 20px'
-                              }}><span style={{
-                                background: 'white',
-                                padding: '0 10px'
-                              }}>or</span></div>
 
 
                           <RaisedButton

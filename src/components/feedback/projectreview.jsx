@@ -134,6 +134,7 @@ export default class ProjectReview extends React.Component {
     e.preventDefault()
     var body = {
       Project: this.props.params._id,
+      "Project Name": this.state.project.Name,
       Charity: this.state.charity._id,
       User: fire.auth().currentUser.uid,
       publicReview: this.state.publicReview,

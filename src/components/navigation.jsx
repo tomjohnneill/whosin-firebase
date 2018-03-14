@@ -49,7 +49,7 @@ const style = {
     margin: '0px',
     boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
     paddingLeft: '16px',
-    background: 'linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.07))'
+    background: 'linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.25))'
   },
   otherAnchor :{
     float: 'right',
@@ -254,8 +254,8 @@ export default class Navigation extends React.Component {
 
         <AppBar
           showMenuIconButton={false}
-          style={window.location.pathname === '/why' ? style.whyAppBar : window.location.pathname === '/' && fire.auth().currentUser ? style.loggedInAppBar : style.appBar}
-          className={this.props.location === '/' && fire.auth().currentUser ? 'loggedInAppBar' :'appbar'}
+          style={window.location.pathname === '/why' ? style.whyAppBar : window.location.pathname === '/'  ? style.loggedInAppBar : style.appBar}
+          className={this.props.location === '/'  ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
 
@@ -266,7 +266,7 @@ export default class Navigation extends React.Component {
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/why')}
                                     >
-                                    About Us
+                                    About
                                   </div>
                                   <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
@@ -312,7 +312,10 @@ export default class Navigation extends React.Component {
                             {!this.state.user ?
                               <div
                                 onTouchTap={this.setModal}
-                                style={{cursor: 'pointer', paddingLeft: 10, paddingRight: 10}}>Log In
+                                style={{cursor: 'pointer',
+                                  fontWeight: 700,
+                                  color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                  paddingLeft: 10, paddingRight: 10}}>Log In
                                 </div>
                             : null}
                             </div>}

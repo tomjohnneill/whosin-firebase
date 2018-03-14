@@ -6,7 +6,7 @@ import Subheader from 'material-ui/Subheader';
 import TextField from 'material-ui/TextField';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
-import {Tree1,Tree2, Tree3, Tree4, Embryo1, Embryo2, Embryo3, Embryo4} from './icons.jsx';
+import {Embryo1, Embryo2, Embryo3, Embryo4} from './icons.jsx';
 
 
 import Dropzone from 'react-dropzone';
@@ -414,18 +414,7 @@ export default class CustomForm extends React.Component{
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'flex-end',height: '400px', marginBottom: '16px'}}>
           {this.state.loading ?
           null : this.renderIcon(1)}
-          {this.state.loading ? null :
-          Math.round(this.state.stepIndex/this.state.details.length*3.49) === 0 ?
-            <Tree1 style={{height: '100px'}}/>
-            :
-          Math.round(this.state.stepIndex/this.state.details.length*3.49) === 1 ?
-            <Tree2 style={{height: '200px'}}/>
-            :
-            Math.round(this.state.stepIndex/this.state.details.length*3.49) === 2 ?
-            <Tree3 style={{height: '300px'}}/>
-            :
-            <Tree4 style={{height: '400px'}}/>
-          }
+        
         </div>
         <b style={{marginTop: '24px'}}>Step {this.state.stepIndex/2 + 1} of {Math.round(this.state.details.length/2)}</b>
         </div>

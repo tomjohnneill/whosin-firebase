@@ -128,7 +128,8 @@ export default class ShortReview extends React.Component {
       Charity: this.state.charity._id,
       User: fire.auth().currentUser.uid,
       feedback: this.state.feedback,
-      rating: this.state.rating
+      rating: this.state.rating,
+      "Project Name": this.state.project.Name,
     }
     db.collection("Project Reviews").add(body).then((docRef) => (
       browserHistory.push(window.location.pathname + '/thanks')

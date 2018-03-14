@@ -30,7 +30,8 @@ export default  class SignupModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {type: 'signup', loading: false, pwned: null}
+    this.state = {type: 'signup', loading: false, pwned: null,
+      forgotPassword: false, sendPasswordClicked: false}
   }
 
   handleName = (e,  newValue) => {
@@ -104,12 +105,13 @@ export default  class SignupModal extends React.Component {
         // No user is signed in.
       }
     });
-    fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+    fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch((error) => {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         if (errorCode === 'auth/wrong-password') {
           alert('Wrong password.');
+          this.setState({forgotPassword: true})
         } else {
           alert(errorMessage);
         }
@@ -260,6 +262,22 @@ export default  class SignupModal extends React.Component {
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='password'
                       style={styles.textfield}/>
+                  </div>
+                  <div style={{textAlign: 'center', marginBottom: 10}}>
+                    {this.state.forgotPassword ?
+                      <div>
+                        Forgotten your password? <br/><b
+                        style={{cursor: 'pointer'}}
+                        onClick={() => fire.auth().sendPasswordResetEmail(this.state.email, {
+                          url: window.location.href
+                        }).then(() => {
+                          console.log('sending new password')
+                          this.setState({sendPasswordClicked: true})
+                        })}
+                        >Send a reminder?</b>
+                      </div> :
+                      null
+                    }
                   </div>
                   <div style={{width: '100%', boxSizing: 'border-box', backfaceVisibility: 'inherit'
                     ,borderRadius: '10px', paddingBottom: '20px'}}>

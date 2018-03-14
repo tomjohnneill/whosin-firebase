@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import fire from '../../fire';
 
 let db = fire.firestore()
-var firebase = require("firebase");
+var firebase = require("firebase/auth");
 
 export default class FirebaseAuth extends React.Component{
   constructor(props) {
