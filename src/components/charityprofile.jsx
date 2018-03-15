@@ -50,6 +50,34 @@ export function changeImageAddress(file, size) {
   return(str + '?pass=this')
 }
 
+class About extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div style={{display: 'flex', padding: 24}}>
+        <div style={{flex: 2, marginRight: 32}}>
+          <h2>{this.props.charity.Name}</h2>
+          {this.props.charity.Summary}
+        </div>
+        <div style={{flex: 1, textAlign: 'right'}}>
+          <h2>
+            Contact Us
+          </h2>
+          <div>
+            {this.props.charity.Email}<br/>
+            {this.props.charity.Phone}<br/>
+            {this.props.charity.Postcode}<br/>
+            {this.props.charity.Website}
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
 class CharityReviews extends React.Component {
   constructor(props) {
     super(props);
@@ -58,7 +86,7 @@ class CharityReviews extends React.Component {
 
   componentDidMount(props) {
     var data = []
-    db.collection("Project Reviews").where("Charity", "==", this.props.charityId).get().then((engSnapshot) => {
+    db.collection("ProjectReviews").where("Charity", "==", this.props.charityId).get().then((engSnapshot) => {
       console.log(engSnapshot)
       console.log(engSnapshot.size)
       engSnapshot.forEach((engDoc) => {
@@ -295,6 +323,7 @@ export default class CharityProfile extends React.Component {
                     buttonStyle={this.state.selected === 'about' ? styles.selectedTab : styles.tab}
                      label="About"  value="about">
                     <div/>
+                    <About charity={this.state.charity}/>
                   </Tab>
                   <Tab
                     style={{width: 'auto', fontSize: '16px'}}

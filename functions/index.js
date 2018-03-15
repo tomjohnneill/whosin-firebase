@@ -193,11 +193,13 @@ const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
 
 const ALGOLIA_INDEX_NAME = 'projects';
+const SECOND_ALGOLIA_INDEX_NAME = 'organisations';
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
 exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onCreate(event => {
     // Get the note document
     const project = event.data.data();
+    project._id = event.params.projectId
 
     // Add an 'objectID' field which Algolia requires
     project.objectID = event.params.projectId;
@@ -206,6 +208,20 @@ exports.addProjectToSearch = functions.firestore.document('Project/{projectId}')
     const index = client.initIndex(ALGOLIA_INDEX_NAME);
     return index.saveObject(project);
 });
+
+exports.addCharityToSearch = functions.firestore.document('Charity/{charityId}').onCreate(event => {
+    // Get the note document
+    const charity = event.data.data();
+    charity._id  = event.params.charityId;
+
+    // Add an 'objectID' field which Algolia requires
+    charity.objectID = event.params.charityId;
+
+    // Write to the algolia index
+    const index = client.initIndex(SECOND_ALGOLIA_INDEX_NAME);
+    return index.saveObject(charity);
+});
+
 
 var site = 'https://whos-in-firebase.firebaseapp.com'
 

@@ -36,6 +36,9 @@ const style = {
     backgroundColor: 'white',
     borderBottom: '1px solid #DBDBDB'
   },
+  embedAppBar: {
+    display: 'none'
+  },
   whyAppBar: {
     margin: '0px',
     boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
@@ -107,10 +110,12 @@ export default class Navigation extends React.Component {
       if (user === null) {
 
       } else {
+        console.log(user)
         db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
           console.log(data.data())
           this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
         })
+        .catch(error => console.log('Error', error))
       }
     })
 
@@ -120,6 +125,7 @@ export default class Navigation extends React.Component {
         console.log(data.data())
         this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
       })
+      .catch(error => console.log('Error', error))
     }
   }
 
@@ -254,7 +260,9 @@ export default class Navigation extends React.Component {
 
         <AppBar
           showMenuIconButton={false}
-          style={window.location.pathname === '/why' ? style.whyAppBar : window.location.pathname === '/'  ? style.loggedInAppBar : style.appBar}
+          style={window.location.pathname.includes('/embed/') ? style.embedAppBar :
+            window.location.pathname === '/why' ? style.whyAppBar :
+             window.location.pathname === '/'  ? style.loggedInAppBar : style.appBar}
           className={this.props.location === '/'  ? 'loggedInAppBar' :'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -264,7 +272,7 @@ export default class Navigation extends React.Component {
                                 <div style={{display: 'flex'}}>
                                   <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
-                                    onTouchTap={() => browserHistory.push('/why')}
+                                    onTouchTap={() => browserHistory.push('/about')}
                                     >
                                     About
                                   </div>

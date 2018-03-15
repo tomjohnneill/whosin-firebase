@@ -143,7 +143,7 @@ export default class VolunteerStars extends React.Component {
       "Project Name": this.state.engagement['Project Name'],
       created : new Date ()
     }
-    db.collection("User Review").add(body).then((doc) => {
+    db.collection("UserReview").add(body).then((doc) => {
       this.setState({reviewId: doc.id})
     })
     this.setState({stage: 2})
@@ -154,7 +154,7 @@ export default class VolunteerStars extends React.Component {
   }
 
   handleSaveReview = () => {
-    db.collection("User Review").doc(this.state.reviewId).update({
+    db.collection("UserReview").doc(this.state.reviewId).update({
       Review: this.state.additional
     })
   }
@@ -162,7 +162,7 @@ export default class VolunteerStars extends React.Component {
   render() {
     return (
       <div >
-        <MediaQuery maxDeviceWidth={700}>
+
           {this.state.loading ?
           null :
           <div   style={{textAlign: 'left', padding: 24, paddingBottom: 50}}>
@@ -288,7 +288,7 @@ export default class VolunteerStars extends React.Component {
              }
           </div>}
 
-        </MediaQuery>
+
       </div>
     )
   }

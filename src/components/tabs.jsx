@@ -111,7 +111,8 @@ export default class UserTabs extends React.Component {
         var body = {
           'Location': data.city + ', ' + data.country_name
         };
-          db.collection("User").doc(userId).update(body)
+          db.collection("User").doc(userId).update(body).then(() => {})
+          .catch(error => console.log('Error', error))
 
           }
       } )

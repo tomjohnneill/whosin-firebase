@@ -143,7 +143,7 @@ export default class ProjectReview extends React.Component {
       issueImportance: this.state.issueImportance,
       charityImportance: this.state.charityImportance
     }
-    db.collection("Project Reviews").add(body).then((docRef) => (
+    db.collection("ProjectReviews").add(body).then((docRef) => (
       browserHistory.push(window.location.pathname + '/thanks')
     ))
   }

@@ -72,6 +72,7 @@ export default  class SignupModal extends React.Component {
                   this.props.onComplete()
                 }
               })
+            .catch(error => console.log('Error', error))
           } else {
             // No user is signed in.
           }
@@ -91,7 +92,7 @@ export default  class SignupModal extends React.Component {
 
       }
     })
-
+    .catch(error => console.log('Error', error))
 
   }
 

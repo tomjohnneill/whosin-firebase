@@ -46,6 +46,21 @@ export default class CharitiesList extends React.Component{
 
   }
 
+  handleSearch = (e, input) => {
+    const client = window.algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const index = client.initIndex('organisations');
+    var query = e.target.value
+    index
+        .search({
+            query
+        })
+        .then(responses => {
+            // Response from Algolia:
+            // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
+            this.setState({charities: responses.hits});
+        });
+  }
+
   goToCharity (charity, e) {
     e.preventDefault()
     browserHistory.push('/charity/' + charity.id)
@@ -112,6 +127,50 @@ export default class CharitiesList extends React.Component{
 
 
         }
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
+              <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left', paddingLeft: '24px'}}>
+                Organisations
+              </h1>
+              {this.state.loading ?
+                <div>
+                  Loading...
+                </div>
+                :
+
+            <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '8px', paddingRight: '8px',
+            textAlign: 'left'}}>
+              {this.state.charities.map((charity) => (
+                <Link to={`/charity/${charity._id}`} style={{width: '40%', margin: 16}}>
+                  <div style={{width: '100%', height: '240px'}}>
+                    <span style={{fontWeight: 700, marginBottom: 6, display: 'inline-block', height: '45px',
+                      display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                      {charity.Name}
+                    </span>
+                    {charity['Featured Image'] ?
+                    <img src={charity['Featured Image']}
+                      style={{width: '100%', height: '80px',objectFit: 'cover', borderRadius: '4px'}}/>
+                    :
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: '100%', height: '80px', borderRadius: '4px', backgroundColor: 'rgb(247,247,247)'}}>
+                      <World style={{height: '25px', width: '25px'}} fill={'#E55749'}/>
+                    </div>
+                  }
+                    <span style={{marginTop: 6, display: 'inline-block', height: '90px', fontSize: '16px',
+                       overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 4,
+                       textOverflow: 'ellipsis'}}>
+                      {charity.Summary}
+                    </span>
+                  </div>
+                </Link>
+
+
+
+              ))}
+            </div>
+
+
+          }
         </MediaQuery>
       </div>
       </div>

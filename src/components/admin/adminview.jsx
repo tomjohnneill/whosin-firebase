@@ -79,7 +79,8 @@ export default class AdminView extends React.Component {
           <h2>Admin View</h2>
           {this.state.loading ?
             null :
-          this.state.engagements.map((eng) => (
+          this.state.engagements && this.state.engagements.length > 0
+           ? this.state.engagements.map((eng) => (
             <List style={{textAlign: 'left', backgroundColor: 'white'}}>
               <ListItem
                 style={{backgroundColor: eng['Cancelled'] ? 'rgb(248,248,248)' : 'white',
@@ -124,10 +125,16 @@ export default class AdminView extends React.Component {
                   ]}
               />
             </List>
-          ))}
+          )) :
+          <div style={{margin: 20, borderRadius: 4, fontWeight: 700, height: '250px', width: '100%', display: 'flex', backgroundColor: 'rgb(247, 247, 247)', justifyContent: 'center' ,alignItems: 'center'}}>
+            <div>
+              You don't have any supporters just yet
+            </div>
+          </div>
+        }
           <div style={{position: 'fixed', bottom: 0, height: 150 , textAlign: 'center', width: '100%', maxWidth: 900,
             display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-            <div style={{margin: 16}}>
+            <div>
               <b>Contact your supporters</b>
             </div>
             <RaisedButton primary={true} label='Send Email' onClick={this.handleEmail}/>

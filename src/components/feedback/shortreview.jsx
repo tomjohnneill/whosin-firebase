@@ -131,7 +131,7 @@ export default class ShortReview extends React.Component {
       rating: this.state.rating,
       "Project Name": this.state.project.Name,
     }
-    db.collection("Project Reviews").add(body).then((docRef) => (
+    db.collection("ProjectReviews").add(body).then((docRef) => (
       browserHistory.push(window.location.pathname + '/thanks')
     ))
   }

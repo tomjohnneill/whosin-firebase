@@ -207,7 +207,7 @@ export default class OrganisationLookup extends React.Component{
       db.collection("Charity").add(charityBody)
       .then(docRef => {
         body.Charity = docRef.id
-        body['Charity Name'] = docRef.data().Name
+        body['Charity Name'] = this.state.searchText
         if (localStorage.getItem('editProject')) {
           db.collection("Project").doc(localStorage.getItem('editProject')).update(body)
           .then(newProject => {
@@ -226,13 +226,13 @@ export default class OrganisationLookup extends React.Component{
       .catch(error => {this.setState({error: error}); console.log(error)})
     }
 
-
+    /*
     localStorage.removeItem('basics')
     localStorage.removeItem('story')
     localStorage.removeItem('times')
     localStorage.removeItem('coverPhoto')
     localStorage.removeItem('editProject')
-
+    */
   }
 
   handleFill = (e) => {

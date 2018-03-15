@@ -217,7 +217,8 @@ export default class Project extends React.Component {
     this.loadFbLoginApi()
     this.setState({ loading: true });
 
-    db.collection("Project").doc(this.props.location.query.project ? this.props.location.query.project : this.props.params._id).get().then((doc) => {
+    db.collection("Project").doc(this.props.location.query.project ?
+      this.props.location.query.project : this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
       this.setState({ project: project, charity: {}})
@@ -227,8 +228,10 @@ export default class Project extends React.Component {
             charity._id = charityDoc.id
             this.setState({ charity: charity, loading: false})
           })
+          .catch(error => console.log('Error', error))
       }
-    });
+    })
+    .catch(error => console.log('Error', error));
 
     fire.auth().onAuthStateChanged((user) => {
       if (user !== null) {
@@ -240,6 +243,7 @@ export default class Project extends React.Component {
             this.setState({joined: false})
           }
         })
+        .catch(error => console.log('Error', error))
 
         db.collection("Project").doc(this.props.params._id).collection("Challenge")
         .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
@@ -250,6 +254,7 @@ export default class Project extends React.Component {
             this.setState({challengeExists: false})
           }
         })
+        .catch(error => console.log('Error', error))
       }
     })
 
@@ -262,6 +267,7 @@ export default class Project extends React.Component {
         db.collection("User").doc(challenge.User).get().then((userDoc) => {
           this.setState({loading: false, challenge: challenge, challengeUser: userDoc.data()})
         })
+        .catch(error => console.log('Error', error))
 
       })
     }

@@ -35,6 +35,7 @@ import ReviewOverview from './components/feedback/project-review-overview.jsx';
 import ShortReview from './components/feedback/shortreview.jsx';
 import AllProjects from './components/allprojects.jsx';
 import EditCharity from './components/editcharity.jsx';
+import EmbeddedProject from './components/embeddedproject.jsx';
 import About from './components/about.jsx';
 import asyncComponent from './AsyncComponent'
 
@@ -68,6 +69,7 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/4' component={UploadPhoto}/>
       <Route path='/create-project/summary/1' component={FirstSummary}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
+      <Route path='/embed/:_id' component={EmbeddedProject}/>
       <Route path='/projects/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>

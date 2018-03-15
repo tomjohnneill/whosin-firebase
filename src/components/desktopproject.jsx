@@ -36,7 +36,6 @@ import {Spiral, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
-import MediaQuery from 'react-responsive';
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import fire from '../fire';
 
@@ -380,6 +379,7 @@ export default class DesktopProject extends React.Component {
           if (querySnapshot.size === 0) {
             db.collection("Engagement").add(body)
             .then(data => console.log(data))
+            .catch(error => console.log('Error', error))
           }
       })
 
@@ -689,12 +689,7 @@ export default class DesktopProject extends React.Component {
                               address={this.state.project.Location}
                               isMarkerShown
                               googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-                              loadingElement={
-                                <div>
-                                <MediaQuery minDeviceWidth={700}>
-                                  <div style={{ height: `100%` , borderRadius: 20}} />
-                                </MediaQuery>
-                                </div>}
+                              loadingElement={<div style={{ height: `100%` , borderRadius: 20}} />}
                               containerElement={<div style={{ height: `200px`}} />}
                               mapElement={<div style={{ height: `100%`, borderRadius: 20 }} />} />
                           </div>

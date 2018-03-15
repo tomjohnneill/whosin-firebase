@@ -8,6 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import MediaQuery from 'react-responsive';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import {orange500} from 'material-ui/styles/colors';
 import Chip from 'material-ui/Chip';
 
 const styles = {
@@ -36,6 +37,12 @@ const styles = {
 var categories = ['Environment', 'Refugees', 'Equality', 'Poverty', 'Education', 'Healthcare',
                     'Disabilities', 'Young People', 'Old People', 'Isolation', 'Animals', 'Outdoor',
                     'Mental Health']
+
+function disableDates(date) {
+
+  var deadline = new Date()
+  return  date < deadline;
+}
 
 export class Form extends React.Component {
   constructor(props) {
@@ -131,6 +138,8 @@ export class Form extends React.Component {
               hintText={'Maximum'}
               hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
               key='max'
+              errorStyle={{marginTop: 6, color: orange500, textAlign: 'center'}}
+              errorText={this.state.max && this.state.max < this.state.min ? 'You just set max < min' : null}
               value={this.state.max}
               onChange={this.handleSetMax}
               style={styles.textfield}/>
@@ -148,6 +157,7 @@ export class Form extends React.Component {
                underlineShow={false}
                value={this.state.deadline}
                onChange={this.handleSetDeadline}
+               shouldDisableDate={disableDates}
                hintStyle={{  bottom: '8px'}}
                hintText="Deadline" textFieldStyle={styles.textfield}/>
 
