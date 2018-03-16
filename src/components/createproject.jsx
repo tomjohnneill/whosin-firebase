@@ -153,7 +153,7 @@ export default class CreateProject extends React.Component{
                       <Subheader>
                         What are you doing? And why are you doing it?
                       </Subheader>
-                      <LoadableComponent styles={{fontFamily: 'Open Sans', padding: '10px', marginTop: '10px'}}
+                      <LoadableComponent styles={{padding: '10px', marginTop: '10px'}}
                         returnableValue={this.state.project.returnableValue}
                         description={this.state.project.description}
                         onChange={this.handleOnChange}/>

@@ -126,7 +126,7 @@ export default class ProjectList extends React.Component{
               {this.state.loading ?
                 <List>
                   <Subheader style={{fontSize: '25px', letterSpacing: '-0.6px', lineHeight: '30px', color: '#484848',
-                  fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px', fontFamily: 'Open Sans'}}>
+                  fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px'}}>
                     Popular projects
                   </Subheader>
 

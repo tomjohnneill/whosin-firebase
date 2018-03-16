@@ -24,7 +24,7 @@ const muiTheme = getMuiTheme({
   timePicker: {
     headerColor: '#65A1e7',
   },
-  fontFamily: 'Open Sans'
+  fontFamily: 'Nunito'
 });
 
 

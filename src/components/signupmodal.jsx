@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Plant, Spiral} from './icons.jsx';
+import {Plant, Spiral, Tick} from './icons.jsx';
 import {grey500} from 'material-ui/styles/colors'
 import MediaQuery from 'react-responsive';
 import fire from '../fire';
@@ -224,6 +224,23 @@ export default  class SignupModal extends React.Component {
                   <div>
                     Or switch to <b onTouchTap={this.handleSwitchType} style={{color: '#E55749'}}>Login</b>
                   </div>
+
+            </span>
+
+            :
+
+            this.state.sendPasswordClicked ?
+
+            <span
+                style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+
+
+                  <Tick style={{marginBottom: '16px', height: '80px'}}/>
+                  <div style={{paddingBottom: '16px'}}>
+                    We've sent you an email
+                  </div>
+
+
 
             </span>
 

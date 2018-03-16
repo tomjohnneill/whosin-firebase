@@ -135,7 +135,7 @@ export default class AllProjects extends React.Component {
 
                     <div style={{textAlign: 'left', paddingLeft: '18px', paddingRight: '18px', paddingBottom: '64px'}}>
                       <Subheader style={{fontSize: '25px', letterSpacing: '-0.6px', lineHeight: '30px', color: '#484848',
-                      fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px', fontFamily: 'Open Sans'}}>
+                      fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px'}}>
                         All Projects
                       </Subheader>
                       {this.state.loading ?
@@ -201,7 +201,7 @@ export default class AllProjects extends React.Component {
                          value={6} />
                     <div style={{color: '#484848',
                     fontWeight: 700, fontSize: '19px', lineHeight: '22px', maxHeight: '66px', letterSpacing: '-0.8px'
-                    , overflow: 'hidden', fontFamily: 'Open Sans', textOverflow: 'ellipsis', width: '100%'}}>
+                    , overflow: 'hidden',  textOverflow: 'ellipsis', width: '100%'}}>
                       {project.Name}
                     </div>
 
@@ -217,7 +217,7 @@ export default class AllProjects extends React.Component {
                   <Divider/>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', textAlign: 'center'}}>
                     <Subheader style={{fontSize: '25px', letterSpacing: '1px', lineHeight: '30px', color: '#484848',
-                    fontWeight: 700, paddingTop: '16px', marginBottom: '16px', paddingLeft: '0px', fontFamily: 'Open Sans'}}>
+                    fontWeight: 700, paddingTop: '16px', marginBottom: '16px', paddingLeft: '0px'}}>
                       Get started today
                     </Subheader>
                     <div>

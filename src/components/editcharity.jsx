@@ -11,6 +11,7 @@ import TextField from 'material-ui/TextField';
 import {grey500} from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import {changeImageAddress} from './profile.jsx';
+import Snackbar from 'material-ui/Snackbar';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -30,7 +31,6 @@ const styles = {
   },
   tab: {
     height: '60px',
-    fontFamily: 'Open Sans',
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',
@@ -42,11 +42,28 @@ const styles = {
     paddingRight: '20px',
 
   },
-  textField: {
-    height: '36px'
+  textfield: {
+    height: '40px',
+    fontsize: '20px',
+    boxSizing: 'border-box'
+  },
+  whiteTextfield : {
+    backgroundColor: 'rgb(255,255,255)',
+    height: '40px',
+
+  },
+  unfilledTextField: {
+    backgroundColor: 'rgba(101, 161, 231, 0.15)',
+    height: '40px',
+    borderRadius: 6
+  },
+  header : {
+    margin: '0px',
+    padding: '6px',
+    fontWeight: 700
   },
   title : {
-    fontWeight: 700, marginBottom: 6, marginTop: 16, display: 'flex'
+    fontWeight: 700, marginBottom: 6, marginTop: 16, display: 'flex', paddingLeft: 12
   }
 }
 
@@ -161,13 +178,23 @@ class CharityPhotoUpload extends React.Component {
 export default class EditCharity extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true}
+    this.state = {loading: true, details: {}}
+  }
+
+  changeCharityInfo (id, e, nv) {
+    console.log(id)
+    console.log(nv)
+    console.log(e)
+    var charity = this.state.charity
+    charity[id] = nv
+
+    this.setState({charity: charity})
   }
 
   componentDidMount(props) {
     db.collection("Charity").doc(this.props.params.charityId).get().then((doc) => {
       var data = doc.data()
-      this.setState({charity: data, loading: false})
+      this.setState({charity: data, loading: false, snackbar: false})
     })
   }
 
@@ -185,6 +212,10 @@ export default class EditCharity extends React.Component {
     })
   }
 
+  handleRequestClose = () => {
+    this.setState({snackbar: false})
+  }
+
   updateCheck(type) {
     var privacy = this.state.user.privacy
     var user = this.state.user
@@ -199,9 +230,23 @@ export default class EditCharity extends React.Component {
     this.setState({charity: charity})
   }
 
+  handleSaveChanges = () => {
+    var body = this.state.charity
+    db.collection("Charity").doc(this.props.params.charityId).update(
+      body)
+    .then(data => {this.setState({snackbar: true})})
+    .catch(error => {console.log('Error', error)})
+  }
+
   render() {
     return (
       <div>
+        <Snackbar
+          open={this.state.snackbar}
+          message="Profile Updated"
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+        />
         {this.state.loading ?
           null
           :
@@ -230,7 +275,7 @@ export default class EditCharity extends React.Component {
                     <div style={{width: '50%', minWidth: '300px', padding: 16}}>
                       <span style={styles.title}>Picture</span>
 
-                      <div style={{display: 'flex', alignItems: 'center'}}>
+                      <div style={{display: 'flex', alignItems: 'center', padding: 6}}>
                         <div style={{width: '100%'}}>
                         {this.state.charity['Featured Image']?
                         <img style={{height: '200px', width: 'auto', objectFit: 'cover', borderRadius: '4px'}}
@@ -245,50 +290,169 @@ export default class EditCharity extends React.Component {
 
                       </div>
 
-                      <span style={styles.title}>Name</span>
-                      <div style={{display: 'flex', alignItems: 'center'}}>
+                      <div style={{padding: '6px'}}>
+                        <p style={styles.header}>
+                        Display Name
+                        </p>
                         <TextField fullWidth={true}
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
-                          hintText={'Full Name'}
                           value={this.state.charity.Name}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                          key='min'
-                          onChange={this.handleSetName}
-                          style={styles.textfield}/>
-
+                          key='name'
+                          onChange={this.changeCharityInfo.bind(this, 'Name')}
+                          style={this.state.details.name ? styles.whiteTextfield : styles.unfilledTextField}/>
                       </div>
 
-                      <span style={styles.title}>Email</span>
-                      <div style={{display: 'flex', alignItems: 'center'}}>
+
+                      <div style={{display: 'flex'}}>
+                        <div style={{flex: '2', padding: '6px'}}>
+                          <p style={styles.header}>
+                          Contact
+                        </p>
+                            <TextField fullWidth={true}
+                              inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                                paddingLeft: '12px',  boxSizing: 'border-box'}}
+                              underlineShow={false}
+                              onChange={this.changeCharityInfo.bind(this, 'Phone')}
+                              defaultValue={this.state.charity.Phone}
+                              hintText={'Phone'}
+                              hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                              key='location3'
+                              style={this.state.details.phone ? styles.whiteTextfield : styles.unfilledTextField}/>
+
+                            <TextField fullWidth={true}
+                              inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                                paddingLeft: '12px',  boxSizing: 'border-box'}}
+                              underlineShow={false}
+                              onChange={this.changeCharityInfo.bind(this, 'Address')}
+                              defaultValue={this.state.charity.Address}
+                              hintText={'Address'}
+                              hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                              key='location3'
+                              style={this.state.address ? styles.whiteTextfield : styles.unfilledTextField}/>
+
+                            <TextField fullWidth={true}
+                              inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                                paddingLeft: '12px',  boxSizing: 'border-box'}}
+                              underlineShow={false}
+                              onChange={this.changeCharityInfo.bind(this, 'Postcode')}
+                              defaultValue={this.state.charity.Postcode}
+                              hintText={'Postcode'}
+                              hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                              key='location3'
+                              style={this.state.postcode ? styles.whiteTextfield : styles.unfilledTextField}/>
+
+
+                        </div>
+
+                        <div style={{flex: 1, padding: '6px'}}>
+                          <p style={styles.header}>
+                          Charity Number
+                          </p>
+                          <TextField fullWidth={true}
+                            inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                              paddingLeft: '12px',  boxSizing: 'border-box'}}
+                            underlineShow={false}
+                            defaultValue={this.state.charity['Charity Number']}
+                            onChange={this.changeCharityInfo.bind(this, 'Charity Number')}
+                            hintText={'Charity Number'}
+                            hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                            key='location3'
+                            style={styles.whiteTextfield}/>
+                        </div>
+                      </div>
+
+                      <div style={{padding: '6px'}}>
+                        <p style={styles.header}>
+                        Description
+                        </p>
                         <TextField fullWidth={true}
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
-                          hintText={'Minimum'}
-                          value={this.state.charity.Email}
+                          defaultValue={this.state.charity.Description}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                          key='min'
-                          onChange={this.handleSetEmail}
-                          style={styles.textfield}/>
-
+                          onChange={this.changeCharityInfo.bind(this, 'Description')}
+                          key='activities'
+                          rows={3}
+                          multiLine={true}
+                          style={this.state.activities ? styles.whiteTextfield : styles.unfilledTextField}/>
                       </div>
 
-                      <span style={styles.title}>Location</span>
-                      <div style={{display: 'flex', alignItems: 'center', marginBottom: 30}}>
+                      <div style={{display: 'flex'}}>
+                        <div style={{flex: 1, padding: '6px'}}>
+                          <p style={styles.header}>
+                          Email
+                        </p>
                         <TextField fullWidth={true}
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
-                          hintText={'Minimum'}
-                          value={this.state.charity.Location}
+                          hintText={'Email'}
+                          onChange={this.changeCharityInfo.bind(this, 'Email')}
+                          defaultValue={this.state.charity.Email}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                          key='min'
-                          onChange={this.handleSetLocation}
-                          style={styles.textfield}/>
-
+                          key='location2'
+                          style={this.state.email ? styles.whiteTextfield : styles.unfilledTextField}/>
+                        <p style={styles.header}>
+                          Facebook
+                        </p>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          hintText={'Facebook'}
+                          defaultValue={this.state.charity.Facebook}
+                          onChange={this.changeCharityInfo.bind(this, 'Facebook')}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='location2'
+                          style={styles.whiteTextfield}/>
+                        <p style={styles.header}>
+                          Instagram
+                        </p>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          hintText={'@Username'}
+                          defaultValue={this.state.charity.Instagram}
+                          onChange={this.changeCharityInfo.bind(this, 'Instagram')}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='location2'
+                          style={styles.whiteTextfield}/>
+                        </div>
+                        <div style={{flex: 1, padding: '6px', marginBottom: 60}}>
+                          <p style={styles.header}>
+                            Website
+                          </p>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          onChange={this.changeCharityInfo.bind(this, 'Website')}
+                          defaultValue={this.state.charity.Website}
+                          hintText={'Website'}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='location3'
+                          style={styles.whiteTextfield}/>
+                        <p style={styles.header}>
+                          Twitter
+                        </p>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          hintText={'@Username'}
+                          onChange={this.changeCharityInfo.bind(this, 'Twitter')}
+                          defaultValue={this.state.charity.Twitter}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='location2'
+                          style={styles.whiteTextfield}/>
+                        </div>
                       </div>
+                      <div style={{height: 50}}/>
 
                       <RaisedButton style={{marginBottom: 30}} label='Save Changes'
                         labelStyle={{fontWeight: 700, textTransform: 'none'}}

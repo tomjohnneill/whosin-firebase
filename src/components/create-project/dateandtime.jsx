@@ -23,8 +23,7 @@ const defaultStyles = {
   root: {
     position: 'relative',
     paddingBottom: '0px',
-    fontSize: '16px',
-    fontFamily: 'Open Sans'
+    fontSize: '16px'
   },
   input: {
     display: 'inline-block',
@@ -33,8 +32,7 @@ const defaultStyles = {
     fontSize: '16px',
     boxSizing: 'border-box',
     borderRadius: '6px',
-    border: '1px solid rgb(133, 137, 135)',
-    fontFamily: 'Open Sans'
+    border: '1px solid rgb(133, 137, 135)'
   },
   autocompleteContainer: {
     position: 'absolute',
@@ -42,8 +40,7 @@ const defaultStyles = {
     backgroundColor: 'white',
     border: '1px solid #555555',
     width: '100%',
-    zIndex: '5',
-    fontFamily: 'Open Sans'
+    zIndex: '5'
   },
   autocompleteItem: {
     backgroundColor: '#ffffff',

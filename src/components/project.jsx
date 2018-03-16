@@ -139,7 +139,6 @@ selectedTab: {
   },
   tab: {
     height: '36px',
-    fontFamily: 'Open Sans',
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',

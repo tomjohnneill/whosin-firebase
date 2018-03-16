@@ -31,7 +31,6 @@ const styles = {
   },
   tab: {
     height: '60px',
-    fontFamily: 'Open Sans',
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',
@@ -57,7 +56,6 @@ const styles = {
   },
   mobileTab: {
     height: '60px',
-    fontFamily: 'Open Sans',
     backgroundColor: 'white',
     color: '#484848',
     textTransform: 'none',
