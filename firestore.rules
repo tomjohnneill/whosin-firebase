@@ -16,14 +16,14 @@ service cloud.firestore {
      }
 
     match /User/{user} {
-       allow read: if user == request.auth.uid;
-       allow update: if user == request.auth.uid;
+       allow read: if resource.id == request.auth.uid;
+       allow update: if resource.id == request.auth.uid;
 
       // Applies to writes to existing documents
       allow create: if true;
 
         match /public/{publicInfo} {
-          allow read, write: if true;
+          allow read, write: if request.auth.uid == user;
         }
      }
 
@@ -37,11 +37,18 @@ service cloud.firestore {
 
    match /Engagement/{engagement} {
       allow read: if true;
-      allow write: if request.resource.data.User == request.auth.uid;
-      allow delete: if resource.data.User == request.auth.uid
+      allow create: if request.resource.data.User == request.auth.uid;
+      allow delete: if resource.data.User == request.auth.uid;
+      allow update: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid;
+
+
+
+      match /Private/{private} {
+
+      	allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
+        allow write: if request.resource.data.User == request.auth.uid;
+      }
     }
-
-
 
     match /Newsletter/{user} {
        allow create;
@@ -54,7 +61,7 @@ service cloud.firestore {
 
     match /UserReview/{review} {
        allow read: if true;
-       allow create: if request.resource.data.User == request.auth.uid;
+       allow create: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid;
      }
   }
 }

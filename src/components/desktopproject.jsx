@@ -368,9 +368,9 @@ export default class DesktopProject extends React.Component {
         "Project Photo": this.props.project['Featured Image'],
         "Charity": this.props.project['Charity Name'] ? this.props.project['Charity Name'] : null,
         "Charity Number": this.props.project.Charity,
-        "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
-        "Location": doc.data().Location ? doc.data().Location : null,
+        "Location": doc.data().Location && doc.data().privacy && doc.data().privacy.Location
+            ? doc.data().Location : null,
         "created": new Date()
       }
       console.log(body)
@@ -378,7 +378,15 @@ export default class DesktopProject extends React.Component {
       .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
           if (querySnapshot.size === 0) {
             db.collection("Engagement").add(body)
-            .then(data => console.log(data))
+            .then(data => db.collection("Engagement").doc(data.id).
+            collection("Private").doc(this.props.project._id).
+            set({
+              User: fire.auth().currentUser.uid,
+              Email: doc.data().Email,
+              Name: doc.data().Name,
+              "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
+              "Location": doc.data().Location ? doc.data().Location : null
+            }))
             .catch(error => console.log('Error', error))
           }
       })

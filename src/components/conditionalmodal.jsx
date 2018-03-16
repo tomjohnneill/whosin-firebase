@@ -29,6 +29,19 @@ const styles = {
   option : {
     fontFamily: 'Permanent Marker',
     fontSize: '18px'
+  },
+  line: {
+    padding: "0.625em 0",
+    borderBottom: "1px solid #dbd9db",
+    boxSizing: 'border-box',
+    textAlign: 'left',
+    display: 'flex',
+    cursor: 'pointer'
+  },
+  icon: {
+    marginRight: '16px',
+    width: '24px',
+    marginLeft: '6px'
   }
 }
 
@@ -36,7 +49,8 @@ export default  class ConditionalModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {login: true, loading: false, slider: 50, type: null, shared: false, targetCreated: false, modalOpen: false}
+    this.state = {login: true, loading: false, slider: 50, type: null,
+       shared: false, targetCreated: false, modalOpen: false}
   }
 
   handleSlider = (e, v) => {
@@ -109,6 +123,10 @@ export default  class ConditionalModal extends React.Component {
     this.createChallenge()
   }
 
+  handleUnclick = () => {
+    this.setState({shared: false, type: null, undo: true})
+  }
+
   render() {
     console.log(window.navigator)
 
@@ -129,7 +147,7 @@ export default  class ConditionalModal extends React.Component {
 
 
              {(this.state.type === 'friends' && !this.state.shared
-               && !this.state.targetCreated) || this.props.challengeExists ?
+               && !this.state.targetCreated) || (this.props.challengeExists && !this.state.undo) ?
 
                <div style={{fontWeight: 200, textAlign: 'left',
                      borderRadius: 6, marginBottom: 15,
@@ -145,6 +163,11 @@ export default  class ConditionalModal extends React.Component {
                    smsbody={encodeURIComponent("I'm thinking of going to this event, can you come with me? ") + window.location.href + '/' + this.state.challengeId}
                    emailbody={`Hi%20there%2C%0A%0AI%20just%20agreed%20to%20go%20to%20this%20event%3A%20%22${this.props.project.Name}%22%2C%20but%20don%27t%20really%20want%20to%20go%20to%20it%20by%20myself.%20%0A%0AIf%20you%20come%20with%20me%2C%20we%20could%20both%20do%20something%20good.%20You%20can%20read%20a%20bit%20more%20about%20it%20here%3A%0A%0A${encodeURIComponent(window.location.href + '/' + this.state.challengeId)}%0A%0AThanks!%0A%0A` + "name"}
                    />
+
+                 <li style={styles.line} onTouchTap={this.handleUnclick}>
+                     <FontIcon style={styles.icon} className={"fas fa-undo"}/>
+                     Ah, no I didn't mean that
+                   </li>
                </div>
 
                 :

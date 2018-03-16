@@ -206,7 +206,7 @@ export default class About extends React.Component {
                     frameborder='0'
                     width="350"
                     height="500"
-                    src="https://whosin.io/embed/7CLWqTZVGWjvJQ5YCvwG"></iframe>
+                    src="https://whosin.io/embed/9Sp63uDdOHDqIqlLaU4P"></iframe>
                 </div>
               </div>
           </div>

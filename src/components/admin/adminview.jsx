@@ -22,6 +22,15 @@ export default class AdminView extends React.Component {
         console.log(doc.data())
         var elem = doc.data()
         elem['_id'] = doc.id
+        console.log('Engagement Id', doc.id)
+        db.collection("Engagement").doc(doc.id).collection("Private").doc(this.props.params._id).get().then((privateData) => {
+          console.log(privateData.data())
+          if (privateData.data()) {
+
+              elem.Email = privateData.data().Email
+            }
+        })
+        .catch(error => console.log('Error', error))
         data.push(elem)
       });
       this.setState({engagements: data, loading: false})

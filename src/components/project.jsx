@@ -388,7 +388,16 @@ export default class Project extends React.Component {
       .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
           if (querySnapshot.size === 0) {
             db.collection("Engagement").add(body)
-            .then(data => console.log(data))
+            .then(data => db.collection("Engagement").doc(data.id).
+            collection("Private").doc(this.state.project._id).
+            set({
+              User: fire.auth().currentUser.uid,
+              Email: doc.data().Email,
+              Name: doc.data().Name,
+              "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
+              "Location": doc.data().Location ? doc.data().Location : null
+            }))
+            .catch(error => console.log('Error', error))
           }
       })
 

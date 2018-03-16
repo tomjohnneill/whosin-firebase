@@ -10,7 +10,8 @@ const styles = {
     borderTop: "1px solid #dbd9db",
     boxSizing: 'border-box',
     textAlign: 'left',
-    display: 'flex'
+    display: 'flex',
+    cursor: 'pointer'
   },
   icon: {
     marginRight: '16px',
