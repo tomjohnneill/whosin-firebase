@@ -643,12 +643,7 @@ export default class Project extends React.Component {
                 <CardText  children = {
                     <div>
                         <Link to={`/charity/${this.state.charity._id}`} >
-                          {this.state.charity.logo ?
-                            <img style={{height: '100px', width: '100px', objectFit: 'cover'}}
-                              src ={this.state.charity.logo }/>
-                            :
-                            <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
-                          }
+
 
                           <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
                               {this.state.charity.Name}

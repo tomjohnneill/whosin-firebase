@@ -813,15 +813,7 @@ export default class DesktopProject extends React.Component {
                 <CardText  children = {
                     <div>
                         <Link to={`/charity/${this.state.charity._id}`} >
-                          {this.state.charity['Featured Image'] ?
-                            <img style={{height: '90px', marginBottom: 10,  width: 'auto', objectFit: 'cover'}}
-                              src ={this.state.charity['Featured Image'] }/>
-                            :
-                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              width: '120px', height: '90px', marginBottom: 10, borderRadius: '4px', backgroundColor: 'rgb(247,247,247)'}}>
-                              <World style={{height: '30px', width: '30px'}} fill={'#E55749'}/>
-                            </div>
-                          }
+
 
                           <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
                               {this.props.charity.Name}
