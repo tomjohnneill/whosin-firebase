@@ -284,7 +284,7 @@ export default  class SignupModal extends React.Component {
                   <div style={{textAlign: 'center', marginBottom: 10}}>
                     {this.state.forgotPassword ?
                       <div>
-                        Forgotten your password? <br/><b
+                         <br/><b
                         style={{cursor: 'pointer'}}
                         onClick={() => fire.auth().sendPasswordResetEmail(this.state.email, {
                           url: window.location.href
@@ -292,7 +292,7 @@ export default  class SignupModal extends React.Component {
                           console.log('sending new password')
                           this.setState({sendPasswordClicked: true})
                         })}
-                        >Send a reminder?</b>
+                        >Forgot password?</b>
                       </div> :
                       null
                     }

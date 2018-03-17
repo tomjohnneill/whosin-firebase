@@ -321,7 +321,7 @@ export default class Navigation extends React.Component {
           title={
             <div className='flexthis' style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <span onTouchTap ={this.handleTitleTap.bind(this)}  className = 'whosin' style={style.title}>
-              Who's In?
+              who's in?
             </span>
 
             </div>
