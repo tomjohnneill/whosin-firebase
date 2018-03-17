@@ -15,18 +15,10 @@ import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import FontIcon from 'material-ui/FontIcon';
 import ShowChart from 'material-ui/svg-icons/editor/show-chart';
-import ThumbsUpDown from 'material-ui/svg-icons/action/thumbs-up-down';
-import Notifications from 'material-ui/svg-icons/social/notifications';
-import Payment from 'material-ui/svg-icons/action/payment';
-import Assignment from 'material-ui/svg-icons/action/assignment';
-import People from 'material-ui/svg-icons/social/person-outline';
-import Group from 'material-ui/svg-icons/social/group';
-import AccessTime from 'material-ui/svg-icons/device/access-time';
-import Place from 'material-ui/svg-icons/maps/place';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
 import Loading from './loading.jsx';
-import {Spiral, World, Tick} from './icons.jsx';
+import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
@@ -561,367 +553,276 @@ export default class DesktopProject extends React.Component {
       <div>
 
         {this.state.loading ?
-
-
-      <Loading />
+            <Loading />
          :
-            <div style={{marginTop: '20px'}}>
+            <div >
+              <img src={changeImageAddress(this.state.project['Featured Image'], '1500xauto')}
+                style={{borderRadius: 4, height: '400px', width: '100%', position: 'relative'
+                , objectFit: 'cover'}}/>
+              <div className='container' style={{width: '100%', paddingRight: 100, paddingTop: 30,
+                  paddingLeft: 100, display: 'flex', boxSizing: 'border-box'}}>
+                <div className='story-etc' style={{flex: 1}}>
 
-            <div style={{paddingLeft: 'auto', paddingRight: 'auto', display: 'flex',
-                  justifyContent: 'center'}}>
-                  <div style={{width: '100%', maxWidth: '1000px'}}>
-                  <div >
-                    <div style={{display: 'flex'}}>
-                  <p style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', margin: 0, flex: 1}}>
+                  <p className='mobile-project-title'
+                    style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left',
+                    margin: 0}}>
                     {this.state.project.Name}
                   </p>
-                  {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
-                  <div style={{width: '250px' }}>
-                    <RaisedButton label='Admin View'
-                      secondary={true}
-                      style={{marginRight: 16}}
-                      onClick={() => browserHistory.push(window.location.pathname + '/admin')}
-                      labelStyle={{textTransform: 'none', fontWeight: 700}}/>
-                    <RaisedButton label='Edit Project'
-                      secondary={true}
-                      onClick={this.handleEditProject}
-                      labelStyle={{textTransform: 'none', fontWeight: 700}}/>
-                  </div> : null
-                  }
-                  </div>
-                  <p style={{fontSize: '18px', fontWeight: 'light', textAlign: 'left'}}>
-                    {this.state.project.Summary}
-                  </p>
-                </div>
 
-              <div
-                ref='variableBox'
-                style={{display: 'flex',
-                    alignItems: 'center', flexDirection: 'row'}}>
-              <div style={{flex: 538, height: '370px', width: '60%', position: 'relative'}}>
-                <img src={changeImageAddress(this.state.project['Featured Image'], '750xauto')}
-                  style={{borderRadius: 4, height: '370px', width: '100%', position: 'relative'
-                  , objectFit: 'cover'}}/>
-
-                {this.state.project['Start Time'] ?
-                <div style={{background: 'linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.8))', width: '100%', height: '50px', position: 'absolute',
-                    zIndex: 3, bottom: 0, left: 0, color: 'white', textAlign: 'left', paddingLeft: 24, boxSizing: 'border-box',
-                  fontWeight: 700, display: 'flex', alignItems: 'center'}}
-                  className='dateOverlay'>
-                  <FontIcon style={{marginRight: 16}} className="far fa-calendar-alt" color={'white'} />
-                  {this.state.project['Start Time'].toLocaleString('en-gb', {weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
-                </div> :
-                null}
-
-              </div>
-              <div style={{ width: '383px', height: this.props.challenge || this.props.joined ? '370px' : null}}>
-                <CardTitle
-                  style={{height: '100%', paddingTop: '0px', paddingLeft: '32px',  overflowX:'hidden', paddingBottom: '1px'}}
-                  children={
-                    <div style={{justifyContent: 'space-between', display: 'flex', flexDirection: 'column', height: '100%'}}>
-                      <div>
-                        <p style={{fontWeight: '600',  textAlign: 'left', margin: '0px'}}>
-                          {this.state.project['People Pledged'] ? this.state.project['People Pledged'] : 0} people are in
-                        </p>
-                        <p style={{fontWeight: 'lighter',  textAlign: 'left', marginTop: '4px'}}>
-                          {this.state.project['Target People']} people needed
-                        </p>
-                        <LinearProgress  style={{height: '5px', borderRadius: '1.5px'}} color={'#00ABE8'} mode="determinate"
-                          min={0} max={this.state.project['Target People']}
-                          value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
-
-                        <div style={{fontWeight: 'lighter', textAlign: 'left', marginTop: 10, marginBottom: 16}}>
-                          <b style={{fontSize: '18px'}}>
-                            {this.state.project['Deadline'] ? dateDiffInDays(new Date(),this.state.project['End Date']) : 10}
-                          </b> days to go...
-                        </div>
-
-                        {this.state.project.Geopoint ?
-                          <div style={{marginBottom: 16}}>
-                            <MyMapComponent
-                              Geopoint={this.state.project.Geopoint}
-                              address={this.state.project.Location}
-                              isMarkerShown
-                              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-                              loadingElement={<div style={{ height: `100%` , borderRadius: 20}} />}
-                              containerElement={<div style={{ height: `200px`}} />}
-                              mapElement={<div style={{ height: `100%`, borderRadius: 20 }} />} />
-                          </div>
-                        : null}
-
+                  <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
+                    <div className='charity-link-content'
+                       style={{display: 'flex', marginTop: 6, alignItems: 'center'}}>
+                      <div style={{marginRight: 10}} className='charity-icon'>
+                        {this.state.charity['Featured Image'] ?
+                          <img src={this.state.charity['Featured Image']}
+                            style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
+                          :
+                          <World style={{height: 25, width: 25}} color={'#484848'}/>
+                          }
                       </div>
-                      {!this.props.joined && this.props.challenge ?
-                        <div>
-                          <div style={{marginBottom: 10}}>
-                          <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
-                            {`Accept ${this.props.challengeUser.Name}'s challenge:`}
+                      <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                          {this.state.charity.Name}
+                      </p>
+                    </div>
+                  </Link>
+                  <Tabs
+                    ref='tabs'
+                    style={{flex: 1, borderBottom: '1px solid #e4e4e4', paddingTop: 16}}
+                    tabItemContainerStyle={{ backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
+                    inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
+                    left:this.state.inkBarLeft, width: '60px'}}
+                    onChange={this.handleChangeTab}
+                    tabTemplateStyle={{backgroundColor: 'white'}}
+                    >
+                    <Tab
+                      style={{width: 'auto'}}
+                      buttonStyle={this.state.selected === 'story' ? styles.selectedTab : styles.tab}
+                      value='story'
+                      onTouchTap={this.changeAnchorEl}
+                      label='The Story'>
+                      <CardText  children = {
+                          <div>
+                              <Link to={`/charity/${this.state.charity._id}`} >
 
-                        </span>
-                        <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
+
+                                <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
+                                    {this.props.charity.Name}
+                                  </p>
+
+
+                              </Link>
+                               <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
+                                 className='story-text'
+                                  dangerouslySetInnerHTML={this.descriptionMarkup()}/>
+                                 <div className="fb-like" href={this.state.project.FacebookURL}
+                                width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
+                              <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
+                                , display: 'flex', height: '77px', alignItems: 'center'}}>
+                                <div style={{fontFamily: 'Permanent Marker', fontSize: '20px'}}>
+                                  Start a project of your own
+                                </div>
+                                <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
+                                  <RaisedButton label="Let's Go"
+                                    onTouchTap={this.handleLetsGo}
+                                    style={{borderRadius: '4px', float: 'right'}}
+                                    labelStyle={{fontFamily: 'Permanent Marker'}}/>
+                                </div>
+                              </div>
+                          </div>
+                        }>
+
+                      </CardText>
+                    </Tab>
+
+                    <Tab
+                      value='aboutus'
+                      style={{width: 'auto'}}
+                      buttonStyle={this.state.selected === 'aboutus' ? styles.selectedTab : styles.tab}
+                      onTouchTap={this.changeAnchorEl}
+                      label='About Us'>
+                      <div style={{padding: 16}}>
+                        <h2>{this.state.charity.Name}</h2>
+                        <div style={{fontWeight: 'lighter', fontSize: '14px', marginBottom: 20}}>
+                          {this.state.charity.Description}
                         </div>
-                        <RaisedButton
+                        {this.state.charity.Facebook || this.state.charity.Twitter || this.state.charity.Instagram ?
+                          <div>
+                            <Divider/>
 
+                            <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
+                            <div style={{display: 'flex', width: '100%'}}>
+                              {this.state.charity.Facebook ?
+                              <span style={styles.contactIcon}>
+                                <Avatar
+                                  icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
+                                  color={'white'}
+                                  backgroundColor={'#3b5998'}
+                                  size={50}
+                                  style={style}
+                                />
+                              {this.state.charity.Facebook}
+                            </span> : null }
+                              {this.state.charity.Twitter ?
+                              <span style={styles.contactIcon}>
+                                <Avatar
+                                  icon={<FontIcon className="fab fa-twitter fa-2x" />}
+                                  color={'white'}
+                                  backgroundColor={'#00aced'}
+                                  size={50}
+                                  style={style}
+                                />
+                              {this.state.charity.Twitter}
+                            </span> : null }
+                              {this.state.charity.Instagram ?
+                              <span style={styles.contactIcon}>
+                                <Avatar
+                                  icon={<FontIcon className="fab fa-instagram fa-2x" />}
+                                  color={'white'}
+                                  backgroundColor={'#fb3958'}
+                                  size={50}
+                                  style={style}
+                                />
+                              {this.state.charity.Instagram}
+                              </span> : null}
+                            </div>
+                          </div>
+                          : null
+                        }
+                      </div>
+                    </Tab>
+                  </Tabs>
+                </div>
+                <div className='join-container' style={{width: 350, paddingLeft: 150}}>
+
+                  <div style={{backgroundColor: 'rgba(216,216,216,0.2)', padding: '20px 35px 20px 35px', textAlign: 'left'}}
+                    className='datetime-container'>
+                    <div className='date-container' style={{display: 'flex'}}>
+                      <div className='date-icon'>
+                        <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                      </div>
+                      <div>
+                        {this.state.project['Start Time'].toLocaleString('en-gb',
+                          {weekday: 'long', month: 'long', day: 'numeric'})}
+                      </div>
+                    </div>
+                    <div className='time-container' style={{display: 'flex', marginTop: 10}}>
+                      <div className='time-icon'>
+                        <Clock color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                      </div>
+                      <div >
+                        {this.state.project['Start Time'].toLocaleString('en-gb',
+                          {hour: '2-digit', minute: '2-digit'})} -
+                          {this.state.project['End Time'].toLocaleString('en-gb',
+                            {hour: '2-digit', minute: '2-digit'})}
+                      </div>
+                    </div>
+
+                    {this.state.project.Location ?
+                      <div className='location-container' style={{display: 'flex', marginTop: 10}}>
+                        <div className='location-icon'>
+                          <Place color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                        </div>
+                        <div style={{textAlign: 'left'}}>
+                          {this.state.project.Location}
+                        </div>
+                      </div>
+                      : null
+                    }
+                  </div>
+
+                  <LinearProgress  style={{height: '5px', borderRadius: '1.5px', marginTop: 20}} color={'#00ABE8'} mode="determinate"
+                    min={0} max={this.state.project['Target People']}
+                    value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
+                  <div style={{textAlign: 'right', paddingTop: 6}} className='to-go-text'>
+                    {this.state.project['People Pledged'] ? Number(this.state.project['Target People']) - this.state.project['People Pledged'] : this.state.project['Target People']} more people needed
+                  </div>
+
+                  <div style={{paddingTop: 20}}>
+                    {!this.props.joined && this.props.challenge ?
+                      <div>
+                        <div style={{marginBottom: 10}}>
+                        <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
+                          {`Accept ${this.props.challengeUser.Name}'s challenge:`}
+                      </span>
+                      <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
+                      </div>
+                      <RaisedButton
+                         primary={true} fullWidth={true}
+                          labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                         label='Join Now' onTouchTap={this.handleModal} />
+                       </div>
+                       :
+                       !this.props.joined ?
+                      <div>
+                          {!this.state.challengeExists && !this.props.challengeExists && !this.props.challenge ?
+                            <div>
+                        <RaisedButton
                            primary={true} fullWidth={true}
                             labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                           label='Join Now' onTouchTap={this.handleModal} />
+                           label="Join Now" onTouchTap={this.handleModal} />
+                       </div> : <RaisedButton
+                          primary={true} fullWidth={true}
+                           labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                          label='Join Now' onTouchTap={this.handleModal} />}
                          </div>
-
-                         :
-                         !this.props.joined ?
-
-
-                        <div>
-
-                            {!this.state.challengeExists && !this.props.challengeExists && !this.props.challenge ?
-                              <div>
-
-
-                          <RaisedButton
-
-                             primary={true} fullWidth={true}
-                              labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                             label="Join Now" onTouchTap={this.handleModal} />
-                         </div> : <RaisedButton
-                            style={{marginTop: 16}}
-                            primary={true} fullWidth={true}
-                             labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                            label='Join Now' onTouchTap={this.handleModal} />}
-                           </div>
-                     :
-                     <RaisedButton
-
-                         fullWidth={true}
-                         labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                        label="I can't come" onTouchTap={this.handleUnJoin} />}
-
-
-
+                   :
+                   <RaisedButton
+                       fullWidth={true}
+                       labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                      label="I can't come" onTouchTap={this.handleUnJoin} />}
                     </div>
-
-                  }/>
-
-
-
-
                     <div>
-                      {this.state.project.location ?
-                    <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px'}}>
-                      <Place style={{marginRight: '16px'}} color={grey500}/>
-                      {this.state.project.location.place}
-                    </div>
-                    : null}
-                    {this.state.project['End Date'] != null ?
-                    <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px', marginTop: '12px'}}>
-                      <AccessTime style={{marginRight: '16px'}} color={grey500}/>
-                      {this.state.project['End Date']}
-                    </div> : null
-                  }
-                    </div>
-              </div>
-              </div>
-              </div>
-            </div>
+                      <div style={{height: '36px', borderBottom: 'solid 1px #DDDDDD'}}/>
+                      <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left'}}>Who's In?</h1>
 
-            <div style={{paddingLeft: 'auto', paddingRight: 'auto', display: 'flex',
-                  justifyContent: 'center', marginTop: '32px'}}>
-                <div style={{width: '300px', maxWidth: '300px'}}>
+                    <li>
+
+                      <WhosIn project={this.props.project}/>
 
 
-
-                </div>
-            </div>
-
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-          <div style={{backgroundColor: 'white', maxWidth: '1000px', width: '100%', display: 'flex'}}>
-
-
-
-            <Tabs
-              ref='tabs'
-              style={{flex: 538, borderBottom: '1px solid #e4e4e4'}}
-              tabItemContainerStyle={{ backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
-
-
-                inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
-                left:this.state.inkBarLeft, width: '60px'}}
-
-
-
-              onChange={this.handleChangeTab}
-              tabTemplateStyle={{backgroundColor: 'white'}}
-
-              >
-              <Tab
-                style={{width: 'auto'}}
-                buttonStyle={this.state.selected === 'story' ? styles.selectedTab : styles.tab}
-                value='story'
-                onTouchTap={this.changeAnchorEl}
-                label='The Story'>
-                <CardText  children = {
-                    <div>
-                        <Link to={`/charity/${this.state.charity._id}`} >
-
-
-                          <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
-                              {this.props.charity.Name}
-                            </p>
-
-
-                        </Link>
-                         <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
-                           className='story-text'
-                            dangerouslySetInnerHTML={this.descriptionMarkup()}/>
-                           <div className="fb-like" href={this.state.project.FacebookURL}
-                          width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
-                        <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
-                          , display: 'flex', height: '77px', alignItems: 'center'}}>
-                          <div style={{fontFamily: 'Permanent Marker', fontSize: '20px'}}>
-                            Start a project of your own
-                          </div>
-                          <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                            <RaisedButton label="Let's Go"
-                              onTouchTap={this.handleLetsGo}
-                              style={{borderRadius: '4px', float: 'right'}}
-                              labelStyle={{fontFamily: 'Permanent Marker'}}/>
-                          </div>
-                        </div>
-                    </div>
-                  }>
-
-                </CardText>
-              </Tab>
-
-              <Tab
-                value='aboutus'
-                style={{width: 'auto'}}
-                buttonStyle={this.state.selected === 'aboutus' ? styles.selectedTab : styles.tab}
-                onTouchTap={this.changeAnchorEl}
-                label='About Us'>
-                <div style={{padding: 16}}>
-                  <h2>{this.state.charity.Name}</h2>
-                  <div style={{fontWeight: 'lighter', fontSize: '14px', marginBottom: 20}}>
-                    {this.state.charity.Description}
+                    </li>
+                    <ConditionalModal
+                      _id={this.props.params._id}
+                      challengeExists={this.props.challengeExists}
+                      onConditionalComplete={() => this.setState({challengeExists: true})}
+                      title={this.props.params.project}
+                      project = {this.state.project ? this.state.project : null}
+                        open={this.state.conditionalOpen}
+                        changeOpen={this.handleConditionalChangeOpen}
+                        />
                   </div>
-                  {this.state.charity.Facebook || this.state.charity.Twitter || this.state.charity.Instagram ?
-                    <div>
-                      <Divider/>
-
-                      <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
-                      <div style={{display: 'flex', width: '100%'}}>
-                        {this.state.charity.Facebook ?
-                        <span style={styles.contactIcon}>
-                          <Avatar
-                            icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
-                            color={'white'}
-                            backgroundColor={'#3b5998'}
-                            size={50}
-                            style={style}
-                          />
-                        {this.state.charity.Facebook}
-                      </span> : null }
-                        {this.state.charity.Twitter ?
-                        <span style={styles.contactIcon}>
-                          <Avatar
-                            icon={<FontIcon className="fab fa-twitter fa-2x" />}
-                            color={'white'}
-                            backgroundColor={'#00aced'}
-                            size={50}
-                            style={style}
-                          />
-                        {this.state.charity.Twitter}
-                      </span> : null }
-                        {this.state.charity.Instagram ?
-                        <span style={styles.contactIcon}>
-                          <Avatar
-                            icon={<FontIcon className="fab fa-instagram fa-2x" />}
-                            color={'white'}
-                            backgroundColor={'#fb3958'}
-                            size={50}
-                            style={style}
-                          />
-                        {this.state.charity.Instagram}
-                        </span> : null}
-                      </div>
-                    </div>
-                    : null
-                  }
-                </div>
-              </Tab>
-
-              {this.state.project.stripe && this.state.project.stripe.plans ?
-              <Tab
-                value='support'
-                buttonStyle={styles.selectedTab}
-                label='Support'>
-                <div>
-
 
                 </div>
-              </Tab> : null}
-            </Tabs>
-
-            <div style={{width: 383, boxSizing: 'border-box', padding: '0px 16px 0px 32px'}}>
-              <div style={{height: '36px', borderBottom: 'solid 1px #DDDDDD'}}/>
-              <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left'}}>Who's In?</h1>
-              <li>
-
-                <WhosIn project={this.props.project}/>
 
 
-              </li>
-              <ConditionalModal
-                _id={this.props.params._id}
-                challengeExists={this.props.challengeExists}
-                onConditionalComplete={() => this.setState({challengeExists: true})}
-                title={this.props.params.project}
-                project = {this.state.project ? this.state.project : null}
-                  open={this.state.conditionalOpen}
-                  changeOpen={this.handleConditionalChangeOpen}
-                  />
-                <div style={{height: 60}}/>
+
+
+
             </div>
 
+              <div style={{height: 60}}/>
+                <SignupModal
+                  _id={this.props.params._id}
+                  title={this.props.params.pledge}
+                  open={this.state.modalOpen}
+                  changeOpen={this.handleModalChangeOpen}
+                onComplete={this.onComplete}/>
 
-            <CardActions>
+              <CompletedModal
+                  open={this.state.completedOpen}
+                  handleClose={this.handleCompletedModalChangeOpen}
+                  project={this.state.project}
+                  />
 
-            </CardActions>
+                <JoiningModal
+                  _id={this.props.params._id}
+                  title={this.props.params.project}
+                    open={this.state.joiningOpen}
+                    changeOpen={this.handleJoiningChangeOpen}
+                    onComplete={this.onComplete}
+                    />
+
           </div>
-          </div>
-
-          <SignupModal
-            _id={this.props.params._id}
-            title={this.props.params.pledge}
-            open={this.state.modalOpen}
-            changeOpen={this.handleModalChangeOpen}
-          onComplete={this.onComplete}/>
-
-        <CompletedModal
-            open={this.state.completedOpen}
-            handleClose={this.handleCompletedModalChangeOpen}
-            project={this.state.project}
-            />
-
-          <JoiningModal
-            _id={this.props.params._id}
-            title={this.props.params.project}
-              open={this.state.joiningOpen}
-              changeOpen={this.handleJoiningChangeOpen}
-              onComplete={this.onComplete}
-              />
-
-
-
-
-
-      {/*
-      <div>
-      <FacebookProvider appId={Meteor.settings.public.FacebookAppId}>
-        <Comments href={'https://www.allforone.io' +browserHistory.getCurrentLocation().pathname} />
-      </FacebookProvider>
-      </div>
-      */}
-
-      </div>
     }
   </div>
     )

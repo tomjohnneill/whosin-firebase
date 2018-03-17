@@ -283,7 +283,7 @@ export default class Navigation extends React.Component {
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/why')}
                                     >
-                                    Why Start a Project?
+                                    Why start a project?
                                   </div>
                                 <RaisedButton
                                   style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}

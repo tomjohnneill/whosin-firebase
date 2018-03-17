@@ -88,11 +88,6 @@ export default class Why extends React.Component {
             background: 'rgba(0,0,0,0.1)'
           }}/>
 
-          <div style={{position: 'absolute', zIndex: 3, width: '100%', bottom: '0px',
-            backgroundImage: 'linear-gradient(-180deg, rgba(247,247,247,0.00) 0%, rgba(247,247,247,0.67) 60%, rgba(247,247,247,0.88) 80%, rgba(247,247,247,1.00) 100%)'
-            , height: '200px'}}>
-
-          </div>
           <div style={{position: 'absolute', zIndex: 3, left: 'calc(50% - 333px)', top: '50%',
               boxSizing: 'border-box', borderRadius: 6, padding: 25,
               background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.85), rgba(0,0,0,0))'
