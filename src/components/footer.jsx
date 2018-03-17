@@ -75,7 +75,9 @@ export default class Footer extends React.Component {
 
   render() {
     return (
-      <div className='footer-parent' style={{textAlign: 'left'}}>
+      <div className='footer-parent' style={{
+            display: window.location.pathname.includes('/embed/') ? 'none' : 'inherit',
+            textAlign: 'left'}}>
         <MediaQuery minDeviceWidth={700}>
           <div
             className='footer-container'

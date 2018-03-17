@@ -313,7 +313,7 @@ export default class Navigation extends React.Component {
                                 onTouchTap={this.setModal}
                                 style={{cursor: 'pointer',
                                   fontWeight: 700,
-                                  color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                  color: 'inherit',
                                   paddingLeft: 10, paddingRight: 10}}>Log In
                                 </div>
                             : null}

@@ -6,7 +6,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
-import {Spiral, Tick, AvatarIcon} from './icons.jsx'
+import {Spiral, Tick, AvatarIcon, Muscle, Star, ReviewIcon, World} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loading from './loading.jsx';
@@ -26,6 +26,28 @@ const styles = {
     fontWeight: 'lighter',
     padding: '6px',
     textAlign: 'left'
+  },
+  profileHeader : {
+    fontSize: '30px',
+    fontWeight: 200,
+    textAlign: 'left'
+  },
+  summaryContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'left',
+    paddingLeft: 35,
+    paddingTop: 6,
+    paddingBottom: 6
+  },
+  summaryIcon: {
+    height: 40,
+    width: 40,
+    marginRight: 16
+  },
+  summarySummary: {
+    fontWeight: 200,
+    fontSize: '18px'
   }
 }
 
@@ -197,6 +219,73 @@ class RecentlySupported extends React.Component {
   }
 }
 
+class RecentReviews extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  componentDidMount(props) {
+    db.collection("UserReview").where("User", "==", this.props.userId).orderBy("created", "desc")
+    .limit(10).get().then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        var elem = doc.data()
+        elem['_id'] = doc.id
+        data.push(elem)
+      });
+
+      this.setState({projects: data})
+      data.forEach((review) => {
+        db.collection("Charity").doc(review['Charity Number']).get().then((charityDoc) => {
+          data['Charity Picture'] = charityDoc.data()['Featured Image']
+          data['Charity Name'] = charityDoc.data()['Charity']
+        })
+      })
+      this.setState({projects: data})
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        {
+          this.state.projects ?
+          this.state.projects.map((project) => (
+            <Link to={'/projects/' + project['Project Name'] +'/' + project.Project}>
+              <div style={{display: 'flex'}}>
+                <div>
+                  {project['Charity Picture'] ?
+                  <img
+                    src={project['Charity Picture']}
+                    style={{borderRadius: '50%', height: 57, width: 57}} className='logo'/>
+                    :
+                  <World style={{height: 57, width: 57}} color={'#484848'}/>
+                  }
+                  <div className='charity-name' style={{paddingTop: 6}}>
+                    {project['Charity Name']}
+                  </div>
+                </div>
+
+                <div className='review-detail-container' style={{paddingLeft: 40}}>
+                  <div className='review-content' style={{fontSize: '15px', paddingBottom: 20}}>
+                    {project['Review']}
+                  </div>
+                  <div className='review-project' style={{fontWeight:700, fontSize: '11px'}}>
+                    For the project {project['Project Name']}, {project.created.toLocaleString('en-gb', {month: 'long', year: '4-digit'})}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          )) :
+          null
+        }
+      </div>
+    )
+  }
+}
+
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -270,19 +359,23 @@ export default class Profile extends React.Component {
                 ,boxSizing: 'border-box', flexWrap: 'wrap', justifyContent: 'center'}}>
               <div style={{marginBottom: '50px'}}>
                 {this.state.user.public && this.state.user.public.Picture ?
-                <img style={{height: '200px', width: '200px', objectFit: 'cover', borderRadius: '4px'}}
+                <img style={{height: '250px', width: '250px', objectFit: 'cover', borderRadius: '4px'}}
                   src={this.state.user.public && this.state.user.public.Picture ? this.state.user.public.Picture : null}/>
                 :
                 !this.state.publicProfile ?
                 <PhotoUpload changeImage={this.changeImage} userId={this.state.userId}/>
                 :
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-                  height: '200px', width: '200px', backgroundColor: '#DDDDDD', borderRadius: 6}}>
+                  height: '250px', width: '250px', backgroundColor: '#DDDDDD', borderRadius: 6}}>
                   <AvatarIcon style={{height: '150px', width: '150px'}} color={'#484848'}/>
                 </div>
                 }
                 <div style={styles.contactDetails}>
-                  Email address
+                  Verified User
+                  <Tick color={'#3B9E74'} style={{height: '24.8px', float: 'right'}}/>
+                </div>
+                <div style={styles.contactDetails}>
+                  Email Address
                   <Tick style={{height: '24.8px', float: 'right'}}/>
                 </div>
                 <div style={styles.contactDetails}>
@@ -290,33 +383,19 @@ export default class Profile extends React.Component {
                   <Tick style={{height: '24.8px', float: 'right'}}/>
                 </div>
 
-                <div style={{paddingTop: '10px', paddingBottom: '10px', borderBottom: 'solid 1px #DDDDDD',
+                <div style={{paddingTop: '10px', paddingBottom: '10px',
                   borderTop: 'solid 1px #DDDDDD', marginTop: '30px', paddingLeft: '6px', textAlign: 'left',
-                fontSize: '18px'}}>
-                  Connected Accounts
-                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '10px'}}>
-                    <FontIcon color={this.state.user.Facebook ? '#3b5998' : '#DDDDDD'}
-                      className='fab fa-facebook fa-2x' style={{borderRadius: '50%',padding: '3px', height: '35px', width: '35px'}}/>
-                    <FontIcon color={this.state.user.Linkedin ? '#0077b5' : '#DDDDDD'}
-                      className='fab fa-linkedin fa-2x' style={{borderRadius: '50%',padding: '3px', height: '35px', width: '35px'}}/>
-                    <FontIcon color={this.state.user.Twitter ? '#1DA1F2' : '#DDDDDD'}
-                      className='fab fa-twitter fa-2x' style={{borderRadius: '50%',padding: '3px', height: '35px', width: '35px'}}/>
-                    <FontIcon color={this.state.user.Messenger ? '#0084ff' : '#DDDDDD'}
-                      className='fab fa-facebook-messenger fa-2x' style={{padding: '3px', height: '35px', width: '35px'}}/>
-                  </div>
-                </div>
+                fontSize: '18px'}}/>
+
               </div>
               <div style={{maxWidth: '50px', width: '5%'}}/>
               <div style={{minWidth: '350px', width: '30%', marginBottom: '50px'}}>
                 <div style={{display: 'flex'}}>
-                  <div style={{width: '50%', textAlign: 'left', fontFamily: 'Permanent Marker', fontSize: '24px'}}>
+                  <div style={{width: '50%', textAlign: 'left', fontSize: '24px'}}>
                     Hey, I'm {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'not telling you my name'}
                   </div>
-                  <div style={{width: '50%', textAlign: 'right', fontFamily: 'Permanent Marker', color: '#FF9800', fontSize: '24px'}}>
-                    6 Reviews
-                  </div>
                 </div>
-                <div style={{textAlign: 'left', marginTop: '6px'}}>
+                <div style={{textAlign: 'left', marginTop: '6px', fontWeight: 700}}>
                   {this.state.user.public ? this.state.user.public.Location : null} - Joined in 2018
                 </div>
                 <div style={{display: 'flex', alignItems: 'left', marginTop: 16, marginBottom: '50px'}}>
@@ -331,19 +410,42 @@ export default class Profile extends React.Component {
                    }
 
                 </div>
+                <div className='profile-header' style={styles.profileHeader}>
+                  Summary
+                </div>
+                <div className='all-three' style={{marginTop: 20, marginBottom: 20}}>
+                  <div className='summary-container' style={styles.summaryContainer}>
+                    <div className='summary-icon' style={styles.summaryIcon}>
+                      <Muscle style={styles.summaryIcon} color={'#484848'}/>
+                    </div>
+                    <div className='summary-summary' style={styles.summarySummary}>
+                      Fred has joined 10 projects
+                    </div>
+                  </div>
+                  <div className='summary-container' style={styles.summaryContainer}>
+                    <div className='summary-icon' style={styles.summaryIcon}>
+                      <ReviewIcon style={styles.summaryIcon} color={'#484848'}/>
+                    </div>
+                    <div className='summary-summary' style={styles.summarySummary}>
+                      Fred has been recommended by 8 projects
+                    </div>
+                  </div>
+                  <div className='summary-container' style={styles.summaryContainer}>
+                    <div className='summary-icon' style={styles.summaryIcon}>
+                      <Star style={styles.summaryIcon} color={'#484848'}/>
+                    </div>
+                    <div className='summary-summary' style={styles.summarySummary}>
+                      100% turn up rate
+                    </div>
+                  </div>
+                </div>
+                <div className='profile-header' style={styles.profileHeader}>
+                  Reviews (10)
+                </div>
                 <RecentlySupported userId={this.state.userId}/>
 
               </div>
-              <div style={{maxWidth: '50px', width: '5%'}}/>
-              <div style={{minWidth: '350px', width: '40%'}}>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  Verified user <Tick color={'#3B9E74'} style={{height: '50px' , marginLeft: '10px'}}/>
 
-                </div>
-                <div style={{backgroundColor: '#DDDDDD', height: '40vh', width: '100%', marginTop: '105px'}}>
-                  Other interesting titbits
-                </div>
-              </div>
             </div>
 
           </div>

@@ -140,6 +140,7 @@ export default class VolunteerStars extends React.Component {
       User: this.props.params.userId,
       Rating: this.state.turnedUp ? this.state.rating : 1,
       "Turned Up" : this.state.turnedUp,
+      "Charity Number": this.state.engagement['Charity Number'],
       "Project Name": this.state.engagement['Project Name'],
       created : new Date ()
     }

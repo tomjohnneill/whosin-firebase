@@ -585,6 +585,58 @@ export default class DesktopProject extends React.Component {
                       </p>
                     </div>
                   </Link>
+
+                  <div style={{
+                    borderRadius: 4, display: 'flex',
+                     paddingTop: 10, textAlign: 'left'}}
+                    className='datetime-container'>
+                    <div className='date-container' style={{display: 'flex'}}>
+                      <div className='date-icon'>
+                        <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                      </div>
+                      <div>
+                        {this.state.project['Start Time'].toLocaleString('en-gb',
+                          {weekday: 'long', month: 'long', day: 'numeric'})}
+                      </div>
+                    </div>
+                    <div className='time-container' style={{display: 'flex', marginLeft: 24}}>
+                      <div className='time-icon'>
+                        <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                      </div>
+                      <div >
+                        {this.state.project['Start Time'].toLocaleString('en-gb',
+                          {hour: '2-digit', minute: '2-digit'})} -
+                          {this.state.project['End Time'].toLocaleString('en-gb',
+                            {hour: '2-digit', minute: '2-digit'})}
+                      </div>
+                    </div>
+
+                    {this.state.project.Location ?
+                      <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
+                        <div className='location-icon'>
+                          <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                        </div>
+                        <div style={{textAlign: 'left'}}>
+                          {this.state.project.Location}
+                        </div>
+                      </div>
+                      : null
+                    }
+                  </div>
+
+                  <div style={{display: 'flex', alignItems: 'center', paddingTop: 10}}>
+                    <CircularProgress
+                      size={50}
+                      style={{   borderRadius: '50%',  border: '1px solid #DDDDDD'}} color={'#00ABE8'} mode="determinate"
+                      min={0} max={this.state.project['Target People']}
+                      value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']}
+                    />
+
+                  <div style={{textAlign: 'right', marginLeft: 10}} className='to-go-text'>
+                      {this.state.project['People Pledged'] ? Number(this.state.project['Target People']) - this.state.project['People Pledged'] : this.state.project['Target People']} more people needed
+                    </div>
+                  </div>
+
                   <Tabs
                     ref='tabs'
                     style={{flex: 1, borderBottom: '1px solid #e4e4e4', paddingTop: 16}}
@@ -602,15 +654,7 @@ export default class DesktopProject extends React.Component {
                       label='The Story'>
                       <CardText  children = {
                           <div>
-                              <Link to={`/charity/${this.state.charity._id}`} >
 
-
-                                <p style={{margin: 0, fontWeight: 'bold', marginBottom: 30}}>
-                                    {this.props.charity.Name}
-                                  </p>
-
-
-                              </Link>
                                <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
                                  className='story-text'
                                   dangerouslySetInnerHTML={this.descriptionMarkup()}/>
@@ -693,50 +737,6 @@ export default class DesktopProject extends React.Component {
                   </Tabs>
                 </div>
                 <div className='join-container' style={{width: 350, paddingLeft: 150}}>
-
-                  <div style={{backgroundColor: 'rgba(216,216,216,0.2)', padding: '20px 35px 20px 35px', textAlign: 'left'}}
-                    className='datetime-container'>
-                    <div className='date-container' style={{display: 'flex'}}>
-                      <div className='date-icon'>
-                        <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
-                      </div>
-                      <div>
-                        {this.state.project['Start Time'].toLocaleString('en-gb',
-                          {weekday: 'long', month: 'long', day: 'numeric'})}
-                      </div>
-                    </div>
-                    <div className='time-container' style={{display: 'flex', marginTop: 10}}>
-                      <div className='time-icon'>
-                        <Clock color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
-                      </div>
-                      <div >
-                        {this.state.project['Start Time'].toLocaleString('en-gb',
-                          {hour: '2-digit', minute: '2-digit'})} -
-                          {this.state.project['End Time'].toLocaleString('en-gb',
-                            {hour: '2-digit', minute: '2-digit'})}
-                      </div>
-                    </div>
-
-                    {this.state.project.Location ?
-                      <div className='location-container' style={{display: 'flex', marginTop: 10}}>
-                        <div className='location-icon'>
-                          <Place color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
-                        </div>
-                        <div style={{textAlign: 'left'}}>
-                          {this.state.project.Location}
-                        </div>
-                      </div>
-                      : null
-                    }
-                  </div>
-
-                  <LinearProgress  style={{height: '5px', borderRadius: '1.5px', marginTop: 20}} color={'#00ABE8'} mode="determinate"
-                    min={0} max={this.state.project['Target People']}
-                    value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
-                  <div style={{textAlign: 'right', paddingTop: 6}} className='to-go-text'>
-                    {this.state.project['People Pledged'] ? Number(this.state.project['Target People']) - this.state.project['People Pledged'] : this.state.project['Target People']} more people needed
-                  </div>
-
                   <div style={{paddingTop: 20}}>
                     {!this.props.joined && this.props.challenge ?
                       <div>
@@ -772,8 +772,8 @@ export default class DesktopProject extends React.Component {
                       label="I can't come" onTouchTap={this.handleUnJoin} />}
                     </div>
                     <div>
-                      <div style={{height: '36px', borderBottom: 'solid 1px #DDDDDD'}}/>
-                      <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left'}}>Who's In?</h1>
+
+                      <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left', marginTop: 45}}>Who's In?</h1>
 
                     <li>
 
