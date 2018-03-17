@@ -27,8 +27,7 @@ export default class MiniWhy extends React.Component {
         </h1>
         <div style={{display: 'flex', textAlign: 'left'}}>
           <span style={styles.card}>
-            <img style={{height: 125, width: '100%', objectFit: 'cover', marginTop: '-1px'}}
-              src='https://d3kkowhate9mma.cloudfront.net/8a39e19b-4eda-4269-924e-4d9605968c94'/>
+
             <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
               <h2 style={{fontWeight: 700, fontSize: '16px'}}>
                   Why use Who's In?
@@ -40,8 +39,7 @@ export default class MiniWhy extends React.Component {
           </span>
 
           <span style={styles.card}>
-            <img style={{height: 125, width: '100%', objectFit: 'cover'}}
-              src='https://d3kkowhate9mma.cloudfront.net/8a39e19b-4eda-4269-924e-4d9605968c94'/>
+
             <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
             <h2 style={{fontWeight: 700, fontSize: '16px'}}>
               You're in control
@@ -52,8 +50,7 @@ export default class MiniWhy extends React.Component {
           </span>
 
           <span style={styles.card}>
-            <img style={{height: 125, width: '100%', objectFit: 'cover'}}
-              src='https://d3kkowhate9mma.cloudfront.net/8a39e19b-4eda-4269-924e-4d9605968c94'/>
+
             <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
             <h2 style={{fontWeight: 700, fontSize: '16px'}}>
               We'll help you out

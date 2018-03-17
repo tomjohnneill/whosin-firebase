@@ -821,7 +821,9 @@ export default class DesktopProject extends React.Component {
 
 
                         </Link>
-                         <div style={{marginBottom: '30px'}} dangerouslySetInnerHTML={this.descriptionMarkup()}/>
+                         <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
+                           className='story-text'
+                            dangerouslySetInnerHTML={this.descriptionMarkup()}/>
                            <div className="fb-like" href={this.state.project.FacebookURL}
                           width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
                         <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'

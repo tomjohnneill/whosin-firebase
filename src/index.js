@@ -7,7 +7,6 @@ import Project from './components/project.jsx';
 import Home from './components/home.jsx';
 import Profile from './components/profile.jsx';
 import CharityProfile from './components/charityprofile.jsx';
-import CharitiesList from './components/charitieslist.jsx';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import UserTabs from './components/tabs.jsx'
 import CharityAutocomplete from './components/charityautocomplete.jsx';
@@ -18,7 +17,6 @@ import OrganisationLookup from './components/create-project/organisationlookup.j
 import UploadPhoto from './components/create-project/uploadphoto.jsx';
 import FirstSummary from './components/create-project/firstsummary.jsx';
 import DateAndTime from './components/create-project/dateandtime.jsx';
-import LinkedInAuth from './components/auth/linkedin.jsx';
 import FormBuilder from './components/admin/formbuilder.jsx'
 import CustomForm from './components/customform.jsx';
 import ProjectJoined from './components/projectjoined.jsx';
@@ -52,10 +50,8 @@ const rootElement = document.getElementById('root');
       <Route path='/why' component={Why}/>
       <Route path='/admin/emailtemplate' component={EmailTemplateBuilder}/>
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
-      <Route path='/auth/linkedin/' component={LinkedInAuth}/>
       <Route path='/customform' component={CustomForm}/>
       <Route path='/profile' component={Profile}/>
-      <Route path='/organisations' component={CharitiesList}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>

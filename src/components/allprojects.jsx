@@ -72,7 +72,7 @@ export default class AllProjects extends React.Component {
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
-          <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 100, zIndex: 10, paddingRight: 100
+          <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center', paddingLeft: 100, zIndex: 10, paddingRight: 100
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
 
             <Search style={{marginRight: 6}}/>
@@ -81,7 +81,7 @@ export default class AllProjects extends React.Component {
 
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
-          <div style={{position: 'sticky', top: '0px', display: 'flex', alignItems: 'center', paddingLeft: 16, zIndex: 10, paddingRight: 10
+          <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center', paddingLeft: 16, zIndex: 10, paddingRight: 10
             , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
 
             <Search style={{marginRight: 6}}/>

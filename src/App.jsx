@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './components/home.jsx';
 import Navigation from './components/navigation.jsx';
+import Footer from './components/footer.jsx';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -31,12 +32,12 @@ const muiTheme = getMuiTheme({
 
 const App = ( { children } ) => (
 
-      <div className="App">
+      <div style={{paddingTop: 50}} className="App">
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             <Navigation />
             { children }
-
+            <Footer />
           </div>
         </MuiThemeProvider>
       </div>

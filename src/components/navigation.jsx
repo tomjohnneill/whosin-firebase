@@ -33,6 +33,10 @@ const style = {
     margin: '0px',
     boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
     paddingLeft: '16px',
+    position: 'fixed',
+    color: 'inherit',
+    marginBottom: 56,
+    top: 0,
     backgroundColor: 'white',
     borderBottom: '1px solid #DBDBDB'
   },
@@ -47,12 +51,6 @@ const style = {
     top: 0,
     backgroundColor: 'white',
     borderBottom: '1px solid #DBDBDB'
-  },
-  loggedInAppBar : {
-    margin: '0px',
-    boxShadow: 'inset 0px 1px 3px rgba(0,0,0.5), 0px 2px 4px, rgba(0,0,0.5)',
-    paddingLeft: '16px',
-    background: 'linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.25))'
   },
   otherAnchor :{
     float: 'right',
@@ -261,34 +259,27 @@ export default class Navigation extends React.Component {
         <AppBar
           showMenuIconButton={false}
           style={window.location.pathname.includes('/embed/') ? style.embedAppBar :
-            window.location.pathname === '/why' ? style.whyAppBar :
-             window.location.pathname === '/'  ? style.loggedInAppBar : style.appBar}
-          className={this.props.location === '/'  ? 'loggedInAppBar' :'appbar'}
+            window.location.pathname === '/why' ? style.whyAppBar : style.appBar}
+          className={'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
 
                             <MediaQuery minDeviceWidth = {700}>
                               {!window.location.pathname.includes('create-project') ?
                                 <div style={{display: 'flex'}}>
-                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                  <div style={{
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/about')}
                                     >
                                     About
                                   </div>
-                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
-                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
-                                    onTouchTap={() => browserHistory.push('/organisations')}
-                                    >
-                                    Organisations
-                                  </div>
-                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                  <div style={{
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/projects')}
                                     >
                                     Projects
                                   </div>
-                                  <div style={{color: window.location.pathname === '/' ? 'white' : 'inherit',
+                                  <div style={{
                                     fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
                                     onTouchTap={() => browserHistory.push('/why')}
                                     >
