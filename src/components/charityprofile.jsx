@@ -10,6 +10,7 @@ import {Spiral} from './icons.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link, browserHistory} from 'react-router';
+import Loading from './loading.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
 import fire from '../fire';
 
@@ -271,9 +272,7 @@ export default class CharityProfile extends React.Component {
     return (
       <div >
         {this.state.loading ?
-          <div>
-            Loading ...
-          </div>
+          <Loading/>
           :
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 30}}>
             <div style={{width: '100%', maxWidth: '1000px', position: 'relative',

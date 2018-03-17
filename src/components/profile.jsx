@@ -9,6 +9,7 @@ import {Link, browserHistory} from 'react-router';
 import {Spiral, Tick, AvatarIcon} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import Loading from './loading.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -256,9 +257,7 @@ export default class Profile extends React.Component {
     return (
       <div className='block'>
         {this.state.loading ?
-          <div>
-            Loading ...
-          </div>
+          <Loading/>
           :
           this.state.error ?
           <div>

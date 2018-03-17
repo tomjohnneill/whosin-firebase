@@ -7,19 +7,13 @@ import Divider from 'material-ui/Divider';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import {Link, browserHistory} from 'react-router';
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
-import Edit from 'material-ui/svg-icons/image/edit';
 import DocumentTitle from 'react-document-title';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Helmet} from "react-helmet";
-import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
 import ShowChart from 'material-ui/svg-icons/editor/show-chart';
 import ThumbsUpDown from 'material-ui/svg-icons/action/thumbs-up-down';
 import Notifications from 'material-ui/svg-icons/social/notifications';
@@ -31,7 +25,7 @@ import AccessTime from 'material-ui/svg-icons/device/access-time';
 import Place from 'material-ui/svg-icons/maps/place';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
-import Badge from 'material-ui/Badge';
+import Loading from './loading.jsx';
 import {Spiral, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
@@ -41,10 +35,6 @@ import fire from '../fire';
 
 let db = fire.firestore()
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel")
-
-const Loading = () => (
-  <div/>
-)
 
 const style = {margin: 5};
 
@@ -573,50 +563,7 @@ export default class DesktopProject extends React.Component {
         {this.state.loading ?
 
 
-          <div style={{marginTop: '36px'}}>
-
-          <div style={{paddingLeft: 'auto', paddingRight: 'auto', display: 'flex',
-                justifyContent: 'center'}}>
-                <div style={{flex: 1, height: '100%', width: '60%'}}>
-                  <div style={{backgroundColor: grey200, width: '100%', height: '300px'}}/>
-                </div>
-                <div style={{flex: 1, height: '100%', width: '40%', justifyContent: 'space-between', display: 'flex', flexDirection: 'column'}}>
-                  <CardTitle
-                    style={{paddingTop: '0px', paddingLeft: '32px',  overflowX:'hidden', paddingBottom: '0px'}}
-                    title={<div style={{backgroundColor: '#dbdbdb', height: '36px', width: '90%'}}/>}
-                    subtitle={<div style={{backgroundColor: '#efefef', height: '16px', width: '100%', marginTop: '3px'}}/>}
-                    children={
-                      <div>
-                        <div style={{height: '16px'}}/>
-                        <LinearProgress  style={{height: '10px', borderRadius: '4px'}}
-                          color={amber500} mode="determinate"
-                          value={0} />
-                        <div style={{display: 'flex', paddingTop: '16px'}}>
-                          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                            <div style={{backgroundColor: '#ffefd8', height: '16px', width: '5px'}}>
-
-                            </div>
-                            <div style={{color: grey500}}>
-                             people
-                            </div>
-                          </div>
-
-                          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                            <div style={{backgroundColor: '#ffefd8', height: '16px', width: '5px'}}>
-
-                            </div>
-                            <div style={{color: grey500}}>
-                              days to go...
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    }/>
-                </div>
-              </div>
-            </div>
-
+      <Loading />
          :
             <div style={{marginTop: '20px'}}>
 

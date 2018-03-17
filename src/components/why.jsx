@@ -84,13 +84,22 @@ export default class Why extends React.Component {
                style={{position: 'relative', width: '100%', height: '100%', objectFit: 'cover'}}/>
           </div>
 
+          <div style={{position: 'absolute', zIndex: 2, width: '100%', height: '100%', top:0,
+            background: 'rgba(0,0,0,0.1)'
+          }}/>
+
           <div style={{position: 'absolute', zIndex: 3, width: '100%', bottom: '0px',
             backgroundImage: 'linear-gradient(-180deg, rgba(247,247,247,0.00) 0%, rgba(247,247,247,0.67) 60%, rgba(247,247,247,0.88) 80%, rgba(247,247,247,1.00) 100%)'
             , height: '200px'}}>
 
           </div>
-          <div style={{position: 'absolute', zIndex: 3, left: 'calc(50% - 92px)', top: '50%',
-              boxSizing: 'border-box', borderRadius: 6}}>
+          <div style={{position: 'absolute', zIndex: 3, left: 'calc(50% - 333px)', top: '50%',
+              boxSizing: 'border-box', borderRadius: 6, padding: 25,
+              background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.85), rgba(0,0,0,0))'
+            }}>
+              <div style={{fontSize: '45px', fontWeight: 700, color: 'white',
+                textShadow: '1px 1px rgb(0,0,0)', marginBottom: 16, marginTop: 16
+              }}>Find all the volunteers you need</div>
             <RaisedButton labelStyle={{letterSpacing: '1.5px', fontWeight: 'bold',
           fontFamily: 'Permanent Marker', fontSize: '20px'}} label='Get Started' primary={true} onClick={() => browserHistory.push('/create-project/0')}/>
           </div>

@@ -20,9 +20,6 @@ import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-//import MessengerPlugin from 'react-messenger-plugin';
-//import Form from '/imports/ui/components/form.jsx';
-//import OrgFeedback from '/imports/ui/components/organisationfeedback.jsx';
 import ShowChart from 'material-ui/svg-icons/editor/show-chart';
 import ThumbsUpDown from 'material-ui/svg-icons/action/thumbs-up-down';
 import Notifications from 'material-ui/svg-icons/social/notifications';
@@ -37,6 +34,7 @@ import JoiningModal from './joiningmodal.jsx';
 import Badge from 'material-ui/Badge';
 import AccessTime from 'material-ui/svg-icons/device/access-time';
 import Place from 'material-ui/svg-icons/maps/place';
+import Loading from './loading.jsx';
 import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral} from './icons.jsx';
@@ -45,10 +43,6 @@ import fire from '../fire';
 
 let db = fire.firestore()
 
-
-const Loading = () => (
-  <div/>
-)
 
 const style = {margin: 5};
 
@@ -435,67 +429,7 @@ export default class Project extends React.Component {
         <div>
         {this.state.loading ?
 
-          <MediaQuery maxDeviceWidth={700}>
-            <Card style={{backgroundColor: 'white', maxWidth: '700px'}}>
-              <div style={{padding: '10px'}}>
-                <Chip
-                  style={{paddingLeft: '10px', paddingRight: '40px'}}
-                >
-                .
-                </Chip></div>
-                <CardMedia
-                >
-                  <div style={{height: '200px', backgroundColor: grey200, width: '100%'}} />
-                </CardMedia>
-                <CardTitle
-                  style={{overflowX:'hidden'}}
-                  title={<div style={{backgroundColor: '#dbdbdb', height: '36px', width: '90%'}}/>}
-                  subtitle={<div style={{backgroundColor: '#efefef', height: '16px', width: '100%', marginTop: '3px'}}/>}
-                  children={
-                    <div>
-                      <div style={{height: '16px'}}/>
-                      <LinearProgress  style={{height: '10px', borderRadius: '4px'}}
-                        color={amber500} mode="determinate"
-                        value={0} />
-                      <div style={{display: 'flex', paddingTop: '16px'}}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={{backgroundColor: '#ffefd8', height: '16px', width: '5px'}}>
-
-                          </div>
-                          <div style={{color: grey500}}>
-                           people
-                          </div>
-                        </div>
-
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1}}>
-                          <div style={{backgroundColor: '#ffefd8', height: '16px', width: '5px'}}>
-
-                          </div>
-                          <div style={{color: grey500}}>
-                            days to go...
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-
-                        <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px', marginTop: '16px', width: '100%', boxSizing: 'border-box'}}>
-                          <Place style={{marginRight: '16px'}} color={grey500}/>
-                          <div style={{backgroundColor: '#efefef', height: '12px', width: '60%'}}/>
-                        </div>
-
-
-                        <div style={{alignItems: 'center', display: 'flex', paddingLeft: '32px', marginTop: '12px', width: '100%', boxSizing: 'border-box'}}>
-                          <AccessTime style={{marginRight: '16px'}} color={grey500}/>
-                          <div style={{backgroundColor: '#efefef', height: '12px', width: '30%'}}/>
-                        </div>
-
-                      </div>
-                    </div>
-
-                  }/>
-            </Card>
-          </MediaQuery>
+          <Loading/>
             :
           <DocumentTitle title={this.state.project.Name}>
             <div>

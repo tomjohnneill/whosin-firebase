@@ -11,6 +11,7 @@ import {grey200, grey500, grey100, amber500} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List';
 import Search from 'material-ui/svg-icons/action/search';
 import Divider from 'material-ui/Divider';
+import Loading from './loading.jsx';
 
 import fire from '../fire';
 
@@ -93,9 +94,7 @@ export default class AllProjects extends React.Component {
             <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left', paddingLeft: '100px'}}>
               All Projects</h1>
             {this.state.loading ?
-              <div>
-                Loading...
-              </div>
+              <Loading/>
               :
               this.state.projects ?
               <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '80px', paddingRight: '80px',
@@ -139,38 +138,7 @@ export default class AllProjects extends React.Component {
                         All Projects
                       </Subheader>
                       {this.state.loading ?
-                        <List>
-                          <GridList
-                            className = 'flexthis'
-                            cols={2}
-                            cellHeight={220}
-                            padding={12}>
-                            {placeholderTiles.map((id) => (
-                              <GridTile
-                                key={id}
-                                children={
-                                  <div>
-                                    <div
-                                      style={{cursor: 'pointer', height: '100%', width: 'auto'
-                                        , display: 'flex', flexDirection: 'column'}}>
-                                    <div style={{width: '100%', height: '110px', maxWidth: '100%', backgroundColor: grey200}}/>
-                                    <div style={{height: '12px' , backgroundColor: '#dbdbdb', width: '100%', marginTop: '6px'}}/>
-                                    <LinearProgress style={{marginTop: '10px', marginBottom: '6px'}} color={amber500} mode="determinate"
-                                         value={0} />
-                                       <div style={{height: '19px', width: '100%', backgroundColor: '#efefef'
-                                         , marginBottom: '0px'}}/>
-                                       <div style={{height: '19px', width: '60%', backgroundColor: '#efefef'
-                                           , marginTop: '3px', marginBottom: '6px'}}/>
-                                  </div>
-                                  </div>
-                                }
-                                />
-                            ))
-
-                          }
-                          </GridList>
-                        </List>
-
+                        <Loading/>
                         :
                       <List>
                   <GridList
