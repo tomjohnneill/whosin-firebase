@@ -6,7 +6,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
-import {Spiral, Tick} from './icons.jsx'
+import {Spiral, Tick, AvatarIcon} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import fire from '../fire';
@@ -143,7 +143,8 @@ class RecentlySupported extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("Engagement").where("User", "==", this.props.userId).orderBy("created", "desc").limit(10).get().then((querySnapshot) => {
+    db.collection("Engagement").where("User", "==", this.props.userId).orderBy("created", "desc")
+    .limit(10).get().then((querySnapshot) => {
       var data = []
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
@@ -220,11 +221,12 @@ export default class Profile extends React.Component {
           this.setState({userId: userId, publicProfile: publicProfile})
           console.log(this.state)
 
-          db.collection("User").doc(userId).get().then((doc) => {
-            var user = doc.data()
-            user._id = doc.id
-            this.setState({user: user, loading: false, engagements: [], reviews: []})
-          });
+            db.collection("User").doc(userId).collection("public").doc(userId).get().then((publicDoc) => {
+              var publicData = publicDoc.data()
+              user.public = publicData
+              this.setState({user: user, loading: false, engagements: [], reviews: []})
+            })
+            .catch(error => console.log('Error', error))
         })
 
 
@@ -243,6 +245,7 @@ export default class Profile extends React.Component {
   changeImage = (imageUrl) => {
     var user = this.state.user
     user['Picture'] = imageUrl
+    user.public['Picture'] = imageUrl
     this.setState({user: user})
   }
 
@@ -267,14 +270,17 @@ export default class Profile extends React.Component {
                width: '100%', paddingRight: '10px', maxWidth: '1400px'
                 ,boxSizing: 'border-box', flexWrap: 'wrap', justifyContent: 'center'}}>
               <div style={{marginBottom: '50px'}}>
-                {this.state.user.Picture ?
+                {this.state.user.public && this.state.user.public.Picture ?
                 <img style={{height: '200px', width: '200px', objectFit: 'cover', borderRadius: '4px'}}
-                  src={this.state.user.Picture ? this.state.user.Picture : null}/>
+                  src={this.state.user.public && this.state.user.public.Picture ? this.state.user.public.Picture : null}/>
                 :
                 !this.state.publicProfile ?
                 <PhotoUpload changeImage={this.changeImage} userId={this.state.userId}/>
                 :
-                <div style={{height: '200px', width: '200px', backgroundColor: '#DDDDDD'}}/>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  height: '200px', width: '200px', backgroundColor: '#DDDDDD', borderRadius: 6}}>
+                  <AvatarIcon style={{height: '150px', width: '150px'}} color={'#484848'}/>
+                </div>
                 }
                 <div style={styles.contactDetails}>
                   Email address
@@ -305,14 +311,14 @@ export default class Profile extends React.Component {
               <div style={{minWidth: '350px', width: '30%', marginBottom: '50px'}}>
                 <div style={{display: 'flex'}}>
                   <div style={{width: '50%', textAlign: 'left', fontFamily: 'Permanent Marker', fontSize: '24px'}}>
-                    Hey, I'm {this.state.user.Name.replace(/ .*/,'')}
+                    Hey, I'm {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'not telling you my name'}
                   </div>
                   <div style={{width: '50%', textAlign: 'right', fontFamily: 'Permanent Marker', color: '#FF9800', fontSize: '24px'}}>
                     6 Reviews
                   </div>
                 </div>
                 <div style={{textAlign: 'left', marginTop: '6px'}}>
-                  {this.state.user.Location} - Joined in 2018
+                  {this.state.user.public ? this.state.user.public.Location : null} - Joined in 2018
                 </div>
                 <div style={{display: 'flex', alignItems: 'left', marginTop: 16, marginBottom: '50px'}}>
                   {this.state.publicProfile ? null :
