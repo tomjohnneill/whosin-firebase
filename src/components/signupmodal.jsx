@@ -66,10 +66,15 @@ export default  class SignupModal extends React.Component {
                 Name: this.state.name
               }
             )
-            .then(docRef => db.collection("User").doc(docRef.id).collection("public").
-            doc(docRef.id).set({
-              Name: this.state.Name
-            }))
+            .then(docRef =>
+              {
+                console.log(user)
+              return db.collection("User").doc(user.uid).collection("public").
+              doc(user.uid).set({
+                Name: this.state.name
+              })
+            }
+          )
             .then(data =>
               {
                 if (this.props.onComplete) {

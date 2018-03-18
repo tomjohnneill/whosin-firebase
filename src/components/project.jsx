@@ -469,8 +469,11 @@ export default class Project extends React.Component {
               </div>
             </div>
 
+
             <div style={{backgroundColor: 'rgba(216,216,216,0.2)', padding: '20px 35px 20px 35px', textAlign: 'left'}}
               className='datetime-container'>
+
+              {this.state.project['STart Time'] ?
               <div className='date-container' style={{display: 'flex'}}>
                 <div className='date-icon'>
                   <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
@@ -480,6 +483,9 @@ export default class Project extends React.Component {
                     {weekday: 'long', month: 'long', day: 'numeric'})}
                 </div>
               </div>
+              : null}
+
+              {this.state.project['STart Time'] ?
               <div className='time-container' style={{display: 'flex', marginTop: 10}}>
                 <div className='time-icon'>
                   <Clock color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
@@ -491,6 +497,7 @@ export default class Project extends React.Component {
                       {hour: '2-digit', minute: '2-digit'})}
                 </div>
               </div>
+              : null}
 
               {this.state.project.Location ?
                 <div className='location-container' style={{display: 'flex', marginTop: 10}}>
