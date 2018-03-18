@@ -145,7 +145,7 @@ export default class Footer extends React.Component {
                     backgroundColor='#E55749' labelStyle={{textTransform: 'none', color: 'white'}}/>
                 </div>
               </div>
-              <div style={{flex: 2, marginLeft: 24}}>
+              <div style={{flex: 2, marginTop: 24}}>
                 Terms
                 <br/>
                 Address

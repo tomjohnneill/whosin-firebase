@@ -455,7 +455,7 @@ export default class Project extends React.Component {
                       <World style={{height: 25, width: 25}} color={'#484848'}/>
                       }
                   </div>
-                  <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                  <p className='charity-name' style={{margin: 0, fontSize: '14px', textAlign: 'left'}}>
                       {this.state.charity.Name}
                   </p>
                 </div>

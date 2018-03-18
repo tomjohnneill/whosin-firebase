@@ -9,6 +9,8 @@ import FlatButton from 'material-ui/FlatButton';
 import {Spiral} from './icons.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import RaisedButton from 'material-ui/RaisedButton';
+import MediaQuery from 'react-responsive';
+import EmbeddedProject from './embeddedproject.jsx';
 import {Link, browserHistory} from 'react-router';
 import Loading from './loading.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
@@ -41,7 +43,34 @@ const styles = {
     paddingLeft: '20px',
     paddingRight: '20px',
 
-  }
+  },
+  secondHeader: {
+    fontWeight: 200,
+    fontSize: '48px',
+    marginTop: 25,
+    marginBottom: 25
+  },
+  secondBody: {
+    fontWeight: 200,
+    fontSize: '20px'
+  },
+  projectBox: {
+    margin: 15
+  },
+  mobileProjectBox: {
+    marginTop: 15,
+    marginBottom: 15
+  },
+  mobileSecondHeader: {
+    fontWeight: 200,
+    fontSize: '30px',
+    marginTop: 25,
+    marginBottom: 25
+  },
+  mobileSecondBody: {
+    fontWeight: 200,
+    fontSize: '15px'
+  },
 }
 
 export function changeImageAddress(file, size) {
@@ -180,6 +209,56 @@ class Supporters extends React.Component {
   }
 }
 
+export class RecentCharityReviews extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  componentDidMount(props) {
+    db.collection("ProjectReviews").where("Charity", "==", this.props.charityId).orderBy("created", "desc")
+    .limit(3).get().then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        var elem = doc.data()
+        elem['_id'] = doc.id
+        data.push(elem)
+      });
+      this.setState({reviews: data})
+      for (let i = 0; i < data.length; i++) {
+        db.collection("User").doc(data[i].User).collection("public").doc(data[i].User).get().then((userDoc) => {
+          data[i]['User Picture'] = userDoc.data().Picture
+        })
+      }
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        {
+          this.state.reviews ? this.state.reviews.map((review) => {
+            <Link to={`/projects/${review['Project Name']}/${review.Project}`}>
+              <div key={review._id} style={{display: 'flex', alignItems: 'center', paddingTop: 10, paddingBottom: 10}}>
+                <img className='user-picture' style={{borderRadius: '50%', padding: 10, height: 70, width: 70, boxSizing: 'border-box'}}
+                  src={review['User Picture']}/>
+                <div className='review-body' style={{fontSize:'20px', fontWeight: 200}}>
+                  {review.publicReview}
+                </div>
+              </div>
+            </Link>
+          })
+          :
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: 60, backgroundColor: 'rgb(247,247,247)'}}>
+            No reviews just yet
+          </div>
+        }
+      </div>
+    )
+  }
+}
+
 export default class CharityProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -274,83 +353,143 @@ export default class CharityProfile extends React.Component {
         {this.state.loading ?
           <Loading/>
           :
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 30}}>
-            <div style={{width: '100%', maxWidth: '1000px', position: 'relative',
-              backgroundColor: 'white'}}>
-              <div style={{width: '250px', marginBottom: 30, textAlign: 'left'}}>
-                {this.state.charity['Featured Image'] ?
-                  <img src={this.state.charity['Featured Image']}
-                     style={{height: '90px', marginBottom: 10, width: 'auto'}}/>
-                  :
-                <Spiral fill='#FF9800' style={{height: '100px', width: '100px'}}/>
-                }
-                <b style={{display: 'inline-block'}}>{this.state.charity.Name}</b>
-                {fire.auth().currentUser && this.state.charity['Owner'] === fire.auth().currentUser.uid ?
-                <RaisedButton
-                  labelStyle={{textTransform: 'none', fontWeight: 700}}
-                  onClick={() => browserHistory.push(window.location.pathname + '/edit')}
-                  label='Edit Profile' secondary={true} style={{position: 'absolute', top: 19.9, right: 0}}/>
-                :
-                null}
-              </div>
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <div>
+          <div>
+            <MediaQuery minDeviceWidth={700}>
+              <div className='container' style={{paddingLeft: 100, paddingRight: 100,
+                  textAlign: 'left', boxSizing: 'border-box'}}>
+                <div className='charity-header-container' style={{display: 'flex', alignItems: 'center'}}>
+                  <img className='charity-logo-in-header'
+                    src={this.state.charity['Featured Image']}
+                    style={{borderRadius: '50%', height: 222, width: 222}}/>
+                  <div className='charity-title-container' style={{paddingLeft: 50}}>
+                    <div className='charity-title' style={{fontWeight: 'bold', fontSize: '54px'}}>
+                      {this.state.charity.Name}
+                    </div>
+                    <div className='soc-media-container' style={{display: 'flex'}}>
+                      <div className='fb-icon'>
 
+                      </div>
+                      <div className='fb-username'>
+                        {this.state.charity.facebook}
+                      </div>
+                      <div className='twitter-icon'>
+
+                      </div>
+                      <div className='twitter-username'>
+                        {this.state.charity.twitter}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
 
+                <div className='about-review-container' style={{display: 'flex', width: '100%'}}>
+                  <div className='about-container' style={{flex: 1, marginRight: 50}}>
+                    <h2 className='about-header' style={styles.secondHeader}>
+                      About
+                    </h2>
+                    <div className='about-body' style={styles.secondBody}>
+                      {this.state.charity.Summary}
+                    </div>
+                  </div>
+                  <div className='review-container' style={{flex: 1}}>
+                    <h2 className='review-header' style={styles.secondHeader}>
+                      Reviews
+                    </h2>
+                    <RecentCharityReviews charityId={this.state.charity._id} />
+                  </div>
+                </div>
+
+                <div style={{height: 40}}/>
+                <h2 className='project-header' style={styles.secondHeader}>
+                  Projects
+                </h2>
+
+                <div className='project-boxes-container' style={{display: 'flex'}}>
+                  <div className='project-box' style={styles.projectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
+                  <div className='project-box' style={styles.projectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
+                  <div className='project-box' style={styles.projectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
                 </div>
               </div>
-              <Tabs
-                  tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
-                  value={this.props.params.tab}
-                  onChange={this.handleTwoTabClick}
-                  inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
-                  left:this.state.inkBarLeft, width: '100px'}}
-                >
-                  <Tab label="Projects"
-                    style={{width: 'auto', fontSize: '16px'}}
-                      onTouchTap={this.changeAnchorEl}
-                        buttonStyle={this.state.selected === 'projects' ? styles.selectedTab : styles.tab}
-                     value="projects">
-                    <CharityProjectList charityId={this.props.params.charityId}/>
-                  </Tab>
-                  <Tab
-                    style={{width: 'auto', fontSize: '16px'}}
-                    onTouchTap={this.changeAnchorEl}
-                    buttonStyle={this.state.selected === 'about' ? styles.selectedTab : styles.tab}
-                     label="About"  value="about">
-                    <div/>
-                    <About charity={this.state.charity}/>
-                  </Tab>
-                  <Tab
-                    style={{width: 'auto', fontSize: '16px'}}
-                    onTouchTap={this.changeAnchorEl}
-                    buttonStyle={this.state.selected === 'supporters' ? styles.selectedTab : styles.tab}
-                     label="Supporters"  value="supporters">
-                    <Supporters charityId = {this.props.params.charityId}/>
-                  </Tab>
-                  <Tab
-                    style={{width: 'auto', fontSize: '16px'}}
-                    onTouchTap={this.changeAnchorEl}
-                    buttonStyle={this.state.selected === 'reviews' ? styles.selectedTab : styles.tab}
-                     label="Reviews"  value="reviews">
-                     <CharityReviews charityId = {this.props.params.charityId}/>
-                    <div/>
-                  </Tab>
-                </Tabs>
+            </MediaQuery>
 
-            </div>
+            <MediaQuery maxDeviceWidth={700}>
+              <div className='container' style={{paddingLeft: 24, paddingRight: 24,
+                  textAlign: 'left', boxSizing: 'border-box'}}>
+                <div className='charity-header-container'
+                    style={{display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
+                  <img className='charity-logo-in-header'
+                    src={this.state.charity['Featured Image']}
+                    style={{borderRadius: '50%', height: 222, width: 222}}/>
+                  <div className='charity-title-container'>
+                    <div className='charity-title' style={{fontWeight: 'bold', fontSize: '45px', textAlign: 'center'}}>
+                      {this.state.charity.Name}
+                    </div>
+                  </div>
+                  <div className='soc-media-container' style={{display: 'flex'}}>
+                    <div className='fb-icon'>
+
+                    </div>
+                    <div className='fb-username'>
+                      {this.state.charity.facebook}
+                    </div>
+                    <div className='twitter-icon'>
+
+                    </div>
+                    <div className='twitter-username'>
+                      {this.state.charity.twitter}
+                    </div>
+                  </div>
+                </div>
 
 
 
+                <div className='about-review-container' style={{display: 'flex', width: '100%'}}>
+                  <div className='about-container' style={{flex: 1}}>
+                    <h2 className='about-header' style={styles.mobileSecondHeader}>
+                      About
+                    </h2>
+                    <div className='about-body' style={styles.mobileSecondBody}>
+                      {this.state.charity.Summary}
+                    </div>
+                  </div>
+                </div>
 
+                <div>
+                  <div className='review-container' style={{flex: 1}}>
+                    <h2 className='review-header' style={styles.mobileSecondHeader}>
+                      Reviews
+                    </h2>
+                    <RecentCharityReviews charityId={this.state.charity._id} />
+                  </div>
+                </div>
 
+                <div style={{height: 40}}/>
+                <h2 className='project-header' style={styles.mobileSecondHeader}>
+                  Projects
+                </h2>
+
+                <div className='project-boxes-container'>
+                  <div className='project-box' style={styles.mobileProjectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
+                  <div className='project-box' style={styles.mobileProjectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
+                  <div className='project-box' style={styles.mobileProjectBox}>
+                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
+                  </div>
+                </div>
+              </div>
+            </MediaQuery>
           </div>
-
-            }
-        </div>
-
+        }
+      </div>
     )
   }
 }

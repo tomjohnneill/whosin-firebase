@@ -43,7 +43,7 @@ const EmailTemplateBuilder = asyncComponent(() =>
 
 const rootElement = document.getElementById('root');
 
-  render(<Router history={ browserHistory }>
+  render(<Router onUpdate={() => window.scrollTo(0, 0)} history={ browserHistory }>
     <Route path="/" component={ App }>
 
       <IndexRoute component={ UserTabs } />
