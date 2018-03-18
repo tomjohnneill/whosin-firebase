@@ -83,22 +83,48 @@ const styles = {
   },
   ticHeader: {
     fontSize: '52px',
-    fontWeight: 700
+    fontWeight: 700,
+    lineHeight: '48px'
   },
   ticSummary: {
     fontSize: '26px'
   },
   aboutIcon: {
     height: 100,
-    width: 100
+    width: 100,
+    padding: 24,
   },
   aboutText: {
-    padding: 16,
-    fontSize: '36px'
+    padding: 10,
+    color: 'white',
+    fontSize: '24px'
   },
   aboutLeft: {
     width: '50%',
-    marginRight: 50
+    marginRight: 50,
+    paddingLeft: 20,
+    paddingRight:20,
+    boxSizing: 'border-box'
+  },
+  bigIcon: {
+    width: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  aboutRight: {
+    width: '50%',
+    marginLeft: 50,
+    paddingLeft: 20,
+    paddingRight:20,
+    boxSizing: 'border-box'
+  },
+  mobileAbout : {
+    width: '100%'
+  },
+  mobileBigIcon: {
+    marginTop: 50,
+    marginBottom: 50
   }
 }
 
@@ -119,13 +145,13 @@ export default class About extends React.Component {
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
-                  Get up off your ass and do a good thing.
+                  Get up off your ass and do a good thing
                 </div>
                 <div style={styles.redInkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
                   I’m sure you’d have done this already if you had found the
                   right project, but it’s hard, we get it.
-                  That’s why we built Who’s In. <b>Doing good shouldn’t be hard.</b>
+                  That’s why we built Who’s In. <br/><b>Doing good shouldn’t be hard.</b>
                 </div>
               </div>
 
@@ -137,8 +163,32 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: '#E55749', height: 450, paddingLeft: 100, paddingRight: 100,
+              width: '100%', boxSizing: 'border-box', color: 'white'}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div style={styles.bigIcon}>
+                <div>
+                  <Jenga style={{height: 300}} color={'white'}/>
+                </div>
+              </div>
+
+              <div style={styles.aboutRight}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Crowd funding <br/>
+                meet crowd doing
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  Only do a project if it meets its target
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: '#65A1e7', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+
+
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   One off projects
@@ -150,18 +200,42 @@ export default class About extends React.Component {
                 </div>
               </div>
 
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+              <div style={styles.bigIcon}>
                 <div>
                   <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ehkrqd3wwvkao1u54age.gif', '500xauto')}
                     style={{width: '100%', height: 'auto'}}/>
                 </div>
               </div>
+
             </div>
           </div>
 
           <div style={{backgroundColor: '#FF9800', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
-              <div style={styles.aboutLeft}>
+
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+                <div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <Muscle style={{height: 100, width: 100}} color={'white'}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has joined 10 projects
+                    </div>
+                  </div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has been recommended by 10 projects
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div style={styles.aboutRight}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   Reviews for you and you and you and you
                 </div>
@@ -171,34 +245,15 @@ export default class About extends React.Component {
                 </div>
               </div>
 
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
-                <div>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
-                    <div className='about-icon' style={styles.aboutIcon}>
-                      <Muscle style={{height: 100, width: 100}}/>
-                    </div>
-                    <div className='about-reviews' style={styles.aboutText}>
-                      Fred has joined 10 projects
-                    </div>
-                  </div>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
-                    <div className='about-icon' style={styles.aboutIcon}>
-                      <ReviewIcon style={{height: 100, width: 100}}/>
-                    </div>
-                    <div className='about-reviews' style={styles.aboutText}>
-                      Fred has been recommended by 10 projects
-                    </div>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
 
-          <div style={{backgroundColor: '#65A1e7', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
-                  Bring friends! If you have them.
+                  Bring friends! If you have them
                 </div>
                 <div style={styles.inkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
@@ -206,7 +261,7 @@ export default class About extends React.Component {
                 </div>
               </div>
 
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+              <div style={styles.bigIcon}>
                 <div>
                   <img
                     style={{width: '100%', height: 'auto'}}
@@ -217,346 +272,184 @@ export default class About extends React.Component {
           </div>
 
           <div style={{backgroundColor: 'white', height: 450, width: '100%', paddingLeft: 100, paddingRight: 100}}>
-            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
-              <div>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center',
+            flexDirection: 'column'}}>
+              <div style={{width: '100%', textAlign: 'center', fontSize: '52px', fontWeight: 700}}>
                 Go forth and do good
               </div>
-            </div>
-          </div>
-
-
-
-          <div style={{maxWidth: '1000px', width: '100%', height: '60vh', padding: 24, marginTop: 40, boxSizing: 'border-box' }}>
-            <div>
-              <div style={styles.title}>
-                Who's In?
-              </div>
-              <div style={styles.summary}>
-                  Tackling issues you care about has never been easier.
-              </div>
-            </div>
-
-          </div>
-          <div style={{backgroundColor: 'white', width: '100%', height: '650px',
-            display: 'flex', justifyContent: 'center'}}>
-            <div style={{maxWidth: '600px', width: '100%', display: 'flex', justifyContent: 'center'}}>
-              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'left', padding: 24}}>
-                <h2 style={styles.header}>
-                  The story
-                </h2>
-                <div style={styles.redInkbar}/>
-                <div style={{height: 20}}/>
-                <div style={styles.para}>
-                   More people than ever care about the big issues that society faces.
-                </div>
-
-
-                <div style={styles.para}>
-                    While it's easier than ever to broadcast
-                   our feelings on social media, it's just as difficult as before to know what you can do.
-                </div>
-
-                <div style={{marginTop: 20, fontWeight: 700, fontSize: '24px'}}>
-                  Our mission is to make 'making a difference' much easier.
-                </div>
-
-                <div style={styles.para}>
-                    Here's how...
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </MediaQuery>
-
-        <MediaQuery maxDeviceWidth={700}>
-          <div style={{maxWidth: '1000px', width: '100%', height: '60vh', padding: 24, marginTop: 40, boxSizing: 'border-box' }}>
-            <div>
-              <div style={styles.mobileTitle}>
-                Who's In?
-              </div>
-              <div style={styles.mobileSummary}>
-                  Tackling issues you care about has never been easier.
-              </div>
-            </div>
-
-          </div>
-          <div style={{backgroundColor: 'white', width: '100%', height: 'auto',
-            display: 'flex', justifyContent: 'center'}}>
-            <div style={{maxWidth: '600px', width: '100%', display: 'flex', justifyContent: 'center'}}>
-              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'left', padding: 24}}>
-                <h2 style={styles.header}>
-                  The story
-                </h2>
-                <div style={styles.redInkbar}/>
-                <div style={{height: 20}}/>
-                <div style={styles.para}>
-                   More people than ever care about the big issues that society faces.
-                </div>
-
-
-                <div style={styles.para}>
-                    While it's easier than ever to broadcast
-                   our feelings on social media, it's just as difficult as before to know what you can do.
-                </div>
-
-                <div style={{marginTop: 20, fontWeight: 700, fontSize: '24px'}}>
-                  Our mission is to make 'making a difference' much easier.
-                </div>
-
-                <div style={styles.para}>
-                    Here's how...
-                </div>
-
-                <div style={{height: '60px'}}/>
-              </div>
-
-            </div>
-          </div>
-        </MediaQuery>
-
-      <MediaQuery minDeviceWidth={700}>
-        <div style={{display: 'flex', justifyContent: 'center',
-          backgroundColor: '#E55749', width: '100%', height: '90vh', color: 'white'}}>
-          <div style={styles.inside}>
-            <div style={styles.step}>
-              Organisers create projects
-            </div>
-
-            <div style={styles.inkbar}/>
-
-              <div style={{height: 'auto', display: 'flex'}}>
-                <div style={{margin: 20}}>
-                <iframe
-                  frameborder='0'
-                  width="350"
-                  height="500"
-                  src="https://whosin.io/embed/Nik1eqwY1ijdbZseZaGN"></iframe>
-                </div>
-
-                <div style={{margin: 20}}>
-                  <iframe
-                    frameborder='0'
-                    width="350"
-                    height="500"
-                    src="https://whosin.io/embed/9Sp63uDdOHDqIqlLaU4P"></iframe>
-                </div>
-              </div>
-          </div>
-        </div>
-      </MediaQuery>
-
-      <MediaQuery maxDeviceWidth={700}>
-        <div style={{display: 'flex', justifyContent: 'center',
-          backgroundColor: '#E55749', width: '100%', height: 'auto', color: 'white'}}>
-          <div style={styles.inside}>
-            <div style={styles.step}>
-              Organisers create projects
-            </div>
-
-            <div style={styles.inkbar}/>
-              <div style={{height: 'auto'}}>
-                <div style={{margin: 20}}>
-                <iframe
-                  frameborder='0'
-                  width="320"
-                  height="500"
-                  src="https://whosin.io/embed/Nik1eqwY1ijdbZseZaGN"></iframe>
-                </div>
-
-                <div style={{margin: 20}}>
-                  <iframe
-                    frameborder='0'
-                    width="320"
-                    height="500"
-                    src="https://whosin.io/embed/7CLWqTZVGWjvJQ5YCvwG"></iframe>
-                </div>
-              </div>
-          </div>
-        </div>
-      </MediaQuery>
-
-        <MediaQuery minDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center',
-            backgroundColor: '#65A1e7', width: '100%', height: '90vh', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Projects aim to reach their targets
-              </div>
-              <div style={styles.inkbar}/>
-                <img src='https://d3kkowhate9mma.cloudfront.net/750xauto/be4fde63-5991-417a-afd7-5ebde2056ae7'
-                  style={{height: '50vh', width: 'auto', backgroundColor: 'white', color: 'black', marginTop: 36,
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px', borderRadius: 6,
-                padding: 10}}
+              <div style={{marginTop: 25}}>
+                <RaisedButton primary={true}
+                  label='Find a project' onClick={() => browserHistory.push('/projects')}
+                  labelStyle={{textTransform: 'none', fontWeight: 700}}
                   />
+              </div>
             </div>
           </div>
+
+
         </MediaQuery>
+
 
         <MediaQuery maxDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center',
-            backgroundColor: '#65A1e7', width: '100%', height: '90vh', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Projects aim to reach their targets
+          <div style={{backgroundColor: 'white', padding: 24}}>
+            <div style={{height: 50}}/>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <div>
+                <Ass style={{height: 300}} color={'#484848'}/>
               </div>
-              <div style={styles.inkbar}/>
+            </div>
+            <div style={{height: 50}}/>
+
+            <div style={{ alignItems: 'center'}}>
+              <div style={styles.mobileAbout}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Get up off your ass and do a good thing
+                </div>
+                <div style={styles.redInkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  I’m sure you’d have done this already if you had found the
+                  right project, but it’s hard, we get it.
+                  That’s why we built Who’s In. <br/><b>Doing good shouldn’t be hard.</b>
+                </div>
+              </div>
+
+
+            </div>
+            <div style={{height: 50}}/>
+          </div>
+
+          <div style={{backgroundColor: '#E55749', padding: 24,
+              width: '100%', boxSizing: 'border-box', color: 'white'}}>
+            <div style={{ alignItems: 'center', height: '100%'}}>
+              <div style={styles.mobileBigIcon}>
+                <div>
+                  <Jenga style={{height: 300}} color={'white'}/>
+                </div>
+              </div>
+
+              <div style={styles.mobileAbout}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Crowd funding <br/>
+                meet crowd doing
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  Only do a project if it meets its target
+                </div>
+              </div>
+            </div>
+            <div style={{height: 50}}/>
+          </div>
+
+          <div style={{backgroundColor: '#65A1e7', color: 'white',padding: 24}}>
+            <div style={{height: 50}}/>
+            <div style={{ alignItems: 'center', height: '100%'}}>
+
+
+              <div style={styles.mobileAbout}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  One off projects
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  It’s hard to commit longer than a few days to a project,
+                  so we’re collecting as many one-off projects as we can find.
+                </div>
+              </div>
+
+              <div style={styles.mobileBigIcon}>
+                <div>
+                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ehkrqd3wwvkao1u54age.gif', '500xauto')}
+                    style={{width: '100%', height: 'auto'}}/>
+                </div>
+              </div>
 
             </div>
           </div>
+
+          <div style={{backgroundColor: '#FF9800', color: 'white', padding:24}}>
+            <div style={{height: 50}}/>
+            <div style={{alignItems: 'center', height: '100%'}}>
+
+              <div style={styles.mobileAbout}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Reviews for you and you and you and you
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  You can leave a review for the charity you worked with, and they can leave one for you.
+                </div>
+              </div>
+              <div style={{height: 50}}/>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <Muscle style={{height: 100, width: 100}} color={'white'}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has joined 10 projects
+                    </div>
+                  </div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has been recommended by 10 projects
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style={{height: 50}}/>
+
+
+            </div>
+          </div>
+
+          <div style={{backgroundColor: '#E55749',color: 'white', padding: 24}}>
+            <div style={{height: 50}}/>
+            <div style={{ alignItems: 'center', height: '100%'}}>
+              <div style={styles.mobileAbout}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Bring friends! If you have them
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  Don’t want to sign up unless your friends have? Done. We’ve built that feature for you.
+                </div>
+              </div>
+
+              <div style={styles.mobileBigIcon}>
+                <div>
+                  <img
+                    style={{width: '100%', height: 'auto'}}
+                    src='https://i.imgur.com/eYnBLEB.gif'/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: 'white', width: '100%', padding: 24}}>
+            <div style={{height: 50}}/>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center',
+            flexDirection: 'column'}}>
+              <div style={{width: '100%', textAlign: 'center', fontSize: '52px', fontWeight: 700}}>
+                Go forth and do good
+              </div>
+              <div style={{marginTop: 25}}>
+                <RaisedButton primary={true}
+                  label='Find a project' onClick={() => browserHistory.push('/projects')}
+                  labelStyle={{textTransform: 'none', fontWeight: 700}}
+                  />
+              </div>
+            </div>
+            <div style={{height: 50}}/>
+          </div>
+
+
         </MediaQuery>
 
-
-        <div style={{display: 'flex', justifyContent: 'center',
-          backgroundColor: 'white', width: '100%', height: '90vh'}}>
-          <div style={styles.inside}>
-            <div style={styles.step}>
-              Find what you're interested in
-            </div>
-            <div style={styles.blackInkbar}/>
-              <div style={{height: '40vh', width: '400px', backgroundColor: 'white', color: 'black'}}>
-                Giphy capture of searching
-              </div>
-          </div>
-        </div>
-
-
-        <MediaQuery minDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center',
-            backgroundColor: '#FF9800', width: '100%', height: '90vh', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Don't be lonely
-              </div>
-              <div style={styles.inkbar}/>
-                <div style={{height: '40vh', width: '400px', backgroundColor: 'white', color: 'black',
-                  padding: 24, margin: 40, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexDirection: 'column',
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',}}>
-                  <div style={{display: 'flex', width: '100%'}}>
-                    <div style={{flex: 1}}>
-                      <Person1 color={'#DDDDDD'} style={{height: 100, width: 100}}/>
-                    </div>
-                    <div style={{flex: 1}}>
-                      <Person2 color={'#FF9800'} style={{height: 100, width: 100}}/>
-                    </div>
-                    <div style={{flex: 1}}>
-                      <Person3 color={'#DDDDDD'} style={{height: 100, width: 100}}/>
-                    </div>
-                  </div>
-                  <div style={{color: '#484848', padding: 24, fontSize: '24px', fontWeight: 700}}>
-
-                    Sign up with a group of friends
-                  </div>
-                  <div style={{marginTop: 0, fontWeight: 200, color: grey500}}>
-                    Don't come unless they come with you
-                  </div>
-                </div>
-            </div>
-          </div>
-        </MediaQuery>
-
-        <MediaQuery maxDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center',
-            backgroundColor: '#FF9800', width: '100%', height: '90vh', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Don't be lonely
-              </div>
-              <div style={styles.inkbar}/>
-                <div style={{height: '400px', width: '100%', backgroundColor: 'white', color: 'black',
-                  boxSizing: 'border-box',
-                  padding: 24, marginTop: 40, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexDirection: 'column',
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',}}>
-                  <div style={{display: 'flex', width: '100%'}}>
-                    <div style={{flex: 1}}>
-                      <Person1 color={'#DDDDDD'} style={{height: 80, width: 80}}/>
-                    </div>
-                    <div style={{flex: 1}}>
-                      <Person2 color={'#FF9800'} style={{height: 80, width: 80}}/>
-                    </div>
-                    <div style={{flex: 1}}>
-                      <Person3 color={'#DDDDDD'} style={{height: 80, width: 80}}/>
-                    </div>
-                  </div>
-                  <div style={{color: '#484848', padding: 24, fontSize: '24px', fontWeight: 700}}>
-
-                    Sign up with a group of friends
-                  </div>
-                  <div style={{marginTop: 0, fontWeight: 200, color: grey500}}>
-                    Don't come unless they come with you
-                  </div>
-                </div>
-            </div>
-          </div>
-        </MediaQuery>
-
-        <MediaQuery minDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center',
-            backgroundColor: '#65A1e7', width: '100%', height: '100vh', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Build a reputation
-              </div>
-              <div style={styles.inkbar}/>
-              <div style={{display: 'flex'}}>
-                <div style={{margin: 20, height: 510, overflow: 'hidden', width: '350px', backgroundColor: 'white', color: '#484848', borderRadius: 6,
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px'}}>
-                  <ShortReview params={{_id: 'B8AJNxBHBRhxHATpzvht'}}/>
-                </div>
-
-                <div style={{margin: 20, height: 580, overflow: 'hidden', width: '350px', backgroundColor: 'white', color: '#484848', borderRadius: 6,
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px'}}>
-                  <VolunteerStars params={{_id: 'B8AJNxBHBRhxHATpzvht', userId: '2wOtwTpKxjdCFOa0tNlLpOAYSsO2'}}/>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </MediaQuery>
-        <MediaQuery maxDeviceWidth={700}>
-          <div style={{display: 'flex', justifyContent: 'center', paddingTop: 24, paddingBottom: 24,
-            backgroundColor: '#65A1e7', width: '100%', height: 'auto', color: 'white'}}>
-            <div style={styles.inside}>
-              <div style={styles.step}>
-                Build a reputation
-              </div>
-              <div style={styles.inkbar}/>
-              <div style={{width: '100%'}}>
-                <div style={{marginTop: 30, height: 510, overflow: 'hidden', width: '100%', backgroundColor: 'white', color: '#484848', borderRadius: 6,
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px'}}>
-                  <ShortReview params={{_id: 'B8AJNxBHBRhxHATpzvht'}}/>
-                </div>
-
-                <div style={{marginTop: 20, height: 580, overflow: 'hidden', width: '100%', backgroundColor: 'white', color: '#484848', borderRadius: 6,
-                  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px'}}>
-                  <VolunteerStars params={{_id: 'B8AJNxBHBRhxHATpzvht', userId: '2wOtwTpKxjdCFOa0tNlLpOAYSsO2'}}/>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </MediaQuery>
-
-        <div style={{display: 'flex', justifyContent: 'center',
-          backgroundColor: 'white', width: '100%', height: '40vh'}}>
-          <div style={styles.inside}>
-            <div style={styles.step}>
-              Get started
-            </div>
-            <div style={styles.redInkbar}/>
-
-          <div style={{padding: 50}}>
-            <RaisedButton label="Let's Go"
-              primary={true}
-              onClick={() => browserHistory.push('/projects')}
-              labelStyle={{letterSpacing: '1.5px', fontWeight: 'bold',
-                fontFamily: 'Permanent Marker', fontSize: '24px'}}/>
-
-          </div>
-          </div>
-        </div>
 
       </div>
     )

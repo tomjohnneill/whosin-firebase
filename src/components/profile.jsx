@@ -442,7 +442,9 @@ export default class Profile extends React.Component {
                      }
                   </div>
                   <div style={{width: '100%'}}>
-
+                    <div style={{ textAlign: 'left', fontSize: '36px', fontWeight: 700, paddingTop: 15}}>
+                      Hey, I'm {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'not telling you my name'}
+                    </div>
 
                   </div>
                   <div style={{textAlign: 'left', marginTop: '6px', fontWeight: 700}}>
@@ -459,7 +461,12 @@ export default class Profile extends React.Component {
                         <Muscle style={styles.summaryIcon} color={'#484848'}/>
                       </div>
                       <div className='summary-summary' style={styles.summarySummary}>
-                        {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has joined {this.state.user.public.ProjectCount ? this.state.user.public.ProjectCount : 0} projects
+                        {this.state.user.public ?
+                          <div>
+                          {this.state.user.public.Name ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has joined {this.state.user.public.ProjectCount ? this.state.user.public.ProjectCount : 0} projects
+                          </div>
+                          : null
+                        }
                       </div>
                     </div>
                     <div className='summary-container' style={styles.summaryContainer}>
@@ -467,8 +474,15 @@ export default class Profile extends React.Component {
                         <ReviewIcon style={styles.summaryIcon} color={'#484848'}/>
                       </div>
                       <div className='summary-summary' style={styles.summarySummary}>
-                        {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has been recommended
-                          by {this.state.user.public.RecommendedCount ? this.state.user.public.RecommendedCount : 0} projects
+                        {this.state.user.public ?
+                          <div>
+                            {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has been recommended
+                              by {this.state.user.public.RecommendedCount ? this.state.user.public.RecommendedCount : 0} projects
+                          </div>
+                          :
+                          null
+
+                          }
                       </div>
                     </div>
                     <div className='summary-container' style={styles.summaryContainer}>
@@ -557,7 +571,12 @@ export default class Profile extends React.Component {
                         <Muscle style={styles.mobileSummaryIcon} color={'#484848'}/>
                       </div>
                       <div className='mobile-summary-summary' style={styles.mobileSummarySummary}>
-                        {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has joined {this.state.user.public.ProjectCount ? this.state.user.public.ProjectCount : 0} projects
+                        {this.state.user.public ?
+                          <div>
+                          {this.state.user.public.Name ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has joined {this.state.user.public.ProjectCount ? this.state.user.public.ProjectCount : 0} projects
+                          </div>
+                          : null
+                        }
                       </div>
                     </div>
                     <div className='mobile-summary-container' style={styles.mobileSummaryContainer}>
@@ -565,8 +584,15 @@ export default class Profile extends React.Component {
                         <ReviewIcon style={styles.mobileSummaryIcon} color={'#484848'}/>
                       </div>
                       <div className='mobile-summary-summary' style={styles.mobileSummarySummary}>
-                        {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has been recommended
-                          by {this.state.user.public.RecommendedCount ? this.state.user.public.RecommendedCount : 0} projects
+                        {this.state.user.public ?
+                          <div>
+                            {this.state.user.public ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'} has been recommended
+                              by {this.state.user.public.RecommendedCount ? this.state.user.public.RecommendedCount : 0} projects
+                          </div>
+                          :
+                          null
+
+                          }
                       </div>
                     </div>
                     <div className='mobile-summary-container' style={styles.mobileSummaryContainer}>
