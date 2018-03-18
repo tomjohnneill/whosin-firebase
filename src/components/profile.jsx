@@ -437,7 +437,7 @@ export default class Profile extends React.Component {
                       secondary={true}
                       label='Edit Profile' labelStyle={{textTransform: 'none', padding: '10px', fontSize: '16px'}}
                         onTouchTap={() => browserHistory.push('/profile/edit')}
-                        icon={<FontIcon className="fas fa-pencil-alt" style={{color: '#65A1e7'}}/>}
+
                          />
                      }
                   </div>
@@ -534,7 +534,7 @@ export default class Profile extends React.Component {
                       secondary={true}
                       label='Edit Profile' labelStyle={{textTransform: 'none', padding: '10px', fontSize: '16px'}}
                         onTouchTap={() => browserHistory.push('/profile/edit')}
-                        icon={<FontIcon className="fas fa-pencil-alt" style={{color: '#65A1e7'}}/>}
+
                          />
                      }
                   </div>

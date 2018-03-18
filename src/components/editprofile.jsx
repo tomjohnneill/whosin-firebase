@@ -14,7 +14,6 @@ import MenuItem from 'material-ui/MenuItem';
 import Checkbox from 'material-ui/Checkbox';
 import {PhotoUpload} from './profile.jsx';
 import Snackbar from 'material-ui/Snackbar';
-import FirebaseAuth from './auth/firebaseauth.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -286,59 +285,6 @@ export default class EditProfile extends React.Component {
                     </div>
                   </Tab>
 
-                  <Tab
-                    style={{width: 'auto', fontSize: '16px'}}
-                    onTouchTap={this.changeAnchorEl}
-                    buttonStyle={this.state.selected === 'about' ? styles.selectedTab : styles.tab}
-                     label="More Information"  value="about">
-                     <div style={{width: '50%', minWidth: '300px', padding: 16}}>
-                       <i style={{color: grey500}}>If you share this information with project organisers, it helps them apply for funding for their organisations. We will never show it publically.</i>
-                       <span style={styles.title}>Name</span>
-                         <SelectField
-                          floatingLabelText="Frequency"
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1} primaryText="Never" />
-                          <MenuItem value={2} primaryText="Every Night" />
-                          <MenuItem value={3} primaryText="Weeknights" />
-                          <MenuItem value={4} primaryText="Weekends" />
-                          <MenuItem value={5} primaryText="Weekly" />
-                        </SelectField>
-
-                       <span style={styles.title}>Email</span>
-                       <TextField fullWidth={true}
-                         inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                           paddingLeft: '12px',  boxSizing: 'border-box'}}
-                         underlineShow={false}
-                         hintText={'Email'}
-                         value={this.state.min}
-                         hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                         key='min'
-                         onChange={this.handleSetMin}
-                         style={styles.textfield}/>
-
-                       <span style={styles.title}>Name</span>
-                       <TextField fullWidth={true}
-                         inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                           paddingLeft: '12px',  boxSizing: 'border-box'}}
-                         underlineShow={false}
-                         hintText={'Minimum'}
-                         value={this.state.min}
-                         hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                         key='min'
-                         onChange={this.handleSetMin}
-                         style={styles.textfield}/>
-                     </div>
-                  </Tab>
-
-                  <Tab
-                    style={{width: 'auto', fontSize: '16px'}}
-                    onTouchTap={this.changeAnchorEl}
-                    buttonStyle={this.state.selected === 'supporters' ? styles.selectedTab : styles.tab}
-                     label="Verification"  value="supporters">
-                    <FirebaseAuth/>
-                  </Tab>
                 </Tabs>
             </div>
           </div>
