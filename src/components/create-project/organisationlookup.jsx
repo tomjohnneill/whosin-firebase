@@ -226,13 +226,13 @@ export default class OrganisationLookup extends React.Component{
       .catch(error => {this.setState({error: error}); console.log(error)})
     }
 
-    /*
+
     localStorage.removeItem('basics')
     localStorage.removeItem('story')
     localStorage.removeItem('times')
     localStorage.removeItem('coverPhoto')
     localStorage.removeItem('editProject')
-    */
+
   }
 
   handleFill = (e) => {

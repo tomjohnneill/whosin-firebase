@@ -19,7 +19,7 @@ const styles = {
   selectedTab: {
     height: '60px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     fontSize: '16px',
     letterSpacing: '0.4px',
@@ -44,7 +44,7 @@ const styles = {
   mobileSelectedTab: {
     height: '60px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     fontSize: '16px',
     letterSpacing: '0.4px',
@@ -195,7 +195,7 @@ export default class UserTabs extends React.Component {
 
           <AllProjects/>
 
-          
+
       </div>
     )
   }

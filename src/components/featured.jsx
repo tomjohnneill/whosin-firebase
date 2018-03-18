@@ -12,7 +12,7 @@ export default class Featured extends React.Component {
           Our Featured Projects
         </h1>
         <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '45px'}}>
-          <div style={{width: '40px', height: '1px', backgroundColor: '#FF9800'}}/>
+          <div style={{width: '40px', height: '1px', backgroundColor: '#E55749'}}/>
         </div>
         <div style={{width:'100%', maxWidth: '1400px', display: 'flex', justifyContent: 'space-between',
           alignItems: 'center', padding: '20px'}}>

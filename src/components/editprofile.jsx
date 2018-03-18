@@ -22,7 +22,7 @@ const styles = {
   selectedTab: {
     height: '60px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     fontSize: '16px',
     letterSpacing: '0.4px',
@@ -161,8 +161,11 @@ export default class EditProfile extends React.Component {
           publicInfo[key] = this.state.user[key]
         }
       })
+      if (this.state.user.Phone) {
+        publicInfo.Phone = true
+      }
       db.collection("User").doc(this.state.user._id).collection("public")
-      .doc(this.state.user._id).set(publicInfo)
+      .doc(this.state.user._id).set(publicInfo, {merge: true})
     })
     .then(() => {})
     .catch(error => console.log('Error', error))
@@ -193,7 +196,7 @@ export default class EditProfile extends React.Component {
                   tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
                   value={this.props.params.tab}
                   onChange={this.handleTwoTabClick}
-                  inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
+                  inkBarStyle={{zIndex: 2, backgroundColor: '#E55749',
                   left:this.state.inkBarLeft, width: '100px'}}
                 >
                   <Tab label="Public Profile"
@@ -216,12 +219,7 @@ export default class EditProfile extends React.Component {
                         <div style={{height: '200px', width: '200px', backgroundColor: '#DDDDDD'}}/>
                         }
                         </div>
-                        <Checkbox
-                          style={{marginLeft: '10px', width: '20%'}}
-                          checked={this.state.user.privacy.Picture}
-                          onCheck={this.updateCheck.bind(this, 'Picture')}
-                          label="Public"
-                          />
+
                       </div>
 
                       <span style={styles.title}>Name</span>
@@ -244,28 +242,10 @@ export default class EditProfile extends React.Component {
                           />
                       </div>
 
-                      <span style={styles.title}>Email</span>
-                      <div style={{display: 'flex', alignItems: 'center'}}>
-                        <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
-                          underlineShow={false}
-                          hintText={'Minimum'}
-                          value={this.state.user.Email}
-                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                          key='min'
-                          onChange={this.handleSetEmail}
-                          style={styles.textfield}/>
-                        <Checkbox
-                          style={{width: '20%', marginLeft: '10px'}}
-                          checked={this.state.user.privacy.Email}
-                          onCheck={this.updateCheck.bind(this, 'Email')}
-                          label="Public"
-                          />
-                      </div>
 
-                      <span style={styles.title}>Location</span>
-                      <div style={{display: 'flex', alignItems: 'center', marginBottom: 30}}>
+
+                      <span style={styles.title}>City</span>
+                      <div style={{display: 'flex', alignItems: 'center'}}>
                         <TextField fullWidth={true}
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
@@ -284,8 +264,23 @@ export default class EditProfile extends React.Component {
                           />
                       </div>
 
+                      <span style={styles.title}>Email</span>
+                      <div style={{width: '60%', display: 'flex', alignItems: 'center'}}>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          hintText={'Minimum'}
+                          value={this.state.user.Email}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='min'
+                          onChange={this.handleSetEmail}
+                          style={styles.textfield}/>
+
+                      </div>
+
                       <span style={styles.title}>Phone Number</span>
-                      <div style={{width: '80%', display: 'flex', alignItems: 'center', marginBottom: 30}}>
+                      <div style={{width: '60%', display: 'flex', alignItems: 'center', marginBottom: 30}}>
                         <TextField fullWidth={true}
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}

@@ -134,7 +134,7 @@ export default class EmbeddedProject extends React.Component {
                       />
                   </div>
 
-                    <div style={{flex: 2, fontFamily: 'Permanent Marker', color: '#FF9800', fontSize: '24px', paddingTop: 24, paddingRight: 24}}>
+                    <div style={{flex: 2, fontFamily: 'Permanent Marker', color: '#E55749', fontSize: '24px', paddingTop: 24, paddingRight: 24}}>
                       Who's In?
                     </div>
 

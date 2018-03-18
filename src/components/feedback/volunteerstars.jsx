@@ -172,7 +172,7 @@ export default class VolunteerStars extends React.Component {
                 <img src={this.state.engagement['Volunteer Picture']}
                   style={{height: '100px', width: '100px', objectFit: 'cover', borderRadius: 6}}/>
                 :
-                <Spiral style={{height: '150px', width: '150px'}} color={'#FF9800'}/>
+                <Spiral style={{height: '150px', width: '150px'}} color={'#E55749'}/>
               }
             </div>
             <div>

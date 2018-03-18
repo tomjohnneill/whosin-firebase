@@ -88,7 +88,7 @@ const styles = {
     padding: 30,
   },
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
 
   },
@@ -108,7 +108,7 @@ explanation: {
 },     selectedTab: {
     height: '36px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     letterSpacing: '0.4px',
     lineHeight: '16px',
@@ -641,7 +641,7 @@ export default class DesktopProject extends React.Component {
                     ref='tabs'
                     style={{flex: 1, borderBottom: '1px solid #e4e4e4', paddingTop: 16}}
                     tabItemContainerStyle={{ backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
-                    inkBarStyle={{zIndex: 2, backgroundColor: '#FF9800',
+                    inkBarStyle={{zIndex: 2, backgroundColor: '#E55749',
                     left:this.state.inkBarLeft, width: '60px'}}
                     onChange={this.handleChangeTab}
                     tabTemplateStyle={{backgroundColor: 'white'}}
@@ -696,27 +696,33 @@ export default class DesktopProject extends React.Component {
                             <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
                             <div style={{display: 'flex', width: '100%'}}>
                               {this.state.charity.Facebook ?
-                              <span style={styles.contactIcon}>
-                                <Avatar
-                                  icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
-                                  color={'white'}
-                                  backgroundColor={'#3b5998'}
-                                  size={50}
-                                  style={style}
-                                />
-                              {this.state.charity.Facebook}
-                            </span> : null }
+                                <a style={{flex: 1}} href={`https://www.facebook.com/${this.state.charity.Facebook}`}>
+                                  <span style={styles.contactIcon}>
+                                    <Avatar
+                                      icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
+                                      color={'white'}
+                                      backgroundColor={'#3b5998'}
+                                      size={50}
+                                      style={style}
+                                    />
+                                  {this.state.charity.Facebook}
+                                </span>
+                              </a>
+                              : null }
                               {this.state.charity.Twitter ?
-                              <span style={styles.contactIcon}>
-                                <Avatar
-                                  icon={<FontIcon className="fab fa-twitter fa-2x" />}
-                                  color={'white'}
-                                  backgroundColor={'#00aced'}
-                                  size={50}
-                                  style={style}
-                                />
-                              {this.state.charity.Twitter}
-                            </span> : null }
+                                <a style={{flex: 1}} href={`https://www.twitter.com/${this.state.charity.Twitter}`}>
+                                  <span style={styles.contactIcon}>
+                                    <Avatar
+                                      icon={<FontIcon className="fab fa-twitter fa-2x" />}
+                                      color={'white'}
+                                      backgroundColor={'#00aced'}
+                                      size={50}
+                                      style={style}
+                                    />
+                                  {this.state.charity.Twitter}
+                                </span>
+                              </a>
+                                : null }
                               {this.state.charity.Instagram ?
                               <span style={styles.contactIcon}>
                                 <Avatar

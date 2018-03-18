@@ -31,27 +31,27 @@ class ProgressBar extends React.Component {
         <section style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <section style={{display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth:'300px', width:'100%'}}>
             <div style={{flex: '0 0 auto'}}>
-              <svg style={{height: '10px', width: '10px', fill: '#FF9800' }}>
+              <svg style={{height: '10px', width: '10px', fill: '#E55749' }}>
                 <circle style={{cx: '5px', cy: '5px', r:'5px'}}/>
               </svg>
             </div>
             <div style={{flex: '1 1 auto'}}>
-              <span style={{display: 'block', borderColor: this.props.index > 0 ? '#FF9800' : 'rgb(189, 189, 189)',
+              <span style={{display: 'block', borderColor: this.props.index > 0 ? '#E55749' : 'rgb(189, 189, 189)',
                   borderTopStyle: 'solid', borderTopWidth: '2px'}}/>
             </div>
 
             <div style={{flex: '0 0 auto'}}>
-              <svg style={{height: '10px', width: '10px', fill: this.props.index > 0 ? '#FF9800' : 'rgb(158, 158, 158)'}}>
+              <svg style={{height: '10px', width: '10px', fill: this.props.index > 0 ? '#E55749' : 'rgb(158, 158, 158)'}}>
                 <circle style={{cx: '5px', cy: '5px', r:'5px'}}/>
               </svg>
             </div>
             <div style={{flex: '1 1 auto'}}>
-              <span style={{display: 'block', borderColor: this.props.index > 1 ? '#FF9800' : 'rgb(189, 189, 189)',
+              <span style={{display: 'block', borderColor: this.props.index > 1 ? '#E55749' : 'rgb(189, 189, 189)',
                   borderTopStyle: 'solid', borderTopWidth: '2px'}}/>
             </div>
 
             <div style={{flex: '0 0 auto'}}>
-              <svg style={{height: '10px', width: '10px', fill: this.props.index > 1 ? '#FF9800' : 'rgb(158, 158, 158)'}}>
+              <svg style={{height: '10px', width: '10px', fill: this.props.index > 1 ? '#E55749' : 'rgb(158, 158, 158)'}}>
                 <circle style={{cx: '5px', cy: '5px', r:'5px'}}/>
               </svg>
             </div>

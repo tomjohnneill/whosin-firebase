@@ -18,7 +18,7 @@ let icon = { 'calendar-plus': 'left' };
 const styles = {
 
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
 
   },
@@ -152,7 +152,7 @@ export class YouMightLike extends React.Component {
               {project.Summary}
             </p>
             <div style={{dispay: 'flex'}}>
-              <span style={{fontFamily: 'Permanent Marker', color: '#FF9800' }}>
+              <span style={{fontFamily: 'Permanent Marker', color: '#E55749' }}>
                 Who's In?
               </span>
               <FlatButton style={{marginLeft: '16px'}}
@@ -202,7 +202,7 @@ export default class CantCome extends React.Component{
             <MediaQuery minDeviceWidth={700}>
               <div style={{flex: 2, marginRight: 30}}>
 
-                <Spiral color={'#FF9800'}/>
+                <Spiral color={'#E55749'}/>
 
               </div>
             </MediaQuery>

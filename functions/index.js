@@ -24,6 +24,16 @@ exports.addOneToPeople = functions.firestore
       })
     })
 
+    var User = newValue.User;
+    var ProjectSize
+    db.collection("Engagement").where("User", "==", User).get().then((querySnapshot) => {
+      ProjectSize = querySnapshot.size
+      db.collection("User").doc(User).collection("public").doc(User).set({
+        ProjectCount: ProjectSize
+      }, {merge: true})
+    })
+
+
     return (null)
     // perform desired operations ...
 });
@@ -42,6 +52,15 @@ exports.removeOneToPeople = functions.firestore
       db.collection("Project").doc(Project).update({
         'People Pledged': peoplePledged
       })
+    })
+
+    var User = newValue.User;
+    var ProjectSize
+    db.collection("Engagement").where("User", "==", User).get().then((querySnapshot) => {
+      ProjectSize = querySnapshot.size
+      db.collection("User").doc(User).collection("public").doc(User).set({
+        ProjectCount: ProjectSize
+      }, {merge: true})
     })
 
     return (null)

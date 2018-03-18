@@ -137,7 +137,7 @@ export default class About extends React.Component {
   render() {
     return (
       <div className='aboutContainer' style={{width: '100%', display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: 'center', textAlign: 'left', backgroundColor: '#FF9800',
+        justifyContent: 'center', alignItems: 'center', textAlign: 'left', backgroundColor: '#E55749',
       overflowX: 'hidden'}}>
 
         <MediaQuery minDeviceWidth={700}>
@@ -202,7 +202,7 @@ export default class About extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ehkrqd3wwvkao1u54age.gif', '500xauto')}
+                  <img src='https://i.imgur.com/vRF33ES.gif'
                     style={{width: '100%', height: 'auto'}}/>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#FF9800', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
@@ -228,7 +228,7 @@ export default class About extends React.Component {
                       <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
-                      Fred has been recommended by 10 projects
+                      Fred has recommended 10 projects
                     </div>
                   </div>
                 </div>
@@ -359,7 +359,7 @@ export default class About extends React.Component {
 
               <div style={styles.mobileBigIcon}>
                 <div>
-                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ehkrqd3wwvkao1u54age.gif', '500xauto')}
+                  <img src='https://i.imgur.com/vRF33ES.gif'
                     style={{width: '100%', height: 'auto'}}/>
                 </div>
               </div>
@@ -367,7 +367,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#FF9800', color: 'white', padding:24}}>
+          <div style={{backgroundColor: '#E55749', color: 'white', padding:24}}>
             <div style={{height: 50}}/>
             <div style={{alignItems: 'center', height: '100%'}}>
 
@@ -396,7 +396,7 @@ export default class About extends React.Component {
                       <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
-                      Fred has been recommended by 10 projects
+                      Fred has recommended 10 projects
                     </div>
                   </div>
                 </div>

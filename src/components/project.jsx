@@ -96,7 +96,7 @@ const styles = {
     padding: 30,
   },
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
 
   },
@@ -114,7 +114,7 @@ explanation: {
 selectedTab: {
     height: '36px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     letterSpacing: '0.4px',
     lineHeight: '16px',

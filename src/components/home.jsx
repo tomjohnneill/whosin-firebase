@@ -26,7 +26,7 @@ let db = fire.firestore()
 
 const styles = {
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
   },
   bottomBit: {
@@ -213,7 +213,7 @@ export default class Home extends React.Component{
                   top: '165px', left: '60px',
                   display: 'flex', alignItems: 'left', flexDirection: 'column'
                 }}>
-                    <div style={{fontFamily: 'Permanent Marker', fontSize: '100px', color: '#FF9800',
+                    <div style={{fontFamily: 'Permanent Marker', fontSize: '100px', color: '#E55749',
                             textShadow:'1px 1px rgb(0,0,0)'}}>
                       Who's In?
                     </div>

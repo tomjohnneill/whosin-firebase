@@ -18,7 +18,7 @@ let icon = { 'calendar-plus': 'left' };
 const styles = {
 
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
 
   },

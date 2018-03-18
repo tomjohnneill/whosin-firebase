@@ -22,7 +22,7 @@ const styles = {
   selectedTab: {
     height: '60px',
     backgroundColor: 'white',
-    color: '#FF9800',
+    color: '#E55749',
     textTransform: 'none',
     fontSize: '16px',
     letterSpacing: '0.4px',

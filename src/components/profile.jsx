@@ -6,7 +6,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import SwipeableViews from 'react-swipeable-views';
 import {Link, browserHistory} from 'react-router';
-import {Spiral, Tick, AvatarIcon, Muscle, Star, ReviewIcon, World} from './icons.jsx'
+import {Spiral, Tick, AvatarIcon, Muscle, Star, ReviewIcon, World, Cross} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -412,17 +412,18 @@ export default class Profile extends React.Component {
                     <AvatarIcon style={{height: '150px', width: '150px'}} color={'#484848'}/>
                   </div>
                   }
-                  <div style={styles.contactDetails}>
-                    Verified User
-                    <Tick color={'#3B9E74'} style={{height: '24.8px', float: 'right'}}/>
-                  </div>
+
                   <div style={styles.contactDetails}>
                     Email Address
                     <Tick style={{height: '24.8px', float: 'right'}}/>
                   </div>
                   <div style={styles.contactDetails}>
                     Phone Number
+                    {this.state.user.public.Phone ?
                     <Tick style={{height: '24.8px', float: 'right'}}/>
+                    :
+                    <Cross style={{height: 24.8, float: 'right'}}/>
+                    }
                   </div>
 
                   <div style={{paddingTop: '10px', paddingBottom: '10px',

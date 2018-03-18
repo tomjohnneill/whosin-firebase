@@ -12,7 +12,7 @@ let db = fire.firestore()
 
 const styles = {
   number: {
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '20px',
   },
   bottomBit: {
