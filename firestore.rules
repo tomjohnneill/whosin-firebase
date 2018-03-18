@@ -16,8 +16,8 @@ service cloud.firestore {
      }
 
     match /User/{user} {
-       allow read: if resource.id == request.auth.uid;
-       allow update: if resource.id == request.auth.uid;
+       allow read: if user == request.auth.uid;
+       allow update: if user == request.auth.uid;
 
       // Applies to writes to existing documents
       allow create: if true;
@@ -45,7 +45,7 @@ service cloud.firestore {
 
       match /Private/{private} {
 
-      	allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
         allow write: if request.resource.data.User == request.auth.uid;
       }
     }

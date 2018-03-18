@@ -66,6 +66,10 @@ export default  class SignupModal extends React.Component {
                 Name: this.state.name
               }
             )
+            .then(docRef => db.collection("User").doc(docRef.id).collection("public").
+            doc(docRef.id).set({
+              Name: this.state.Name
+            }))
             .then(data =>
               {
                 if (this.props.onComplete) {
@@ -284,7 +288,7 @@ export default  class SignupModal extends React.Component {
                   <div style={{textAlign: 'center', marginBottom: 10}}>
                     {this.state.forgotPassword ?
                       <div>
-                         <br/><b
+                        Forgotten your password? <br/><b
                         style={{cursor: 'pointer'}}
                         onClick={() => fire.auth().sendPasswordResetEmail(this.state.email, {
                           url: window.location.href
@@ -292,7 +296,7 @@ export default  class SignupModal extends React.Component {
                           console.log('sending new password')
                           this.setState({sendPasswordClicked: true})
                         })}
-                        >Forgot password?</b>
+                        >Send a reminder?</b>
                       </div> :
                       null
                     }
