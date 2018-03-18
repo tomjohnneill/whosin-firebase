@@ -55,7 +55,8 @@ const styles = {
     fontSize: '20px'
   },
   projectBox: {
-    margin: 15
+    margin: 15,
+    maxWidth: 350
   },
   mobileProjectBox: {
     marginTop: 15,
@@ -209,6 +210,50 @@ class Supporters extends React.Component {
   }
 }
 
+export class CharityProjects extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {loading: true}
+  }
+
+  componentDidMount(props) {
+    db.collection("Project").where("Charity", "==", this.props.charityId)
+    .get().then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        var elem = doc.data()
+        elem['_id'] = doc.id
+        data.push(elem)
+      });
+      console.log(data)
+      this.setState({loading: false, projects: data})
+    })
+  }
+
+  render() {
+    console.log(this.state.loading)
+    return (
+      <div className='project-boxes-container' style={{display: 'flex', flexWrap: 'wrap'}}>
+        {
+          this.state.loading ?
+            null :
+            this.state.projects ?
+              this.state.projects.map((project) => (
+                <div className='project-box' style={styles.projectBox}>
+                  <EmbeddedProject noLogo={true} project={project}/>
+                </div>
+              ))
+             :
+            <div style={{height: 200, width: '100%', display: 'flex', alignItems: 'center'}}>
+              No projects just yet
+            </div>
+        }
+      </div>
+    )
+  }
+}
+
 export class RecentCharityReviews extends React.Component {
   constructor(props) {
     super(props);
@@ -355,7 +400,7 @@ export default class CharityProfile extends React.Component {
           :
           <div>
             <MediaQuery minDeviceWidth={700}>
-              <div className='container' style={{paddingLeft: 100, paddingRight: 100,
+              <div className='container' style={{paddingLeft: 100, paddingRight: 100, paddingTop: 32,
                   textAlign: 'left', boxSizing: 'border-box'}}>
                 <div className='charity-header-container' style={{display: 'flex', alignItems: 'center'}}>
                   <img className='charity-logo-in-header'
@@ -404,17 +449,8 @@ export default class CharityProfile extends React.Component {
                   Projects
                 </h2>
 
-                <div className='project-boxes-container' style={{display: 'flex'}}>
-                  <div className='project-box' style={styles.projectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                  <div className='project-box' style={styles.projectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                  <div className='project-box' style={styles.projectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                </div>
+                <CharityProjects charityId={this.state.charity._id}/>
+
               </div>
             </MediaQuery>
 
@@ -474,17 +510,7 @@ export default class CharityProfile extends React.Component {
                   Projects
                 </h2>
 
-                <div className='project-boxes-container'>
-                  <div className='project-box' style={styles.mobileProjectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                  <div className='project-box' style={styles.mobileProjectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                  <div className='project-box' style={styles.mobileProjectBox}>
-                    <EmbeddedProject noLogo={true} projectId='Nik1eqwY1ijdbZseZaGN'/>
-                  </div>
-                </div>
+                <CharityProjects charityId={this.state.charity._id}/>
               </div>
             </MediaQuery>
           </div>

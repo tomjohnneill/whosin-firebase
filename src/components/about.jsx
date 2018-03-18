@@ -179,7 +179,7 @@ export default class About extends React.Component {
                 </div>
                 <div style={styles.inkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
-                  Only do a project if it meets its target
+                  Only do a project if it meets its target.
                 </div>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default class About extends React.Component {
                 </div>
                 <div style={styles.inkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
-                  Only do a project if it meets its target
+                  Only do a project if it meets its target.
                 </div>
               </div>
             </div>

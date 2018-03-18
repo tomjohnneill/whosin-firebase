@@ -300,7 +300,7 @@ export default class OrganisationLookup extends React.Component{
             </div>
           </div>
         </div>
-        <div style={{flex: 1, width: '100%', marginLeft: '50px', boxSizing: 'border-box', height: '70vh'}} className='basics-image'>
+        <div style={{flex: 1, width: '100%', marginLeft: '50px', boxSizing: 'border-box', minHeight: '70vh'}} className='basics-image'>
           {this.state.stage === 0 ?
             <div style={{backgroundColor: '#F5F5F5',display: 'flex', alignItems: 'center', flexDirection: 'column', height: '70vh', justifyContent: 'center'}} >
 
@@ -311,7 +311,7 @@ export default class OrganisationLookup extends React.Component{
             </div>
             :
             this.state.loading ?
-            <div style={{height: '70vh', display: 'flex', flexDirection: 'column',
+            <div style={{minHeight: '70vh', display: 'flex', flexDirection: 'column',
                justifyContent: 'center', alignItems: 'center', backgroundColor:'#F5F5F5' }}>
               <CircularProgress size={80} thickness={5} />
               <div style={{paddingTop: '16px'}}>

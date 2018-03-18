@@ -93,6 +93,13 @@ export default class EditProfile extends React.Component {
     this.setState({user: user})
   }
 
+  handleSetPhone = (e, nv) => {
+    console.log(e.target.value)
+    var user = this.state.user
+    user['Phone'] = e.target.value
+    this.setState({user: user})
+  }
+
   componentDidMount(props) {
     fire.auth().onAuthStateChanged((user) => {
           var userId
@@ -263,7 +270,7 @@ export default class EditProfile extends React.Component {
                           inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
-                          hintText={'Minimum'}
+                          hintText={'Location'}
                           value={this.state.user.Location}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                           key='min'
@@ -275,6 +282,21 @@ export default class EditProfile extends React.Component {
                           onCheck={this.updateCheck.bind(this, 'Location')}
                           label="Public"
                           />
+                      </div>
+
+                      <span style={styles.title}>Phone Number</span>
+                      <div style={{width: '80%', display: 'flex', alignItems: 'center', marginBottom: 30}}>
+                        <TextField fullWidth={true}
+                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          underlineShow={false}
+                          hintText={'Phone Number'}
+                          value={this.state.user.Phone}
+                          hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                          key='phone'
+                          onChange={this.handleSetPhone}
+                          style={styles.textfield}/>
+
                       </div>
 
                       <RaisedButton style={{marginBottom: 30}} label='Save Changes'

@@ -362,7 +362,7 @@ export default class Project extends React.Component {
         "Project Photo": this.state.project['Featured Image'],
         "Charity": this.state.project['Charity Name'],
         "Charity Number": this.props.project.Charity,
-        "Name": doc.data().Name,
+        "Name": doc.data().Name.replace(/ .*/,''),
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
         "Location": doc.data().Location ? doc.data().Location : null,
@@ -465,7 +465,7 @@ export default class Project extends React.Component {
                 min={0} max={this.state.project['Target People']}
                 value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
               <div style={{textAlign: 'right', paddingTop: 6}} className='to-go-text'>
-                {this.state.project['People Pledged'] ? Number(this.state.project['Target People']) - this.state.project['People Pledged'] : this.state.project['Target People']} more people needed
+                {this.state.project['People Pledged'] ? Math.max(Number(this.state.project['Target People']) - this.state.project['People Pledged'],0) : this.state.project['Target People']} more people needed
               </div>
             </div>
 

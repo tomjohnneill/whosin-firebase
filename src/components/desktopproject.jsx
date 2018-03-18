@@ -345,7 +345,7 @@ export default class DesktopProject extends React.Component {
         "Project": this.props.project._id,
         "Project Name": this.props.project.Name,
         "User": fire.auth().currentUser.uid,
-        "Name": doc.data().Name,
+        "Name": doc.data().Name.replace(/ .*/,''),
         "Project Photo": this.props.project['Featured Image'],
         "Charity": this.props.project['Charity Name'] ? this.props.project['Charity Name'] : null,
         "Charity Number": this.props.project.Charity,
@@ -494,7 +494,7 @@ export default class DesktopProject extends React.Component {
     var rect = e.target.getBoundingClientRect()
     console.log(rect)
     console.log(window.innerWidth)
-    this.setState({inkBarLeft: (rect.width-60)/2  + rect.x - (window.innerWidth - Math.min(window.innerWidth,1000) )/2  ,
+    this.setState({inkBarLeft: (rect.width-60)/2  + rect.x - 100  ,
 
     })
 
@@ -633,7 +633,7 @@ export default class DesktopProject extends React.Component {
                     />
 
                   <div style={{textAlign: 'right', marginLeft: 10}} className='to-go-text'>
-                      {this.state.project['People Pledged'] ? Number(this.state.project['Target People']) - this.state.project['People Pledged'] : this.state.project['Target People']} more people needed
+                      {this.state.project['People Pledged'] ? Math.max(Number(this.state.project['Target People']) - this.state.project['People Pledged'],0) : this.state.project['Target People']} more people needed
                     </div>
                   </div>
 
