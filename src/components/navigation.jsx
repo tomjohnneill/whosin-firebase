@@ -24,7 +24,7 @@ const style = {
   title: {
     cursor: 'pointer',
     fontFamily: 'Permanent Marker',
-    color: '#FF9800',
+    color: '#E55749',
     fontSize: '30px',
     marginRight: '15px',
     width: '100px'

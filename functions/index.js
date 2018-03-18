@@ -78,7 +78,7 @@ exports.sendSignUpEmail = functions.firestore
             console.log(email)
             console.log(user.Email)
             let data = {
-                from: "Who's In? You're in. <alerts@whosin.io>",
+                from: "Who's In? You're in <alerts@whosin.io>",
                 subject: `${ProjectData.Name}`,
                 html: email,
                 'h:Reply-To': 'alerts@whosin.io',

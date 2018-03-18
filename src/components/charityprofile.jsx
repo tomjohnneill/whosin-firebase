@@ -383,7 +383,7 @@ export default class CharityProfile extends React.Component {
                 </div>
 
                 <div className='about-review-container' style={{display: 'flex', width: '100%'}}>
-                  <div className='about-container' style={{flex: 1, marginRight: 50}}>
+                  <div className='about-container' style={{flex: 1, marginRight: 100}}>
                     <h2 className='about-header' style={styles.secondHeader}>
                       About
                     </h2>

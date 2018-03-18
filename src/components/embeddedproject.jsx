@@ -15,21 +15,36 @@ export default class EmbeddedProject extends React.Component {
 
   componentDidMount(props) {
     var projectId = this.props.params && this.props.params._id ? this.props.params._id : this.props.projectId
-    db.collection("Project").doc(projectId).get().then((doc) => {
-      var project = doc.data()
-      project._id = doc.id
-      console.log(project)
-      this.setState({ project: project})
+
+    if (this.props.project) {
+      let project = this.props.project
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
             charity._id = charityDoc.id
-            this.setState({ charity: charity, loading: false})
+            this.setState({ project: project, charity: charity, loading: false})
           })
           .catch(error => console.log('Error', error))
       }
-    })
-    .catch(error => console.log('Error', error));;
+    } else {
+      db.collection("Project").doc(projectId).get().then((doc) => {
+        var project = doc.data()
+        project._id = doc.id
+        console.log(project)
+        this.setState({ project: project})
+        if (project.Charity) {
+          db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+              var charity = charityDoc.data() ? charityDoc.data() : {}
+              charity._id = charityDoc.id
+              this.setState({ charity: charity, loading: false})
+            })
+            .catch(error => console.log('Error', error))
+        }
+      })
+      .catch(error => console.log('Error', error));
+    }
+
+
   }
 
   render() {
@@ -38,7 +53,7 @@ export default class EmbeddedProject extends React.Component {
         {this.state.loading ?
           <div/>
           :
-          <div style={{borderRadius: 8, overflow: 'hidden', border: '1px solid #DDDDDD', paddingBottom: 24}}>
+          <div style={{backgroundColor: 'white', borderRadius: 8, overflow: 'hidden', border: '1px solid #DDDDDD', paddingBottom: 24}}>
           <Link to={`/projects/p/${this.state.project._id}`} target="_parent">
             <img src={changeImageAddress(this.state.project['Featured Image'], '500xauto')}
               style={{width: '100%', height: '170px', objectFit: 'cover'}}
@@ -67,6 +82,7 @@ export default class EmbeddedProject extends React.Component {
                   {this.state.project.Summary}
                 </p>
 
+                {this.state.project['Start Time'] ?
                 <div style={{display: 'flex',
                    paddingTop: 10, textAlign: 'left'}}
                   className='datetime-container'>
@@ -91,6 +107,7 @@ export default class EmbeddedProject extends React.Component {
                     </div>
                   </div>
                 </div>
+                : null}
                 <div>
                   {this.state.project.Location ?
                     <div className='location-container'

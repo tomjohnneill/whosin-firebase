@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import {changeImageAddress} from './desktopproject.jsx';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Link } from 'react-router';
+import EmbeddedProject from './embeddedproject.jsx';
 import MediaQuery from 'react-responsive';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -100,30 +101,9 @@ export default class AllProjects extends React.Component {
               <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '80px', paddingRight: '80px',
               textAlign: 'left'}}>
                 {this.state.projects.map((project) => (
-                  <Link to={`/projects/${project['Name']}/${project._id}`}>
-                    <div style={{width: '230px', height: '280px', margin: 20}}>
-                      <img src={changeImageAddress(project['Featured Image'], '250xauto')}
-                        style={{width: '100%', height: '180px',objectFit: 'cover', borderRadius: '4px'}}/>
-                      <span style={{display: 'inline-block',fontWeight: 100, color: grey500, fontSize: '12px', textTransform: 'uppercase'}}>
-                        {project.Location ? project.Location.replace(/(([^\s]+\s\s*){3})(.*)/,"$1…") : 'Online'}
-                      </span>
-                      <div style={{color: '#484848',
-                      fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', width: '100%', marginTop: '6px'}}>
-                        <b style={{color: '#FF9800'}}>{project['People Pledged']}</b> people,  <b style={{color: '#FF9800'}}>10</b> days to go...
-                      </div>
-                      <LinearProgress
-                        min={0}
-                        mode={'determinate'}
-                        max={project['Target People']}
-                        value={project['People Pledged']}
-                        color={amber500}
-                        style={{marginTop: 6, marginBottom: 6}}
-                        />
-                      <span style={{fontWeight: 700, display: 'inline-block'}}>
-                        {project.Name}
-                      </span>
-                    </div>
-                  </Link>
+                  <div style={{margin: 20, width: 370}}>
+                    <EmbeddedProject noLogo={true} projectId={project._id}/>
+                  </div>
                 ))}
               </div>
               :
@@ -140,48 +120,19 @@ export default class AllProjects extends React.Component {
                       {this.state.loading ?
                         <Loading/>
                         :
-                      <List>
-                  <GridList
-                    cols={2}
-
-              cellHeight={220}
-              padding={12}>
-              {this.state.projects ? this.state.projects.map((project) => (
-
-                <GridTile
-                  key={project._id}
-
-              children={
-                  <Link to={'/projects/' + project.Name + '/' + project._id}>
-                    <div  style={{cursor: 'pointer', height: '100%', width: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-
-
-                    <img style={{width: '100%', height: '50%', maxWidth: '100%',
-                      borderRadius: '2px', objectFit: 'cover', backgroundColor: grey200}}
-                      src={project['Featured Image'] ? changeImageAddress(project['Featured Image'], 'autox150'): null} />
-
-                    <div style={{color: '#484848',
-                    fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', width: '100%', marginTop: '6px'}}>
-                      <b style={{color: '#FF9800'}}>{project.projectCount}</b> people,  <b style={{color: '#FF9800'}}>10</b> days to go...
-                    </div>
-
-                    <LinearProgress style={{marginRight: '16px', marginLeft: '16px', marginTop: '10px', marginBottom: '6px'}} color={amber500} mode="determinate"
-                         value={6} />
-                    <div style={{color: '#484848',
-                    fontWeight: 700, fontSize: '19px', lineHeight: '22px', maxHeight: '66px', letterSpacing: '-0.8px'
-                    , overflow: 'hidden',  textOverflow: 'ellipsis', width: '100%'}}>
-                      {project.Name}
-                    </div>
-
-                    </div>
-                  </Link>
-                  }
-              />
-
-          )) : null}
-                </GridList>
-                  </List>
-                }
+                        this.state.projects ?
+                        <div style={{display: 'flex', flexWrap: 'wrap',
+                        textAlign: 'left'}}>
+                          {this.state.projects.map((project) => (
+                            <div style={{paddingTop: 10, paddingBottom: 10, width: '100%', boxSizing: 'border-box'}}>
+                              <EmbeddedProject noLogo={true}
+                                project={project}
+                                projectId={project._id}/>
+                            </div>
+                          ))}
+                        </div>
+                             : null
+                }}
                   <Divider/>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', textAlign: 'center'}}>
                     <Subheader style={{fontSize: '25px', letterSpacing: '1px', lineHeight: '30px', color: '#484848',

@@ -1,11 +1,12 @@
 import React from 'react'
 import MediaQuery from 'react-responsive';
-import {World, Person2, Person3, Person1} from './icons.jsx';
+import {World, Person2, Person3, Person1, Ass, Muscle, ReviewIcon, Jenga} from './icons.jsx';
 import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
   yellow100, limeA200, limeA700, green300} from 'material-ui/styles/colors';
 import ShortReview from './feedback/shortreview.jsx';
 import VolunteerStars from './feedback/volunteerstars.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import {changeImageAddress} from './project.jsx';
 import {browserHistory} from 'react-router';
 
 const styles = {
@@ -44,6 +45,7 @@ const styles = {
   inkbar: {
     height: 6,
     marginTop: 10,
+    marginBottom: 10,
     width: '100px',
     backgroundColor: 'rgba(250,250,250,0.5)'
   },
@@ -56,6 +58,7 @@ const styles = {
   redInkbar: {
     height: 6,
     marginTop: 10,
+    marginBottom: 10,
     width: '100px',
     backgroundColor: '#E55749'
   },
@@ -77,6 +80,25 @@ const styles = {
   step: {
     fontSize: '40px',
     fontWeight: 700
+  },
+  ticHeader: {
+    fontSize: '52px',
+    fontWeight: 700
+  },
+  ticSummary: {
+    fontSize: '26px'
+  },
+  aboutIcon: {
+    height: 100,
+    width: 100
+  },
+  aboutText: {
+    padding: 16,
+    fontSize: '36px'
+  },
+  aboutLeft: {
+    width: '50%',
+    marginRight: 50
   }
 }
 
@@ -93,6 +115,117 @@ export default class About extends React.Component {
       overflowX: 'hidden'}}>
 
         <MediaQuery minDeviceWidth={700}>
+          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div style={styles.aboutLeft}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Get up off your ass and do a good thing.
+                </div>
+                <div style={styles.redInkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  I’m sure you’d have done this already if you had found the
+                  right project, but it’s hard, we get it.
+                  That’s why we built Who’s In. <b>Doing good shouldn’t be hard.</b>
+                </div>
+              </div>
+
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+                <div>
+                  <Ass style={{height: 300}} color={'#484848'}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div style={styles.aboutLeft}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  One off projects
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  It’s hard to commit longer than a few days to a project,
+                  so we’re collecting as many one-off projects as we can find.
+                </div>
+              </div>
+
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+                <div>
+                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ehkrqd3wwvkao1u54age.gif', '500xauto')}
+                    style={{width: '100%', height: 'auto'}}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: '#FF9800', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div style={styles.aboutLeft}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Reviews for you and you and you and you
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  You can leave a review for the charity you worked with, and they can leave one for you.
+                </div>
+              </div>
+
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+                <div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <Muscle style={{height: 100, width: 100}}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has joined 10 projects
+                    </div>
+                  </div>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div className='about-icon' style={styles.aboutIcon}>
+                      <ReviewIcon style={{height: 100, width: 100}}/>
+                    </div>
+                    <div className='about-reviews' style={styles.aboutText}>
+                      Fred has been recommended by 10 projects
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: '#65A1e7', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div style={styles.aboutLeft}>
+                <div className='tongue-in-cheek-header' style={styles.ticHeader}>
+                  Bring friends! If you have them.
+                </div>
+                <div style={styles.inkbar}/>
+                <div className='description-summary' style={styles.ticSummary}>
+                  Don’t want to sign up unless your friends have? Done. We’ve built that feature for you.
+                </div>
+              </div>
+
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
+                <div>
+                  <img
+                    style={{width: '100%', height: 'auto'}}
+                    src='https://i.imgur.com/eYnBLEB.gif'/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: 'white', height: 450, width: '100%', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+              <div>
+                Go forth and do good
+              </div>
+            </div>
+          </div>
+
+
+
           <div style={{maxWidth: '1000px', width: '100%', height: '60vh', padding: 24, marginTop: 40, boxSizing: 'border-box' }}>
             <div>
               <div style={styles.title}>
