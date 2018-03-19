@@ -206,7 +206,7 @@ export default class Project extends React.Component {
       this.props.location.query.project : this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
-      this.setState({ project: project, charity: {}})
+      this.setState({loading: false, project: project, charity: {}})
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}

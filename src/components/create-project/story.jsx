@@ -88,8 +88,9 @@ class StoryForm extends React.Component {
   render() {
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
-        <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
-          Tell your story</p>
+
+          <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+            Tell your story</p>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <p style={styles.header}>What is the title of your project?</p>
           <TextField fullWidth={true}
@@ -164,10 +165,10 @@ export default class Story extends React.Component{
           <div style={{display: 'flex', paddingLeft: '100px', paddingTop: '50px'}}>
             <div style={{width: '500px', display: 'flex'
               , justifyContent: 'center'}} className='basics-container'>
-              <StoryForm/>
+              <StoryForm edit={this.props.edit}/>
             </div>
             <div style={{flex: 1, boxSizing: 'border-box', paddingLeft: '100px'}} className='basics-image'>
-              <UploadPhoto/>
+              <UploadPhoto changeParentState={() => this.setState({pictureUploaded: true})}/>
             </div>
           </div>
         </MediaQuery>

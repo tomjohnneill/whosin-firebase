@@ -169,7 +169,7 @@ export default class UserTabs extends React.Component {
           <div>
             <img
               style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
-              src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/ab09077f-2b0d-471a-8e67-d338081bdc56', '1500xauto')}/>
+              src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/important/jesse-orrico-184803-unsplash.jpg', '2000xauto')}/>
             <div style={{position: 'absolute',top:'-51px',  height: '100%', minWidth: 320,
               width: '30%',
               left: '5%'

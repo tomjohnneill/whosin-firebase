@@ -324,6 +324,12 @@ export default class DesktopProject extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.setState({charity: nextProps.charity})
+    }
+  }
+
   deleteEngagement = () => {
     console.log('remove engagement')
       db.collection("Engagement").where("Project", "==", this.props.project._id)
@@ -562,7 +568,23 @@ export default class DesktopProject extends React.Component {
               <div className='container' style={{width: '100%', paddingRight: 100, paddingTop: 30,
                   paddingLeft: 100, display: 'flex', boxSizing: 'border-box'}}>
                 <div className='story-etc' style={{flex: 1}}>
-
+                  {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                    <div style={{display: 'flex', float: 'right'}}>
+                      <FlatButton
+                        secondary={true}
+                        style={{marginRight: 20}}
+                        label='Admin View' labelStyle={{textTransform: 'none', fontWeight: 700, padding: '10px', fontSize: '16px'}}
+                          onTouchTap={() => browserHistory.push(window.location.pathname + '/admin')}
+                           />
+                     <FlatButton
+                       secondary={true}
+                       style={{marginRight: 20}}
+                       label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
+                         onTouchTap={() => browserHistory.push(window.location.pathname + '/admin')}
+                          />
+                   </div>
+                     : null
+                   }
                   <p className='mobile-project-title'
                     style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left',
                     margin: 0}}>

@@ -11,6 +11,7 @@ import SwipeableViews from 'react-swipeable-views';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
 import EmbeddedProject from './embeddedproject.jsx';
+import FontIcon from 'material-ui/FontIcon';
 import {Link, browserHistory} from 'react-router';
 import Loading from './loading.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
@@ -410,19 +411,39 @@ export default class CharityProfile extends React.Component {
                     <div className='charity-title' style={{fontWeight: 'bold', fontSize: '54px'}}>
                       {this.state.charity.Name}
                     </div>
-                    <div className='soc-media-container' style={{display: 'flex'}}>
-                      <div className='fb-icon'>
-
-                      </div>
-                      <div className='fb-username'>
-                        {this.state.charity.facebook}
-                      </div>
-                      <div className='twitter-icon'>
-
-                      </div>
-                      <div className='twitter-username'>
-                        {this.state.charity.twitter}
-                      </div>
+                    <div className='soc-media-container' style={{display: 'flex', alignItems: 'center'}}>
+                      {this.state.charity.Facebook ?
+                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.facebook.com/${this.state.charity.Facebook}`}>
+                        <div className='fb-icon'>
+                          <Avatar
+                            icon={<FontIcon className="fab fa-facebook" />}
+                            color={'white'}
+                            backgroundColor={'#3b5998'}
+                            size={25}
+                            style={{marginRight: 10}}
+                          />
+                        </div>
+                        <div className='fb-username'>
+                          {this.state.charity.Facebook}
+                        </div>
+                      </a>
+                      : null}
+                      {this.state.charity.Twitter ?
+                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.twitter.com/${this.state.charity.Twitter}`}>
+                        <div className='twitter-icon'>
+                          <Avatar
+                            icon={<FontIcon className="fab fa-twitter" />}
+                            color={'white'}
+                            backgroundColor={'#00aced'}
+                            size={25}
+                            style={{marginRight: 10, marginLeft: 20}}
+                          />
+                        </div>
+                        <div className='twitter-username'>
+                          {this.state.charity.Twitter}
+                        </div>
+                      </a>
+                      : null}
                     </div>
                   </div>
                 </div>
@@ -467,19 +488,39 @@ export default class CharityProfile extends React.Component {
                       {this.state.charity.Name}
                     </div>
                   </div>
-                  <div className='soc-media-container' style={{display: 'flex'}}>
-                    <div className='fb-icon'>
-
-                    </div>
-                    <div className='fb-username'>
-                      {this.state.charity.facebook}
-                    </div>
-                    <div className='twitter-icon'>
-
-                    </div>
-                    <div className='twitter-username'>
-                      {this.state.charity.twitter}
-                    </div>
+                  <div className='soc-media-container' style={{display: 'flex', alignItems: 'center'}}>
+                    {this.state.charity.Facebook ?
+                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.facebook.com/${this.state.charity.Facebook}`}>
+                      <div className='fb-icon'>
+                        <Avatar
+                          icon={<FontIcon className="fab fa-facebook" />}
+                          color={'white'}
+                          backgroundColor={'#3b5998'}
+                          size={25}
+                          style={{marginRight: 10}}
+                        />
+                      </div>
+                      <div className='fb-username'>
+                        {this.state.charity.Facebook}
+                      </div>
+                    </a>
+                    : null}
+                    {this.state.charity.Twitter ?
+                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.twitter.com/${this.state.charity.Twitter}`}>
+                      <div className='twitter-icon'>
+                        <Avatar
+                          icon={<FontIcon className="fab fa-twitter" />}
+                          color={'white'}
+                          backgroundColor={'#00aced'}
+                          size={25}
+                          style={{marginRight: 10, marginLeft: 20}}
+                        />
+                      </div>
+                      <div className='twitter-username'>
+                        {this.state.charity.Twitter}
+                      </div>
+                    </a>
+                    : null}
                   </div>
                 </div>
 

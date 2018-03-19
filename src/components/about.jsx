@@ -82,12 +82,12 @@ const styles = {
     fontWeight: 700
   },
   ticHeader: {
-    fontSize: '52px',
+    fontSize: '48px',
     fontWeight: 700,
     lineHeight: '48px'
   },
   ticSummary: {
-    fontSize: '26px'
+    fontSize: '22px'
   },
   aboutIcon: {
     height: 100,
@@ -210,7 +210,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: '#FF9800', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
@@ -367,7 +367,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#E55749', color: 'white', padding:24}}>
+          <div style={{backgroundColor: '#FF9800', color: 'white', padding:24}}>
             <div style={{height: 50}}/>
             <div style={{alignItems: 'center', height: '100%'}}>
 

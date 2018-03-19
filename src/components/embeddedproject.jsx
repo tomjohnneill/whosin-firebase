@@ -18,6 +18,10 @@ export default class EmbeddedProject extends React.Component {
 
     if (this.props.project) {
       let project = this.props.project
+      if (typeof project['Start Time'] === 'string') {
+        project['Start Time'] = new Date(project['Start Time'])
+        project['End Time'] = new Date(project['End Time'])
+      }
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
@@ -30,13 +34,12 @@ export default class EmbeddedProject extends React.Component {
       db.collection("Project").doc(projectId).get().then((doc) => {
         var project = doc.data()
         project._id = doc.id
-        console.log(project)
-        this.setState({ project: project})
+        this.setState({ project: project, loading: false})
         if (project.Charity) {
           db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
               var charity = charityDoc.data() ? charityDoc.data() : {}
               charity._id = charityDoc.id
-              this.setState({ charity: charity, loading: false})
+              this.setState({ charity: charity})
             })
             .catch(error => console.log('Error', error))
         }
@@ -45,6 +48,26 @@ export default class EmbeddedProject extends React.Component {
     }
 
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      let project = nextProps.project
+      if (typeof project['Start Time'] === 'string') {
+        project['Start Time'] = new Date(project['Start Time'])
+        project['End Time'] = new Date(project['End Time'])
+      }
+      this.setState({project: nextProps.project})
+
+      if (project.Charity) {
+        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+            var charity = charityDoc.data() ? charityDoc.data() : {}
+            charity._id = charityDoc.id
+            this.setState({ project: project, charity: charity, loading: false})
+          })
+          .catch(error => console.log('Error', error))
+        }
+    }
   }
 
   render() {

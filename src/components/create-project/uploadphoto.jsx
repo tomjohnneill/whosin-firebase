@@ -67,6 +67,9 @@ export default class UploadPhoto extends React.Component{
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
                 console.log(xhr.responseText);
+                if (this.props.changeParentState) {
+                  this.props.changeParentState()
+                }
                 this.setState({uploadComplete: true, uploading: false})
             }
         }.bind(this)
@@ -112,8 +115,10 @@ export default class UploadPhoto extends React.Component{
             <div style={{width: '500px', display: 'flex'
               , justifyContent: 'center'}} className='basics-container'>
               <div className='form' style={{textAlign: 'left', width: '100%'}}>
+                {!this.props.edit ?
                 <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
                   Upload a cover photo</p>
+                : null }
                 <div style={{width: '100%', paddingBottom: '40px',
                   paddingRight: '50px', boxSizing: 'border-box'}}>
                   <Dropzone key={'photos'} onDrop={this.upload.bind(this)}

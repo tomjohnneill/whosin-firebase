@@ -70,12 +70,16 @@ export default class AllProjects extends React.Component {
   }
 
   render() {
-
+    if (this.state.projects) {
+      console.log(this.state.projects)
+    }
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
-          <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center', paddingLeft: 100, zIndex: 10, paddingRight: 100
-            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
+          <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center',
+             paddingLeft: 100, zIndex: 10, paddingRight: 100
+            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20,
+            paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
 
             <Search style={{marginRight: 6}}/>
             <TextField hintText={'Search'} onChange={this.handleSearch}/>
@@ -101,8 +105,8 @@ export default class AllProjects extends React.Component {
               <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '80px', paddingRight: '80px',
               textAlign: 'left'}}>
                 {this.state.projects.map((project) => (
-                  <div style={{margin: 20, width: 370}}>
-                    <EmbeddedProject noLogo={true} projectId={project._id}/>
+                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '33%'}}>
+                    <EmbeddedProject noLogo={true} project={project}/>
                   </div>
                 ))}
               </div>
@@ -127,7 +131,7 @@ export default class AllProjects extends React.Component {
                             <div style={{paddingTop: 10, paddingBottom: 10, width: '100%', boxSizing: 'border-box'}}>
                               <EmbeddedProject noLogo={true}
                                 project={project}
-                                projectId={project._id}/>
+                              />
                             </div>
                           ))}
                         </div>
