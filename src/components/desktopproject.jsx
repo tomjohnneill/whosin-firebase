@@ -316,7 +316,13 @@ export default class DesktopProject extends React.Component {
   }
 
   componentDidMount(props) {
-    this.setState({project: this.props.project, charity: this.props.charity, loading: false})
+    let project = this.props.project
+    if (typeof project['Start Time'] === 'string') {
+      project['Start Time'] = new Date(project['Start Time'])
+      project['End Time'] = new Date(project['End Time'])
+    }
+
+    this.setState({project: project, charity: this.props.charity, loading: false})
     console.log(window.location.pathname.substr(window.location.pathname.length - 7))
     if (window.location.pathname.substr(window.location.pathname.length - 10) === '/completed') {
       console.log('project is completed')
@@ -326,6 +332,12 @@ export default class DesktopProject extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
+      let project = nextProps.project
+      if (typeof project['Start Time'] === 'string') {
+        project['Start Time'] = new Date(project['Start Time'])
+        project['End Time'] = new Date(project['End Time'])
+      }
+      this.setState({project: nextProps.project})
       this.setState({charity: nextProps.charity})
     }
   }

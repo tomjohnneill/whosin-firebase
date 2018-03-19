@@ -66,7 +66,7 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/summary/1' component={FirstSummary}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/embed/:_id' component={EmbeddedProject}/>
-      <Route path='/projects/' component={Project}/>
+      <Route path='/project/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/completed' component={Project}/>

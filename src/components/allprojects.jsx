@@ -40,7 +40,7 @@ export default class AllProjects extends React.Component {
   componentDidMount(props) {
 
 
-    db.collection("Project").get().then((querySnapshot) => {
+    db.collection("Project").where("Approved", "==", true).get().then((querySnapshot) => {
       var data = []
       querySnapshot.forEach((doc) => {
 
@@ -60,7 +60,8 @@ export default class AllProjects extends React.Component {
     var query = e.target.value
     index
         .search({
-            query
+            query: query,
+            filters: 'Approved:true'
         })
         .then(responses => {
             // Response from Algolia:

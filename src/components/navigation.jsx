@@ -101,16 +101,11 @@ export default class Navigation extends React.Component {
 
 
   componentDidMount(props) {
-
-
-    console.log(fire.auth())
     fire.auth().onAuthStateChanged((user) => {
       if (user === null) {
 
       } else {
-        console.log(user)
         db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
-          console.log(data.data())
           this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
         })
         .catch(error => console.log('Error', error))
@@ -118,9 +113,7 @@ export default class Navigation extends React.Component {
     })
 
     if (fire.auth().currentUser) {
-      console.log(fire.auth().currentUser)
       db.collection("User").doc(fire.auth().currentUser.uid).get().then((data) => {
-        console.log(data.data())
         this.setState({user: data.data(), userPicture: data.data().Picture, loading: false})
       })
       .catch(error => console.log('Error', error))
@@ -300,7 +293,11 @@ export default class Navigation extends React.Component {
                               this.state.user ?
                               <IconButton onTouchTap={() => browserHistory.push('/profile')}
                                 style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
+                                {this.state.userPicture ?
                                 <Avatar src={this.state.userPicture}/>
+                                :
+                                <Avatar> {this.state.user.Name.substring(0,1)}</Avatar>
+                                }
                               </IconButton> :
                               <RaisedButton label='Login' primary={true}
                                 onClick={this.handleModal}

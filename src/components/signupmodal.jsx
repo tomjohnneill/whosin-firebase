@@ -52,7 +52,6 @@ export default  class SignupModal extends React.Component {
     .then(response => {
       if (response.status === 200) {
         response.text().then(text => {
-          console.log(text);
           this.setState({pwned: text})
         });
 
@@ -68,7 +67,6 @@ export default  class SignupModal extends React.Component {
             )
             .then(docRef =>
               {
-                console.log(user)
               return db.collection("User").doc(user.uid).collection("public").
               doc(user.uid).set({
                 Name: this.state.name

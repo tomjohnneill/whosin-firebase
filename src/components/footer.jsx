@@ -106,12 +106,7 @@ export default class Footer extends React.Component {
               </div>
               <div style={{flex: 2, marginLeft: 24, display: 'flex', justifyContent: 'center'}}>
                 <div>
-                  Terms
-                  <br/>
-                  Address
-                  <br/>
-                  Contact Us
-                  <br/>
+                  Contact Us: support@whosin.io
                 </div>
               </div>
             </div>
@@ -146,11 +141,8 @@ export default class Footer extends React.Component {
                 </div>
               </div>
               <div style={{flex: 2, marginTop: 24}}>
-                Terms
-                <br/>
-                Address
-                <br/>
-                Contact Us
+
+                Contact Us: support@whosin.io
                 <br/>
               </div>
             </div>

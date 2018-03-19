@@ -9,6 +9,7 @@ import {Link, browserHistory} from 'react-router';
 import {Spiral, Tick, AvatarIcon, Muscle, Star, ReviewIcon, World, Cross} from './icons.jsx'
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
+import EmbeddedProject from './embeddedproject.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
 import Loading from './loading.jsx';
@@ -326,6 +327,52 @@ class RecentReviews extends React.Component {
   }
 }
 
+class ProjectsOrganised extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  componentDidMount(props) {
+    db.collection("Project").where("Creator", "==", this.props.userId).get().then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        var elem = doc.data()
+        elem['_id'] = doc.id
+        if (!elem.Charity) {
+          data.push(elem)
+        }
+      });
+      this.setState({projects: data, loading: false})
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.projects && this.state.projects.length > 0 ?
+          <div>
+            <div className='profile-header' style={styles.profileHeader}>
+              Projects organised by {this.props.name}
+            </div>
+            <div>
+              {this.state.projects ? this.state.projects.map((project) => (
+                <div style={{padding: 20, width: '50%'}}>
+                  <EmbeddedProject noLogo={true} project={project}/>
+                </div>
+              ))
+              : null
+            }
+            </div>
+          </div>
+          :
+          null}
+      </div>
+    )
+  }
+}
+
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -350,7 +397,7 @@ export default class Profile extends React.Component {
           }
           this.setState({userId: userId, publicProfile: publicProfile})
           console.log(this.state)
-
+          var user = user ? user : {}
             db.collection("User").doc(userId).collection("public").doc(userId).get().then((publicDoc) => {
               var publicData = publicDoc.data()
               user.public = publicData
@@ -496,6 +543,10 @@ export default class Profile extends React.Component {
                     </div>
                   </div>
 
+
+                  <ProjectsOrganised userId={this.state.userId}
+                    name={this.state.user.public.Name ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'}/>
+
                   <RecentReviews userId={this.state.userId}/>
 
                 </div>
@@ -507,7 +558,7 @@ export default class Profile extends React.Component {
             <MediaQuery maxDeviceWidth={700}>
               <div style={{padding: 24,
                  width: '100%', boxSizing: 'border-box'}}>
-                <div style={{marginBottom: 20}}>
+                <div style={{marginBottom: 20, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                   {this.state.user.public && this.state.user.public.Picture ?
                   <img style={{height: '250px', width: '250px', objectFit: 'cover', borderRadius: '4px'}}
                     src={this.state.user.public && this.state.user.public.Picture ? this.state.user.public.Picture : null}/>
@@ -542,16 +593,16 @@ export default class Profile extends React.Component {
 
                   <div style={{paddingTop: 20, display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column'}}>
                     <div style={styles.mobileContactDetails}>
-                      Verified User
-                      <Tick color={'#3B9E74'} style={{height: '24.8px', float: 'right'}}/>
-                    </div>
-                    <div style={styles.mobileContactDetails}>
                       Email Address
                       <Tick style={{height: '24.8px', float: 'right'}}/>
                     </div>
                     <div style={styles.mobileContactDetails}>
                       Phone Number
+                      {this.state.user.public.Phone ?
                       <Tick style={{height: '24.8px', float: 'right'}}/>
+                      :
+                      <Cross style={{height: 24.8, float: 'right'}}/>
+                      }
                     </div>
                   </div>
 

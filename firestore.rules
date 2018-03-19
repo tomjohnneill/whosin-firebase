@@ -54,6 +54,11 @@ service cloud.firestore {
        allow create;
      }
 
+    match /emailTemplates/{email} {
+     allow create;
+     allow read: if exists(/databases/$(database)/documents/Admins/$(request.auth.uid))
+   }
+
    match /ProjectReviews/{review} {
       allow read: if true;
       allow create: if request.resource.data.User == request.auth.uid;

@@ -149,8 +149,6 @@ export function changeImageAddress(file, size) {
   }
 }
 
-const FB = window.FB
-
 var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken') :
   '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
@@ -170,37 +168,22 @@ export default class Project extends React.Component {
       charity: {}, inkBarLeft: '20px', selected: 'story', challengeExists: false}
   }
 
-  loadFbLoginApi() {
-
-       window.fbAsyncInit = function() {
-           window.FB.init({
-               appId      : '535993046799422',
-               cookie     : true,  // enable cookies to allow the server to access
-               // the session
-               xfbml      : true,  // parse social plugins on this page
-               version    : 'v2.1' // use version 2.1
-           });
-       };
-
-       console.log("Loading fb api");
-         // Load the SDK asynchronously
-       (function(d, s, id) {
-           var js, fjs = d.getElementsByTagName(s)[0];
-           if (d.getElementById(id)) return;
-           js = d.createElement(s); js.id = id;
-           js.src = "//connect.facebook.net/en_US/sdk.js";
-           fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-  }
-
 
   componentDidMount(props) {
     if (this.props.location.query.project) {
           window.history.replaceState({}, 'Title', '/projects/p/' + this.props.location.query.project)
     }
-
-    this.loadFbLoginApi()
     this.setState({ loading: true });
+
+    if (localStorage.getItem('project')) {
+      let project = JSON.parse(localStorage.getItem('project'))
+      if (typeof project['Start Time'] === 'string') {
+        project['Start Time'] = new Date(project['Start Time'])
+        project['End Time'] = new Date(project['End Time'])
+      }
+      this.setState({loading: false, project: project})
+      localStorage.removeItem('project')
+    }
 
     db.collection("Project").doc(this.props.location.query.project ?
       this.props.location.query.project : this.props.params._id).get().then((doc) => {
@@ -368,7 +351,6 @@ export default class Project extends React.Component {
         "Location": doc.data().Location ? doc.data().Location : null,
         "created": new Date()
       }
-      console.log(body)
       db.collection("Engagement").where("Project", "==", this.state.project._id)
       .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
           if (querySnapshot.size === 0) {
@@ -392,7 +374,6 @@ export default class Project extends React.Component {
   }
 
   deleteEngagement = () => {
-    console.log('remove engagement')
       db.collection("Engagement").where("Project", "==", this.state.project._id)
       .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
           querySnapshot.forEach(function(doc) {
@@ -473,7 +454,7 @@ export default class Project extends React.Component {
             <div style={{backgroundColor: 'rgba(216,216,216,0.2)', padding: '20px 35px 20px 35px', textAlign: 'left'}}
               className='datetime-container'>
 
-              {this.state.project['STart Time'] ?
+              {this.state.project['Start Time'] ?
               <div className='date-container' style={{display: 'flex'}}>
                 <div className='date-icon'>
                   <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
@@ -485,7 +466,7 @@ export default class Project extends React.Component {
               </div>
               : null}
 
-              {this.state.project['STart Time'] ?
+              {this.state.project['Start Time'] ?
               <div className='time-container' style={{display: 'flex', marginTop: 10}}>
                 <div className='time-icon'>
                   <Clock color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
@@ -554,8 +535,7 @@ export default class Project extends React.Component {
             <div style={{padding: '20px 35px 20px 35px', textAlign: 'left'}}>
 
                  <div dangerouslySetInnerHTML={this.descriptionMarkup()}/>
-                   <div className="fb-like" href={this.state.project.FacebookURL}
-                  width='200px'  layout="standard" action="like" size="small" showFaces="true" share="false"></div>
+
                 <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
                   , display: 'flex', height: '77px', alignItems: 'center'}}>
                   <div style={{fontFamily: 'Permanent Marker', fontSize: '20px', padding: 6}}>

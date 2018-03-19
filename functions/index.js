@@ -215,7 +215,7 @@ const ALGOLIA_INDEX_NAME = 'projects';
 const SECOND_ALGOLIA_INDEX_NAME = 'organisations';
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
-exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onCreate(event => {
+exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onWrite(event => {
     // Get the note document
     const project = event.data.data();
     project._id = event.params.projectId
@@ -242,7 +242,7 @@ exports.addCharityToSearch = functions.firestore.document('Charity/{charityId}')
 });
 
 
-var site = 'https://whos-in-firebase.firebaseapp.com'
+var site = 'https://whosin.io'
 
 function buildHtmlWithProject (post, id) {
   const string = `<!DOCTYPE html><head>
@@ -255,7 +255,7 @@ function buildHtmlWithProject (post, id) {
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="https://example.com/favicon.png">
     </head><body>
-    <script>window.location="${site}/projects/?project=${id}";</script>
+    <script>window.location="${site}/project/?project=${id}";</script>
     </body></html>`;
   return string;
 }
@@ -281,7 +281,7 @@ function buildHtmlWithChallenge (id, post, challenge, challengeId) {
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="https://example.com/favicon.png">
     </head><body>
-    <script>window.location="${site}/projects/?project=${id}&challenge=${challengeId}";</script>
+    <script>window.location="${site}/project/?project=${id}&challenge=${challengeId}";</script>
     </body></html>`;
   return string;
 }

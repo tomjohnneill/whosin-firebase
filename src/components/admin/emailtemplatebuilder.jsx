@@ -23,7 +23,8 @@ export default class EmailTemplateBuilder extends React.Component {
     console.log(dateObj)
     if (this.props.params.templateId) {
         db.collection("emailTemplates").doc(this.props.params.templateId).get().then((doc) => {
-        this.setState({loading: false, sample: JSON.parse(doc.data().design)})
+          console.log(doc.data())
+        this.setState({loading: false, sample: JSON.parse(doc.data().design), mergeTags: doc.data().mergeTags})
         console.log(this.state.sample)
       })
     } else {
@@ -33,13 +34,19 @@ export default class EmailTemplateBuilder extends React.Component {
 
     exportHtml = () => {
       this.setState({open: true})
-
+      if (this.props.params.templateId) {
         this.editor.exportHtml(data => {
           const { design, html } = data
-          console.log('exportHtml', html)
-          console.log(design)
-          console.log(this.state.name)
-          console.log(this.state.mergeTags)
+          db.collection("emailTemplates").doc(this.props.params.templateId).update({
+            html: html,
+            design: JSON.stringify(design),
+            mergeTags: this.state.mergeTags,
+          })
+          .then(() => this.setState({name: null}) )
+      })
+      } else {
+        this.editor.exportHtml(data => {
+          const { design, html } = data
           db.collection("emailTemplates").add({
             html: html,
             design: JSON.stringify(design),
@@ -48,6 +55,8 @@ export default class EmailTemplateBuilder extends React.Component {
           })
           .then(() => this.setState({name: null}) )
       })
+      }
+
 
   }
 
