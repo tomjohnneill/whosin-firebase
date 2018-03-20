@@ -1,6 +1,7 @@
 import React  from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {Link, browserHistory} from 'react-router';
+import {changeImageAddress} from './desktopproject.jsx';
 import LinearProgress from 'material-ui/LinearProgress';
 import fire from '../fire';
 import {grey500} from 'material-ui/styles/colors'
@@ -51,7 +52,7 @@ export default class CharityProjectList extends React.Component {
                     </div>
                     <CardMedia mediaStyle={{display: 'flex'}}>
                       <img style={{flex: 1, width: '50%', maxWidth: null, minWidth: null, height: '250px', objectFit: 'cover'}}
-                        src={project['Featured Image']} alt="" />
+                        src={changeImageAddress(project['Featured Image'], '1000xauto')} alt="" />
                       <div style={{padding: 20, flex: 3, width: null, maxWidth: null, minWidth: null}}>
                         <span>
 

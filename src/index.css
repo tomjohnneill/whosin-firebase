@@ -24,6 +24,11 @@ body {
 
 }
 
+.desktop-header {
+  font-weight: 700;
+  font-size: 36px;
+  text-align: left
+}
 
 
 li {

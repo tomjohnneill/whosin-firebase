@@ -107,10 +107,10 @@ export class Form extends React.Component {
   handleChangeType = (event, index, value) => this.setState({type: value});
 
   render() {
-
+    console.log(this.state)
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
-        <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+        <p className='desktop-header'>
           Let's start with the basics</p>
 
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
@@ -139,7 +139,8 @@ export class Form extends React.Component {
               hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
               key='max'
               errorStyle={{marginTop: 6, color: orange500, textAlign: 'center'}}
-              errorText={this.state.max && this.state.max < this.state.min ? 'You just set max < min' : null}
+              errorText={this.state.max && this.state.min
+                  && Number(this.state.max) < Number(this.state.min) ? 'You just set max < min' : null}
               value={this.state.max}
               onChange={this.handleSetMax}
               style={styles.textfield}/>

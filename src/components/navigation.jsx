@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import { IndexLink, Link, browserHistory } from 'react-router';
 import Menu from 'material-ui/Menu';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -9,6 +10,7 @@ import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import MediaQuery from 'react-responsive';
 import Settings from 'material-ui/svg-icons/action/settings';
+import Drawer from 'material-ui/Drawer';
 import InfoOutline from 'material-ui/svg-icons/action/info';
 import SignupModal from './signupmodal.jsx';
 //import MessagingButton from '/imports/ui/components/messagingbutton.jsx';
@@ -94,7 +96,7 @@ export default class Navigation extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {open: false, changePasswordOpen: false, modalOpen: false, loading: true};
+    this.state = {drawerOpen: false, open: false, changePasswordOpen: false, modalOpen: false, loading: true};
     this.logout = this.logout.bind(this);
 
   }
@@ -242,6 +244,11 @@ export default class Navigation extends React.Component {
     this.setState({modalOpen: false})
   }
 
+  goToAndClose = (url) => {
+    this.setState({drawerOpen: false})
+    browserHistory.push(url)
+  }
+
   render() {
     console.log(this.state)
 
@@ -250,9 +257,20 @@ export default class Navigation extends React.Component {
       <div >
 
         <AppBar
-          showMenuIconButton={false}
+
           style={window.location.pathname.includes('/embed/') ? style.embedAppBar :
             window.location.pathname === '/why' ? style.whyAppBar : style.appBar}
+          iconClassNameLeft='mobile-nav-bar'
+          iconElementLeft={
+            <div>
+
+              <MediaQuery maxDeviceWidth={700}>
+                <IconButton onClick={() => this.setState({drawerOpen: true})} tooltip='Menu'>
+                  <MenuIcon/>
+                </IconButton>
+              </MediaQuery>
+            </div>
+          }
           className={'appbar'}
           iconElementRight={
                             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -261,19 +279,19 @@ export default class Navigation extends React.Component {
                               {!window.location.pathname.includes('create-project') ?
                                 <div style={{display: 'flex'}}>
                                   <div style={{
-                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
                                     onTouchTap={() => browserHistory.push('/about')}
                                     >
                                     About
                                   </div>
                                   <div style={{
-                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
                                     onTouchTap={() => browserHistory.push('/projects')}
                                     >
                                     Projects
                                   </div>
                                   <div style={{
-                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:20}}
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
                                     onTouchTap={() => browserHistory.push('/why')}
                                     >
                                     Why start a project?
@@ -339,6 +357,19 @@ export default class Navigation extends React.Component {
          changeOpen={this.handleModalChangeOpen}
          onComplete = {this.handleComplete}
          />
+       <Drawer
+         style={{textAlign: 'left'}}
+          onRequestChange={(drawerOpen) => {
+            this.setState({drawerOpen: drawerOpen})
+            console.log('request changed')
+          }}
+          docked={false}
+          open={this.state.drawerOpen}>
+            <MenuItem onClick={() => this.goToAndClose('/about')}>About</MenuItem>
+            <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
+            <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
+            <MenuItem onClick={() => this.goToAndClose('/create-project/0')}>Start a project</MenuItem>
+          </Drawer>
 
       </div>
     );

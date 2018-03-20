@@ -98,9 +98,12 @@ export default class UploadPhoto extends React.Component{
 
   render() {
     console.log(this.state)
+    console.log(this.props)
     var imageUrl
      if(this.state.imageUrl) {
        imageUrl = this.state.imageUrl
+     } else if (this.props.imageUrl) {
+       imageUrl = this.props.imageUrl
      } else if (localStorage.getItem('coverPhoto') === 'undefined') {
        imageUrl = null
      } else {
@@ -116,7 +119,7 @@ export default class UploadPhoto extends React.Component{
               , justifyContent: 'center'}} className='basics-container'>
               <div className='form' style={{textAlign: 'left', width: '100%'}}>
                 {!this.props.edit ?
-                <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+                <p className='desktop-header'>
                   Upload a cover photo</p>
                 : null }
                 <div style={{width: '100%', paddingBottom: '40px',
@@ -131,6 +134,130 @@ export default class UploadPhoto extends React.Component{
                             height: '40vh',
                             textAlign: 'center',
                             justifyContent: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            border: '2px dashed rgb(133, 137, 135)',
+                            borderRadius: 6,
+                            color: grey500,
+                            flexDirection: 'column'
+
+                          }
+
+                          const acceptedStyles = {
+                            ...styles,
+                            borderStyle: 'solid',
+                            borderColor: '#6c6',
+                            backgroundColor: '#eee'
+                          }
+
+                          const rejectStyles = {
+                            ...styles,
+                            borderStyle: 'solid',
+                            borderColor: '#c66',
+                            backgroundColor: '#eee'
+                          }
+
+                          if (isDragActive) {
+                            return (
+                              <div style={acceptedStyles}>
+                                File will be accepted
+                              </div>
+                            )
+                          }
+                          if (isDragReject) {
+                            return (
+                              <div style={rejectStyles}>
+                                File will be rejected
+                              </div>
+                            )
+                          }
+                          // Default case
+                          return (
+                            <div style={styles}>
+                              {this.state.uploading ?
+                              <div style={{height: '70vh', width: '100%', display: 'flex',
+                                alignItems: 'center', justifyContent: 'center'}}>
+                                <CircularProgress size={80} thickness={5} />
+                              </div>
+                              :
+                                (localStorage.getItem('coverPhoto') && !this.state.uploadComplete) || this.props.imageUrl ?
+                                <div style={{position: 'relative', height: '100%', width: '100%'}}>
+                                  <img src={imageUrl}
+                                  style={{padding: 16, boxSizing: 'border-box', position: 'relative', width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}}/>
+                                {this.state.dropzoneHover ?
+                                  <RaisedButton label='Change Photo'
+                                    style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
+                                    icon={<CloudUpload />}
+                                    labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
+                                    primary={true}
+                                    />
+                                  :
+                                  null}
+
+                                </div>
+                                :
+                                this.state.uploadComplete  ?
+                                <div style={{position: 'relative', height: '100%', width: '100%'}}>
+                                  <img src={imageUrl}
+                            style={{padding: 16, boxSizing: 'border-box', position: 'relative', width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}}/>
+                            {this.state.dropzoneHover ?
+                              <RaisedButton label='Change Photo'
+                                style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
+                                icon={<CloudUpload />}
+                                labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
+                                primary={true}
+                                />
+                              :
+                              null}
+                                </div>
+                                :
+                                <div>
+                                  <RaisedButton label='Upload Photo'
+                                    icon={<CloudUpload />}
+                                    labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
+                                    primary={true}
+                                    />
+                                  <div style={{marginTop: '20px', fontWeight: 700}}>or drag one in</div>
+                                </div>
+                            }
+
+
+
+                            </div>
+                          )
+                        }}
+                      </Dropzone>
+                </div>
+
+              </div>
+            </div>
+            <div style={{flex: 1, paddingLeft: '50px', boxSizing: 'border-box'}} className='basics-image'>
+
+
+            </div>
+          </div>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
+          <div style={{boxSizing: 'border-box', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{width: '100%', display: 'flex'
+              , justifyContent: 'center'}} className='basics-container'>
+              <div className='form' style={{textAlign: 'left', width: '100%'}}>
+                {!this.props.edit ?
+                <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+                  Upload a cover photo</p>
+                : null }
+                <div style={{width: '100%', paddingBottom: 24, boxSizing: 'border-box'}}>
+                  <Dropzone key={'photos'} onDrop={this.upload.bind(this)}
+                    onMouseEnter={this.handleDropzoneEnter}
+                    onMouseLeave={this.handleDropzoneLeave}
+                     style={{}}>
+                        {({ isDragActive, isDragReject }) => {
+                          let styles = {
+                            width: '100%',
+                            height: '40vh',
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                            boxSizing: 'border-box',
                             display: 'flex',
                             alignItems: 'center',
                             border: '2px dashed rgb(133, 137, 135)',
@@ -228,117 +355,7 @@ export default class UploadPhoto extends React.Component{
 
               </div>
             </div>
-            <div style={{flex: 1, paddingLeft: '50px', boxSizing: 'border-box'}} className='basics-image'>
-
-
-            </div>
           </div>
-        </MediaQuery>
-        <MediaQuery maxDeviceWidth={700}>
-
-          <div style={{width: '100%',padding: '16px', display: 'flex', boxSizing: 'border-box'
-            , justifyContent: 'center'}} className='basics-container'>
-            <div className='form' style={{textAlign: 'left', width: '100%'}}>
-              <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
-                Upload a cover photo</p>
-              <div style={{width: '100%', paddingBottom: '16px',
-               boxSizing: 'border-box'}}>
-                <Dropzone key={'photos'} onDrop={this.upload.bind(this)}  style={{}}>
-                      {({ isDragActive, isDragReject }) => {
-                        let styles = {
-                          width: 'auto',
-                          height: 100,
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                          display: 'flex',
-                          alignItems: 'center',
-                          border: '1px solid rgb(133, 137, 135)',
-                          borderRadius: 6,
-                          color: grey500,
-
-                        }
-
-                        const acceptedStyles = {
-                          ...styles,
-                          borderStyle: 'solid',
-                          borderColor: '#6c6',
-                          backgroundColor: '#eee'
-                        }
-
-                        const rejectStyles = {
-                          ...styles,
-                          borderStyle: 'solid',
-                          borderColor: '#c66',
-                          backgroundColor: '#eee'
-                        }
-
-                        if (isDragActive) {
-                          return (
-                            <div style={acceptedStyles}>
-                              File will be accepted
-                            </div>
-                          )
-                        }
-                        if (isDragReject) {
-                          return (
-                            <div style={rejectStyles}>
-                              File will be rejected
-                            </div>
-                          )
-                        }
-                        // Default case
-                        return (
-                          <div style={styles}>
-                            Drag and drop (or click) to upload
-                          </div>
-                        )
-                      }}
-                    </Dropzone>
-              </div>
-              <div style={{boxSizing: 'border-box', borderRadius: '6px', paddingBottom: '20px'}} className='basics-image'>
-                {this.state.uploading ?
-                <div style={{height: '70vh', width: '100%', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center'}}>
-                  <CircularProgress size={80} thickness={5} />
-                </div>
-                :
-                  localStorage.getItem('coverPhoto') && !this.state.uploadComplete ?
-                  <div style={{position: 'relative'}}>
-                    <img src={imageUrl}
-                      style={{position: 'relative', width: '100%', height: '200px',
-                        objectFit: 'cover', borderRadius: '10px'}}/>
-                      <IconButton
-                        style={{padding: 0, position: 'absolute', top: 10, right: 10, height: 40, zIndex: 3}}
-                        onTouchTap={this.handleRemovePicture}
-                        iconStyle={{position: 'absolute', top: 10, right: 10, height: 40, zIndex: 3}}>
-                        <Cross color={'rgb(182,48,43)'}/>
-                      </IconButton>
-                  </div>
-                  :
-                  this.state.uploadComplete  ?
-                  <div style={{position: 'relative'}}>
-                  <img src={imageUrl}
-                    style={{position: 'relative', width: '100%', height: '200px',
-                      objectFit: 'cover', borderRadius: '10px'}}/>
-                    <IconButton
-                      style={{padding: 0, position: 'absolute', top: 10, right: 10, height: 40, zIndex: 3}}
-                      onTouchTap={this.handleRemovePicture}
-                      iconStyle={{position: 'absolute', top: 10, right: 10, height: 40, zIndex: 3}}>
-                      <Cross color={'rgb(182,48,43)'}/>
-                    </IconButton>
-                  </div>
-                  :
-                <div style={{height: '200px', width: '100%', backgroundColor: '#f5f5f5', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center'}}>
-                  Your image will appear here
-                </div>
-              }
-
-              </div>
-
-            </div>
-          </div>
-
         </MediaQuery>
       </div>
     )

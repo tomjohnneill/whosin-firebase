@@ -7,6 +7,7 @@ import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
   yellow100, limeA200, limeA700, green300} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton';
 import {browserHistory} from 'react-router';
+import {changeImageAddress} from '../desktopproject.jsx';
 import fire from '../../fire';
 
 let db = fire.firestore()
@@ -160,7 +161,7 @@ export default class ProjectReview extends React.Component {
           <div style={{width: '100%', maxWidth: '1000px', display: 'flex', marginBottom: 50}}>
             <div style={{flex: 2}}>
               <h2 style={styles.title}>Rate & Review</h2>
-              <img src={this.state.project['Featured Image']} style={{width: '100%', height: '150px', objectFit: 'cover'}}/>
+              <img src={changeImageAddress(this.state.project['Featured Image'], '1500xauto')} style={{width: '100%', height: '150px', objectFit: 'cover'}}/>
               <h2 style={styles.title}>{this.state.project.Name}</h2>
             </div>
             <div style={{flex: 1}}/>

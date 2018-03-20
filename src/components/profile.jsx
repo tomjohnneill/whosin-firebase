@@ -65,7 +65,6 @@ const styles = {
     alignItems: 'center',
     textAlign: 'left',
     paddingLeft: 24,
-    paddingRight: 24,
     paddingTop: 6,
     paddingBottom: 6
   },
@@ -236,7 +235,7 @@ class RecentlySupported extends React.Component {
                 </div>
                 <div style={{flex: 1}}>
                   <img style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: 2}}
-                    src={project['Project Photo']}/>
+                    src={changeImageAddress(project['Project Photo'], '500xauto')}/>
                 </div>
               </div>
             </Link>
@@ -295,7 +294,7 @@ class RecentReviews extends React.Component {
                   <div>
                     {project['Charity Picture'] ?
                     <img
-                      src={project['Charity Picture']}
+                      src={changeImageAddress(project['Charity Picture'], '250xauto')}
                       style={{borderRadius: '50%', height: 57, width: 57}} className='logo'/>
                       :
                     <World style={{height: 57, width: 57}} color={'#484848'}/>
@@ -342,9 +341,11 @@ class ProjectsOrganised extends React.Component {
         elem['_id'] = doc.id
         if (!elem.Charity) {
           data.push(elem)
+          this.setState({projects: data, loading: false})
         }
       });
-      this.setState({projects: data, loading: false})
+      console.log(data)
+
     })
   }
 
@@ -357,11 +358,14 @@ class ProjectsOrganised extends React.Component {
               Projects organised by {this.props.name}
             </div>
             <div>
-              {this.state.projects ? this.state.projects.map((project) => (
-                <div style={{padding: 20, width: '50%'}}>
-                  <EmbeddedProject noLogo={true} project={project}/>
-                </div>
-              ))
+              {this.state.projects ?
+                <div>
+                  {this.state.projects.map((project) => (
+                  <div style={{padding: 20, width: '50%'}}>
+                    <EmbeddedProject noLogo={true} project={project}/>
+                  </div>
+                  ))}
+              </div>
               : null
             }
             </div>
@@ -478,7 +482,7 @@ export default class Profile extends React.Component {
                   fontSize: '18px'}}/>
 
                 </div>
-                <div style={{marginLeft: 50, width: 600, marginBottom: '50px'}}>
+                <div style={{marginLeft: 50, minWidth: 600, marginBottom: '50px'}}>
                   <div style={{float: 'right', alignItems: 'left'}}>
                     {this.state.publicProfile ? null :
                     <FlatButton

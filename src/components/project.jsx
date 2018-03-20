@@ -197,6 +197,11 @@ export default class Project extends React.Component {
             this.setState({ charity: charity, loading: false})
           })
           .catch(error => console.log('Error', error))
+      } else {
+        db.collection("User").doc(project.Creator).collection("public").doc(project.Creator).get().then((userDoc) => {
+          var creator = userDoc.data()
+          this.setState({creator: creator})
+        })
       }
     })
     .catch(error => console.log('Error', error));
@@ -409,6 +414,7 @@ export default class Project extends React.Component {
           <MediaQuery minDeviceWidth={700}>
             <DesktopProject params={this.props.params} project={this.state.project}
               joined={this.state.joined}
+              creator={this.state.creator}
               challengeExists={this.state.challengeExists}
               challenge = {this.state.challenge}
               challengeUser={this.state.challengeUser}
@@ -425,22 +431,36 @@ export default class Project extends React.Component {
                 margin: 0}}>
                 {this.state.project.Name}
               </p>
-              <Link  className='mobile-charity-link' to={`/charity/${this.state.charity._id}`}>
-                <div className='mobile-charity-link-content'
-                   style={{display: 'flex', marginTop: 6, alignItems: 'center'}}>
-                  <div style={{marginRight: 10}} className='charity-icon'>
-                    {this.state.charity['Featured Image'] ?
-                      <img src={this.state.charity['Featured Image']}
-                        style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
-                      :
-                      <World style={{height: 25, width: 25}} color={'#484848'}/>
-                      }
+              {this.state.project.Charity ?
+                <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
+                  <div className='charity-link-content'
+                     style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                    <div style={{marginRight: 10}} className='charity-icon'>
+                      {this.state.charity['Featured Image'] ?
+                        <img src={changeImageAddress(this.state.charity['Featured Image'], '50xauto')}
+                          style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
+                        :
+                        <World style={{height: 25, width: 25}} color={'#484848'}/>
+                        }
+                    </div>
+                    <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                        {this.state.charity.Name}
+                    </p>
                   </div>
-                  <p className='charity-name' style={{margin: 0, fontSize: '14px', textAlign: 'left'}}>
-                      {this.state.charity.Name}
-                  </p>
-                </div>
-              </Link>
+                </Link>
+                :
+                <Link  className='charity-link' to={`/profiles/${this.state.project.Creator}`}>
+                  <div className='charity-link-content'
+                     style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                    <div style={{marginRight: 10}} className='charity-icon'>
+                      <Avatar>{this.state.project.Creator.substring(0,1)}</Avatar>
+                    </div>
+                    <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                        {this.state.project.Creator}
+                    </p>
+                  </div>
+                </Link>
+              }
 
               <LinearProgress  style={{height: '5px', borderRadius: '1.5px', marginTop: 20}} color={'#00ABE8'} mode="determinate"
                 min={0} max={this.state.project['Target People']}
@@ -536,18 +556,7 @@ export default class Project extends React.Component {
 
                  <div dangerouslySetInnerHTML={this.descriptionMarkup()}/>
 
-                <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
-                  , display: 'flex', height: '77px', alignItems: 'center'}}>
-                  <div style={{fontFamily: 'Permanent Marker', fontSize: '20px', padding: 6}}>
-                    Start a project of your own
-                  </div>
-                  <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                    <RaisedButton label="Go"
-                      onTouchTap={this.handleLetsGo}
-                      style={{borderRadius: '4px', float: 'right'}}
-                      labelStyle={{fontFamily: 'Permanent Marker'}}/>
-                  </div>
-                </div>
+
             </div>
 
 
@@ -588,6 +597,19 @@ export default class Project extends React.Component {
                       changeOpen={this.handleConditionalChangeOpen}
                       />
               </li>
+            </div>
+
+            <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
+              , display: 'flex', height: '77px', alignItems: 'center'}}>
+              <div style={{fontFamily: 'Permanent Marker', fontSize: '20px', padding: 6}}>
+                Start a project of your own
+              </div>
+              <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
+                <RaisedButton label="Go"
+                  onTouchTap={this.handleLetsGo}
+                  style={{borderRadius: '4px', float: 'right'}}
+                  labelStyle={{fontFamily: 'Permanent Marker'}}/>
+              </div>
             </div>
 
 

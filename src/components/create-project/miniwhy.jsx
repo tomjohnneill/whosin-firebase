@@ -16,7 +16,7 @@ const styles = {
 
 export default class MiniWhy extends React.Component {
   handleProject = () => {
-    browserHistory.push('/create-project/1')
+    browserHistory.push('/create-project/choose-type')
   }
 
   render() {

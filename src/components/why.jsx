@@ -88,6 +88,7 @@ export default class Why extends React.Component {
             background: 'rgba(0,0,0,0.1)'
           }}/>
 
+        <MediaQuery minDeviceWidth={700}>
           <div style={{position: 'absolute', zIndex: 3, left: 'calc(50% - 333px)', top: '50%',
               boxSizing: 'border-box', borderRadius: 6, padding: 25,
               background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.85), rgba(0,0,0,0))'
@@ -98,6 +99,21 @@ export default class Why extends React.Component {
             <RaisedButton labelStyle={{letterSpacing: '1.5px', fontWeight: 'bold',
           fontFamily: 'Permanent Marker', fontSize: '20px'}} label='Get Started' primary={true} onClick={() => browserHistory.push('/create-project/0')}/>
           </div>
+        </MediaQuery>
+
+        <MediaQuery maxDeviceWidth={700}>
+          <div style={{position: 'absolute', zIndex: 3, width: '100%', top: '30%',
+              boxSizing: 'border-box', borderRadius: 6, padding: 25,
+              background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.85), rgba(0,0,0,0))'
+            }}>
+              <div style={{fontSize: '45px', fontWeight: 700, color: 'white',
+                textShadow: '1px 1px rgb(0,0,0)', marginBottom: 16, marginTop: 16
+              }}>Find all the volunteers you need</div>
+            <RaisedButton labelStyle={{letterSpacing: '1.5px', fontWeight: 'bold',
+          fontFamily: 'Permanent Marker', fontSize: '20px'}} label='Get Started' primary={true} onClick={() => browserHistory.push('/create-project/0')}/>
+          </div>
+        </MediaQuery>
+
         </div>
         <MediaQuery minDeviceWidth={700}>
           <div style={{width: '100%', height: 'auto',

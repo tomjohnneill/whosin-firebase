@@ -122,17 +122,17 @@ class Form extends React.Component {
      .then(results => getLatLng(results[0]))
      .then(latLng => {
        console.log('Success', latLng)
-       var startTime = this.state.startTime
+       var startTime = new Date(this.state.startTime)
        var startHours = startTime.getHours()
        var startMinutes = startTime.getMinutes()
-       var startDate = this.state.startDate
+       var startDate = new Date(this.state.startDate)
        startDate.setHours(startHours)
        startDate.setMinutes(startMinutes)
 
-       var endTime = this.state.endTime
+       var endTime = new Date(this.state.endTime)
        var endHours = endTime.getHours()
        var endMinutes = endTime.getMinutes()
-       var endDate = this.state.endDate
+       var endDate = new Date(this.state.endDate)
        endDate.setHours(endHours)
        endDate.setMinutes(endMinutes)
 
@@ -275,15 +275,24 @@ class Form extends React.Component {
 
 
         </div>
-        <RaisedButton label='NEXT' backgroundColor='#E55749'
-          onClick={this.handleNext}
-          style={{marginRight: 16}}
-          disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
-          labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
-            style={{marginRight: 127}}
+            style={{marginRight: 16}}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+        <MediaQuery minDeviceWidth={700}>
+          <RaisedButton label='NEXT' backgroundColor='#E55749'
+              onClick={this.handleNext}
+              style={{marginRight: 127}}
+              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
+              labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
+          <RaisedButton label='NEXT' backgroundColor='#E55749'
+              onClick={this.handleNext}
+              style={{marginRight: 16}}
+              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
+              labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+        </MediaQuery>
       <RaisedButton label='Skip' secondary={true}
           onClick={() => browserHistory.push('/create-project/3')}
             labelStyle={{color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>

@@ -48,15 +48,7 @@ export default  class SignupModal extends React.Component {
   }
 
   handleCreateAccount = () => {
-    fetch(`https://api.pwnedpasswords.com/pwnedpassword/${this.state.password}`)
-    .then(response => {
-      if (response.status === 200) {
-        response.text().then(text => {
-          this.setState({pwned: text})
-        });
-
-      } else {
-        this.setState({pwned: null})
+    this.setState({pwned: null})
         fire.auth().onAuthStateChanged(user => {
           if (user) {
             db.collection('User').doc(user.uid).set(
@@ -94,11 +86,8 @@ export default  class SignupModal extends React.Component {
               alert(errorMessage);
             }
                       // ...
-          });
+          })
 
-
-      }
-    })
     .catch(error => console.log('Error', error))
 
   }

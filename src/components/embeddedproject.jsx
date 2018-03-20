@@ -22,6 +22,7 @@ export default class EmbeddedProject extends React.Component {
         project['Start Time'] = new Date(project['Start Time'])
         project['End Time'] = new Date(project['End Time'])
       }
+      this.setState({project: project, loading: false})
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
@@ -57,7 +58,7 @@ export default class EmbeddedProject extends React.Component {
         project['Start Time'] = new Date(project['Start Time'])
         project['End Time'] = new Date(project['End Time'])
       }
-      this.setState({project: nextProps.project})
+      this.setState({project: nextProps.project, loading: false})
 
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
@@ -86,11 +87,12 @@ export default class EmbeddedProject extends React.Component {
                      margin: 0, marginTop: 10}}>
                     {this.state.project.Name}
                   </div>
+                  {this.state.charity ?
                   <div className='charity-link-content'
                      style={{display: 'flex', marginTop: 6, alignItems: 'center'}}>
                     <div style={{marginRight: 10}} className='charity-icon'>
                       {this.state.charity['Featured Image'] ?
-                        <img src={this.state.charity['Featured Image']}
+                        <img src={changeImageAddress(this.state.charity['Featured Image'], '50xauto')}
                           style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
                         :
                         <World style={{height: 25, width: 25}} color={'#484848'}/>
@@ -100,6 +102,8 @@ export default class EmbeddedProject extends React.Component {
                         {this.state.charity.Name}
                     </p>
                   </div>
+                  :
+                  null}
 
                 <p style={{fontSize: '18px', fontWeight: 'light', textAlign: 'left'}}>
                   {this.state.project.Summary}

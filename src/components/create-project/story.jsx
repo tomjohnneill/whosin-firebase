@@ -5,6 +5,9 @@ import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
 import {orange500} from 'material-ui/styles/colors';
 import UploadPhoto from './uploadphoto.jsx';
+import fire from '../../fire';
+
+let db = fire.firestore()
 
 const styles = {
   textfield: {
@@ -47,15 +50,6 @@ class StoryForm extends React.Component {
     }
   }
 
-  handleNext = (e) => {
-    e.preventDefault()
-
-    var story = {title: this.state.title, story: this.state.story, summary: this.state.summary}
-    var storyString = JSON.stringify(story)
-    localStorage.setItem('story', storyString)
-    browserHistory.push('/create-project/summary/1')
-  }
-
 
   handlePrevious = (e) => {
     e.preventDefault()
@@ -85,11 +79,63 @@ class StoryForm extends React.Component {
     }
   }
 
+  handleNext = (e) => {
+    e.preventDefault()
+    var worktoolsToken = localStorage.getItem('worktoolsToken')
+    var basics = JSON.parse(localStorage.getItem('basics'))
+    var story = {
+      story: this.state.story,
+      summary: this.state.summary,
+      title: this.state.title
+    }
+    var coverPhoto = localStorage.getItem('coverPhoto')
+    var times = JSON.parse(localStorage.getItem('times'))
+    var startTime = times ? new Date(times['Start Time']) : null
+    var endTime = times ? new Date(times['End Time']) : null
+    var body = {
+      "Creator": fire.auth().currentUser.uid,
+      'Name': story.title,
+      'Description': story.story,
+      'Summary': story.summary,
+      'Target People': basics.min,
+      'Maximum People': basics.max,
+      'Featured Image': coverPhoto,
+      'Deadline': new Date(basics.deadline),
+      'Location': times ? times.address : null,
+      'Start Time': startTime,
+      'End Time': endTime,
+      'Tags': basics.tags,
+      "Geopoint": times ? times.location : null,
+      "created": new Date()
+    }
+    if (localStorage.getItem('charity')) {
+      var charity = JSON.parse(localStorage.getItem('charity'))
+      body.Charity = charity._id
+      body['Charity Name'] = charity.Name
+    }
+    console.log(body)
+    console.log(JSON.stringify(body))
+    db.collection("Project").add(body)
+    .then(newProject => {
+      console.log(newProject)
+      localStorage.removeItem('basics')
+      localStorage.removeItem('story')
+      localStorage.removeItem('times')
+      localStorage.removeItem('coverPhoto')
+      localStorage.removeItem('charity')
+      localStorage.removeItem('editProject')
+      browserHistory.push('/projects/p/' + newProject.id + '/completed')
+    })
+    .catch(error => {this.setState({error: error}); console.log(error)})
+
+
+    }
+
   render() {
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
 
-          <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+          <p className='desktop-header'>
             Tell your story</p>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <p style={styles.header}>What is the title of your project?</p>
@@ -141,14 +187,16 @@ class StoryForm extends React.Component {
             hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
             key='date'/>
         </div>
-        <RaisedButton label='NEXT' backgroundColor='#E55749'
-          onClick={this.handleNext}
-          disabled={!this.state.story || !this.state.summary || !this.state.title || !localStorage.getItem('coverPhoto')}
-          labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
-        <div style={{width: '16px', display: 'inline-block'}}/>
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+        <div style={{width: '16px', display: 'inline-block'}}/>
+        <RaisedButton label='NEXT' backgroundColor='#E55749'
+            onClick={this.handleNext}
+            disabled={!this.state.story || !this.state.summary || !this.state.title || !localStorage.getItem('coverPhoto')}
+            labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+
+
           <div style={{height: '60px'}}/>
       </div>
     )
@@ -173,6 +221,9 @@ export default class Story extends React.Component{
           </div>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
+          <div style={{flex: 1, boxSizing: 'border-box', padding: 16}} className='basics-image'>
+            <UploadPhoto changeParentState={() => this.setState({pictureUploaded: true})}/>
+          </div>
           <div style={{padding: '16px'}}>
             <StoryForm/>
           </div>

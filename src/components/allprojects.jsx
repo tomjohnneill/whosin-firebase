@@ -5,6 +5,7 @@ import {changeImageAddress} from './desktopproject.jsx';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Link } from 'react-router';
 import EmbeddedProject from './embeddedproject.jsx';
+import {browserHistory} from 'react-router';
 import MediaQuery from 'react-responsive';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -137,7 +138,7 @@ export default class AllProjects extends React.Component {
                           ))}
                         </div>
                              : null
-                }}
+                }
                   <Divider/>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', textAlign: 'center'}}>
                     <Subheader style={{fontSize: '25px', letterSpacing: '1px', lineHeight: '30px', color: '#484848',
@@ -153,7 +154,7 @@ export default class AllProjects extends React.Component {
                         buttonStyle={{height: '36px'}}
                          labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
                               letterSpacing: '0.6px', fontWeight: 'bold'}}
-                         label='Start a project' onTouchTap={this.handleCreatePledge}/>
+                         label='Start a project' onTouchTap={() => browserHistory.push('/create-project/0')}/>
                     </div>
                   </div>
                   </div>

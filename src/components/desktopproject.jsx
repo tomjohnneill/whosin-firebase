@@ -215,6 +215,13 @@ class CompletedModal extends React.Component {
         <Dialog
           modal={false}
           open={this.props.open}
+          actions={[
+            <div style={{padding: 20}}>
+              <FlatButton onClick={this.props.handleClose}
+              primary={true}
+              labelStyle={{textTransform: 'none', fontSize: '25px', fontWeight: 700}}
+              label='Go to project'/>
+        </div>]}
           onRequestClose={this.props.handleClose}
         >
         <div style={{maxWidth: '1000px', width: '100%', marginTop: 30}}>
@@ -322,7 +329,7 @@ export default class DesktopProject extends React.Component {
       project['End Time'] = new Date(project['End Time'])
     }
 
-    this.setState({project: project, charity: this.props.charity, loading: false})
+    this.setState({project: project, charity: this.props.charity, loading: false, creator: this.props.creator})
     console.log(window.location.pathname.substr(window.location.pathname.length - 7))
     if (window.location.pathname.substr(window.location.pathname.length - 10) === '/completed') {
       console.log('project is completed')
@@ -338,7 +345,7 @@ export default class DesktopProject extends React.Component {
         project['End Time'] = new Date(project['End Time'])
       }
       this.setState({project: nextProps.project})
-      this.setState({charity: nextProps.charity})
+      this.setState({charity: nextProps.charity, creator: nextProps.creator})
     }
   }
 
@@ -472,12 +479,6 @@ export default class DesktopProject extends React.Component {
   this.setState({open: false});
 };
 
-  handleEditClick = (e) => {
-    e.preventDefault()
-    browserHistory.push(`/projects/${ this.props.pledge.slug }/${ this.props.pledge._id }/edit` )
-  }
-
-
   descriptionMarkup() {
     return {__html: this.state.project.Description ?
       this.state.project.Description.replace('<img', '<img style="width:100%;height:auto"') : this.state.project.Description}
@@ -586,13 +587,13 @@ export default class DesktopProject extends React.Component {
                         secondary={true}
                         style={{marginRight: 20}}
                         label='Admin View' labelStyle={{textTransform: 'none', fontWeight: 700, padding: '10px', fontSize: '16px'}}
-                          onTouchTap={() => browserHistory.push(window.location.pathname + '/admin')}
+                          onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/admin')}
                            />
                      <FlatButton
                        secondary={true}
                        style={{marginRight: 20}}
                        label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
-                         onTouchTap={() => browserHistory.push(window.location.pathname + '/admin')}
+                         onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/editproject')}
                           />
                    </div>
                      : null
@@ -603,22 +604,36 @@ export default class DesktopProject extends React.Component {
                     {this.state.project.Name}
                   </p>
 
-                  <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
-                    <div className='charity-link-content'
-                       style={{display: 'flex', marginTop: 6, alignItems: 'center'}}>
-                      <div style={{marginRight: 10}} className='charity-icon'>
-                        {this.state.charity['Featured Image'] ?
-                          <img src={this.state.charity['Featured Image']}
-                            style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
-                          :
-                          <World style={{height: 25, width: 25}} color={'#484848'}/>
-                          }
+                  {this.state.project.Charity ?
+                    <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
+                      <div className='charity-link-content'
+                         style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                        <div style={{marginRight: 10}} className='charity-icon'>
+                          {this.state.charity['Featured Image'] ?
+                            <img src={changeImageAddress(this.state.charity['Featured Image'], '50xauto')}
+                              style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
+                            :
+                            <World style={{height: 25, width: 25}} color={'#484848'}/>
+                            }
+                        </div>
+                        <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                            {this.state.charity.Name}
+                        </p>
                       </div>
-                      <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
-                          {this.state.charity.Name}
-                      </p>
-                    </div>
-                  </Link>
+                    </Link>
+                    :
+                    <Link  className='charity-link' to={`/profile/${this.state.project.Creator}`}>
+                      <div className='charity-link-content'
+                         style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                        <div style={{marginRight: 10}} className='charity-icon'>
+                          <Avatar>{this.state.creator ? this.state.creator.Name.substring(0,1) : null}</Avatar>
+                        </div>
+                        <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                            {this.state.creator ? this.state.creator.Name : null}
+                        </p>
+                      </div>
+                    </Link>
+                  }
 
                   <div style={{
                     borderRadius: 4, display: 'flex',

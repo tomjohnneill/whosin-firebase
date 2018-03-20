@@ -188,6 +188,39 @@ exports.reviewReminder = functions.https.onRequest((req, res) => {
     res.status(200).send('Done');
 });
 
+exports.projectCreatedAdminEmail = functions.firestore
+  .document('Project/{projectId}')
+  .onCreate(event => {
+    var project = event.data.data();
+    var htmlString = `
+      <a href='https://console.firebase.google.com/u/0/project/whos-in-firebase/database/firestore/data/Project/${event.params.projectId}'>
+      Approve link</a>
+      <br></br>
+      ${JSON.stringify(project, null, 2)}
+    `
+    let data = {
+        from: `Project Created <admin@whosin.io>`,
+        subject: `New: ${project.Name}`,
+        html: htmlString,
+        'h:Reply-To': 'alerts@whosin.io',
+        to: 'mevanbabakar@gmail.com'
+      }
+      mailgun.messages().send(data, function (error, body) {
+        console.log(body)
+      })
+    data = {
+        from: `Project Created <admin@whosin.io>`,
+        subject: `New: ${project.Name}`,
+        html: htmlString,
+        'h:Reply-To': 'alerts@whosin.io',
+        to: 'thomasjohnneill@gmail.com'
+      }
+      mailgun.messages().send(data, function (error, body) {
+        console.log(body)
+      })
+    return (null)
+  })
+
 /*
 exports.addOneToPeople = functions.firestore
   .document('User Review/{reviewId}')

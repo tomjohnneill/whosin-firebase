@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 import Toggle from 'material-ui/Toggle';
+import {changeImageAddress} from '../desktopproject.jsx';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
@@ -222,7 +223,8 @@ export class EditProjectForm extends React.Component {
 
             {/* Min and max */}
             <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box', paddingTop: 16}}>
-              <UploadPhoto edit={true} changeParentState={() => this.setState({pictureUploaded: true})}/>
+              <UploadPhoto edit={true} imageUrl={this.state.project['Featured Image']}
+                changeParentState={() => this.setState({pictureUploaded: true})}/>
               <p style={styles.header}>
                 How many people are you looking for?
               </p>
@@ -453,7 +455,8 @@ export class EditProjectForm extends React.Component {
 export default class AdminView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, selected: 'admin', inkBarLeft: 15}
+    this.state = {loading: true, selected: this.props.params.adminTab ? this.props.params.adminTab : 'admin'
+      , inkBarLeft: 15}
   }
 
   changeAnchorEl = (e) => {
@@ -467,6 +470,7 @@ export default class AdminView extends React.Component {
   }
 
   handleTwoTabClick = (value) => {
+    browserHistory.push(`/projects/p/${this.props.params._id}/admin/${value}`)
     this.setState({selected: value})
   }
 
@@ -544,8 +548,14 @@ export default class AdminView extends React.Component {
     console.log(this.state.engagements)
     return (
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-        <div style={{padding: 16, width: '100%', maxWidth: '900px'}}>
-          <h2>Admin View</h2>
+        <div style={{padding: 16, width: '100%', maxWidth: '900px', position: 'relative'}}>
+          <h2 style={{position: 'relative'}}>Admin View</h2>
+            <div style={{position: 'absolute', right: 0, top:20, padding: 16}}>
+              <RaisedButton
+                label='Back to Profile'
+                labelStyle={{fontWeight: 700, textTransform: 'none'}}
+                secondary={true} onClick={() => browserHistory.push(`/projects/p/${this.props.params._id}`)}/>
+            </div>
 
             <Tabs
                 tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
@@ -577,7 +587,7 @@ export default class AdminView extends React.Component {
                             color: eng['Cancelled'] ? 'rgba(0, 0, 0, 0.4)' : 'inherit'}}
                     leftAvatar={<Avatar
                       style={{opacity:  eng['Cancelled'] ? 0.5 : 1}}
-                       src={eng['Volunteer Picture']} />}
+                       src={changeImageAddress(eng['Volunteer Picture'], '30xauto')} />}
                     primaryText={eng.Name}
                     primaryTogglesNestedList={true}
                     secondaryText={eng.Location}

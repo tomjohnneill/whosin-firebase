@@ -89,6 +89,10 @@ const styles = {
   ticSummary: {
     fontSize: '22px'
   },
+  ticSummaryLight: {
+    fontSize: '22px',
+    fontWeight: 200
+  },
   aboutIcon: {
     height: 100,
     width: 100,
@@ -96,7 +100,6 @@ const styles = {
   },
   aboutText: {
     padding: 10,
-    color: 'white',
     fontSize: '24px'
   },
   aboutLeft: {
@@ -148,7 +151,7 @@ export default class About extends React.Component {
                   Get up off your ass and do a good thing
                 </div>
                 <div style={styles.redInkbar}/>
-                <div className='description-summary' style={styles.ticSummary}>
+                <div className='description-summary' style={styles.ticSummaryLight}>
                   I’m sure you’d have done this already if you had found the
                   right project, but it’s hard, we get it.
                   That’s why we built Who’s In. <br/><b>Doing good shouldn’t be hard.</b>
@@ -210,14 +213,14 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#FF9800', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: 'white', height: 450,color: 'inherit', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
                 <div>
                   <div style={{display: 'flex', alignItems: 'center'}}>
                     <div className='about-icon' style={styles.aboutIcon}>
-                      <Muscle style={{height: 100, width: 100}} color={'white'}/>
+                      <Muscle style={{height: 100, width: 100}} color={'#484848'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
                       Fred has joined 10 projects
@@ -225,7 +228,7 @@ export default class About extends React.Component {
                   </div>
                   <div style={{display: 'flex', alignItems: 'center'}}>
                     <div className='about-icon' style={styles.aboutIcon}>
-                      <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
+                      <ReviewIcon style={{height: 100, width: 100}} color={'#484848'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
                       Fred has recommended 10 projects
@@ -239,7 +242,7 @@ export default class About extends React.Component {
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   Reviews for you and you and you and you
                 </div>
-                <div style={styles.inkbar}/>
+                <div style={styles.redInkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
                   You can leave a review for the charity you worked with, and they can leave one for you.
                 </div>
@@ -249,7 +252,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#E55749', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: '#3B9E74', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
@@ -367,7 +370,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#FF9800', color: 'white', padding:24}}>
+          <div style={{backgroundColor: 'white', padding:24}}>
             <div style={{height: 50}}/>
             <div style={{alignItems: 'center', height: '100%'}}>
 
@@ -375,7 +378,7 @@ export default class About extends React.Component {
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   Reviews for you and you and you and you
                 </div>
-                <div style={styles.inkbar}/>
+                <div style={styles.redInkbar}/>
                 <div className='description-summary' style={styles.ticSummary}>
                   You can leave a review for the charity you worked with, and they can leave one for you.
                 </div>
@@ -385,7 +388,7 @@ export default class About extends React.Component {
                 <div>
                   <div style={{display: 'flex', alignItems: 'center'}}>
                     <div className='about-icon' style={styles.aboutIcon}>
-                      <Muscle style={{height: 100, width: 100}} color={'white'}/>
+                      <Muscle style={{height: 100, width: 100}} color={'#484848'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
                       Fred has joined 10 projects
@@ -393,7 +396,7 @@ export default class About extends React.Component {
                   </div>
                   <div style={{display: 'flex', alignItems: 'center'}}>
                     <div className='about-icon' style={styles.aboutIcon}>
-                      <ReviewIcon style={{height: 100, width: 100}} color={'white'}/>
+                      <ReviewIcon style={{height: 100, width: 100}} color={'#484848'}/>
                     </div>
                     <div className='about-reviews' style={styles.aboutText}>
                       Fred has recommended 10 projects
@@ -407,7 +410,7 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#E55749',color: 'white', padding: 24}}>
+          <div style={{backgroundColor: '#3B9E74',color: 'white', padding: 24}}>
             <div style={{height: 50}}/>
             <div style={{ alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileAbout}>

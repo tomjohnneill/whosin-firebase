@@ -6,7 +6,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
-import {Spiral} from './icons.jsx';
+import {Spiral, World} from './icons.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
@@ -146,7 +146,7 @@ class CharityReviews extends React.Component {
           <Link to={`/profile/${review.User}`}>
             <div style={{height: '200px', width: '150px', display: 'flex', alignItems: 'center', flexDirection: 'column',
             textAlign: 'center'}}>
-              <img src={review['Volunteer Picture']} style={{borderRadius: '50%',
+              <img src={changeImageAddress(review['Volunteer Picture'], '250xauto')} style={{borderRadius: '50%',
                 height: '100px', width: '100px'}}/>
               <div style={{width: '100%', marginTop: 16}}>
                 <b>{review.Name}</b><br/>
@@ -197,7 +197,7 @@ class Supporters extends React.Component {
           <Link to={`/profile/${supporter.User}`}>
             <div style={{height: '200px', width: '150px', display: 'flex', alignItems: 'center', flexDirection: 'column',
             textAlign: 'center'}}>
-              <img src={supporter['Volunteer Picture']} style={{borderRadius: '50%',
+              <img src={changeImageAddress(supporter['Volunteer Picture'], '250xauto')} style={{borderRadius: '50%',
                 height: '100px', width: '100px'}}/>
               <div style={{width: '100%', marginTop: 16}}>
                 <b>{supporter.Name}</b><br/>
@@ -288,7 +288,7 @@ export class RecentCharityReviews extends React.Component {
             <Link to={`/projects/${review['Project Name']}/${review.Project}`}>
               <div key={review._id} style={{display: 'flex', alignItems: 'center', paddingTop: 10, paddingBottom: 10}}>
                 <img className='user-picture' style={{borderRadius: '50%', padding: 10, height: 70, width: 70, boxSizing: 'border-box'}}
-                  src={review['User Picture']}/>
+                  src={changeImageAddress(review['User Picture'], '250xauto')}/>
                 <div className='review-body' style={{fontSize:'20px', fontWeight: 200}}>
                   {review.publicReview}
                 </div>
@@ -404,9 +404,16 @@ export default class CharityProfile extends React.Component {
               <div className='container' style={{paddingLeft: 100, paddingRight: 100, paddingTop: 32,
                   textAlign: 'left', boxSizing: 'border-box'}}>
                 <div className='charity-header-container' style={{display: 'flex', alignItems: 'center'}}>
-                  <img className='charity-logo-in-header'
-                    src={this.state.charity['Featured Image']}
-                    style={{borderRadius: '50%', height: 222, width: 222}}/>
+                  {this.state.charity['Featured Image'] ?
+                    <img className='charity-logo-in-header'
+                      src={changeImageAddress(this.state.charity['Featured Image'], '500xauto')}
+                      style={{borderRadius: '50%', height: 222, width: 222, margin: 20}}/>
+                    :
+                    <div style={{margin: 20, height: 222, width: 222, borderRadius: '50%', backgroundColor: 'rgba(216,216,216,0.2)',
+                        display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <World style={{height: 100, width: 100}}/>
+                    </div>
+                  }
                   <div className='charity-title-container' style={{paddingLeft: 50}}>
                     <div className='charity-title' style={{fontWeight: 'bold', fontSize: '54px'}}>
                       {this.state.charity.Name}
@@ -446,8 +453,19 @@ export default class CharityProfile extends React.Component {
                       : null}
                     </div>
                   </div>
-                </div>
 
+                </div>
+                <div style={{marginTop: 16}}>
+                  {fire.auth().currentUser && fire.auth().currentUser.uid === this.state.charity.Owner  ?
+                  <FlatButton
+                    secondary={true}
+                    label='Edit Profile' labelStyle={{textTransform: 'none', padding: '10px', fontSize: '16px'}}
+                      onTouchTap={() => browserHistory.push(`/charity/${this.props.params.charityId}/edit`)}
+                       />
+                     :
+                     null
+                   }
+                </div>
                 <div className='about-review-container' style={{display: 'flex', width: '100%'}}>
                   <div className='about-container' style={{flex: 1, marginRight: 100}}>
                     <h2 className='about-header' style={styles.secondHeader}>
@@ -480,9 +498,16 @@ export default class CharityProfile extends React.Component {
                   textAlign: 'left', boxSizing: 'border-box'}}>
                 <div className='charity-header-container'
                     style={{display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
-                  <img className='charity-logo-in-header'
-                    src={this.state.charity['Featured Image']}
-                    style={{borderRadius: '50%', height: 222, width: 222}}/>
+                    {this.state.charity['Featured Image'] ?
+                      <img className='charity-logo-in-header'
+                        src={changeImageAddress(this.state.charity['Featured Image'], '500xauto')}
+                        style={{borderRadius: '50%', height: 222, margin: 20, width: 222}}/>
+                      :
+                      <div style={{height: 222, width: 222, borderRadius: '50%', backgroundColor: 'rgba(216,216,216,0.2)',
+                            margin: 20, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <World style={{height: 100, width: 100}}/>
+                      </div>
+                    }
                   <div className='charity-title-container'>
                     <div className='charity-title' style={{fontWeight: 'bold', fontSize: '45px', textAlign: 'center'}}>
                       {this.state.charity.Name}

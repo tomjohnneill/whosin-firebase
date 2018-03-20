@@ -106,12 +106,35 @@ export default class OrganisationLookup extends React.Component{
     });
 
     this.debounce(this.fetchCharities(), 500)
+    const client = window.algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const index = client.initIndex('organisations');
+    var query = searchText
+    index
+        .search({
+            query
+        })
+        .then(responses => {
+            // Response from Algolia:
+            // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
+            var charities = this.state.charities
+            var toBeConcatted
+            for (let i = 0; i < responses.hits.length; i++) {
+              let matches = charities.filter(charity => charity['Charity Number'] === responses.hits[i].objectID)
+              if (matches.length === 0) {
+                toBeConcatted.push(responses.hits[i])
+              }
+            }
+            charities.concat(toBeConcatted)
+            this.setState({charities: charities});
+        });
 
 
     };
 
   handleNewRequest = (string, v) => {
     console.log(string)
+
+
     console.log(this.state.rawCharities)
     var newArray = this.state.rawCharities.filter(function (el) {
       return el.name === string
@@ -147,35 +170,9 @@ export default class OrganisationLookup extends React.Component{
 
   handleNext = (e) => {
     e.preventDefault()
-    var worktoolsToken = localStorage.getItem('worktoolsToken')
-    var basics = JSON.parse(localStorage.getItem('basics'))
-    var story = JSON.parse(localStorage.getItem('story'))
-    var coverPhoto = localStorage.getItem('coverPhoto')
-    var times = JSON.parse(localStorage.getItem('times'))
-    var startTime = times ? new Date(times['Start Time']) : null
-    var endTime = times ? new Date(times['End Time']) : null
-    var body = {
-      "Creator": fire.auth().currentUser.uid,
-      'Name': story.title,
-      'Description': story.story,
-      'Summary': story.summary,
-      'Target People': basics.min,
-      'Maximum People': basics.max,
-      'Featured Image': coverPhoto,
-      'Deadline': new Date(basics.deadline),
-      'Location': times ? times.address : null,
-      'Start Time': startTime,
-      'End Time': endTime,
-      'Tags': basics.tags,
-      "Geopoint": times ? times.location : null,
-      "created": new Date()
-    }
-    console.log(body)
-    console.log(JSON.stringify(body))
-
 
     var charityBody = {
-      'Name': this.state.searchText ,
+      'Name': this.state.name ? this.state.name : this.state.searchText,
       'Summary': this.state.activities ? this.state.activities : null,
       'Description': this.state.activities ? this.state.activities : null ,
       'Website': this.state.website ? this.state.website : null ,
@@ -193,45 +190,22 @@ export default class OrganisationLookup extends React.Component{
     if (this.state.charityNumber) {
       db.collection("Charity").doc(this.state.charityNumber.toString()).set(charityBody, {merge: true})
       .then(docRef => {
-        body.Charity = this.state.charityNumber.toString()
-        body['Charity Name'] = this.state.searchText
-        db.collection("Project").add(body)
-        .then(newProject => {
-          console.log(newProject)
-          browserHistory.push('/projects/p/' + newProject.id + '/completed')
-        })
-          })
-      .catch(error => {this.setState({error: error}); console.log(error)})
+        charityBody._id = docRef.id
+        localStorage.setItem('charity', JSON.stringify(charityBody))
+        browserHistory.push('/create-project/1')
+      })
+      .catch(error => {this.setState({error: error}); alert(error); console.log(error)})
 
     } else {
       db.collection("Charity").add(charityBody)
       .then(docRef => {
-        body.Charity = docRef.id
-        body['Charity Name'] = this.state.searchText
-        if (localStorage.getItem('editProject')) {
-          db.collection("Project").doc(localStorage.getItem('editProject')).update(body)
-          .then(newProject => {
-            console.log(newProject)
-            browserHistory.push('/projects/p/' + newProject.id + '/completed')
+        charityBody._id = docRef.id
+        localStorage.setItem('charity', JSON.stringify(charityBody))
+        browserHistory.push('/create-project/1')
           })
-        } else {
-          db.collection("Project").add(body)
-          .then(newProject => {
-            console.log(newProject)
-            browserHistory.push('/projects/p/' + newProject.id + '/completed')
-          })
-        }
-
-          })
-      .catch(error => {this.setState({error: error}); console.log(error)})
+      .catch(error => {this.setState({error: error}); alert(error); console.log(error)})
     }
 
-
-    localStorage.removeItem('basics')
-    localStorage.removeItem('story')
-    localStorage.removeItem('times')
-    localStorage.removeItem('coverPhoto')
-    localStorage.removeItem('editProject')
 
   }
 
@@ -251,7 +225,7 @@ export default class OrganisationLookup extends React.Component{
         <div style={{width: '500px', display: 'flex'
           , justifyContent: 'center'}} className='basics-container'>
           <div className='form' style={{textAlign: 'center', paddingLeft: '50px', paddingRight: '50px'}}>
-            <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px'}}>
+            <p className='desktop-header'>
               Add your details</p>
             <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
               <p style={{margin: '0px', paddingRight: '24px', paddingLeft: '24px', paddingBottom: '16px'}}>
@@ -320,7 +294,7 @@ export default class OrganisationLookup extends React.Component{
             </div>
             :
             <div style={{marginTop: '-10px', paddingLeft: '50px', paddingRight: '50px', textAlign: 'left'}}>
-              <div style={{padding: '10px', backgroundColor: '#F5F5F5', fontFamily: 'Permanent Marker', fontSize: '30px', marginBottom: '16px'}}>
+              <div style={{padding: '10px', backgroundColor: '#F5F5F5',marginBottom: '16px'}} className='desktop-header'>
                 Check your details
               </div>
 

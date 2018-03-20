@@ -34,6 +34,7 @@ import ShortReview from './components/feedback/shortreview.jsx';
 import AllProjects from './components/allprojects.jsx';
 import EditCharity from './components/editcharity.jsx';
 import EmbeddedProject from './components/embeddedproject.jsx';
+import OrganisationType from './components/create-project/organisationtype.jsx';
 import About from './components/about.jsx';
 import asyncComponent from './AsyncComponent'
 
@@ -59,6 +60,7 @@ const rootElement = document.getElementById('root');
       <Route path='/step/stepper' component={CreateProject}/>
       <Route path='/auto/autocomplete' component={CharityAutocomplete}/>
       <Route path='/create-project/0' component={MiniWhy}/>
+      <Route path='/create-project/choose-type' component={OrganisationType}/>
       <Route path='/create-project/1' component={Basics}/>
       <Route path='/create-project/2' component={DateAndTime}/>
       <Route path='/create-project/3' component={Story}/>
@@ -69,6 +71,7 @@ const rootElement = document.getElementById('root');
       <Route path='/project/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
+      <Route path='/projects/:pledge/:_id/admin/:adminTab' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/completed' component={Project}/>
       <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/review/project' component={ReviewOverview}/>
