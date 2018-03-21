@@ -196,10 +196,13 @@ export class Form extends React.Component {
           </div>
 
         </div>
-        <RaisedButton label='NEXT' backgroundColor='#E55749'
+        <RaisedButton label='NEXT'
           onClick={this.handleNext}
           disabled={!this.state.deadline || !this.state.min }
-          labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+          style={{height: '36px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+          buttonStyle={{height: '36px'}}
+           labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                letterSpacing: '0.6px', fontWeight: 'bold'}}/>
       </div>
     )
   }

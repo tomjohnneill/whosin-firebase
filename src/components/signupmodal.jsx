@@ -144,7 +144,7 @@ export default  class SignupModal extends React.Component {
       <div>
         <MediaQuery minDeviceWidth={700}>
           <Dialog
-            open={this.props.open ? true : false}
+            open={this.props.open && !fire.auth().currentUser ? true : false}
             modal={false}
 
             onRequestClose={this.props.changeOpen}
@@ -318,7 +318,7 @@ export default  class SignupModal extends React.Component {
           </Dialog>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
-          <div style={{backgroundColor: 'white', zIndex: 10, marginTop: 10, display: this.props.open ? 'inherit' : 'none', width: '100%', position: 'relative',
+          <div style={{backgroundColor: 'white', zIndex: 10, marginTop: 10, display: this.props.open && !fire.auth().currentUser ? 'inherit' : 'none', width: '100%', position: 'relative',
           boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px', borderRadius: 6, padding: 10, boxSizing: 'border-box'}}>
           {this.state.loading  ?
           <div style={{width: '100%', height: '100%', position: 'absolute', top: '0px',left: '0px',zIndex: '20', boxSizing: 'border-box', backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

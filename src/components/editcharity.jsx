@@ -68,7 +68,7 @@ const styles = {
 }
 
 
-class CharityPhotoUpload extends React.Component {
+export class CharityPhotoUpload extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -95,7 +95,9 @@ class CharityPhotoUpload extends React.Component {
                 var body = {
                   'Featured Image': imageUrl
                 }
-                db.collection("Charity").doc(this.props.charityId).update(body)
+                if (this.props.charityId) {
+                  db.collection("Charity").doc(this.props.charityId).update(body)
+                }
                 this.props.changeImage(imageUrl)
             }
         }.bind(this)

@@ -191,7 +191,7 @@ export default class Project extends React.Component {
       project._id = doc.id
       this.setState({loading: false, project: project, charity: {}})
       if (project.Charity) {
-        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+        db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
             charity._id = charityDoc.id
             this.setState({ charity: charity, loading: false})
@@ -348,8 +348,8 @@ export default class Project extends React.Component {
         "Project Name": this.state.project.Name,
         "User": fire.auth().currentUser.uid,
         "Project Photo": this.state.project['Featured Image'],
-        "Charity": this.state.project['Charity Name'],
-        "Charity Number": this.props.project.Charity,
+        "Charity": this.state.project['Charity Name'] ? this.state.project['Charity Name'] : null,
+        "Charity Number": this.state.project.Charity ? this.state.project.Charity : null,
         "Name": doc.data().Name.replace(/ .*/,''),
         "Email": doc.data().Email,
         "Volunteer Picture": doc.data().Picture ? doc.data().Picture : null,
@@ -424,6 +424,23 @@ export default class Project extends React.Component {
           <MediaQuery maxDeviceWidth = {700}>
             <img className='mobile-cover-image' src={this.state.project['Featured Image']}
               style={{height: '222px', width: '100%', objectFit: 'cover'}}/>
+              {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                <div style={{display: 'flex', float: 'right'}}>
+                  <FlatButton
+                    secondary={true}
+                    style={{marginRight: 20}}
+                    label='Admin View' labelStyle={{textTransform: 'none', fontWeight: 700, padding: '10px', fontSize: '16px'}}
+                      onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/admin')}
+                       />
+                 <FlatButton
+                   secondary={true}
+                   style={{marginRight: 20}}
+                   label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
+                     onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/editproject')}
+                      />
+               </div>
+                 : null
+               }
             <div style={{padding: '20px 35px 20px 35px'}} className='mobile-project-container'>
 
               <p className='mobile-project-title'
@@ -431,6 +448,7 @@ export default class Project extends React.Component {
                 margin: 0}}>
                 {this.state.project.Name}
               </p>
+
               {this.state.project.Charity ?
                 <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
                   <div className='charity-link-content'
@@ -449,14 +467,14 @@ export default class Project extends React.Component {
                   </div>
                 </Link>
                 :
-                <Link  className='charity-link' to={`/profiles/${this.state.project.Creator}`}>
+                <Link  className='charity-link' to={`/profile/${this.state.project.Creator}`}>
                   <div className='charity-link-content'
                      style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
                     <div style={{marginRight: 10}} className='charity-icon'>
-                      <Avatar>{this.state.project.Creator.substring(0,1)}</Avatar>
+                      <Avatar>{this.state.creator ? this.state.creator.Name.substring(0,1) : null}</Avatar>
                     </div>
                     <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
-                        {this.state.project.Creator}
+                        {this.state.creator ? this.state.creator.Name : null}
                     </p>
                   </div>
                 </Link>
@@ -515,33 +533,39 @@ export default class Project extends React.Component {
 
 
             <div style={{display: 'flex', justifyContent: 'center', padding: '20px 35px 20px 35px'}}>
-              {!this.state.joined && this.state.challenge?
+              {!this.state.joined && this.state.challenge ?
                 <div>
                   <div style={{marginBottom: 10}}>
-                    <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
-                      {`Accept ${this.state.challengeUser.Name}'s challenge:`}
-
-                    </span>
-                    <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
-                  </div>
-                    <RaisedButton
-                     primary={true} fullWidth={true}
-                     labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                     label='Join Now' onTouchTap={this.handleModal} />
+                  <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
+                    {`Accept ${this.state.challengeUser.Name}'s challenge:`}
+                </span>
+                <span style={{fontWeight: 'lighter', color: 'grey', fontSize: '14px'}}>(They're not coming unless you are)</span>
+                </div>
+                <RaisedButton
+                   primary={true} fullWidth={true}
+                    labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                   label='Join Now' onTouchTap={this.handleModal} />
                  </div>
                  :
                  !this.state.joined ?
-                    <div style={{width: '100%'}}>
-                      <RaisedButton
-                         primary={true} fullWidth={true}
-                          labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                         label="Join Now" onTouchTap={this.handleModal} />
-                        </div>
-                  :
+                <div>
+                    {!this.state.challengeExists && !this.state.challengeExists && !this.state.challenge ?
+                      <div>
                   <RaisedButton
-                     fullWidth={true}
+                     primary={true} fullWidth={true}
+                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                     label="Join Now" onTouchTap={this.handleModal} />
+                 </div> : <RaisedButton
+                    primary={true} fullWidth={true}
                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                        label="I can't come" onTouchTap={this.handleUnJoin} />}
+                    label='Join Now' onTouchTap={this.handleModal} />}
+                   </div>
+             :
+             <RaisedButton
+                 fullWidth={true}
+                 labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                label="I can't come" onTouchTap={this.handleUnJoin} />}
+
                   </div>
                   <div style={{position: 'sticky'}}>
                     <SignupModal

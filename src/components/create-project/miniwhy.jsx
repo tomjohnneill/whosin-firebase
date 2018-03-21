@@ -62,10 +62,10 @@ export default class MiniWhy extends React.Component {
         </div>
 
         <RaisedButton label='Start a Project' onClick={this.handleProject}
-            primary={true}
-            buttonStyle={{borderRadius: '6px'}}
-            style={{borderRadius: '6px', marginTop: 30}}
-            labelStyle={{fontSize: '18px', fontWeight: 600, textTransform: 'none'}}
+            style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+            buttonStyle={{height: '36px'}}
+             labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                  letterSpacing: '0.6px', fontWeight: 'bold'}}
           />
       </div>
     )

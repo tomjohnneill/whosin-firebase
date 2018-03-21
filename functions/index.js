@@ -8,6 +8,16 @@ let db = admin.firestore()
 
 var mailgun = require('mailgun-js')({apiKey: 'key-dfe410401ff096a0f1764383dfb5e89a', domain: 'mg.whosin.io'})
 
+function changeImageAddress(file, size) {
+  if (file && file.includes('https://d3kkowhate9mma.cloudfront.net')) {
+    var str = file, replacement = '/' + size + '/';
+    str = str.replace(/\/([^\/]*)$/,replacement+'$1');
+    return(str + '?pass=this')
+  } else {
+    return (file)
+  }
+}
+
 exports.addOneToPeople = functions.firestore
   .document('Engagement/{engagementId}')
   .onCreate(event => {
@@ -90,7 +100,7 @@ exports.sendSignUpEmail = functions.firestore
             email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
             email = email.replace("{{ projectName }}", ProjectData.Name)
             email = email.replace('{{ Name }}', newValue.Name)
-            email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
+            email = email.replace("{{ imageUrl }}", changeImageAddress(ProjectData['Featured Image'], '750xauto'))
             email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
             email = email.replace("{{ location }}", ProjectData['Location'])
             email = email.replace("{{ schemaScript }}", ProjectData['Location'])

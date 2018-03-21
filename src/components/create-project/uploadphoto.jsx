@@ -243,7 +243,7 @@ export default class UploadPhoto extends React.Component{
               , justifyContent: 'center'}} className='basics-container'>
               <div className='form' style={{textAlign: 'left', width: '100%'}}>
                 {!this.props.edit ?
-                <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+                <p className='desktop-header'>
                   Upload a cover photo</p>
                 : null }
                 <div style={{width: '100%', paddingBottom: 24, boxSizing: 'border-box'}}>
@@ -310,10 +310,12 @@ export default class UploadPhoto extends React.Component{
                                   style={{padding: 16, boxSizing: 'border-box', position: 'relative', width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}}/>
                                 {this.state.dropzoneHover ?
                                   <RaisedButton label='Change Photo'
-                                    style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
+                                    style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 36, zIndex: 10}}
                                     icon={<CloudUpload />}
-                                    labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
-                                    primary={true}
+                                    primary={true} overlayStyle={{height: '36px'}}
+                                    buttonStyle={{height: '36px'}}
+                                     labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                                          letterSpacing: '0.6px', fontWeight: 'bold'}}
                                     />
                                   :
                                   null}

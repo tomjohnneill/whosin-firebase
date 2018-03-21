@@ -187,7 +187,7 @@ class Form extends React.Component {
       }
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
-        <p style={{marginTop: '0px',fontFamily: 'Permanent Marker', fontSize: '32px', textAlign: 'left'}}>
+        <p className='desktop-header'>
           If this is an event, can you give some details?</p>
           <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
             <p style={styles.header}>
@@ -277,25 +277,35 @@ class Form extends React.Component {
         </div>
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
-            style={{marginRight: 16}}
-            labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+            style={{marginRight: 16, height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+            buttonStyle={{height: '36px'}}
+            labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                 letterSpacing: '0.6px', fontWeight: 'bold'}}/>
         <MediaQuery minDeviceWidth={700}>
-          <RaisedButton label='NEXT' backgroundColor='#E55749'
+          <RaisedButton label='NEXT'
               onClick={this.handleNext}
-              style={{marginRight: 127}}
               disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
-              labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+              style={{marginRight: 16, height: '36px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+              buttonStyle={{height: '36px'}}
+               labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    letterSpacing: '0.6px', fontWeight: 'bold'}}/>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
           <RaisedButton label='NEXT' backgroundColor='#E55749'
               onClick={this.handleNext}
-              style={{marginRight: 16}}
+              style={{marginRight: 16, height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+              buttonStyle={{height: '36px'}}
+              labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                   letterSpacing: '0.6px', fontWeight: 'bold'}}
               disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
-              labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+            />
         </MediaQuery>
       <RaisedButton label='Skip' secondary={true}
           onClick={() => browserHistory.push('/create-project/3')}
-            labelStyle={{color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+          style={{marginRight: 16, height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+          buttonStyle={{height: '36px'}}
+            labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                 letterSpacing: '0.6px', fontWeight: 'bold'}}/>
       </div>
     )
   }

@@ -282,8 +282,11 @@ export default class About extends React.Component {
               </div>
               <div style={{marginTop: 25}}>
                 <RaisedButton primary={true}
+                  style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                  buttonStyle={{height: '36px'}}
+                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                        letterSpacing: '0.6px', fontWeight: 'bold'}}
                   label='Find a project' onClick={() => browserHistory.push('/projects')}
-                  labelStyle={{textTransform: 'none', fontWeight: 700}}
                   />
               </div>
             </div>
@@ -441,9 +444,12 @@ export default class About extends React.Component {
                 Go forth and do good
               </div>
               <div style={{marginTop: 25}}>
-                <RaisedButton primary={true}
+                <RaisedButton
                   label='Find a project' onClick={() => browserHistory.push('/projects')}
-                  labelStyle={{textTransform: 'none', fontWeight: 700}}
+                  style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                  buttonStyle={{height: '36px'}}
+                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                        letterSpacing: '0.6px', fontWeight: 'bold'}}
                   />
               </div>
             </div>

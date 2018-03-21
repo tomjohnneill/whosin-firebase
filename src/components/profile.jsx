@@ -108,6 +108,7 @@ export class PhotoUpload extends React.Component {
                   'Picture': imageUrl
                 }
                 db.collection("User").doc(this.props.userId).update(body)
+                db.collection("User").doc(this.props.userId).collection("public").doc(this.props.userId).update(body)
                 this.props.changeImage(imageUrl)
             }
         }.bind(this)
@@ -358,16 +359,31 @@ class ProjectsOrganised extends React.Component {
               Projects organised by {this.props.name}
             </div>
             <div>
+              <MediaQuery minDeviceWidth={700}>
               {this.state.projects ?
                 <div>
                   {this.state.projects.map((project) => (
-                  <div style={{padding: 20, width: '50%'}}>
+                  <div style={{padding: 20, width: '50%', boxSizing: 'border-box'}}>
                     <EmbeddedProject noLogo={true} project={project}/>
                   </div>
                   ))}
-              </div>
-              : null
-            }
+                </div>
+                : null
+              }
+              </MediaQuery>
+              <MediaQuery maxDeviceWidth={700}>
+              {this.state.projects ?
+                <div>
+                  {this.state.projects.map((project) => (
+                  <div style={{padding: 20, width: '100%', boxSizing: 'border-box'}}>
+                    <EmbeddedProject noLogo={true} project={project}/>
+                  </div>
+                  ))}
+                </div>
+                : null
+              }
+              </MediaQuery>
+
             </div>
           </div>
           :
@@ -660,6 +676,11 @@ export default class Profile extends React.Component {
                       </div>
                     </div>
                   </div>
+
+
+                  <ProjectsOrganised userId={this.state.userId}
+                    name={this.state.user.public.Name ? this.state.user.public.Name.replace(/ .*/,'') : 'Anon'}/>
+
 
                   <RecentReviews userId={this.state.userId}/>
 

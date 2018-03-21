@@ -191,7 +191,7 @@ class StoryForm extends React.Component {
             onTouchTap={this.handlePrevious}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
         <div style={{width: '16px', display: 'inline-block'}}/>
-        <RaisedButton label='NEXT' backgroundColor='#E55749'
+        <RaisedButton label='Finish' backgroundColor='#E55749'
             onClick={this.handleNext}
             disabled={!this.state.story || !this.state.summary || !this.state.title || !localStorage.getItem('coverPhoto')}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>

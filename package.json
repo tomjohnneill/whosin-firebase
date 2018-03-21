@@ -10,6 +10,7 @@
     "react-add-to-calendar": "^0.1.5",
     "react-async-script-loader": "^0.3.0",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-cropper": "^1.0.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.3",

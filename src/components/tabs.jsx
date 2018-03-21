@@ -157,7 +157,10 @@ export default class UserTabs extends React.Component {
 
               </span>
               <div style={{display: 'flex', paddingTop: '30px'}}>
-                <RaisedButton labelStyle={styles.button} primary={true}
+                <RaisedButton   style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                  buttonStyle={{height: '36px'}}
+                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                        letterSpacing: '0.6px', fontWeight: 'bold'}}
                   onClick={() => browserHistory.push('/projects')} label='Find a project'/>
               </div>
             </div>
@@ -183,7 +186,10 @@ export default class UserTabs extends React.Component {
 
                 </span>
                 <div style={{display: 'flex', paddingTop: '30px'}}>
-                <RaisedButton labelStyle={styles.button} primary={true}
+                <RaisedButton   style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                  buttonStyle={{height: '36px'}}
+                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                        letterSpacing: '0.6px', fontWeight: 'bold'}}
                    onClick={() => browserHistory.push('/projects')} label='Find a project'/>
                 </div>
               </div>

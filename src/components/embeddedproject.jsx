@@ -24,7 +24,7 @@ export default class EmbeddedProject extends React.Component {
       }
       this.setState({project: project, loading: false})
       if (project.Charity) {
-        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+        db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
             charity._id = charityDoc.id
             this.setState({ project: project, charity: charity, loading: false})
@@ -37,7 +37,7 @@ export default class EmbeddedProject extends React.Component {
         project._id = doc.id
         this.setState({ project: project, loading: false})
         if (project.Charity) {
-          db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+          db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
               var charity = charityDoc.data() ? charityDoc.data() : {}
               charity._id = charityDoc.id
               this.setState({ charity: charity})
@@ -61,7 +61,7 @@ export default class EmbeddedProject extends React.Component {
       this.setState({project: nextProps.project, loading: false})
 
       if (project.Charity) {
-        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+        db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
             var charity = charityDoc.data() ? charityDoc.data() : {}
             charity._id = charityDoc.id
             this.setState({ project: project, charity: charity, loading: false})

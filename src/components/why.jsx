@@ -60,7 +60,7 @@ export default class Why extends React.Component {
   handleGetStarted = (e) => {
     e.preventDefault()
     if (fire.auth().currentUser) {
-      browserHistory.push('/create-project/1')
+      browserHistory.push('/create-project/choose-type')
     } else {
       this.setState({modalOpen: true})
     }
@@ -68,7 +68,7 @@ export default class Why extends React.Component {
 
   onComplete = () => {
     this.setState({modalOpen: false})
-    browserHistory.push('/create-project/1')
+    browserHistory.push('/create-project/choose-type')
   }
 
   handleModalChangeOpen = () => {

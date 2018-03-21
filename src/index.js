@@ -35,11 +35,16 @@ import AllProjects from './components/allprojects.jsx';
 import EditCharity from './components/editcharity.jsx';
 import EmbeddedProject from './components/embeddedproject.jsx';
 import OrganisationType from './components/create-project/organisationtype.jsx';
+import Terms from './components/terms.jsx';
 import About from './components/about.jsx';
 import asyncComponent from './AsyncComponent'
 
 const EmailTemplateBuilder = asyncComponent(() =>
     import('./components/admin/emailtemplatebuilder.jsx').then(module => module.default)
+)
+
+const ImageCrop = asyncComponent(() =>
+    import('./components/admin/imagecrop.jsx').then(module => module.default)
 )
 
 const rootElement = document.getElementById('root');
@@ -52,6 +57,7 @@ const rootElement = document.getElementById('root');
       <Route path='/admin/emailtemplate' component={EmailTemplateBuilder}/>
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
       <Route path='/customform' component={CustomForm}/>
+      <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
@@ -70,6 +76,7 @@ const rootElement = document.getElementById('root');
       <Route path='/embed/:_id' component={EmbeddedProject}/>
       <Route path='/project/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
+      <Route path='/projects/:pledge/:_id/crop-edit' component={ImageCrop}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/admin/:adminTab' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/completed' component={Project}/>

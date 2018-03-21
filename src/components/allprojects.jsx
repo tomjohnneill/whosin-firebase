@@ -80,8 +80,8 @@ export default class AllProjects extends React.Component {
         <MediaQuery minDeviceWidth={700}>
           <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center',
              paddingLeft: 100, zIndex: 10, paddingRight: 100
-            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20,
-            paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
+            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 6,
+            paddingBottom: 6, borderBottom: '1px solid #DDDDDD'}}>
 
             <Search style={{marginRight: 6}}/>
             <TextField hintText={'Search'} onChange={this.handleSearch}/>
@@ -90,7 +90,7 @@ export default class AllProjects extends React.Component {
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
           <div style={{position: 'sticky', top: '50px', display: 'flex', alignItems: 'center', paddingLeft: 16, zIndex: 10, paddingRight: 10
-            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #DDDDDD'}}>
+            , background: 'linear-gradient(0deg, #ffffff, #f7f7f7)', paddingTop: 6, paddingBottom: 6, borderBottom: '1px solid #DDDDDD'}}>
 
             <Search style={{marginRight: 6}}/>
             <TextField hintText={'Search'} onChange={this.handleSearch}/>
@@ -98,7 +98,7 @@ export default class AllProjects extends React.Component {
         </MediaQuery>
         <div>
           <MediaQuery minDeviceWidth={700}>
-            <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left', paddingLeft: '100px'}}>
+            <h1 className='desktop-header' style={{paddingLeft: '100px', marginTop: 16}}>
               All Projects</h1>
             {this.state.loading ?
               <Loading/>

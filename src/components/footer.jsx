@@ -101,7 +101,10 @@ export default class Footer extends React.Component {
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
                     onClick={() => db.collection("Newsletter").add({email: this.state.emailSignup})}
-                    backgroundColor='#E55749' labelStyle={{textTransform: 'none', color: 'white'}}/>
+                    style={{height: '36px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                    buttonStyle={{height: '36px'}}
+                     labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                          letterSpacing: '0.6px', fontWeight: 'bold'}}/>
                 </div>
               </div>
               <div style={{flex: 2, marginLeft: 24, display: 'flex', justifyContent: 'center'}}>
@@ -137,7 +140,10 @@ export default class Footer extends React.Component {
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
                     onClick={() => db.collection("Newsletter").add({email: this.state.emailSignup})}
-                    backgroundColor='#E55749' labelStyle={{textTransform: 'none', color: 'white'}}/>
+                    style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                    buttonStyle={{height: '36px'}}
+                     labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                          letterSpacing: '0.6px', fontWeight: 'bold'}}/>
                 </div>
               </div>
               <div style={{flex: 2, marginTop: 24}}>

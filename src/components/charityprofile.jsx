@@ -420,7 +420,8 @@ export default class CharityProfile extends React.Component {
                     </div>
                     <div className='soc-media-container' style={{display: 'flex', alignItems: 'center'}}>
                       {this.state.charity.Facebook ?
-                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.facebook.com/${this.state.charity.Facebook}`}>
+                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener"
+                         href={`https://www.facebook.com/${this.state.charity.Facebook.replace(/[^\x00-\x7F]/g, "")}`}>
                         <div className='fb-icon'>
                           <Avatar
                             icon={<FontIcon className="fab fa-facebook" />}
@@ -436,7 +437,8 @@ export default class CharityProfile extends React.Component {
                       </a>
                       : null}
                       {this.state.charity.Twitter ?
-                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.twitter.com/${this.state.charity.Twitter}`}>
+                      <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener"
+                        href={`https://www.twitter.com/${this.state.charity.Twitter.replace(/[^\x00-\x7F]/g, "")}`}>
                         <div className='twitter-icon'>
                           <Avatar
                             icon={<FontIcon className="fab fa-twitter" />}
@@ -515,7 +517,8 @@ export default class CharityProfile extends React.Component {
                   </div>
                   <div className='soc-media-container' style={{display: 'flex', alignItems: 'center'}}>
                     {this.state.charity.Facebook ?
-                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.facebook.com/${this.state.charity.Facebook}`}>
+                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener"
+                       href={`https://www.facebook.com/${this.state.charity.Facebook.replace(/[^\x00-\x7F]/g, "")}`}>
                       <div className='fb-icon'>
                         <Avatar
                           icon={<FontIcon className="fab fa-facebook" />}
@@ -531,7 +534,8 @@ export default class CharityProfile extends React.Component {
                     </a>
                     : null}
                     {this.state.charity.Twitter ?
-                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener" href={`https://www.twitter.com/${this.state.charity.Twitter}`}>
+                    <a style={{display: 'flex', alignItems: 'center'}} target='_blank' rel="noopener"
+                      href={`https://www.twitter.com/${this.state.charity.Twitter.replace(/[^\x00-\x7F]/g, "")}`}>
                       <div className='twitter-icon'>
                         <Avatar
                           icon={<FontIcon className="fab fa-twitter" />}

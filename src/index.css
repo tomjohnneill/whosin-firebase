@@ -27,9 +27,18 @@ body {
 .desktop-header {
   font-weight: 700;
   font-size: 36px;
-  text-align: left
+  text-align: left;
+  margin: 0;
+  padding-bottom: 16px
 }
 
+.normal-button {
+  height: 36px;
+  display: flex;
+   align-items: center;
+  letter-spacing: 0.6px;
+  fontWeight: bold;
+}
 
 li {
   list-style-type: none;

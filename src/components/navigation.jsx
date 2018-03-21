@@ -11,6 +11,7 @@ import IconButton from 'material-ui/IconButton';
 import MediaQuery from 'react-responsive';
 import Settings from 'material-ui/svg-icons/action/settings';
 import Drawer from 'material-ui/Drawer';
+import {Ass} from './icons.jsx'
 import InfoOutline from 'material-ui/svg-icons/action/info';
 import SignupModal from './signupmodal.jsx';
 //import MessagingButton from '/imports/ui/components/messagingbutton.jsx';
@@ -28,8 +29,7 @@ const style = {
     fontFamily: 'Permanent Marker',
     color: '#E55749',
     fontSize: '30px',
-    marginRight: '15px',
-    width: '100px'
+    marginRight: '10px'
   },
   appBar: {
     margin: '0px',
@@ -97,7 +97,6 @@ export default class Navigation extends React.Component {
   constructor(props){
     super(props);
     this.state = {drawerOpen: false, open: false, changePasswordOpen: false, modalOpen: false, loading: true};
-    this.logout = this.logout.bind(this);
 
   }
 
@@ -120,15 +119,6 @@ export default class Navigation extends React.Component {
       })
       .catch(error => console.log('Error', error))
     }
-  }
-
-
-  logout(e){
-    e.preventDefault();
-
-    this.setState({data: {isAuthenticated: false}})
-
-
   }
 
 
@@ -191,7 +181,14 @@ export default class Navigation extends React.Component {
 
   handleSignOut = (e) => {
     e.preventDefault()
+    fire.auth().signOut()
+    .then(() => {browserHistory.push('/'); this.setState({drawerOpen: false})})
 
+    fire.auth().onAuthStateChanged((user) => {
+      if (user === null) {
+        this.setState({user: null, userPicture: null})
+      }
+    })
   }
 
   handleModal = (e) => {
@@ -263,7 +260,9 @@ export default class Navigation extends React.Component {
           iconClassNameLeft='mobile-nav-bar'
           iconElementLeft={
             <div>
-
+              <MediaQuery minDeviceWidth={700}>
+                <div style={{width: 16}}/>
+              </MediaQuery>
               <MediaQuery maxDeviceWidth={700}>
                 <IconButton onClick={() => this.setState({drawerOpen: true})} tooltip='Menu'>
                   <MenuIcon/>
@@ -317,12 +316,7 @@ export default class Navigation extends React.Component {
                                 <Avatar> {this.state.user.Name.substring(0,1)}</Avatar>
                                 }
                               </IconButton> :
-                              <RaisedButton label='Login' primary={true}
-                                onClick={this.handleModal}
-                                 labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center', textAlign: 'center', paddingLeft: '19px',
-                                      letterSpacing: '0.6px', fontWeight: 'bold'}}
-
-                                />}
+                            null}
                             {!this.state.user ?
                               <div
                                 onTouchTap={this.setModal}
@@ -335,6 +329,7 @@ export default class Navigation extends React.Component {
                             </div>}
           title={
             <div className='flexthis' style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+
             <span onTouchTap ={this.handleTitleTap.bind(this)}  className = 'whosin' style={style.title}>
               who's in?
             </span>
@@ -369,6 +364,8 @@ export default class Navigation extends React.Component {
             <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/create-project/0')}>Start a project</MenuItem>
+            <MenuItem onClick={this.handleSignOut}>
+              Sign out</MenuItem>
           </Drawer>
 
       </div>
