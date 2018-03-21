@@ -2,6 +2,7 @@ import React from 'react';
 import MediaQuery from 'react-responsive';
 import {World, AvatarIcon} from '../icons.jsx';
 import {browserHistory} from 'react-router'
+import DocumentTitle from 'react-document-title';
 
 export default class OrganisationType extends React.Component {
   constructor(props) {
@@ -89,6 +90,7 @@ export default class OrganisationType extends React.Component {
 
     return (
       <div>
+        <DocumentTitle title='Create Project'/>
         <MediaQuery minDeviceWidth={700}>
           <div style={{paddingLeft: 100, paddingTop: 36, paddingRight: 100}}>
             <div className='desktop-header'>

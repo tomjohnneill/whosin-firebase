@@ -73,6 +73,11 @@ export default class Footer extends React.Component {
     this.state = {}
   }
 
+  handleSignUp = () => {
+     db.collection("Newsletter").add({email: this.state.emailSignup})
+     .then(() => this.setState({emailSignup: ''}))
+  }
+
   render() {
     return (
       <div className='footer-parent' style={{
@@ -94,13 +99,14 @@ export default class Footer extends React.Component {
                     paddingLeft: '12px',  boxSizing: 'border-box'}}
                   underlineShow={false}
                   type='email'
+                  value={this.state.emailSignup}
                   hintText={'Email Address'}
                   hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                   key='email'
                   style={styles.textfield}/>
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
-                    onClick={() => db.collection("Newsletter").add({email: this.state.emailSignup})}
+                    onClick={this.handleSignUp}
                     style={{height: '36px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                     buttonStyle={{height: '36px'}}
                      labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
@@ -133,13 +139,14 @@ export default class Footer extends React.Component {
                     paddingLeft: '12px',  boxSizing: 'border-box'}}
                   underlineShow={false}
                   type='email'
+                  value={this.state.emailSignup}
                   hintText={'Email Address'}
                   hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                   key='email'
                   style={styles.textfield}/>
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
-                    onClick={() => db.collection("Newsletter").add({email: this.state.emailSignup})}
+                    onClick={this.handleSignUp}
                     style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                     buttonStyle={{height: '36px'}}
                      labelStyle={{height: '36px', display: 'flex', alignItems: 'center',

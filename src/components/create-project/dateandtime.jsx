@@ -1,11 +1,12 @@
 import React from 'react';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {  browserHistory } from 'react-router';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import {PlacesWithStandaloneSearchBox} from '../admin/adminview.jsx';
 
 const styles = {
   textfield: {
@@ -115,39 +116,34 @@ class Form extends React.Component {
   };
 
 
+  handleSetGeopoint = (lat, lng, address) => {
+    this.setState({geopoint: {lat: lat, lng: lng}, address: address})
+  }
+
 
   handleNext = (e) => {
-    e.preventDefault()
-    geocodeByAddress(this.state.address)
-     .then(results => getLatLng(results[0]))
-     .then(latLng => {
-       console.log('Success', latLng)
-       var startTime = new Date(this.state.startTime)
-       var startHours = startTime.getHours()
-       var startMinutes = startTime.getMinutes()
-       var startDate = new Date(this.state.startDate)
-       startDate.setHours(startHours)
-       startDate.setMinutes(startMinutes)
+    var startTime = new Date(this.state.startTime)
+    var startHours = startTime.getHours()
+    var startMinutes = startTime.getMinutes()
+    var startDate = new Date(this.state.startDate)
+    startDate.setHours(startHours)
+    startDate.setMinutes(startMinutes)
 
-       var endTime = new Date(this.state.endTime)
-       var endHours = endTime.getHours()
-       var endMinutes = endTime.getMinutes()
-       var endDate = new Date(this.state.endDate)
-       endDate.setHours(endHours)
-       endDate.setMinutes(endMinutes)
+    var endTime = new Date(this.state.endTime)
+    var endHours = endTime.getHours()
+    var endMinutes = endTime.getMinutes()
+    var endDate = new Date(this.state.endDate)
+    endDate.setHours(endHours)
+    endDate.setMinutes(endMinutes)
 
-       var times =
-         {'Start Time': startDate,
-           'End Time': endDate,
-         'address': this.state.address,
-          'location': latLng}
-       var timeString = JSON.stringify(times)
-       localStorage.setItem('times', timeString)
-       browserHistory.push('/create-project/3')
-
-     })
-     .catch(error => alert('Error', error))
-
+    var times =
+      {'Start Time': startDate,
+        'End Time': endDate,
+      'address': this.state.address,
+       'location': this.state.geopoint}
+    var timeString = JSON.stringify(times)
+    localStorage.setItem('times', timeString)
+    browserHistory.push('/create-project/3')
 
   }
 
@@ -180,21 +176,29 @@ class Form extends React.Component {
 
   render() {
     console.log(this.state)
-    const inputProps = {
-        value: this.state.address,
-        onChange: this.onChange,
-        placeholder: 'Location'
-      }
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
+        <DocumentTitle title='Create Project'/>
         <p className='desktop-header'>
           If this is an event, can you give some details?</p>
           <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
             <p style={styles.header}>
               Where is this happenning?
             </p>
-            <PlacesAutocomplete value={this.state.address}
-              styles={defaultStyles} options={options} inputProps={inputProps} />
+            <PlacesWithStandaloneSearchBox
+              bounds={null}
+              currentLocation = {this.state.address}
+              reportPlaceToParent={(places) =>
+                {
+                  console.log(places)
+                  var geo = places[0].geometry.location
+                  var lat = geo.lat()
+                  var lng = geo.lng()
+                  this.handleSetGeopoint(lat, lng, places[0].formatted_address)
+                  console.log(this.state)
+                }
+              }
+              />
 
           </div>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
@@ -208,6 +212,7 @@ class Form extends React.Component {
             <DatePicker
                style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
                    boxSizing: 'border-box'}}
+                   autoOk={true}
                  underlineShow={false}
                  value={this.state.startDate}
                  onChange={this.handleSetStartDate}
@@ -246,6 +251,7 @@ class Form extends React.Component {
                style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
                    boxSizing: 'border-box'}}
                  underlineShow={false}
+                 autoOk={true}
                  shouldDisableDate={disableDates}
                  value={this.state.endDate}
                  onChange={this.handleSetEndDate}

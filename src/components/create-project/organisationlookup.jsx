@@ -8,13 +8,16 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Search from 'material-ui/svg-icons/action/search';
 import FlatButton from 'material-ui/FlatButton';
 import MediaQuery from 'react-responsive';
+import DocumentTitle from 'react-document-title';
 import {CharityPhotoUpload} from '../editcharity.jsx';
 import Dialog from 'material-ui/Dialog';
+
 import fire from '../../fire';
 
 let db = fire.firestore()
 
 
+var algoliasearch = require('algoliasearch/lite')
 
 const styles = {
   textfield: {
@@ -110,7 +113,7 @@ export default class OrganisationLookup extends React.Component{
       searchText: searchText,
     });
     var newCharities = []
-    const client = window.algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const client = algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
     const index = client.initIndex('organisations');
     var query = searchText
     index
@@ -275,6 +278,7 @@ export default class OrganisationLookup extends React.Component{
     var charityList = tempList
     return (
       <div>
+        <DocumentTitle title='Create Organisation'/>
         <MediaQuery minDeviceWidth={700}>
           <div style={{display: 'flex', paddingLeft: '100px', paddingTop: '50px', paddingRight: '100px'}}>
             <div style={{width: '500px', display: 'flex'

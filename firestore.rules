@@ -33,6 +33,11 @@ service cloud.firestore {
 
        // Applies to writes to existing documents
        allow create: if request.resource.data.Owner == request.auth.uid;
+
+       match /Subscribers/{subscriberId} {
+       		allow read: if request.auth.uid == subscriberId;
+          allow write: if request.auth.uid == subscriberId;
+        }
       }
 
    match /Engagement/{engagement} {

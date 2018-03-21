@@ -3,6 +3,7 @@ import { IndexLink, Link, browserHistory } from 'react-router';
 import Menu from 'material-ui/Menu';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
@@ -308,14 +309,31 @@ export default class Navigation extends React.Component {
                             </MediaQuery>
                             {this.state.loading ? null :
                               this.state.user ?
-                              <IconButton onTouchTap={() => browserHistory.push('/profile')}
+                              <div style={{
+                                  height: '100%',
+                                  alignItems: 'center',
+                                  display: 'flex'
+                                }}>
+                                <IconButton onTouchTap={() => browserHistory.push('/profile')}
                                 style={{padding: 0, height: 40, width: 40, marginRight: 16}}>
                                 {this.state.userPicture ?
                                 <Avatar src={this.state.userPicture}/>
                                 :
                                 <Avatar> {this.state.user.Name.substring(0,1)}</Avatar>
                                 }
-                              </IconButton> :
+                              </IconButton>
+                              <MediaQuery minDeviceWidth={700}>
+                              <div
+                                onTouchTap={this.handleSignOut}
+                                style={{cursor: 'pointer',
+                                  fontWeight: 700,
+                                  height: '100%', alignItems: 'center',
+                                  display: 'flex',
+                                  color: 'inherit',
+                                  paddingLeft: 10, paddingRight: 10}}>Sign Out
+                                </div>
+                                </MediaQuery>
+                              </div> :
                             null}
                             {!this.state.user ?
                               <div
@@ -349,6 +367,7 @@ export default class Navigation extends React.Component {
        </div>
        <SignupModal
          open={this.state.modalOpen}
+         type='login'
          changeOpen={this.handleModalChangeOpen}
          onComplete = {this.handleComplete}
          />

@@ -19,6 +19,8 @@ import fire from '../fire';
 
 let db = fire.firestore()
 
+var algoliasearch = require('algoliasearch/lite')
+
 var placeholderTiles = [0,1,2,3,4,5,6,7]
 
 
@@ -56,7 +58,7 @@ export default class AllProjects extends React.Component {
   }
 
   handleSearch = (e, input) => {
-    const client = window.algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const client = algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
     const index = client.initIndex('projects');
     var query = e.target.value
     index

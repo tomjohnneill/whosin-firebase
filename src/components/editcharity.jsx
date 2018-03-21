@@ -9,7 +9,6 @@ import {Link, browserHistory} from 'react-router';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import {grey500} from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
 import {changeImageAddress} from './profile.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import fire from '../fire';

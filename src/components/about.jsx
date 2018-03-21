@@ -243,7 +243,7 @@ export default class About extends React.Component {
                   Reviews for you and you and you and you
                 </div>
                 <div style={styles.redInkbar}/>
-                <div className='description-summary' style={styles.ticSummary}>
+                <div className='description-summary' style={styles.ticSummaryLight}>
                   You can leave a review for the charity you worked with, and they can leave one for you.
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default class About extends React.Component {
                   Get up off your ass and do a good thing
                 </div>
                 <div style={styles.redInkbar}/>
-                <div className='description-summary' style={styles.ticSummary}>
+                <div className='description-summary' style={styles.ticSummaryLight}>
                   I’m sure you’d have done this already if you had found the
                   right project, but it’s hard, we get it.
                   That’s why we built Who’s In. <br/><b>Doing good shouldn’t be hard.</b>
@@ -382,7 +382,7 @@ export default class About extends React.Component {
                   Reviews for you and you and you and you
                 </div>
                 <div style={styles.redInkbar}/>
-                <div className='description-summary' style={styles.ticSummary}>
+                <div className='description-summary' style={styles.ticSummaryLight}>
                   You can leave a review for the charity you worked with, and they can leave one for you.
                 </div>
               </div>

@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SignupModal from './signupmodal.jsx';
 import {browserHistory } from 'react-router';
 import MediaQuery from 'react-responsive';
+import {changeImageAddress} from './desktopproject.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -41,15 +42,6 @@ const styles = {
   }
 }
 
-export function changeImageAddress(file, size) {
-  if (file && file.includes('https://d3kkowhate9mma.cloudfront.net')) {
-    var str = file, replacement = '/' + size + '/';
-    str = str.replace(/\/([^\/]*)$/,replacement+'$1');
-    return(str + '?pass=this')
-  } else {
-    return (file)
-  }
-}
 
 export default class Why extends React.Component {
   constructor(props) {
@@ -251,7 +243,7 @@ export default class Why extends React.Component {
               </div>
               <div style={{marginBottom: '100px'}}>
                 <div>
-                  <img src='https://d3kkowhate9mma.cloudfront.net/d9b2ac00-2db5-4567-8c71-bae246d6d089'
+                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/d9b2ac00-2db5-4567-8c71-bae246d6d089', '500xauto')}
                     style={styles.mobilepicture} />
                 </div>
                 <span style={styles.mobilenumber}>
@@ -269,7 +261,7 @@ export default class Why extends React.Component {
               </div>
               <div style={{marginBottom: '150px'}}>
                 <div>
-                  <img src='https://d3kkowhate9mma.cloudfront.net/d4e8d8a0-5a48-4bd8-84dd-816643cae7e0'
+                  <img src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/d4e8d8a0-5a48-4bd8-84dd-816643cae7e0', '500xauto')}
                     style={styles.mobilepicture} />
                 </div>
                 <span style={styles.mobilenumber}>

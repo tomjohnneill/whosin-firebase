@@ -8,12 +8,15 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import {Spiral, World} from './icons.jsx';
 import SwipeableViews from 'react-swipeable-views';
+import Social from 'material-ui/svg-icons/social/notifications';
 import RaisedButton from 'material-ui/RaisedButton';
+import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import EmbeddedProject from './embeddedproject.jsx';
 import FontIcon from 'material-ui/FontIcon';
 import {Link, browserHistory} from 'react-router';
 import Loading from './loading.jsx';
+import SignupModal from './signupmodal.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
 import fire from '../fire';
 
@@ -218,7 +221,7 @@ export class CharityProjects extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("Project").where("Charity", "==", this.props.charityId)
+    db.collection("Project").where("Charity", "==", this.props.charityId).where("Approved", "==", true)
     .get().then((querySnapshot) => {
       var data = []
       querySnapshot.forEach((doc) => {
@@ -308,7 +311,8 @@ export class RecentCharityReviews extends React.Component {
 export default class CharityProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {user: {}, loading: true, slideIndex: 0, left: '10%', selected: 'projects'}
+    this.state = {user: {}, loading: true, slideIndex: 0,
+      left: '10%', selected: 'projects', modalOpen: false}
   }
 
   handleClick(index, e) {
@@ -323,8 +327,33 @@ export default class CharityProfile extends React.Component {
       this.setState({charity: charity, loading: false})
     })
 
+    if (fire.auth().currentUser) {
+      db.collection("Charity").doc(this.props.params.charityId)
+        .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
+          if (doc.exists) {
+            this.setState({subscribed: true})
+          } else {
+            this.setState({subscribed: false})
+          }
+        })
+    }
 
+    fire.auth().onAuthStateChanged((user) => {
+      if (user === null) {
 
+      } else {
+        console.log('registering user as logged in')
+        db.collection("Charity").doc(this.props.params.charityId)
+          .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
+            console.log(doc)
+            if (doc.exists) {
+              this.setState({subscribed: true})
+            } else {
+              this.setState({subscribed: false})
+            }
+          })
+    }
+  })
 
 
   }
@@ -392,14 +421,50 @@ export default class CharityProfile extends React.Component {
     this.setState({selected: value})
   }
 
+  subscribeUser = () => {
+    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
+      var user = userDoc.data()
+      db.collection("Charity").doc(this.props.params.charityId)
+      .collection("Subscribers").doc(fire.auth().currentUser.uid).set({
+        "Email": user.Email,
+        "Name": user.Name
+      })
+      .then(() => this.setState({subscribed: true}))
+    })
+  }
+
+  unsubscribeUser = () => {
+    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
+      var user = userDoc.data()
+      db.collection("Charity").doc(this.props.params.charityId)
+      .collection("Subscribers").doc(fire.auth().currentUser.uid).delete().then(() => {
+        console.log('subscriber deleted')
+        this.setState({subscribed: false})
+      }).catch(error => console.log('error', error))
+    })
+  }
+
+  handleSubscribe = () => {
+    if (fire.auth().currentUser) {
+      this.subscribeUser()
+    } else {
+      this.setState({modalOpen: true})
+    }
+  }
+
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
   render() {
-    console.log(this.state)
+    console.log(this.state.subscribed)
     return (
       <div >
         {this.state.loading ?
           <Loading/>
           :
           <div>
+            <DocumentTitle title={this.state.charity.Name}/>
             <MediaQuery minDeviceWidth={700}>
               <div className='container' style={{paddingLeft: 100, paddingRight: 100, paddingTop: 32,
                   textAlign: 'left', boxSizing: 'border-box'}}>
@@ -454,6 +519,30 @@ export default class CharityProfile extends React.Component {
                       </a>
                       : null}
                     </div>
+
+                    <div style={{paddingTop: 16}}>
+                      {this.state.subscribed ?
+                        <RaisedButton
+                          label='Unsubscribe'
+
+                          icon={<Social/>}
+                          onClick={this.unsubscribeUser}
+                          />
+                        :
+
+                      <RaisedButton
+                        label='Subscribe'
+                        labelStyle={{fontWeight: 700}}
+                        icon={<Social/>}
+                        onClick={this.handleSubscribe}
+                        secondary={true}/>
+                    }
+                    </div>
+                    <SignupModal
+                      open={this.state.modalOpen}
+                      changeOpen={this.handleModalChangeOpen}
+                    onComplete={this.subscribeUser}/>
+
                   </div>
 
                 </div>
@@ -467,6 +556,7 @@ export default class CharityProfile extends React.Component {
                      :
                      null
                    }
+
                 </div>
                 <div className='about-review-container' style={{display: 'flex', width: '100%'}}>
                   <div className='about-container' style={{flex: 1, marginRight: 100}}>
@@ -551,6 +641,30 @@ export default class CharityProfile extends React.Component {
                     </a>
                     : null}
                   </div>
+                  <div style={{paddingTop: 16}}>
+                    {this.state.subscribed ?
+                      <RaisedButton
+                        label='Unsubscribe'
+
+                        icon={<Social/>}
+                        onClick={this.unsubscribeUser}
+                        />
+                      :
+
+                    <RaisedButton
+                      label='Subscribe'
+                      labelStyle={{fontWeight: 700}}
+                      icon={<Social/>}
+                      onClick={this.handleSubscribe}
+                      secondary={true}/>
+                  }
+                  </div>
+                  <div style={{width: '90vw'}}>
+                  <SignupModal
+                    open={this.state.modalOpen}
+                    changeOpen={this.handleModalChangeOpen}
+                  onComplete={this.subscribeUser}/>
+                </div>
                 </div>
 
 

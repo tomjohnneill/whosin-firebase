@@ -361,7 +361,7 @@ class ProjectsOrganised extends React.Component {
             <div>
               <MediaQuery minDeviceWidth={700}>
               {this.state.projects ?
-                <div>
+                <div style={{display: 'flex', flexWrap: 'wrap'}}>
                   {this.state.projects.map((project) => (
                   <div style={{padding: 20, width: '50%', boxSizing: 'border-box'}}>
                     <EmbeddedProject noLogo={true} project={project}/>

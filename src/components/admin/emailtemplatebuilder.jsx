@@ -89,7 +89,7 @@ export default class EmailTemplateBuilder extends React.Component {
 
     onLoad = () => {
   // this.editor.addEventListener('onDesignLoad', this.onDesignLoad)
-  this.editor.loadDesign(this.state.sample ? this.state.sample : {})
+  this.editor.loadDesign(this.state.sample ? this.state.sample : null)
 }
 
   render() {

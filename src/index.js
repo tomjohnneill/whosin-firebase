@@ -1,44 +1,89 @@
 import React from 'react';
-import { hydrate, render } from 'react-dom';
+import {  render } from 'react-dom';
 import './index.css';
 import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
-import Project from './components/project.jsx';
-import Home from './components/home.jsx';
-import Profile from './components/profile.jsx';
-import CharityProfile from './components/charityprofile.jsx';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import UserTabs from './components/tabs.jsx'
-import CharityAutocomplete from './components/charityautocomplete.jsx';
-import CreateProject from './components/createproject.jsx';
-import Basics from './components/create-project/basics.jsx';
-import Story from './components/create-project/story.jsx';
-import OrganisationLookup from './components/create-project/organisationlookup.jsx';
-import UploadPhoto from './components/create-project/uploadphoto.jsx';
-import FirstSummary from './components/create-project/firstsummary.jsx';
-import DateAndTime from './components/create-project/dateandtime.jsx';
-import FormBuilder from './components/admin/formbuilder.jsx'
-import CustomForm from './components/customform.jsx';
-import ProjectJoined from './components/projectjoined.jsx';
-import ProjectCreated from './components/create-project/projectcreated.jsx';
-import Why from './components/why.jsx';
-import Register from './components/feedback/register.jsx';
-import MiniWhy from './components/create-project/miniwhy.jsx';
-import CantCome from './components/cantcome.jsx';
-import ProjectReview from './components/feedback/projectreview.jsx';
-import EditProfile from './components/editprofile.jsx';
-import AdminView from './components/admin/adminview.jsx';
-import VolunteerStars from './components/feedback/volunteerstars.jsx';
-import ReviewOverview from './components/feedback/project-review-overview.jsx';
-import ShortReview from './components/feedback/shortreview.jsx';
-import AllProjects from './components/allprojects.jsx';
-import EditCharity from './components/editcharity.jsx';
-import EmbeddedProject from './components/embeddedproject.jsx';
-import OrganisationType from './components/create-project/organisationtype.jsx';
-import Terms from './components/terms.jsx';
-import About from './components/about.jsx';
 import asyncComponent from './AsyncComponent'
 
+const AllProjects = asyncComponent(() =>
+  import('./components/allprojects.jsx').then(module => module.default)
+)
+const EmbeddedProject = asyncComponent(() =>
+  import('./components/embeddedproject.jsx').then(module => module.default)
+)
+const Terms = asyncComponent(() =>
+  import('./components/terms.jsx').then(module => module.default)
+)
+const About = asyncComponent(() =>
+  import('./components/about.jsx').then(module => module.default)
+)
+const EmailTemplateFrontPage = asyncComponent(() =>
+  import('./components/admin/emailtemplatefrontpage.jsx').then(module => module.default)
+)
+const MiniWhy = asyncComponent(() =>
+  import('./components/create-project/miniwhy.jsx').then(module => module.default)
+)
+const CantCome = asyncComponent(() =>
+  import('./components/cantcome.jsx').then(module => module.default)
+)
+const Register = asyncComponent(() =>
+  import('./components/feedback/register.jsx').then(module => module.default)
+)
+const Project = asyncComponent(() =>
+  import('./components/project.jsx').then(module => module.default)
+)
+const Profile = asyncComponent(() =>
+  import('./components/profile.jsx').then(module => module.default)
+)
+const CharityProfile = asyncComponent(() =>
+  import('./components/charityprofile.jsx').then(module => module.default)
+)
+const UserTabs = asyncComponent(() =>
+  import('./components/tabs.jsx').then(module => module.default)
+)
+const OrganisationLookup = asyncComponent(() =>
+  import('./components/create-project/organisationlookup.jsx').then(module => module.default)
+)
+const ProjectJoined = asyncComponent(() =>
+  import('./components/projectjoined.jsx').then(module => module.default)
+)
+const Why = asyncComponent(() =>
+  import('./components/why.jsx').then(module => module.default)
+)
+const EditProfile = asyncComponent(() =>
+  import('./components/editprofile.jsx').then(module => module.default)
+)
+const EditCharity = asyncComponent(() =>
+  import('./components/editcharity.jsx').then(module => module.default)
+)
+const OrganisationType = asyncComponent(() =>
+  import('./components/create-project/organisationtype.jsx').then(module => module.default)
+)
+const Basics = asyncComponent(() =>
+  import('./components/create-project/basics.jsx').then(module => module.default)
+)
+const Story = asyncComponent(() =>
+  import('./components/create-project/story.jsx').then(module => module.default)
+)
+const DateAndTime = asyncComponent(() =>
+  import('./components/create-project/dateandtime.jsx').then(module => module.default)
+)
+const AdminView = asyncComponent(() =>
+  import('./components/admin/adminview.jsx').then(module => module.default)
+)
+const ProjectReview = asyncComponent(() =>
+  import('./components/feedback/projectreview.jsx').then(module => module.default)
+)
+const ReviewOverview = asyncComponent(() =>
+  import('./components/feedback/project-review-overview.jsx').then(module => module.default)
+)
+const ShortReview = asyncComponent(() =>
+  import('./components/feedback/shortreview.jsx').then(module => module.default)
+)
+const VolunteerStars = asyncComponent(() =>
+  import('./components/feedback/volunteerstars.jsx').then(module => module.default)
+)
 const EmailTemplateBuilder = asyncComponent(() =>
     import('./components/admin/emailtemplatebuilder.jsx').then(module => module.default)
 )
@@ -54,24 +99,19 @@ const rootElement = document.getElementById('root');
 
       <IndexRoute component={ UserTabs } />
       <Route path='/why' component={Why}/>
-      <Route path='/admin/emailtemplate' component={EmailTemplateBuilder}/>
+      <Route path='/admin/emailtemplate' component={EmailTemplateFrontPage}/>
+      <Route path='/admin/emailtemplate/new' component={EmailTemplateBuilder}/>
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
-      <Route path='/customform' component={CustomForm}/>
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
-      <Route path='/form/formbuilder' component={FormBuilder}/>
-      <Route path='/step/stepper' component={CreateProject}/>
-      <Route path='/auto/autocomplete' component={CharityAutocomplete}/>
       <Route path='/create-project/0' component={MiniWhy}/>
       <Route path='/create-project/choose-type' component={OrganisationType}/>
       <Route path='/create-project/1' component={Basics}/>
       <Route path='/create-project/2' component={DateAndTime}/>
       <Route path='/create-project/3' component={Story}/>
-      <Route path='/create-project/4' component={UploadPhoto}/>
-      <Route path='/create-project/summary/1' component={FirstSummary}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/embed/:_id' component={EmbeddedProject}/>
       <Route path='/project/' component={Project}/>
@@ -80,7 +120,6 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/admin/:adminTab' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/completed' component={Project}/>
-      <Route path='/projects/:pledge/:_id/questions' component={CustomForm}/>
       <Route path='/projects/:pledge/:_id/review/project' component={ReviewOverview}/>
       <Route path='/projects/:pledge/:_id/review/project/long' component={ProjectReview}/>
       <Route path='/projects/:pledge/:_id/review/project/short' component={ShortReview}/>
@@ -97,8 +136,6 @@ const rootElement = document.getElementById('root');
       <Route path='/:tab' component={UserTabs}/>
 
       <Route path='/profile/:_id' component={Profile}/>
-      <Route path='/create-project/:_id' component={ProjectCreated}/>
-
       <Route path="*" component={ UserTabs } />
       </Route>
 

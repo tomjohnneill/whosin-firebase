@@ -15,9 +15,7 @@ import DocumentTitle from 'react-document-title';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Helmet} from "react-helmet";
 import Chip from 'material-ui/Chip';
-import FontIcon from 'material-ui/FontIcon';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import MediaQuery from 'react-responsive';
@@ -232,7 +230,6 @@ export default class Project extends React.Component {
     })
 
     if (this.props.params.challengeId || this.props.location.query.challenge) {
-      this.setState({loading: true})
       db.collection("Project").doc(this.props.location.query.project ? this.props.location.query.project : this.props.params._id)
       .collection("Challenge").doc(this.props.location.query.challenge ? this.props.location.query.challenge : this.props.params.challengeId).get().then((doc) => {
         var challenge = doc.data()
@@ -422,7 +419,7 @@ export default class Project extends React.Component {
           </MediaQuery>
 
           <MediaQuery maxDeviceWidth = {700}>
-            <img className='mobile-cover-image' src={this.state.project['Featured Image']}
+            <img className='mobile-cover-image' src={changeImageAddress(this.state.project['Featured Image'], '500xauto')}
               style={{height: '222px', width: '100%', objectFit: 'cover'}}/>
               {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
                 <div style={{display: 'flex', float: 'right'}}>
@@ -592,7 +589,7 @@ export default class Project extends React.Component {
                     Geopoint={this.state.project.Geopoint}
                     address={this.state.project.Location}
                     isMarkerShown
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLdq8kJzE87Ba_Q5NEph7nD6vkcXmzhA&v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` , borderRadius: 6}} />}
                     containerElement={<div style={{ height: `100px`}} />}
                     mapElement={<div style={{ height: `100%`, borderRadius: 6 }} />} />
@@ -621,19 +618,6 @@ export default class Project extends React.Component {
                       changeOpen={this.handleConditionalChangeOpen}
                       />
               </li>
-            </div>
-
-            <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
-              , display: 'flex', height: '77px', alignItems: 'center'}}>
-              <div style={{fontFamily: 'Permanent Marker', fontSize: '20px', padding: 6}}>
-                Start a project of your own
-              </div>
-              <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <RaisedButton label="Go"
-                  onTouchTap={this.handleLetsGo}
-                  style={{borderRadius: '4px', float: 'right'}}
-                  labelStyle={{fontFamily: 'Permanent Marker'}}/>
-              </div>
             </div>
 
 

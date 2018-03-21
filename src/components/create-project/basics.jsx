@@ -9,6 +9,7 @@ import MediaQuery from 'react-responsive';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {orange500} from 'material-ui/styles/colors';
+import DocumentTitle from 'react-document-title';
 import Chip from 'material-ui/Chip';
 
 const styles = {
@@ -110,6 +111,7 @@ export class Form extends React.Component {
     console.log(this.state)
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
+        <DocumentTitle title='Create Project'/>
         <p className='desktop-header'>
           Let's start with the basics</p>
 
@@ -157,6 +159,7 @@ export class Form extends React.Component {
                  boxSizing: 'border-box'}}
                underlineShow={false}
                value={this.state.deadline}
+               autoOk={true}
                onChange={this.handleSetDeadline}
                shouldDisableDate={disableDates}
                hintStyle={{  bottom: '8px'}}

@@ -1,6 +1,5 @@
 import React , {PropTypes} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Home from './home.jsx';
 import Profile from './profile.jsx';
 import ProjectList from './projectlist.jsx';
 import { Link, browserHistory } from 'react-router';

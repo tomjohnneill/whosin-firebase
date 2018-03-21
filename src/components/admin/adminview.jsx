@@ -7,7 +7,7 @@ import {changeImageAddress} from '../desktopproject.jsx';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
@@ -118,6 +118,70 @@ var categories = ['Environment', 'Refugees', 'Equality', 'Poverty', 'Education',
                     'Disabilities', 'Young People', 'Old People', 'Isolation', 'Animals', 'Outdoor',
                     'Mental Health']
 
+const { compose, withProps, lifecycle } = require("recompose");
+const {
+  withScriptjs,
+} = require("react-google-maps");
+const { StandaloneSearchBox } = require("react-google-maps/lib/components/places/StandaloneSearchBox");
+
+export const PlacesWithStandaloneSearchBox = compose(
+  withProps({
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLdq8kJzE87Ba_Q5NEph7nD6vkcXmzhA&v=3.exp&libraries=geometry,drawing,places",
+    loadingElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: `400px` }} />,
+  }),
+  lifecycle({
+    componentWillMount() {
+      const refs = {}
+
+      this.setState({
+        places: [],
+        onSearchBoxMounted: ref => {
+          refs.searchBox = ref;
+        },
+        onPlacesChanged: () => {
+          const places = refs.searchBox.getPlaces();
+
+          this.setState({
+            places,
+          });
+          this.props.reportPlaceToParent(places)
+        },
+      })
+    },
+  }),
+  withScriptjs
+)(props =>
+  <div data-standalone-searchbox="">
+    <StandaloneSearchBox
+      ref={props.onSearchBoxMounted}
+      bounds={props.bounds}
+      onPlacesChanged={props.onPlacesChanged}
+    >
+      <input
+        type="text"
+        defaultValue={props.currentLocation}
+        placeholder="Location"
+        style={{
+          display: 'inline-block',
+          width: '100%',
+          color: '#484848',
+          padding: '10px',
+          fontSize: '16px',
+          boxSizing: 'border-box',
+          borderRadius: '6px',
+          border: '1px solid rgb(133, 137, 135)'
+        }}
+      />
+    </StandaloneSearchBox>
+
+  </div>
+);
+
+
+
+
+
 export class EditProjectForm extends React.Component {
   constructor(props) {
     super(props);
@@ -138,6 +202,15 @@ export class EditProjectForm extends React.Component {
 
   handleSetDeadline = (e, date) => {
     this.setState({deadline: date})
+  }
+
+  handleSetGeopoint = (lat, lng, address) => {
+    var project = this.state.project
+    project.Location = address
+    console.log(address)
+    console.log({lat: lat, lng: lng})
+    project.Geopoint = {lat: lat, lng: lng}
+    this.setState({project: project})
   }
 
   handleRequestDelete = (key) => {
@@ -185,6 +258,7 @@ export class EditProjectForm extends React.Component {
     .catch(error => this.setState({error: error}))
   };
 
+/*
   handleSaveChanges = () => {
     let project = this.state.project
     project.Location = this.state.address
@@ -196,7 +270,7 @@ export class EditProjectForm extends React.Component {
        then(data => this.setState({snackbar: true}))
      })
   }
-
+*/
   handleRequestClose = () => {
     this.setState({snackbar: false})
   }
@@ -310,8 +384,19 @@ export class EditProjectForm extends React.Component {
               <p style={styles.header}>
                 Where is this happenning?
               </p>
-              <PlacesAutocomplete value={this.state.project.Location}
-                styles={defaultStyles} options={options} inputProps={inputProps} />
+            <PlacesWithStandaloneSearchBox
+              currentLocation = {this.state.project.Location}
+              reportPlaceToParent={(places) =>
+                {
+                  console.log(places)
+                  var geo = places[0].geometry.location
+                  var lat = geo.lat()
+                  var lng = geo.lng()
+                  this.handleSetGeopoint(lat, lng, places[0].formatted_address)
+                  console.log(this.state)
+                }
+              }
+              />
 
             </div>
           <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
@@ -459,14 +544,22 @@ export default class AdminView extends React.Component {
       , inkBarLeft: 15}
   }
 
-  changeAnchorEl = (e) => {
+  changeAnchorEl (tab, e)  {
     console.log('handleMultipleChoiceClick')
     e.preventDefault()
     console.log(e)
     var rect = e.target.getBoundingClientRect()
     console.log(rect)
-    this.setState({inkBarLeft: (rect.width-60)/2  + rect.x - (window.document.body.clientWidth - 900) /2,
-    })
+    if (window.document.body.clientWidth > 700) {
+      this.setState({selected: tab,
+        inkBarLeft: (rect.width-60)/2  + rect.x - (window.document.body.clientWidth - 900) /2,
+      })
+    } else {
+      this.setState({selected: tab,
+        inkBarLeft: (rect.width-60)/2  + rect.x -16,
+      })
+    }
+
   }
 
   handleTwoTabClick = (value) => {
@@ -549,7 +642,13 @@ export default class AdminView extends React.Component {
     return (
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         <div style={{padding: 16, width: '100%', maxWidth: '900px', position: 'relative'}}>
-          <h2 style={{position: 'relative'}}>Admin View</h2>
+          <MediaQuery maxDeviceWidth={700}>
+            <h2 style={{position: 'relative', textAlign: 'left'}}>Admin View</h2>
+          </MediaQuery>
+          <MediaQuery minDeviceWidth={700}>
+            <h2 style={{position: 'relative'}}>Admin View</h2>
+          </MediaQuery>
+
             <div style={{position: 'absolute', right: 0, top:20, padding: 16}}>
               <RaisedButton
                 label='Back to Profile'
@@ -566,7 +665,7 @@ export default class AdminView extends React.Component {
               >
         <Tab label="Admin"
           style={{width: 'auto', fontSize: '16px'}}
-            onTouchTap={this.changeAnchorEl}
+            onTouchTap={this.changeAnchorEl.bind(this, 'admin')}
               buttonStyle={this.state.selected === 'admin' ? styles.selectedTab : styles.tab}
            value="admin">
 
@@ -638,7 +737,7 @@ export default class AdminView extends React.Component {
 
           <Tab label="Edit Project"
             style={{width: 'auto', fontSize: '16px'}}
-              onTouchTap={this.changeAnchorEl}
+              onTouchTap={this.changeAnchorEl.bind(this, 'editproject')}
                 buttonStyle={this.state.selected === 'editproject' ? styles.selectedTab : styles.tab}
              value="editproject">
              <EditProjectForm projectId={this.props.params._id}/>

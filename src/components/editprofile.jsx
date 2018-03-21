@@ -5,7 +5,6 @@ import {List, ListItem} from 'material-ui/List';
 import {Link, browserHistory} from 'react-router';
 import {Spiral, Tick} from './icons.jsx';
 import {grey500} from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import TextField from 'material-ui/TextField';

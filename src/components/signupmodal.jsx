@@ -30,7 +30,7 @@ export default  class SignupModal extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {type: 'signup', loading: false, pwned: null,
+    this.state = {type: this.props.type ? this.props.type : 'signup', loading: false, pwned: null,
       forgotPassword: false, sendPasswordClicked: false}
   }
 

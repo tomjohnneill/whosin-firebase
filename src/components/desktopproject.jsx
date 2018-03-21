@@ -1,29 +1,29 @@
-  import React , {PropTypes} from 'react';
-  import {grey200, grey500, grey100, amber500, grey300, lightBlue50, blue500, yellow600} from 'material-ui/styles/colors'
-  import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-  import RaisedButton from 'material-ui/RaisedButton';
-  import LinearProgress from 'material-ui/LinearProgress';
-  import Divider from 'material-ui/Divider';
-  import {Tabs, Tab} from 'material-ui/Tabs';
-  import Dialog from 'material-ui/Dialog';
-  import {Link, browserHistory} from 'react-router';
-  import IconButton from 'material-ui/IconButton';
-  import Subheader from 'material-ui/Subheader';
-  import DocumentTitle from 'react-document-title';
-  import Avatar from 'material-ui/Avatar';
-  import FlatButton from 'material-ui/FlatButton';
-  import CircularProgress from 'material-ui/CircularProgress';
-  import FontIcon from 'material-ui/FontIcon';
-  import ShowChart from 'material-ui/svg-icons/editor/show-chart';
-  import SignupModal from './signupmodal.jsx';
-  import JoiningModal from './joiningmodal.jsx';
-  import Loading from './loading.jsx';
-  import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
-  import Share from './share.jsx'
-  import ConditionalModal from './conditionalmodal.jsx';
-  import {List, ListItem} from 'material-ui/List';
-  import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-  import fire from '../fire';
+import React , {PropTypes} from 'react';
+import {grey200, grey500, grey100, amber500, grey300, lightBlue50, blue500, yellow600} from 'material-ui/styles/colors'
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+import LinearProgress from 'material-ui/LinearProgress';
+import Divider from 'material-ui/Divider';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Dialog from 'material-ui/Dialog';
+import {Link, browserHistory} from 'react-router';
+import IconButton from 'material-ui/IconButton';
+import Subheader from 'material-ui/Subheader';
+import DocumentTitle from 'react-document-title';
+import Avatar from 'material-ui/Avatar';
+import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
+import FontIcon from 'material-ui/FontIcon';
+import ShowChart from 'material-ui/svg-icons/editor/show-chart';
+import SignupModal from './signupmodal.jsx';
+import JoiningModal from './joiningmodal.jsx';
+import Loading from './loading.jsx';
+import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
+import Share from './share.jsx'
+import ConditionalModal from './conditionalmodal.jsx';
+import {List, ListItem} from 'material-ui/List';
+import {withScriptjs,  withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import fire from '../fire';
 
   let db = fire.firestore()
   const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel")
@@ -188,7 +188,7 @@
   var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken') :
     '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
-  export const MyMapComponent = withGoogleMap((props) =>
+  export const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
       defaultZoom={10}
       defaultCenter={props.Geopoint}
@@ -202,7 +202,7 @@
       </MarkerWithLabel>
       {props.isMarkerShown && <Marker position={props.Geopoint} />}
     </GoogleMap>
-  )
+  ))
 
   class CompletedModal extends React.Component {
     constructor(props) {
@@ -215,6 +215,7 @@
           <Dialog
             modal={false}
             open={this.props.open}
+            style={{paddingTop: 0}}
             actions={[
               <div style={{padding: 20}}>
                 <FlatButton onClick={this.props.handleClose}
@@ -224,8 +225,10 @@
           </div>]}
             onRequestClose={this.props.handleClose}
           >
-          <div style={{maxWidth: '1000px', width: '100%', marginTop: 30}}>
-
+          <div style={{maxWidth: '1000px', width: '100%'}}>
+            <div style={{backgroundColor: 'rgba(101, 161, 231, 0.7)', height: 20}}>
+              We'll contact you when
+            </div>
             <div style={{display: 'flex'}}>
               <div style={{flex: 2, marginRight: 30}}>
 
@@ -292,7 +295,7 @@
               <ul style={{textAlign: 'left', alignItems: 'center', borderBottom: '1px solid #DDDDDD', height: '60px', fontSize: '10px', display: 'flex'}}>
                 {eng['Volunteer Picture'] ?
 
-                <Avatar src={eng['Volunteer Picture']}/>:
+                <Avatar src={changeImageAddress(eng['Volunteer Picture'], '40xauto')}/>:
                   <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>}
                 <div style={{flex: 2, paddingLeft: '24px',display: 'flex', alignItems: 'center'}}>
                   <div>
@@ -588,7 +591,7 @@
                 <img
                   onMouseEnter={this.handleDropzoneEnter}
                   src={changeImageAddress(this.state.project['Featured Image'], '1500xauto')}
-                  style={{borderRadius: 4, height: '400px', width: '100%', position: 'relative',
+                  style={{height: '400px', width: '100%', position: 'relative',
                     objectPosition: this.state.project.imageY ? `50% ${this.state.project.imageY}`  : '50% 50%'
                   , objectFit: 'cover'}}/>
                 {this.state.dropzoneHover && fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid  ?
@@ -658,10 +661,12 @@
                       </Link>
                     }
 
+
                     <div style={{
                       borderRadius: 4, display: 'flex',
                        paddingTop: 10, textAlign: 'left'}}
                       className='datetime-container'>
+                      {this.state.project['Start Time'] ?
                       <div className='date-container' style={{display: 'flex'}}>
                         <div className='date-icon'>
                           <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
@@ -671,6 +676,8 @@
                             {weekday: 'long', month: 'long', day: 'numeric'})}
                         </div>
                       </div>
+                      : null}
+                      {this.state.project['Start Time'] ?
                       <div className='time-container' style={{display: 'flex', marginLeft: 24}}>
                         <div className='time-icon'>
                           <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
@@ -682,6 +689,8 @@
                               {hour: '2-digit', minute: '2-digit'})}
                         </div>
                       </div>
+                      : null}
+
 
                       {this.state.project.Location ?
                         <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
@@ -731,24 +740,13 @@
                                    className='story-text'
                                     dangerouslySetInnerHTML={this.descriptionMarkup()}/>
 
-                                <div style={{marginTop: '20px', padding: '16px', boxSizing: 'border-box', backgroundColor: '#f5f5f5'
-                                  , display: 'flex', height: '77px', alignItems: 'center'}}>
-                                  <div style={{fontFamily: 'Permanent Marker', fontSize: '20px'}}>
-                                    Start a project of your own
-                                  </div>
-                                  <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                                    <RaisedButton label="Let's Go"
-                                      onTouchTap={this.handleLetsGo}
-                                      style={{borderRadius: '4px', float: 'right'}}
-                                      labelStyle={{fontFamily: 'Permanent Marker'}}/>
-                                  </div>
-                                </div>
+
                             </div>
                           }>
 
                         </CardText>
                       </Tab>
-
+                      {this.state.project.Charity ?
                       <Tab
                         value='aboutus'
                         style={{width: 'auto'}}
@@ -767,7 +765,7 @@
                               <h2 style={{fontSize: '18px', marginBottom: 16}}>Contact Us</h2>
                               <div style={{display: 'flex', width: '100%'}}>
                                 {this.state.charity.Facebook ?
-                                  <a style={{flex: 1}} href={`https://www.facebook.com/${this.state.charity.Facebook.trim()}`}>
+                                  <a style={{flex: 1}} href={`https://www.facebook.com/${this.state.charity.Facebook.replace(/[^\x00-\x7F]/g, "")}`}>
                                     <span style={styles.contactIcon}>
                                       <Avatar
                                         icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
@@ -781,7 +779,7 @@
                                 </a>
                                 : null }
                                 {this.state.charity.Twitter ?
-                                  <a style={{flex: 1}} href={`https://www.twitter.com/${this.state.charity.Twitter.trim()}`}>
+                                  <a style={{flex: 1}} href={`https://www.twitter.com/${this.state.charity.Twitter.replace(/[^\x00-\x7F]/g, "")}`}>
                                     <span style={styles.contactIcon}>
                                       <Avatar
                                         icon={<FontIcon className="fab fa-twitter fa-2x" />}
@@ -790,7 +788,7 @@
                                         size={50}
                                         style={style}
                                       />
-                                    {this.state.charity.Twitter.trim}
+                                    {this.state.charity.Twitter.trim()}
                                   </span>
                                 </a>
                                   : null }
@@ -811,6 +809,7 @@
                           }
                         </div>
                       </Tab>
+                      : null}
                     </Tabs>
                   </div>
                   <div className='join-container' style={{width: 350, paddingLeft: 150}}>

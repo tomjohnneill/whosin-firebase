@@ -38,17 +38,21 @@ export class YouMightLike extends React.Component {
   componentDidMount(props) {
     var potentialProjects = []
 
-    db.collection("Project").where("Charity", "==", this.props.project.Charity)
-    .get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        var elem = doc.data()
-        elem['_id'] = doc.id
-        if (doc.id !== this.props.project._id) {
-          potentialProjects.push(elem)
-        }
-      });
-      this.setState({potentialProjects: potentialProjects, loading: false})
-    })
+    if (this.props.project.Charity) {
+      db.collection("Project").where("Charity", "==", this.props.project.Charity)
+      .where("Approved", "==", true)
+      .get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          var elem = doc.data()
+          elem['_id'] = doc.id
+          if (doc.id !== this.props.project._id) {
+            potentialProjects.push(elem)
+          }
+        });
+        this.setState({potentialProjects: potentialProjects, loading: false})
+      })
+    }
+
 
     /*
     if (this.props.project.Type) {
@@ -68,6 +72,7 @@ export class YouMightLike extends React.Component {
     */
     if (this.props.project['Start Time']) {
       db.collection("Project").where("Start Time", ">", this.props.project['Start Time'])
+      .where("Approved", "==", true)
       .get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           var elem = doc.data()

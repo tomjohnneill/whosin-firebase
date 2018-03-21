@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
+import DocumentTitle from 'react-document-title';
 import {  browserHistory } from 'react-router';
 import {orange500} from 'material-ui/styles/colors';
 import UploadPhoto from './uploadphoto.jsx';
@@ -34,19 +35,12 @@ export function changeImageAddress(file, size) {
 class StoryForm extends React.Component {
   constructor(props) {
     super(props);
-    var story = JSON.parse(localStorage.getItem('story'))
-    if (story) {
-      this.state = {
-        title: story.title,
-        story: story.story,
-        summary: story.summary
-      }
-    } else {
-      this.state = {
-        title: null,
-        story: null,
-        summary: null
-      }
+    var story = localStorage.getItem('story')
+    var summary = localStorage.getItem('summary')
+    this.state = {
+      story: story ? story : null,
+      summary: summary ? summary : null,
+      title: null
     }
   }
 
@@ -67,10 +61,12 @@ class StoryForm extends React.Component {
   }
 
   handleSetStory = (e) => {
+    localStorage.setItem('story', e.target.value)
     this.setState({story: e.target.value})
   }
 
   handleSetSummary = (e) => {
+    localStorage.setItem('summary', e.target.value)
     this.setState({summary: e.target.value})
     if (e.target.value.length > 200) {
       this.setState({summaryLengthError: true})
@@ -134,7 +130,7 @@ class StoryForm extends React.Component {
   render() {
     return (
       <div className='form' style={{textAlign: 'left', width: '100%'}}>
-
+        <DocumentTitle title='Create Project'/>
           <p className='desktop-header'>
             Tell your story</p>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>

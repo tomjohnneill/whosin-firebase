@@ -288,23 +288,33 @@ exports.addCharityToSearch = functions.firestore.document('Charity/{charityId}')
 var site = 'https://whosin.io'
 
 function buildHtmlWithProject (post, id) {
-  const string = `<!DOCTYPE html><head>
-    <title>' + post.Name + ' | Example Website</title>
-    <meta property="og:title" content="${post.Name}">
-    <meta property="twitter:title" content="${post.Name}">
-    <meta property="og:type" content="article" />
-    <meta property="og:description" content="${post.Sumary ? post.Summary : post.Description}" />
-    <meta property="og:image" content="${post['Featured Image']}" />
-    <meta name="twitter:card" content="summary" />
-    <link rel="icon" href="https://example.com/favicon.png">
-    </head><body>
-    <script>window.location="${site}/project/?project=${id}";</script>
-    </body></html>`;
+  var string
+  try {
+    string = `<!DOCTYPE html><head>
+      <title>' + post.Name + ' | Example Website</title>
+      <meta property="og:title" content="${post.Name}">
+      <meta property="twitter:title" content="${post.Name}">
+      <meta property="og:type" content="article" />
+      <meta property="og:description" content="${post.Sumary ? post.Summary : post.Description}" />
+      <meta property="og:image" content="${post['Featured Image']}" />
+      <meta name="twitter:card" content="summary" />
+      <link rel="icon" href="https://example.com/favicon.png">
+      </head><body>
+      <script>window.location="${site}/project/?project=${id}";</script>
+      </body></html>`
+  }
+    catch(error) {
+      string = `<!DOCTYPE html><head>
+        </head><body>
+        <script>window.location="${site}/project/?project=${id}&challenge=${challengeId}";</script>
+        </body></html>`
+    };
   return string;
 }
 
 exports.project = functions.https.onRequest((req, res) => {
   const path = req.path.split('/');
+  console.log(path)
   const projectId = path[3];
   console.log(projectId)
   db.collection("Project").doc(projectId).get().then((doc) => {
@@ -314,7 +324,9 @@ exports.project = functions.https.onRequest((req, res) => {
 });
 
 function buildHtmlWithChallenge (id, post, challenge, challengeId) {
-  const string = `<!DOCTYPE html><head>
+  var string
+  try {
+  string = `<!DOCTYPE html><head>
     <title>' + post.Name + ' | Example Website</title>
     <meta property="og:title" content="${post.Name}">
     <meta property="twitter:title" content="${post.Name}">
@@ -326,6 +338,12 @@ function buildHtmlWithChallenge (id, post, challenge, challengeId) {
     </head><body>
     <script>window.location="${site}/project/?project=${id}&challenge=${challengeId}";</script>
     </body></html>`;
+  } catch(error) {
+    string = `<!DOCTYPE html><head>
+      </head><body>
+      <script>window.location="${site}/project/?project=${id}&challenge=${challengeId}";</script>
+      </body></html>`
+  }
   return string;
 }
 
