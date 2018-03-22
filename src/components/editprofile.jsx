@@ -166,7 +166,7 @@ export default class EditProfile extends React.Component {
       db.collection("User").doc(this.state.user._id).collection("public")
       .doc(this.state.user._id).set(publicInfo, {merge: true})
     })
-    .then(() => {})
+    .then(() => {browserHistory.goBack})
     .catch(error => console.log('Error', error))
   }
 
@@ -270,6 +270,7 @@ export default class EditProfile extends React.Component {
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
                           hintText={'Minimum'}
+                          disabled={true}
                           value={this.state.user.Email}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                           key='min'

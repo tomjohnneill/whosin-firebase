@@ -6,6 +6,7 @@ import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
 import ShortReview from './feedback/shortreview.jsx';
 import VolunteerStars from './feedback/volunteerstars.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import DocumentTitle from 'react-document-title';
 import {changeImageAddress} from './project.jsx';
 import {browserHistory} from 'react-router';
 
@@ -142,6 +143,7 @@ export default class About extends React.Component {
       <div className='aboutContainer' style={{width: '100%', display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', textAlign: 'left', backgroundColor: '#E55749',
       overflowX: 'hidden'}}>
+      <DocumentTitle title='About'/>
 
         <MediaQuery minDeviceWidth={700}>
           <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100}}>

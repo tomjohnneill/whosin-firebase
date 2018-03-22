@@ -233,7 +233,7 @@ class Form extends React.Component {
                   underlineShow={false}
                   value={this.state.startTime}
                   minutesStep={5}
-
+                  format='24hr'
                   onChange={this.handleSetStartTime}
                   hintStyle={{  bottom: '8px'}}
                   hintText="Time" textFieldStyle={styles.textfield}/>
@@ -271,7 +271,7 @@ class Form extends React.Component {
                   underlineShow={false}
                   minutesStep={5}
                   value={this.state.endTime}
-
+                  format='24hr'
                   onChange={this.handleSetEndTime}
                   hintStyle={{  bottom: '8px'}}
                   hintText="Time" textFieldStyle={styles.textfield}/>

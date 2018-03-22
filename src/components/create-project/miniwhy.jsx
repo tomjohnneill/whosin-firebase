@@ -1,6 +1,7 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
+import MediaQuery from 'react-responsive';
 
 const styles = {
   card : {
@@ -21,52 +22,63 @@ export default class MiniWhy extends React.Component {
 
   render() {
     return (
-      <div style={{paddingLeft: '100px', textAlign: 'left'}}>
-        <h1 style={{fontFamily: 'Permanent Marker', fontWeight: 'normal'}}>
-          Welcome to the next step
-        </h1>
-        <div style={{display: 'flex', textAlign: 'left'}}>
-          <span style={styles.card}>
-
-            <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
-              <h2 style={{fontWeight: 700, fontSize: '16px'}}>
-                  Why use Who's In?
-                </h2>
-                Whatever the project, Who's In?
-                makes it simple to find new supporters and reach volunteers
-                looking to help out with a cause like yours.
+      <div>
+        <MediaQuery minDeviceWidth={700}>
+          <div style={{paddingLeft: '100px', textAlign: 'left', paddingTop: 50}}>
+            <h1 className='desktop-header'>
+              Here's what you'll need to finish
+            </h1>
+            <div style={{paddingLeft: 16}}>
+              * The number of people you’re looking for <br/>
+            * The deadline to sign up <br/>
+          * Address of the event <br/>
+        * Date and time of your event <br/>
+      * Project title, summary and description <br/>
+              * A cover image
             </div>
-          </span>
+              <p style={{fontWeight: 700}}>
+              If you’re a charity or organisation you’ll also need:
+              </p>
+    <div style={{paddingLeft: 16}}>
+              * Your logo
+            </div>
 
-          <span style={styles.card}>
-
-            <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
-            <h2 style={{fontWeight: 700, fontSize: '16px'}}>
-              You're in control
-            </h2>
-            With Who's In?, you're in control of when and where you run your project,
-             how many people you need, and what the maximum number of people you can deal with.
-           </div>
-          </span>
-
-          <span style={styles.card}>
-
-            <div style={{paddingLeft: 40, paddingRight: 40, fontSize: '16px'}}>
-            <h2 style={{fontWeight: 700, fontSize: '16px'}}>
-              We'll help you out
-            </h2>
-            We offer tools for contacting volunteers, conducting surveys,
-            creating compelling impact summaries and demographic statistics for donors.
+            <RaisedButton label='Start a Project' onClick={this.handleProject}
+                style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                buttonStyle={{height: '36px'}}
+                 labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                      letterSpacing: '0.6px', fontWeight: 'bold'}}
+              />
           </div>
-          </span>
-        </div>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
+          <div style={{padding: 24, textAlign: 'left'}}>
+            <h1 className='desktop-header'>
+              Here's what you'll need to finish
+            </h1>
+            <div style={{paddingLeft: 16}}>
+              * The number of people you’re looking for <br/>
+            * The deadline to sign up <br/>
+          * Address of the event <br/>
+        * Date and time of your event <br/>
+      * Project title, summary and description <br/>
+              * A cover image
+            </div>
+              <p style={{fontWeight: 700}}>
+              If you’re a charity or organisation you’ll also need:
+              </p>
+    <div style={{paddingLeft: 16}}>
+              * Your logo
+            </div>
 
-        <RaisedButton label='Start a Project' onClick={this.handleProject}
-            style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-            buttonStyle={{height: '36px'}}
-             labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
-                  letterSpacing: '0.6px', fontWeight: 'bold'}}
-          />
+            <RaisedButton label='Start a Project' onClick={this.handleProject}
+                style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                buttonStyle={{height: '36px'}}
+                 labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                      letterSpacing: '0.6px', fontWeight: 'bold'}}
+              />
+          </div>
+        </MediaQuery>
       </div>
     )
   }

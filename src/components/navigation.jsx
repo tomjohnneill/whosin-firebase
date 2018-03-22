@@ -290,12 +290,7 @@ export default class Navigation extends React.Component {
                                     >
                                     Projects
                                   </div>
-                                  <div style={{
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
-                                    onTouchTap={() => browserHistory.push('/why')}
-                                    >
-                                    Why start a project?
-                                  </div>
+
                                 <RaisedButton
                                   style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                                   buttonStyle={{height: '36px'}}
@@ -381,7 +376,6 @@ export default class Navigation extends React.Component {
           open={this.state.drawerOpen}>
             <MenuItem onClick={() => this.goToAndClose('/about')}>About</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
-            <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/create-project/0')}>Start a project</MenuItem>
             <MenuItem onClick={this.handleSignOut}>
               Sign out</MenuItem>

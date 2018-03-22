@@ -221,40 +221,29 @@ import fire from '../fire';
                 <FlatButton onClick={this.props.handleClose}
                 primary={true}
                 labelStyle={{textTransform: 'none', fontSize: '25px', fontWeight: 700}}
-                label='Go to project'/>
+                label='OK'/>
           </div>]}
             onRequestClose={this.props.handleClose}
           >
-          <div style={{maxWidth: '1000px', width: '100%'}}>
-            <div style={{backgroundColor: 'rgba(101, 161, 231, 0.7)', height: 20}}>
-              We'll contact you when
-            </div>
-            <div style={{display: 'flex'}}>
-              <div style={{flex: 2, marginRight: 30}}>
+          <div style={{maxWidth: '1000px', width: '100%', padding: 40, boxSizing: 'border-box', textAlign: 'left'}}>
+            <div style={{display: 'flex', height: 150, alignItems: 'center', justifyContent: 'center'}}>
 
-                <Tick color={'#3B9E74'}/>
-              </div>
-              <div style={{flex: 5}}>
-                <div style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
-                  {this.props.project.Name}
-                </div>
-                <img src={changeImageAddress(this.props.project['Featured Image'], '750xauto')}
-                  style={{width: '100%', height: '220px', objectFit: 'cover'}}
-                  />
-              </div>
+                <Tick style={{height: 150}} color={'#3B9E74'}/>
+
+
             </div>
+            <div style={{fontSize: '40px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16}}>
+            Nice, you've started a project.
+            </div>
+            <div style={{marginBottom: '16px', fontWeight: 'lighter', fontSize: '28px'}}>
+              We'll just need to approve it before other people can see it.
+            </div>
+
+
             <div style={{textAlign: 'left'}}>
               <div style={{width: '60%'}}>
-                <div style={{display: 'inline-block',fontSize: '24px', fontWeight: 'bold', textAlign: 'left', marginBottom: 16, marginTop: 16}}>
-                  Nice, you've started a project.
-                </div>
-                <div style={{float: 'right', height: '64.8px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              </div>
 
-                </div>
-              </div>
-              <div style={{marginBottom: '16px', fontWeight: 'lighter'}}>
-                Now the fun really starts.
-              </div>
               <div style={{marginTop: '30px'}}>
 
 
@@ -738,7 +727,9 @@ import fire from '../fire';
 
                                  <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
                                    className='story-text'
-                                    dangerouslySetInnerHTML={this.descriptionMarkup()}/>
+                                    >
+                                    {this.state.project.Description}
+                                  </div>
 
 
                             </div>

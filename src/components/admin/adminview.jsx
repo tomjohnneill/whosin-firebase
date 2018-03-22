@@ -258,19 +258,18 @@ export class EditProjectForm extends React.Component {
     .catch(error => this.setState({error: error}))
   };
 
-/*
+
   handleSaveChanges = () => {
     let project = this.state.project
-    project.Location = this.state.address
-    geocodeByAddress(this.state.address)
-     .then(results => getLatLng(results[0]))
-     .then(latLng => {
-       project.Geopoint = latLng
-       db.collection("Project").doc(this.props.projectId).update(project).
-       then(data => this.setState({snackbar: true}))
-     })
+
+     db.collection("Project").doc(this.props.projectId).update(project).
+     then(data => {
+       this.setState({snackbar: true})
+        browserHistory.goBack
+      }
+      )
   }
-*/
+
   handleRequestClose = () => {
     this.setState({snackbar: false})
   }

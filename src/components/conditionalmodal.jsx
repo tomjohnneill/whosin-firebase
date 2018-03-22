@@ -220,7 +220,7 @@ export default  class ConditionalModal extends React.Component {
                       borderRadius: 6, marginBottom: 15,
                     marginTop: '17.4px', background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
                     borderLeft: '3px solid rgb(33, 150, 243)', paddingLeft: 16}}>
-                  <Subheader style={{color: 'inherit', fontWeight: 700, fontSize: '24px', paddingLeft: 0}}>
+                  <Subheader style={{textTransform: 'none', color: 'inherit', fontWeight: 700, fontSize: '24px', paddingLeft: 0}}>
                     I'll sign up if...
                   </Subheader>
                   <ListItem
