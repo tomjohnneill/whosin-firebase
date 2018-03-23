@@ -686,9 +686,9 @@ import fire from '../fire';
                           <div className='location-icon'>
                             <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
                           </div>
-                          <div style={{textAlign: 'left'}}>
+                          <a href={`https://www.google.com/maps/?q=${this.state.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
                             {this.state.project.Location}
-                          </div>
+                          </a>
                         </div>
                         : null
                       }

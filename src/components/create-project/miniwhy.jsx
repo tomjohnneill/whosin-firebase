@@ -26,7 +26,7 @@ export default class MiniWhy extends React.Component {
         <MediaQuery minDeviceWidth={700}>
           <div style={{paddingLeft: '100px', textAlign: 'left', paddingTop: 50}}>
             <h1 className='desktop-header'>
-              Here's what you'll need to finish
+              Here's what you'll need to get started
             </h1>
             <div style={{paddingLeft: 16}}>
               * The number of people you’re looking for <br/>

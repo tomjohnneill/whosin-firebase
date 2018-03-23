@@ -213,6 +213,11 @@ export default class Story extends React.Component{
             </div>
             <div style={{flex: 1, boxSizing: 'border-box', paddingLeft: '100px'}} className='basics-image'>
               <UploadPhoto changeParentState={() => this.setState({pictureUploaded: true})}/>
+              <div style={{ textAlign: 'left'}}>
+                Don't have a photo to hand? We've collected some nice free ones
+                <a  style={{color: '#65A1e7', fontWeight: 700 }}
+                   href='https://unsplash.com/collections/1881196/volunteering' target='_blank' rel='noopener'> here.</a>
+              </div>
             </div>
           </div>
         </MediaQuery>

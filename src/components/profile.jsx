@@ -340,7 +340,7 @@ class ProjectsOrganised extends React.Component {
         console.log(doc.data())
         var elem = doc.data()
         elem['_id'] = doc.id
-        if (!elem.Charity) {
+        if (!elem.Charity || (fire.auth().currentUser && fire.auth().currentUser.uid === this.props.userId)) {
           data.push(elem)
           this.setState({projects: data, loading: false})
         }
@@ -363,8 +363,16 @@ class ProjectsOrganised extends React.Component {
               {this.state.projects ?
                 <div style={{display: 'flex', flexWrap: 'wrap'}}>
                   {this.state.projects.map((project) => (
-                  <div style={{padding: 20, width: '50%', boxSizing: 'border-box'}}>
+                  <div style={{position: 'relative', padding: 20, width: '50%', boxSizing: 'border-box'}}>
                     <EmbeddedProject noLogo={true} project={project}/>
+                      {project.Approved ? null :
+                      <div
+                        onClick={() => {browserHistory.push(`/projects/p/${project._id}`)}}
+                        style={{cursor: 'pointer',height: '100%', width: '100%', zIndex: 4, boxSizing: 'border-box',
+                                  position: 'absolute', paddingTop: 20, paddingRight: 40, paddingBottom: 20, borderRadius: 8, top: 0}}>
+                          <div style={{height: '100%', width: '100%', backgroundColor: 'rgba(216, 216, 216, 0.35)'}}/>
+                      </div>
+                    }
                   </div>
                   ))}
                 </div>

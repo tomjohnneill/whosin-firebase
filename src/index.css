@@ -5,6 +5,20 @@ body {
     color: #484848
 }
 
+.my-masonry-grid {
+  display: flex;
+  margin-left: -30px;
+}
+.my-masonry-grid_column {
+  border-left: 10px solid transparent;
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 10px;
+  width: 100%
+}
+
 .react-add-to-calendar__button {
   background-color: #65A1e7;
   color: white;

@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
+import Snackbar from 'material-ui/Snackbar';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -70,19 +71,32 @@ const styles = {
 export default class Footer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {signedUp: false}
   }
 
   handleSignUp = () => {
      db.collection("Newsletter").add({email: this.state.emailSignup})
-     .then(() => this.setState({emailSignup: ''}))
+     .then(() => this.setState({signedUp: true, emailSignup: ''}))
   }
+
+  handleRequestClose = () => {
+    this.setState({
+      signedUp: false,
+    });
+  };
+
 
   render() {
     return (
       <div className='footer-parent' style={{
             display: window.location.pathname.includes('/embed/') ? 'none' : 'inherit',
             textAlign: 'left'}}>
+            <Snackbar
+              open={this.state.signedUp}
+              message="We've added you to the mailing list"
+              autoHideDuration={4000}
+              onRequestClose={this.handleRequestClose}
+            />
         <MediaQuery minDeviceWidth={700}>
           <div
             className='footer-container'
@@ -104,6 +118,9 @@ export default class Footer extends React.Component {
                   hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                   key='email'
                   style={styles.textfield}/>
+                <div style={{paddingTop: 6}}>
+                We won't share this data with anyone else
+              </div>
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
                     onClick={this.handleSignUp}

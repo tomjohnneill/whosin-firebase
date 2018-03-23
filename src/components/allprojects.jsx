@@ -13,6 +13,7 @@ import {grey200, grey500, grey100, amber500} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List';
 import Search from 'material-ui/svg-icons/action/search';
 import Divider from 'material-ui/Divider';
+import Masonry from 'react-masonry-css';
 import Loading from './loading.jsx';
 
 import fire from '../fire';
@@ -106,14 +107,19 @@ export default class AllProjects extends React.Component {
               <Loading/>
               :
               this.state.projects ?
-              <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '80px', paddingRight: '80px',
-              textAlign: 'left'}}>
+
+              <Masonry
+                breakpointCols={3}
+                style={{paddingRight: 100, paddingLeft: 100}}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column">
                 {this.state.projects.map((project) => (
-                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '33%'}}>
-                    <EmbeddedProject noLogo={true} project={project}/>
+                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+                    <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
                   </div>
                 ))}
-              </div>
+              </Masonry>
+
               :
               null
             }

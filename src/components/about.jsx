@@ -155,7 +155,7 @@ export default class About extends React.Component {
                 <div style={styles.redInkbar}/>
                 <div className='description-summary' style={styles.ticSummaryLight}>
                   I’m sure you’d have done this already if you had found the
-                  right project, but it’s hard, we get it.
+                  right project, but it’s difficult, we get it.
                   That’s why we built Who’s In. <br/><b>Doing good shouldn’t be hard.</b>
                 </div>
               </div>

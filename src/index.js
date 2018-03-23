@@ -5,13 +5,10 @@ import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import asyncComponent from './AsyncComponent'
+import Project from  './components/project.jsx'
+import EmbeddedProject from './components/embeddedproject.jsx'
+import AllProjects from './components/allprojects.jsx';
 
-const AllProjects = asyncComponent(() =>
-  import('./components/allprojects.jsx').then(module => module.default)
-)
-const EmbeddedProject = asyncComponent(() =>
-  import('./components/embeddedproject.jsx').then(module => module.default)
-)
 const Terms = asyncComponent(() =>
   import('./components/terms.jsx').then(module => module.default)
 )
@@ -29,9 +26,6 @@ const CantCome = asyncComponent(() =>
 )
 const Register = asyncComponent(() =>
   import('./components/feedback/register.jsx').then(module => module.default)
-)
-const Project = asyncComponent(() =>
-  import('./components/project.jsx').then(module => module.default)
 )
 const Profile = asyncComponent(() =>
   import('./components/profile.jsx').then(module => module.default)
