@@ -725,11 +725,9 @@ import fire from '../fire';
                         <CardText  children = {
                             <div>
 
-                                 <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
-                                   className='story-text'
-                                    >
-                                    {this.state.project.Description}
-                                  </div>
+                              <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
+                        className='story-text'
+                         dangerouslySetInnerHTML={this.descriptionMarkup()}/>
 
 
                             </div>

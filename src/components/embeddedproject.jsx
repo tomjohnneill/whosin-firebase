@@ -72,6 +72,7 @@ export default class EmbeddedProject extends React.Component {
   }
 
   render() {
+    console.log(this.state.project)
     return (
       <div>
         {this.state.loading ?

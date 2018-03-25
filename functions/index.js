@@ -319,6 +319,7 @@ exports.project = functions.https.onRequest((req, res) => {
   console.log(projectId)
   db.collection("Project").doc(projectId).get().then((doc) => {
     const htmlString = buildHtmlWithProject(doc.data(), doc.id);
+    res.set('Cache-Control', 'public, max-age=172800, s-maxage=172800');
     res.status(200).end(htmlString);
   })
 });

@@ -42,18 +42,21 @@ export default class AllProjects extends React.Component {
   }
 
   componentDidMount(props) {
+    const client = algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    const index = client.initIndex('projects');
+    var query = ''
+    index
+        .search({
+            query: query,
+            filters: 'Approved:true'
+        })
+        .then(responses => {
+            // Response from Algolia:
+            // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
+            this.setState({projects: responses.hits, loading: false});
+        });
 
 
-    db.collection("Project").where("Approved", "==", true).get().then((querySnapshot) => {
-      var data = []
-      querySnapshot.forEach((doc) => {
-
-        var elem = doc.data()
-        elem['_id'] = doc.id
-        data.push(elem)
-      });
-      this.setState({projects: data, loading: false})
-    });
 
 
   }
