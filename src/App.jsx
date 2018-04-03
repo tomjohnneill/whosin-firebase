@@ -4,10 +4,18 @@ import Footer from './components/footer.jsx';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
+import ReactGA from 'react-ga';
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
+
+if (process.env.NODE_ENV === 'production') {
+  ReactGA.initialize('UA-116158905-1');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}
+
+
+
 
 const muiTheme = getMuiTheme({
   palette: {

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -7,6 +8,9 @@ import {Plant, Spiral, Tick} from './icons.jsx';
 import {grey500} from 'material-ui/styles/colors'
 import MediaQuery from 'react-responsive';
 import fire from '../fire';
+import firebase from "firebase/app";
+import 'firebase/auth';
+
 
 let db = fire.firestore()
 
@@ -26,10 +30,12 @@ const styles = {
   }
 }
 
+
+
 export default  class SignupModal extends React.Component {
   constructor(props) {
     super(props)
-
+    console.log(this.props)
     this.state = {type: this.props.type ? this.props.type : 'signup', loading: false, pwned: null,
       forgotPassword: false, sendPasswordClicked: false}
   }
@@ -67,9 +73,7 @@ export default  class SignupModal extends React.Component {
           )
             .then(data =>
               {
-                if (this.props.onComplete) {
-                  this.props.onComplete()
-                }
+                this.setState({type: 'phone'})
               })
             .catch(error => console.log('Error', error))
           } else {
@@ -137,14 +141,97 @@ export default  class SignupModal extends React.Component {
     }
   }
 
+  onSignInSubmit = () => {
+    console.log('phone thing')
+  }
+
+  handlePhoneAuth = () => {
+    firebase.auth().languageCode = 'en-gb'
+    const phoneTextRef = this.phoneText
+
+    var phoneRaw = phoneTextRef.getValue()
+    if (phoneRaw.substring(0,1) === '0') {
+      var phoneNumber = "+44" + phoneRaw.substring(1)
+    } else {
+      var phoneNumber = phoneRaw
+    }
+    console.log(phoneNumber)
+    this.setState({phoneNumberInState: phoneNumber})
+    var appVerifier = window.recaptchaVerifier;
+    console.log(phoneNumber)
+    console.log(appVerifier)
+
+    fire.auth().currentUser.linkWithPhoneNumber(phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          console.log(confirmationResult)
+          // SMS sent. Prompt user to type the code from the message, then sign the
+          // user in with confirmationResult.confirm(code).
+          window.confirmationResult = confirmationResult;
+          this.setState({type: 'enterCode'})
+        }).catch(function (error) {
+          alert(error)
+          // Error; SMS not sent
+          // ...
+        });
+
+  }
+
+  handleConfirmPhone = () => {
+    console.log(this.state.confirmationCode)
+    var credential = firebase.auth.PhoneAuthProvider.credential(window.confirmationResult.verificationId, this.state.confirmationCode);
+    fire.auth().currentUser.updatePhoneNumber(credential)
+    .then((result) => {
+        // User signed in successfully.
+        console.log(result)
+        if (this.props.onComplete) {
+          db.collection("User").doc(fire.auth().currentUser.uid).update({
+            phoneNumber: this.state.phoneNumberInState
+          })
+          .then(() => {
+            this.props.onComplete()
+          })
+
+        }
+        // ...
+      }).catch(function (error) {
+        alert(error)
+      });
+  }
+
+  loadRecaptcha = () => {
+    console.log('times up')
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(this.recaptcha, {
+       'size': 'normal',
+       'callback': function (response) {
+         // reCAPTCHA solved, allow signInWithPhoneNumber.
+         // ...
+       },
+       'expired-callback': function () {
+         // Response expired. Ask user to solve reCAPTCHA again.
+         // ...
+       }
+    });
+    window.recaptchaVerifier.render().then(function (widgetId) {
+      window.recaptchaWidgetId = widgetId;
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.type !== prevProps.type) {
+      this.setState({type: this.props.type})
+    }
+
+    if (this.state.type === 'phone' && prevState.type != 'phone') {
+      window.setTimeout(this.loadRecaptcha, 200)
+    }
+  }
+
   render() {
-
-
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
           <Dialog
-            open={this.props.open && !fire.auth().currentUser ? true : false}
+            open={this.props.open && (!fire.auth().currentUser || !fire.auth().currentUser.phoneNumber) ? true : false}
             modal={false}
 
             onRequestClose={this.props.changeOpen}
@@ -242,6 +329,8 @@ export default  class SignupModal extends React.Component {
 
             :
 
+            this.state.type === 'login' ?
+
             <span
                 style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
 
@@ -307,9 +396,43 @@ export default  class SignupModal extends React.Component {
                     Or switch to <b onTouchTap={this.handleSwitchType} style={{cursor: 'pointer',color: '#E55749'}}>
                     {this.state.type === 'login' ? 'Sign up' : 'Login'}</b>
                   </div>
-
+                  <div onClick={() => this.setState({type: 'phone'})}>Phone auth</div>
             </span>
+            :
+            this.state.type === 'phone' ?
 
+            <div style={{padding: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
+              <h2>We need to check you're a real person (robots don't have phones)</h2>
+              <TextField
+                key='phoneno'
+                ref={(ref)=>this.phoneText=ref} hintText='Phone Number (+44...)'/>
+              <div style={{paddingTop: 24, paddingBottom: 24, display: this.state.type === 'phone' ? 'flex' : 'none',
+                   justifyContent: 'center', width: '100%'}} ref={(ref)=>this.recaptcha=ref}>
+
+              </div>
+
+              <RaisedButton
+                style={{height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+                buttonStyle={{height: '36px'}}
+                labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                     letterSpacing: '0.6px', fontWeight: 'bold'}}
+                primary={true} onClick={this.handlePhoneAuth} label='Get Verification Code'/>
+            </div>
+            :
+            <div style={{padding: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
+              <h2>We've sent you a code, enter it here</h2>
+              <TextField style={{marginBottom: 10}}
+                value={this.state.confirmationCode}
+                key='code'
+                onChange={(e,nv) => this.setState({confirmationCode: nv})} hintText='Confirmation code'/>
+
+              <RaisedButton
+                style={{height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+                buttonStyle={{height: '36px'}}
+                labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                     letterSpacing: '0.6px', fontWeight: 'bold'}}
+                primary={true} onClick={this.handleConfirmPhone} label='Confirm'/>
+            </div>
 
           }
 
@@ -318,7 +441,9 @@ export default  class SignupModal extends React.Component {
           </Dialog>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={700}>
-          <div style={{backgroundColor: 'white', zIndex: 10, marginTop: 10, display: this.props.open && !fire.auth().currentUser ? 'inherit' : 'none', width: '100%', position: 'relative',
+          <div style={{backgroundColor: 'white', zIndex: 10, marginTop: 10,
+            display: this.props.open && (!fire.auth().currentUser || !fire.auth().currentUser.phoneNumber) ? 'inherit' : 'none',
+             width: '100%', position: 'relative',
           boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px', borderRadius: 6, padding: 10, boxSizing: 'border-box'}}>
           {this.state.loading  ?
           <div style={{width: '100%', height: '100%', position: 'absolute', top: '0px',left: '0px',zIndex: '20', boxSizing: 'border-box', backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -393,7 +518,7 @@ export default  class SignupModal extends React.Component {
 
           </span>
 
-          :
+        :  this.state.type === 'login' ?
 
           <span
               style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
@@ -431,6 +556,22 @@ export default  class SignupModal extends React.Component {
                     key='password'
                     style={styles.textfield}/>
                 </div>
+                <div style={{textAlign: 'center', marginBottom: 10}}>
+                  {this.state.forgotPassword ?
+                    <div>
+                      Forgotten your password? <br/><b
+                      style={{cursor: 'pointer'}}
+                      onClick={() => fire.auth().sendPasswordResetEmail(this.state.email, {
+                        url: window.location.href
+                      }).then(() => {
+                        console.log('sending new password')
+                        this.setState({sendPasswordClicked: true})
+                      })}
+                      >Send a reminder?</b>
+                    </div> :
+                    null
+                  }
+                </div>
                 <div style={{width: '100%', boxSizing: 'border-box', backfaceVisibility: 'inherit'
                   ,borderRadius: '10px', paddingBottom: '20px'}}>
                   <RaisedButton fullWidth={true}
@@ -444,11 +585,46 @@ export default  class SignupModal extends React.Component {
                 <div>
                   Or switch to <b onTouchTap={this.handleSwitchType} style={{cursor: 'pointer',color: '#E55749'}}>
                   {this.state.type === 'login' ? 'Sign up' : 'Login'}</b>
+
+                <div onClick={() => this.setState({type: 'phone'})}>Phone auth</div>
                 </div>
 
           </span>
 
+          :
+          this.state.type === 'phone' ?
+          <div style={{padding: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
+            <h2>We need to check you're a real person (robots don't have phones)</h2>
+            <TextField
+              key='phoneno'
+              ref={(ref)=>this.phoneText=ref} hintText='Phone Number (+44...)'/>
+            <div style={{paddingTop: 24, paddingBottom: 24, display: this.state.type === 'phone' ? 'flex' : 'none',
+                 justifyContent: 'center', width: '100%'}} ref={(ref)=>this.recaptcha=ref}>
 
+            </div>
+
+            <RaisedButton
+              style={{height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+              buttonStyle={{height: '36px'}}
+              labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                   letterSpacing: '0.6px', fontWeight: 'bold'}}
+              primary={true} onClick={this.handlePhoneAuth} label='Get Verification Code'/>
+          </div>
+          :
+          <div style={{padding: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
+            <h2>We've sent you a code, enter it here</h2>
+            <TextField style={{marginBottom: 10}}
+              value={this.state.confirmationCode}
+              key='code'
+              onChange={(e,nv) => this.setState({confirmationCode: nv})} hintText='Confirmation code'/>
+
+            <RaisedButton
+              style={{height: '36px', boxShadow: ''}} overlayStyle={{height: '36px'}}
+              buttonStyle={{height: '36px'}}
+              labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                   letterSpacing: '0.6px', fontWeight: 'bold'}}
+              primary={true} onClick={this.handleConfirmPhone} label='Confirm'/>
+          </div>
         }
       </div>
       </div>

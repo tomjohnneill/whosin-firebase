@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "whos-in-firebase"
+    "default": "whos-in-firebase",
+    "stagiing": "whos-in-dev",
+    "staging": "whos-in-dev",
+    "prod": "whos-in-firebase"
   }
 }

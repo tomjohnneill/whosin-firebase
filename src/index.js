@@ -85,6 +85,10 @@ const EmailTemplateBuilder = asyncComponent(() =>
 const ImageCrop = asyncComponent(() =>
     import('./components/admin/imagecrop.jsx').then(module => module.default)
 )
+const CaseStudy = asyncComponent(() =>
+    import('./components/casestudy.jsx').then(module => module.default)
+)
+
 
 const rootElement = document.getElementById('root');
 
@@ -98,6 +102,7 @@ const rootElement = document.getElementById('root');
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
+      <Route path='/casestudy' component={CaseStudy}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
@@ -123,7 +128,7 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:Name/:_id/register' component={Register}/>
       <Route path='/projects/:pledge/:_id/:challengeId/joined' component={ProjectJoined}/>
       <Route path='/projects/:pledge/:_id/:challengeId' component={Project}/>
-      <Route path='/pages/:tabb/:pledge/:_id' component={Project}/>
+      <Route path='/pages/:tab/:pledge/:_id' component={Project}/>
       <Route path='/charity/:charityId' component={CharityProfile}/>
       <Route path='/charity/:charityId/edit' component={EditCharity}/>
       <Route path='/' component={UserTabs}/>

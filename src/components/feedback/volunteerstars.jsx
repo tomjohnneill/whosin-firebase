@@ -5,6 +5,7 @@ import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
 import {Tick, Cross, Spiral} from '../icons.jsx';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Loading from '../loading.jsx';
 import TextField from 'material-ui/TextField';
 
 import fire from '../../fire';
@@ -113,6 +114,7 @@ export default class VolunteerStars extends React.Component {
         var data = []
         querySnapshot.forEach((doc) => {
           var elem = doc.data()
+          console.log(elem)
           elem['_id'] = doc.id
           data.push(elem)
         })
@@ -165,7 +167,7 @@ export default class VolunteerStars extends React.Component {
       <div >
 
           {this.state.loading ?
-          null :
+          <Loading/> :
           <div   style={{textAlign: 'left', padding: 24, paddingBottom: 50}}>
             <div>
               {this.state.engagement['Volunteer Picture'] ?

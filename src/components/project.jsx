@@ -147,22 +147,14 @@ export function changeImageAddress(file, size) {
   }
 }
 
-var worktoolsToken = localStorage.getItem('worktoolsToken') ? localStorage.getItem('worktoolsToken') :
-  '05a797cd-8b31-4abe-b63b-adbf0952e2c7'
 
 export default class Project extends React.Component {
   constructor(props) {
 
     super(props);
     console.log(this.props)
-    var worktoolsToken = localStorage.getItem('worktoolsToken')
-    var loggedIn
-    if (worktoolsToken) {
-      loggedIn = true
-    } else {
-      loggedIn = false
-    }
-    this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0, loading:true, loggedIn: loggedIn,
+
+    this.state = {open: false, adminDrawerOpen: false, selectedIndex: 0, loading:true,
       charity: {}, inkBarLeft: '20px', selected: 'story', challengeExists: false}
   }
 
@@ -251,11 +243,6 @@ export default class Project extends React.Component {
   }
 
 
-
-  handleModal = (e) => {
-    this.setState({modalOpen: true})
-  }
-
   handleModalChangeOpen = (e) => {
     console.log('modal change state fired for some reason')
     this.setState({modalOpen: false})
@@ -312,22 +299,47 @@ export default class Project extends React.Component {
 
   }
 
-  handleModal = (e) => {
-    if (localStorage.getItem('worktoolsToken')) {
-      if (this.state.questions) {
-        browserHistory.push(window.location.href + '/questions')
-      } else {
-        this.createEngagement()
-        browserHistory.push(window.location.href + '/joined')
-      }
+  addChallengeMember = () => {
+    var challengeRef = db.collection("Project").doc(this.props.project._id).collection("Challenge").doc(this.props.challenge._id)
+    challengeRef.get().then((data) => {
+      var challengeMembers = data.data().challengeMembers ? data.data().challengeMembers : []
+      challengeMembers.push(fire.auth().currentUser.uid)
+      challengeRef.update({challengeMembers: challengeMembers})
+    })
+  }
 
+  handleModal = (e) => {
+    console.log('handle modal fired')
+    if (fire.auth().currentUser) {
+      if (fire.auth().currentUser.phoneNumber) {
+        if (this.state.questions) {
+          browserHistory.push(window.location.href + '/questions')
+        } else {
+          this.createEngagement()
+          if (this.state.challenge) {
+            this.addChallengeMember()
+          }
+          if (window.location.pathname.includes('/joined')) {
+            browserHistory.push(window.location.pathname)
+          } else {
+            browserHistory.push(window.location.pathname + '/joined')
+          }
+        }
+      } else {
+          this.setState({
+            modalOpen: true, modalType: 'phone'
+          })
+      }
     } else {
       this.setState({modalOpen: true})
     }
   }
 
   onComplete = () => {
-    if (this.state.questions) {
+    if (this.state.conditionalStatus) {
+      this.setState({conditionalOpen: true, conditionalStatus: false, modalOpen: false})
+    }
+    else if (this.state.questions) {
       browserHistory.push(window.location.href + '/questions')
     } else {
       this.createEngagement()
@@ -566,11 +578,12 @@ export default class Project extends React.Component {
                   </div>
                   <div style={{position: 'sticky'}}>
                     <SignupModal
+                      type={this.state.modalType}
                       _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
                       title={this.props.params.project}
                       open={this.state.modalOpen}
                       changeOpen={this.handleModalChangeOpen}
-                    onComplete={this.setLoggedIn}/>
+                    onComplete={this.onComplete}/>
                 </div>
 
             <div style={{padding: '20px 35px 20px 35px', textAlign: 'left'}}>

@@ -12,7 +12,8 @@
     "algoliasearch": "^3.24.12",
     "firebase-admin": "~5.8.1",
     "firebase-functions": "^0.8.1",
-    "mailgun-js": "^0.16.0"
+    "mailgun-js": "^0.16.0",
+    "node-fetch": "^2.1.2"
   },
   "private": true
 }

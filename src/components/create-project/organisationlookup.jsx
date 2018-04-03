@@ -114,10 +114,14 @@ export default class OrganisationLookup extends React.Component{
     });
     var newCharities = []
     const client = algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
-    const index = client.initIndex('organisations');
+    var index
+    if (process.env.REACT_APP_ENVIRONMENT === "staging" || process.env.NODE_ENV === 'development') {
+      index = client.initIndex('staging_organisations');
+    } else {
+      index = client.initIndex('organisations');
+    }
     var query = searchText
-    index
-        .search({
+    index.search({
             query
         })
         .then(responses => {

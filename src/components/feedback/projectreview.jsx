@@ -95,11 +95,16 @@ export default class ProjectReview extends React.Component {
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
-      db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
-        var charity = charityDoc.data()
-        charity._id = charityDoc.id
-        this.setState({project: project, charity: charity, loading: false})
-      })
+      this.setState({loading: false, project: project, charity: {}})
+      if (project.Charity) {
+        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+          var charity = charityDoc.data()
+          charity._id = charityDoc.id
+          this.setState({project: project, charity: charity, loading: false})
+        })
+      } else {
+        this.setState({charity: {}})
+      }
     })
   }
 

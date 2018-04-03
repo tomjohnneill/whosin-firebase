@@ -323,9 +323,9 @@ import fire from '../fire';
       }
 
       this.setState({project: project, charity: this.props.charity, loading: false, creator: this.props.creator})
-      console.log(window.location.pathname.substr(window.location.pathname.length - 7))
+
       if (window.location.pathname.substr(window.location.pathname.length - 10) === '/completed') {
-        console.log('project is completed')
+
         setTimeout(function() { this.setState({completedOpen: true}); }.bind(this), 2000);
       }
     }
@@ -411,20 +411,25 @@ import fire from '../fire';
 
     handleModal = (e) => {
       if (fire.auth().currentUser) {
-        if (this.props.questions) {
-          browserHistory.push(window.location.href + '/questions')
-        } else {
-          this.createEngagement()
-          if (this.props.challenge) {
-            this.addChallengeMember()
-          }
-          if (window.location.pathname.includes('/joined')) {
-            browserHistory.push(window.location.pathname)
+        if (fire.auth().currentUser.phoneNumber) {
+          if (this.props.questions) {
+            browserHistory.push(window.location.href + '/questions')
           } else {
-            browserHistory.push(window.location.pathname + '/joined')
+            this.createEngagement()
+            if (this.props.challenge) {
+              this.addChallengeMember()
+            }
+            if (window.location.pathname.includes('/joined')) {
+              browserHistory.push(window.location.pathname)
+            } else {
+              browserHistory.push(window.location.pathname + '/joined')
+            }
           }
+        } else {
+            this.setState({
+              modalOpen: true, modalType: 'phone'
+            })
         }
-
       } else {
         this.setState({modalOpen: true})
       }
@@ -641,7 +646,12 @@ import fire from '../fire';
                         <div className='charity-link-content'
                            style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
                           <div style={{marginRight: 10}} className='charity-icon'>
-                            <Avatar>{this.state.creator ? this.state.creator.Name.substring(0,1) : null}</Avatar>
+                            {this.state.creator && this.state.creator.Picture ?
+                              <Avatar src={this.state.creator.Picture}/>
+                              :
+                              <Avatar>{this.state.creator ? this.state.creator.Name.substring(0,1) : null}</Avatar>
+                            }
+
                           </div>
                           <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
                               {this.state.creator ? this.state.creator.Name : null}
@@ -656,7 +666,7 @@ import fire from '../fire';
                        paddingTop: 10, textAlign: 'left'}}
                       className='datetime-container'>
                       {this.state.project['Start Time'] ?
-                      <div className='date-container' style={{display: 'flex'}}>
+                      <div className='date-container' style={{display: 'flex', minWidth: 160}}>
                         <div className='date-icon'>
                           <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
                         </div>
@@ -667,7 +677,7 @@ import fire from '../fire';
                       </div>
                       : null}
                       {this.state.project['Start Time'] ?
-                      <div className='time-container' style={{display: 'flex', marginLeft: 24}}>
+                      <div className='time-container' style={{display: 'flex', marginLeft: 24, minWidth: 140}}>
                         <div className='time-icon'>
                           <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
                         </div>
@@ -813,7 +823,7 @@ import fire from '../fire';
                         </div>
                         <RaisedButton
                            primary={true} fullWidth={true}
-                            labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                            labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                            label='Join Now' onTouchTap={this.handleModal} />
                          </div>
                          :
@@ -823,17 +833,17 @@ import fire from '../fire';
                               <div>
                           <RaisedButton
                              primary={true} fullWidth={true}
-                              labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                              labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                              label="Join Now" onTouchTap={this.handleModal} />
                          </div> : <RaisedButton
                             primary={true} fullWidth={true}
-                             labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                             labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                             label='Join Now' onTouchTap={this.handleModal} />}
                            </div>
                      :
                      <RaisedButton
                          fullWidth={true}
-                         labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                         labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                         label="I can't come" onTouchTap={this.handleUnJoin} />}
                       </div>
                       <div>
@@ -868,6 +878,7 @@ import fire from '../fire';
                 <div style={{height: 60}}/>
                   <SignupModal
                     _id={this.props.params._id}
+                    type={this.state.modalType}
                     title={this.props.params.pledge}
                     open={this.state.modalOpen}
                     changeOpen={this.handleModalChangeOpen}

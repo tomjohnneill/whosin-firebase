@@ -113,34 +113,63 @@ export default class ShortReview extends React.Component {
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
-      db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
-        var charity = charityDoc.data()
-        charity._id = charityDoc.id
-        this.setState({project: project, charity: charity, loading: false})
-      })
+      this.setState({project: project})
+      if (project.Charity) {
+        db.collection("Charity").doc(project.Charity).get().then((charityDoc) => {
+          var charity = charityDoc.data()
+          charity._id = charityDoc.id
+          this.setState({project: project, charity: charity, loading: false})
+        })
+      }
+
     })
   }
 
-  handleSubmit = (e) => {
+  handleSetPrivate = (e, nv) => {
+    this.setState({private: nv})
+  }
+
+  handleSetReview = (e, nv) => {
+    this.setState({review: nv})
+  }
+
+  handleSaveReview = (e) => {
     e.preventDefault()
     var body = {
       Project: this.props.params._id,
-      Charity: this.state.charity._id,
+      Charity: this.state.charity ? this.state.charity._id : null,
+      "Project Creator": this.state.project.Creator,
       User: fire.auth().currentUser.uid,
-      feedback: this.state.feedback,
-      rating: this.state.rating,
+      Review: this.state.review,
+      Rating: this.state.rating,
       "Project Name": this.state.project.Name,
+      created: new Date()
     }
-    db.collection("ProjectReviews").add(body).then((docRef) => (
-      browserHistory.push(window.location.pathname + '/thanks')
-    ))
+    console.log(body)
+
+    db.collection("ProjectReview").add(body).then((docRef) => {
+      console.log('project added')
+      console.log(docRef.id)
+      console.log(this.state.project._id)
+      console.log(fire.auth().currentUser.uid)
+      db.collection("ProjectReview").doc(docRef.id).collection("private")
+        .doc(this.state.project._id).set({
+          Feedback: this.state.private,
+          User: fire.auth().currentUser.uid
+        })
+        .then(() => browserHistory.push(window.location.pathname + '/thanks'))
+        .catch(error => console.log(error))
+
+    })
+    .catch(error => console.log(error))
+
   }
 
   render() {
     return (
       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
         <div style={{width: '100%', boxSizing: 'border-box', padding: 24, maxWidth: '500px', textAlign: 'left'}}>
-          <h2 style={{marginBottom: 36}}>
+          <h2 style={{marginBottom: 20}}>
             Was it worth it?
           </h2>
 
@@ -182,17 +211,38 @@ export default class ShortReview extends React.Component {
             <div style={{color: grey500}}>
 
             </div>
-            <div style={{width: '100%', paddingTop: 15, paddingBottom: 30}}>
+            <div style={{width: '100%', paddingBottom: 15}}>
               <TextField
                 inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                  paddingLeft: '12px',  boxSizing: 'border-box'}}
+                  paddingLeft:  '12px',  boxSizing: 'border-box'}}
                 underlineShow={false}
                 hintText={`Don't worry, this is private feedback`}
                 multiLine={true}
                 fullWidth={true}
-                value={this.state.additional}
-                onChange={this.handleSetAdditional}
-                rows={5}
+                value={this.state.private}
+                onChange={this.handleSetPrivate}
+                rows={3}
+                hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                />
+            </div>
+
+            <h2 style={{marginBottom: 6}}>
+              What would you say about it to others?
+            </h2>
+            <div style={{color: grey500}}>
+
+            </div>
+            <div style={{width: '100%', paddingBottom: 15}}>
+              <TextField
+                inputStyle={{borderRadius: '6px', border: '1px solid #858987',
+                  paddingLeft: '12px',  boxSizing: 'border-box'}}
+                underlineShow={false}
+                hintText={`We'll show this publicly`}
+                multiLine={true}
+                fullWidth={true}
+                value={this.state.review}
+                onChange={this.handleSetReview}
+                rows={3}
                 hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                 />
             </div>
@@ -200,7 +250,7 @@ export default class ShortReview extends React.Component {
               onTouchTap={this.handleSaveReview}
               style={{marginTop: 36}}
                primary={true} fullWidth={true}
-                labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                label="Finish"  />
           </div>
           :

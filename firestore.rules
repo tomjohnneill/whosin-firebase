@@ -4,6 +4,7 @@ service cloud.firestore {
     match /Project/{project} {
        allow read: if true;
        allow update: if resource.data.Creator == request.auth.uid;
+       allow delete: if resource.data.Creator == request.auth.uid;
 
       // Applies to writes to existing documents
       allow create: if request.resource.data.Creator == request.auth.uid;
@@ -60,18 +61,24 @@ service cloud.firestore {
      }
 
     match /emailTemplates/{email} {
-     allow create;
-     allow read: if exists(/databases/$(database)/documents/Admins/$(request.auth.uid))
+     allow read;
+     allow write: if exists(/databases/$(database)/documents/Admins/$(request.auth.uid))
    }
 
-   match /ProjectReviews/{review} {
+   match /ProjectReview/{review} {
       allow read: if true;
-      allow create: if request.resource.data.User == request.auth.uid;
+      allow write: if request.resource.data.User == request.auth.uid;
+
+      match /private/{privateId} {
+
+        allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
+        allow write: if request.resource.data.User == request.auth.uid;
+      }
     }
 
     match /UserReview/{review} {
        allow read: if true;
-       allow create: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid;
+       allow write: if true;
      }
   }
 }

@@ -267,14 +267,16 @@ class RecentReviews extends React.Component {
 
       this.setState({projects: data})
       for (let i = 0; i < data.length; i++) {
-        db.collection("Charity").doc(data[i]['Charity Number']).get().then((charityDoc) => {
-          var charityData = charityDoc.data()
-          console.log(charityData)
-          data[i]['Charity Picture'] = charityData['Featured Image']
-          data[i]['Charity Name'] = charityData['Name']
-          console.log(data)
-          this.setState({projects: data})
-        })
+        if (data[i]['Charity Number']) {
+          db.collection("Charity").doc(data[i]['Charity Number']).get().then((charityDoc) => {
+            var charityData = charityDoc.data()
+            console.log(charityData)
+            data[i]['Charity Picture'] = charityData['Featured Image']
+            data[i]['Charity Name'] = charityData['Name']
+            console.log(data)
+            this.setState({projects: data})
+          })
+        }
       }
       this.setState({projects: data})
     })
@@ -488,18 +490,7 @@ export default class Profile extends React.Component {
                   </div>
                   }
 
-                  <div style={styles.contactDetails}>
-                    Email Address
-                    <Tick style={{height: '24.8px', float: 'right'}}/>
-                  </div>
-                  <div style={styles.contactDetails}>
-                    Phone Number
-                    {this.state.user.public.Phone ?
-                    <Tick style={{height: '24.8px', float: 'right'}}/>
-                    :
-                    <Cross style={{height: 24.8, float: 'right'}}/>
-                    }
-                  </div>
+
 
                   <div style={{paddingTop: '10px', paddingBottom: '10px',
                     borderTop: 'solid 1px #DDDDDD', marginTop: '30px', paddingLeft: '6px', textAlign: 'left',

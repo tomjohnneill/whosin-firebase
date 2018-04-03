@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-
+const fetch = require('node-fetch')
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
@@ -77,6 +77,39 @@ exports.removeOneToPeople = functions.firestore
 });
 
 
+exports.reviewLinkEmail = functions.firestore
+  .document('UserReview/{userReviewId}')
+  .onCreate(event => {
+    // Get an object representing the document
+    // e.g. {'name': 'Marie', 'age': 66}
+    var newValue = event.data.data();
+
+    db.collection("User").doc(newValue.User).get().then((userDoc) => {
+      var user = userDoc.data()
+      console.log(user)
+      db.collection("emailTemplates").doc('eEqHHHsWFjQc4dlK4qqU').get().then((emailDoc) => {
+        var email = emailDoc.data().html
+        var Project = newValue.Project;
+        email = email.replace("{{ reviewLink }}", `https://whosin.io/projects/p/${Project}/review/project`)
+        email = email.replace(/{{ Name }}/g, user.Name.replace(/ .*/,''))
+        email = email.replace(/{{ Organiser }}/g, newValue.Organiser)
+        let data = {
+            from: "Tom <tom@whosin.io>",
+            subject: `You've got a review`,
+            html: email,
+            'h:Reply-To': 'tom@whosin.io',
+            to: user.Email
+          }
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body)
+          })
+
+      })
+    })
+
+    return (null)
+});
+
 exports.sendSignUpEmail = functions.firestore
   .document('Engagement/{engagementId}')
   .onCreate(event => {
@@ -97,9 +130,9 @@ exports.sendSignUpEmail = functions.firestore
           {
             var ProjectData = doc.data()
             ProjectData['_id'] = doc.id
-            email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
+            email = email.replace("{{%20projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
             email = email.replace("{{ projectName }}", ProjectData.Name)
-            email = email.replace('{{ Name }}', newValue.Name)
+            email = email.replace(/{{ Name }}/g, newValue.Name)
             email = email.replace("{{ imageUrl }}", changeImageAddress(ProjectData['Featured Image'], '750xauto'))
             email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
             email = email.replace("{{ location }}", ProjectData['Location'])
@@ -107,7 +140,7 @@ exports.sendSignUpEmail = functions.firestore
             console.log(email)
             console.log(user.Email)
             let data = {
-                from: "Who's In? You're in <alerts@whosin.io>",
+                from: "Who's In? You're in <tom@whosin.io>",
                 subject: `${ProjectData.Name}`,
                 html: email,
                 'h:Reply-To': 'alerts@whosin.io',
@@ -123,6 +156,34 @@ exports.sendSignUpEmail = functions.firestore
 
     return (null)
 });
+
+exports.getTwitterKey = functions.https.onRequest((req, res) => {
+  fetch('https://api.twitter.com/oauth2/token?grant_type=client_credentials', {
+    headers: {
+      'Authorization': 'Basic T3RWZlVNUHdkT1FWZEgyUkNCeHlnbVJGWTpqeW9vUWdDakpVUnhpM3I0ZW5tSVVhb1NXYVVPUTVuZ3FXdUFiMEdXMzliV21STW5GSA==',
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    method: 'POST'
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    console.log(req.query.hashtag)
+    fetch('https://api.twitter.com/1.1/search/tweets.json?q=' + encodeURIComponent(req.query.hashtag), {
+      headers: {
+        'Authorization': 'Bearer ' + data.access_token,
+        'Accept-Encoding': 'gzip',
+        'User-Agent': 'My Twitter App v1.0.23'
+      }
+    })
+    .then(response => response.json())
+    .then(newData => {
+      console.log(newData)
+      res.header("Access-Control-Allow-Origin", "*");
+      res.status(200).send({tweets: newData.statuses})
+    })
+  })
+})
 
 exports.checkForUpcoming = functions.https.onRequest((req, res) => {
     var dateObj = new Date(Date.now() + 86400000 /2)
@@ -254,13 +315,24 @@ const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
 
-const ALGOLIA_INDEX_NAME = 'projects';
-const SECOND_ALGOLIA_INDEX_NAME = 'organisations';
+if (functions.config().environment === 'staging') {
+  const ALGOLIA_INDEX_NAME = 'staging_projects';
+  const SECOND_ALGOLIA_INDEX_NAME = 'staging_organisations';
+} else {
+  const ALGOLIA_INDEX_NAME = 'projects';
+  const SECOND_ALGOLIA_INDEX_NAME = 'organisations';
+}
+
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
 exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onWrite(event => {
     // Get the note document
-    const project = event.data.data();
+    if (event.data.exists) {
+      var project = event.data.data()
+    } else {
+      var project = event.data.previous.data()
+    }
+
     project._id = event.params.projectId
 
     // Add an 'objectID' field which Algolia requires

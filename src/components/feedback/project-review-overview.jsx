@@ -23,7 +23,7 @@ export default class ReviewOverview extends React.Component {
               style={{objectFit: 'cover', height: '200px', width: '200px'}}/>
           </div>
           <div style={{marginTop: 16, fontSize: '20px', fontWeight: 700, color: '#3B9E74'}}>
-            +10 points
+
           </div>
 
           <h2>
@@ -35,24 +35,13 @@ export default class ReviewOverview extends React.Component {
                 onTouchTap={() => browserHistory.push(window.location.pathname + '/short')}
                 style={{marginBottom: 16, padding: 16, boxSizing: 'border-box', cursor: 'pointer',  borderRadius: '4px', width: '100%', color: 'white',
                    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms', boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',
-                  backgroundColor: '#65A1e7',letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                  backgroundColor: '#E55749',letterSpacing: '0.6px', fontWeight: 'bold', textTransform: 'uppercase'}}
                 >
-                Quick and dirty
+                Leave one back
               </div>
 
 
-              +5 points
-            </div>
-            <div style={{flex: 1, padding: 16}}>
-              <div
-                onTouchTap={() => browserHistory.push(window.location.pathname + '/long')}
-                style={{marginBottom: 16, padding: 16, boxSizing: 'border-box',  cursor: 'pointer', borderRadius: '4px', width: '100%', color: 'white', transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms', boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',
-                  backgroundColor: '#E55749',letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
-                >
-                A tad <br/>longer
-              </div>
 
-              <b>+15 points</b>
             </div>
 
           </div>

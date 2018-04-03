@@ -1,4 +1,5 @@
 import React from 'react';
+import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -7,15 +8,19 @@ import {changeImageAddress} from '../desktopproject.jsx';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
-
+import Dialog from 'material-ui/Dialog';
+import {Card, CardHeader} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import {orange500} from 'material-ui/styles/colors';
+import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
+  yellow100, limeA200, limeA700, green300} from 'material-ui/styles/colors'
 import Chip from 'material-ui/Chip';
 import UploadPhoto from '../create-project/uploadphoto.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import Loading from '../loading.jsx';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import fire from '../../fire';
 
 let db = fire.firestore()
@@ -111,6 +116,91 @@ const styles = {
       },
   title : {
     fontWeight: 700, marginBottom: 6, marginTop: 16, display: 'flex'
+  },
+  smallIcon: {
+    width: 36,
+    height: 36,
+  },
+  mediumIcon: {
+    width: 48,
+    height: 48,
+  },
+  tickMed: {
+    width: 58,
+    height:58
+  },
+  largeIcon: {
+    width: 60,
+    height: 60,
+  },
+  small: {
+    width: 72,
+    height: 72,
+    padding: 16,
+  },
+  medium: {
+    width: 96,
+    height: 96,
+  },
+  large: {
+    width: 96,
+    height: 96,
+
+  },
+  circle : {
+    borderRadius: '50%',
+    border: '2px solid ' + grey200,
+    color: grey500,
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer'
+  },
+  badRating : {
+    borderRadius: '50%',
+    border: '2px solid rgb(182,48,43)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(182,48,43)',
+    cursor: 'pointer'
+  },
+  middleRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + yellow500,
+    color: 'inherit',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: yellow500,
+    cursor: 'pointer'
+  },
+  goodRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + 'rgb(59,158,116)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(59,158,116)',
+    cursor: 'pointer'
   }
 }
 
@@ -178,14 +268,220 @@ export const PlacesWithStandaloneSearchBox = compose(
   </div>
 );
 
+class ReviewComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.existingReview)
+    this.state = {review: this.props.existingReview ? this.props.existingReview.Review : undefined,
+      rating: this.props.existingReview ? this.props.existingReview.Rating : undefined}
+  }
+
+  componentDidMount(props) {
+    if (this.props.eng['Charity Number']) {
+      db.collection("Charity").doc(this.props.eng['Charity Number'].toString()).get()
+        .then((doc) => {
+          this.setState({organiser: doc.data().Name})
+        })
+    } else {
+      db.collection("User").doc(fire.auth().currentUser.uid).get()
+      .then((doc) => {
+        this.setState({organiser: doc.data().Name})
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props != nextProps) {
+      this.setState({
+        review: nextProps.existingReview ? nextProps.existingReview.Review : undefined,
+          rating: nextProps.existingReview ? nextProps.existingReview.Rating : undefined
+      })
+      console.log(nextProps)
+    }
+
+  }
+
+  handleRating = (rating) => {
+    this.setState({rating: rating})
+  }
+
+  handleSetAdditional = (e) => {
+    this.setState({review: e.target.value})
+  }
+
+  handleSaveReview = () => {
+    var body = {
+      Project: this.props.projectId,
+      User: this.props.eng.User,
+      Rating: this.state.turnedUp ? this.state.rating : 1,
+      "Turned Up" : this.state.turnedUp === undefined ? true : this.state.turnedUp,
+      "Charity Number": this.props.eng['Charity Number'] ? this.props.eng['Charity Number'] : null,
+      "Project Name": this.props.eng['Project Name'],
+      Review: this.state.review,
+      Organiser: this.state.organiser,
+      created : new Date ()
+    }
+    db.collection("UserReview").add(body).then((doc) => {
+      this.setState({reviewAdded: true})
+    })
+  }
+
+  render() {
+    console.log(this.state)
+    return (
+      <div>
+        <div style={{display: 'flex', paddingLeft: 16, paddingBottom: 16, paddingRight: 16, position: 'relative'}}>
+
+            <div style={{width: 'auto', marginRight: 24}}>
+              <h2 style={styles.reviewHeader}>
+                Turned Up?
+              </h2>
+              Up and down
+            </div>
+
+            <div style={{flex: 1}}>
+              <h2 style={styles.reviewHeader}>
+                Review
+              </h2>
+              <TextField
+                inputStyle={{borderRadius: '6px', border: '1px solid ' + grey500,
+                  paddingLeft: '12px',  boxSizing: 'border-box'}}
+                underlineShow={false}
+                hintText={`This will be shared publicly on ${this.props.eng['Name'] ? this.props.eng['Name'].replace(/ .*/,'') : "this person"}'s profile.`}
+                multiLine={true}
+                fullWidth={true}
+                value={this.state.review}
+                onChange={this.handleSetAdditional}
+                rows={4}
+                hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                />
+            </div>
+
+            <div style={{width: 300, marginLeft: 24}}>
+              <h2 style={styles.reviewHeader}>
+                Rating
+              </h2>
+              <div style={{height: 120, display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
+
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginLeft: 20, marginRight: 20, marginTop: 20}}>
+                  <span onTouchTap={() => this.handleRating(1)}
+                      style={this.state.rating > 3 ? styles.goodRating : this.state.rating === 3 ? styles.middleRating : this.state.rating < 3 ? styles.badRating :  styles.circle}>
+                    1
+                  </span>
+                  <span onTouchTap={() => this.handleRating(2)}
+                      style={this.state.rating > 3 ? styles.goodRating : this.state.rating === 3 ? styles.middleRating : this.state.rating === 2 ? styles.badRating :  styles.circle}>
+                    2
+                  </span>
+                  <span onTouchTap={() => this.handleRating(3)}
+                      style={this.state.rating > 3 ? styles.goodRating : this.state.rating === 3 ? styles.middleRating : styles.circle}>
+                    3
+                  </span>
+                  <span onTouchTap={() => this.handleRating(4)}
+                      style={this.state.rating > 3 ? styles.goodRating : styles.circle}>
+                    4
+                  </span>
+                  <span onTouchTap={() => this.handleRating(5)}
+                    style={this.state.rating === 5 ? styles.goodRating : styles.circle}>
+                    5
+                  </span>
+                </div>
+                <div style={{marginLeft: 20, marginRight: 20}}>
+                  <RaisedButton label='Submit'
+                     primary={true}
+                    fullWidth={true}
+                    onClick={this.handleSaveReview}
+                     labelStyle={{ fontWeight: 'bold'}}/>
+                 </div>
+              </div>
+          </div>
 
 
+          </div>
 
+          {this.state.reviewAdded || this.props.existingReview ?
+          <div style={{boxSizing: 'border-box', position: 'absolute', height: 210,
+            width: '100%', backgroundColor: 'rgba(247,247,247,0.7)', zIndex: 4, bottom: 0}}/>
+          :
+          null
+        }
+        </div>
+    )
+  }
+}
+
+export class UserReviewPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {loading: true}
+  }
+
+  componentDidMount(props) {
+    db.collection("UserReview").where("Project", "==", this.props.projectId).get().then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        data[doc.data().User] = doc.data()
+      });
+      this.setState({reviews: data, loading: false})
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h2 style={{fontWeight: 200, fontSize: '30px', textAlign: 'left'}}>
+          Reviews
+        </h2>
+
+        {this.props.engagements ?
+          this.props.engagements.map((eng) => (
+            <Card
+              style={{
+                border: 'solid 1px #979797', borderRadius: 4, marginTop: 10,
+                boxShadow: 'none',
+                backgroundColor: eng['Cancelled'] ? 'rgb(248,248,248)' : 'white',
+                      color: eng['Cancelled'] ? 'rgba(0, 0, 0, 0.4)' : 'inherit'}}
+              >
+              <CardHeader
+                title={eng.Name}
+                subtitle={eng.Location}
+                avatar={<Avatar
+                  style={{opacity:  eng['Cancelled'] ? 0.5 : 1}}
+                   src={changeImageAddress(eng['Volunteer Picture'], '30xauto')} />}
+
+              />
+            {!this.state.loading ?
+            <ReviewComponent eng={eng}
+                existingReview={this.state.reviews[eng.User]}
+                passEngIdUp={(review) => this.setState({[eng._id]: review})}
+               projectId={this.props.projectId} />
+             :
+             null}
+            </Card>
+          ))
+          :
+          null
+        }
+      </div>
+    )
+  }
+}
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline','strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image', 'video'],
+      ['clean']
+    ]
+  }
 
 export class EditProjectForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true,allTags: categories, snackbar: false}
+    this.state = {loading: true,allTags: categories, snackbar: false, deleteOpen: false}
   }
 
   handleSet = (id, e, data) => {
@@ -270,8 +566,25 @@ export class EditProjectForm extends React.Component {
       )
   }
 
+  handleDeleteModal = () => {
+    this.setState({deleteOpen: !this.state.deleteOpen})
+  }
+
+  handleDeleteProject = () => {
+    db.collection("Project").doc(this.props.projectId).delete().then(() => {
+      this.handleDeleteModal()
+      browserHistory.push('/profile')
+    })
+  }
+
   handleRequestClose = () => {
     this.setState({snackbar: false})
+  }
+
+  handleChangeDescription = (value) => {
+    var project = this.state.project
+    project.Description = value
+    this.setState({project : project})
   }
 
   render() {
@@ -281,6 +594,18 @@ export class EditProjectForm extends React.Component {
         onChange: this.onChange,
         placeholder: 'Location'
       }
+      const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleDeleteModal}
+      />,
+      <FlatButton
+        label="Delete"
+        primary={true}
+        onClick={this.handleDeleteProject}
+      />,
+    ];
     return (
       <div>
         <Snackbar
@@ -293,7 +618,13 @@ export class EditProjectForm extends React.Component {
           <Loading/>
           :
           <div style={{width: '80%'}}>
-
+            <Dialog
+               title="Are you sure you want to delete this project?"
+               actions={actions}
+               modal={true}
+               open={this.state.deleteOpen}
+             >
+             </Dialog>
             {/* Min and max */}
             <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box', paddingTop: 16}}>
               <UploadPhoto edit={true} imageUrl={this.state.project['Featured Image']}
@@ -508,18 +839,12 @@ export class EditProjectForm extends React.Component {
               <p style={styles.header}>
                 Project Description
               </p>
-              <TextField fullWidth={true}
-                inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                  paddingLeft: '12px',  boxSizing: 'border-box'}}
-                underlineShow={false}
-                hintText={'Use your project description to share more about what you’re trying to do. It’s up to you to make the case for your project.'}
-                multiLine={true}
-
+              <ReactQuill
+                style={{fontFamily: 'Nunito'}}
+                modules={modules}
                 value={this.state.project.Description}
-                onChange={this.handleSet.bind(this, 'Description')}
-                rows={5}
-                hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-                key='date'/>
+                  onChange={this.handleChangeDescription} />
+
             </div>
 
 
@@ -527,6 +852,12 @@ export class EditProjectForm extends React.Component {
               labelStyle={{fontWeight: 700, textTransform: 'none'}}
               primary={true}
               onClick={this.handleSaveChanges}
+              />
+
+            <RaisedButton style={{marginBottom: 30, marginLeft: 24}} label='Delete Project'
+              labelStyle={{fontWeight: 700, textTransform: 'none'}}
+              secondary={true}
+              onClick={this.handleDeleteModal}
               />
           </div>
           </div>
@@ -650,7 +981,7 @@ export default class AdminView extends React.Component {
 
             <div style={{position: 'absolute', right: 0, top:20, padding: 16}}>
               <RaisedButton
-                label='Back to Profile'
+                label='Back to Project'
                 labelStyle={{fontWeight: 700, textTransform: 'none'}}
                 secondary={true} onClick={() => browserHistory.push(`/projects/p/${this.props.params._id}`)}/>
             </div>
@@ -731,6 +1062,18 @@ export default class AdminView extends React.Component {
               </div>}
             </div>
             }
+
+          </Tab>
+
+          <Tab label="Leave Reviews"
+            style={{width: 'auto', fontSize: '16px'}}
+              onTouchTap={this.changeAnchorEl.bind(this, 'userreview')}
+                buttonStyle={this.state.selected === 'userreview' ? styles.selectedTab : styles.tab}
+             value="userreview">
+             <UserReviewPage
+               projectId={this.props.params._id}
+
+                engagements={this.state.engagements}/>
 
           </Tab>
 

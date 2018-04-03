@@ -286,7 +286,8 @@ export default class EditProfile extends React.Component {
                             paddingLeft: '12px',  boxSizing: 'border-box'}}
                           underlineShow={false}
                           hintText={'Phone Number'}
-                          value={this.state.user.Phone}
+                          disabled={true}
+                          value={this.state.user.phoneNumber}
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                           key='phone'
                           onChange={this.handleSetPhone}

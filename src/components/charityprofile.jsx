@@ -112,56 +112,6 @@ class About extends React.Component {
   }
 }
 
-class CharityReviews extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {reviews: []}
-  }
-
-  componentDidMount(props) {
-    var data = []
-    db.collection("ProjectReviews").where("Charity", "==", this.props.charityId).get().then((engSnapshot) => {
-      console.log(engSnapshot)
-      console.log(engSnapshot.size)
-      engSnapshot.forEach((engDoc) => {
-        console.log(engDoc.data())
-        var elem = engDoc.data()
-        elem['_id'] = engDoc.id
-        data.push(elem)
-      })
-    })
-    this.setState({reviews: data, loading: false})
-
-  }
-
-  render() {
-    return (
-      <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: '80px', paddingRight: '80px', paddingTop: '30px'}}>
-
-        {this.state.reviews.length === 0 ?
-          <div style={{margin: 20, borderRadius: 4, fontWeight: 700, height: '250px', width: '100%', display: 'flex', backgroundColor: 'rgb(247, 247, 247)', justifyContent: 'center' ,alignItems: 'center'}}>
-            <div>
-              This organisation does not yet have any reviews
-            </div>
-          </div>
-          :
-          this.state.reviews.map((review) => (
-          <Link to={`/profile/${review.User}`}>
-            <div style={{height: '200px', width: '150px', display: 'flex', alignItems: 'center', flexDirection: 'column',
-            textAlign: 'center'}}>
-              <img src={changeImageAddress(review['Volunteer Picture'], '250xauto')} style={{borderRadius: '50%',
-                height: '100px', width: '100px'}}/>
-              <div style={{width: '100%', marginTop: 16}}>
-                <b>{review.Name}</b><br/>
-                {review['Project Name']}
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    )
-  }
-}
 
 class Supporters extends React.Component {
   constructor(props) {
@@ -265,9 +215,10 @@ export class RecentCharityReviews extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("ProjectReviews").where("Charity", "==", this.props.charityId).orderBy("created", "desc")
-    .limit(3).get().then((querySnapshot) => {
+    console.log(this.props.charityId.toString())
+    db.collection("ProjectReview").where("Charity", "==", this.props.charityId.toString()).get().then((querySnapshot) => {
       var data = []
+      console.log(querySnapshot)
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
         var elem = doc.data()
@@ -284,20 +235,26 @@ export class RecentCharityReviews extends React.Component {
   }
 
   render() {
+    console.log(this.state.reviews)
     return (
       <div>
         {
-          this.state.reviews ? this.state.reviews.map((review) => {
-            <Link to={`/projects/${review['Project Name']}/${review.Project}`}>
+          this.state.reviews && this.state.reviews.length > 0 ? this.state.reviews.map((review) => (
+            <Link to={`/projects/p/${review.Project}`}>
               <div key={review._id} style={{display: 'flex', alignItems: 'center', paddingTop: 10, paddingBottom: 10}}>
-                <img className='user-picture' style={{borderRadius: '50%', padding: 10, height: 70, width: 70, boxSizing: 'border-box'}}
-                  src={changeImageAddress(review['User Picture'], '250xauto')}/>
+                {
+                  review['User Picture'] ?
+                  <img className='user-picture' style={{borderRadius: '50%', padding: 10, height: 70, width: 70, boxSizing: 'border-box'}}
+                    src={changeImageAddress(review['User Picture'], '250xauto')}/>
+                  : null
+                }
+
                 <div className='review-body' style={{fontSize:'20px', fontWeight: 200}}>
-                  {review.publicReview}
+                  {review.Review}
                 </div>
               </div>
             </Link>
-          })
+          ))
           :
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: 60, backgroundColor: 'rgb(247,247,247)'}}>
             No reviews just yet

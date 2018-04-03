@@ -19,6 +19,10 @@ body {
   width: 100%
 }
 
+.ql-editor {
+  font-family: Nunito !important
+}
+
 .react-add-to-calendar__button {
   background-color: #65A1e7;
   color: white;
