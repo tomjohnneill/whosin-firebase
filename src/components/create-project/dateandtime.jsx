@@ -5,6 +5,7 @@ import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Checkbox from 'material-ui/Checkbox';
 import {  browserHistory } from 'react-router';
 import {PlacesWithStandaloneSearchBox} from '../admin/adminview.jsx';
 
@@ -139,6 +140,7 @@ class Form extends React.Component {
     var times =
       {'Start Time': startDate,
         'End Time': endDate,
+        'Remote': this.state.remote,
       'address': this.state.address,
        'location': this.state.geopoint}
     var timeString = JSON.stringify(times)
@@ -174,6 +176,10 @@ class Form extends React.Component {
   }
 
 
+  setRemote = (e, checked) => {
+    this.setState({remote: checked})
+  }
+
   render() {
     console.log(this.state)
     return (
@@ -182,23 +188,40 @@ class Form extends React.Component {
         <p className='desktop-header'>
           If this is an event, can you give some details?</p>
           <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
-            <p style={styles.header}>
-              Where is this happenning?
-            </p>
-            <PlacesWithStandaloneSearchBox
-              bounds={null}
-              currentLocation = {this.state.address}
-              reportPlaceToParent={(places) =>
-                {
-                  console.log(places)
-                  var geo = places[0].geometry.location
-                  var lat = geo.lat()
-                  var lng = geo.lng()
-                  this.handleSetGeopoint(lat, lng, places[0].formatted_address)
-                  console.log(this.state)
-                }
-              }
-              />
+
+            <div style={{display: 'flex'}}>
+              <div style={{flex: 1}}>
+                <p style={styles.header}>
+                  Where is this happenning?
+                </p>
+                <PlacesWithStandaloneSearchBox
+                  bounds={null}
+                  disabled={this.state.remote}
+                  currentLocation = {this.state.address}
+                  reportPlaceToParent={(places) =>
+                    {
+                      console.log(places)
+                      var geo = places[0].geometry.location
+                      var lat = geo.lat()
+                      var lng = geo.lng()
+                      this.handleSetGeopoint(lat, lng, places[0].formatted_address)
+                      console.log(this.state)
+                    }
+                  }
+                  />
+              </div>
+              <div style={{width: 100, marginLeft: 10}}>
+                <p style={styles.header}>
+                  Remote?
+                </p>
+                <div style={{height: 40.4, display: 'flex', alignItems: 'center'}}>
+                  <Checkbox
+                    onCheck={this.setRemote}
+                    style={{width: '20%', marginLeft: '25px'}}
+                    />
+                </div>
+              </div>
+            </div>
 
           </div>
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
@@ -290,7 +313,7 @@ class Form extends React.Component {
         <MediaQuery minDeviceWidth={700}>
           <RaisedButton label='NEXT'
               onClick={this.handleNext}
-              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
+              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || (!this.state.address && !this.state.remote)}
               style={{marginRight: 16, height: '36px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
               buttonStyle={{height: '36px'}}
                labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -303,7 +326,7 @@ class Form extends React.Component {
               buttonStyle={{height: '36px'}}
               labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                    letterSpacing: '0.6px', fontWeight: 'bold'}}
-              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || !this.state.address}
+              disabled={!this.state.startDate || !this.state.startTime || !this.state.endDate || !this.state.endTime || (!this.state.address && !this.state.remote)}
             />
         </MediaQuery>
       <RaisedButton label='Skip' secondary={true}

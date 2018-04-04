@@ -250,6 +250,7 @@ export const PlacesWithStandaloneSearchBox = compose(
     >
       <input
         type="text"
+        disabled={props.disabled}
         defaultValue={props.currentLocation}
         placeholder="Location"
         style={{
@@ -313,7 +314,7 @@ class ReviewComponent extends React.Component {
     var body = {
       Project: this.props.projectId,
       User: this.props.eng.User,
-      Rating: this.state.turnedUp ? this.state.rating : 1,
+      Rating: this.state.rating,
       "Turned Up" : this.state.turnedUp === undefined ? true : this.state.turnedUp,
       "Charity Number": this.props.eng['Charity Number'] ? this.props.eng['Charity Number'] : null,
       "Project Name": this.props.eng['Project Name'],

@@ -90,7 +90,7 @@ exports.reviewLinkEmail = functions.firestore
       db.collection("emailTemplates").doc('eEqHHHsWFjQc4dlK4qqU').get().then((emailDoc) => {
         var email = emailDoc.data().html
         var Project = newValue.Project;
-        email = email.replace("{{ reviewLink }}", `https://whosin.io/projects/p/${Project}/review/project`)
+        email = email.replace("{{%20reviewLink }}", `https://whosin.io/projects/p/${Project}/review/project`)
         email = email.replace(/{{ Name }}/g, user.Name.replace(/ .*/,''))
         email = email.replace(/{{ Organiser }}/g, newValue.Organiser)
         let data = {
@@ -130,12 +130,15 @@ exports.sendSignUpEmail = functions.firestore
           {
             var ProjectData = doc.data()
             ProjectData['_id'] = doc.id
-            email = email.replace("{{%20projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
+            email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
             email = email.replace("{{ projectName }}", ProjectData.Name)
             email = email.replace(/{{ Name }}/g, newValue.Name)
             email = email.replace("{{ imageUrl }}", changeImageAddress(ProjectData['Featured Image'], '750xauto'))
             email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
+            email = email.replace("{{ endTime }}", ProjectData['End Time'] ? ProjectData['End Time'].toLocaleString() : null)
             email = email.replace("{{ location }}", ProjectData['Location'])
+            email = email.replace("{{ locationUrl }}", `https://www.google.com/maps/?q=${ProjectData.Location}`)
+            email = email.replace("{{ organiser }}", ProjectData['Charity Name'])
             email = email.replace("{{ schemaScript }}", ProjectData['Location'])
             console.log(email)
             console.log(user.Email)
@@ -316,11 +319,11 @@ const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
 
 if (functions.config().environment === 'staging') {
-  const ALGOLIA_INDEX_NAME = 'staging_projects';
-  const SECOND_ALGOLIA_INDEX_NAME = 'staging_organisations';
+  var ALGOLIA_INDEX_NAME = 'staging_projects';
+  var SECOND_ALGOLIA_INDEX_NAME = 'staging_organisations';
 } else {
-  const ALGOLIA_INDEX_NAME = 'projects';
-  const SECOND_ALGOLIA_INDEX_NAME = 'organisations';
+  var ALGOLIA_INDEX_NAME = 'projects';
+  var SECOND_ALGOLIA_INDEX_NAME = 'organisations';
 }
 
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);

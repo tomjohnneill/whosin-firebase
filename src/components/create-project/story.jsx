@@ -97,11 +97,12 @@ class StoryForm extends React.Component {
       'Maximum People': basics.max,
       'Featured Image': coverPhoto,
       'Deadline': new Date(basics.deadline),
-      'Location': times ? times.address : null,
+      'Location': times && times.address ? times.address : null,
       'Start Time': startTime,
+      'Remote': times && times.Remote ? times.Remote : false,
       'End Time': endTime,
       'Tags': basics.tags,
-      "Geopoint": times ? times.location : null,
+      "Geopoint": times && times.location ? times.location : null,
       "created": new Date()
     }
     if (localStorage.getItem('charity')) {

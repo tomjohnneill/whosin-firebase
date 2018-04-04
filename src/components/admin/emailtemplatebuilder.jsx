@@ -24,7 +24,8 @@ export default class EmailTemplateBuilder extends React.Component {
     if (this.props.params.templateId) {
         db.collection("emailTemplates").doc(this.props.params.templateId).get().then((doc) => {
           console.log(doc.data())
-        this.setState({loading: false, sample: JSON.parse(doc.data().design), mergeTags: doc.data().mergeTags})
+        this.setState({loading: false, sample: doc.data().design ? JSON.parse(doc.data().design) : null,
+          mergeTags: doc.data().mergeTags ? doc.data().mergeTags : []})
         console.log(this.state.sample)
       })
     } else {

@@ -588,6 +588,18 @@ import fire from '../fire';
                   style={{height: '400px', width: '100%', position: 'relative',
                     objectPosition: this.state.project.imageY ? `50% ${this.state.project.imageY}`  : '50% 50%'
                   , objectFit: 'cover'}}/>
+                <div style={{position: 'absolute', right: 200, boxSizing: 'border-box',
+                  borderRadius: '50%',
+                    border: '3px solid #E55749', fontWeight: 700
+                  , height: 150, width: 150, display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                  background: `linear-gradient( 0deg, #E55749, #E55749 ${this.state.project['People Pledged'] === null ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%,
+                  white ${this.state.project['People Pledged'] === null ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%, white 100%)`,
+                  top: 375, zIndex: 3}}>
+                  <span style={{backgroundColor: 'rgba(255,255,255,0.8)'}}>
+                    {this.state.project['Target People'] - this.state.project['People Pledged']} more <br/> people needed
+                  </span>
+                </div>
                 {this.state.dropzoneHover && fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid  ?
                     <RaisedButton label='Change Crop'
                       style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
@@ -704,18 +716,6 @@ import fire from '../fire';
                       }
                     </div>
 
-                    <div style={{display: 'flex', alignItems: 'center', paddingTop: 10}}>
-                      <CircularProgress
-                        size={50}
-                        style={{   borderRadius: '50%',  border: '1px solid #DDDDDD'}} color={'#00ABE8'} mode="determinate"
-                        min={0} max={this.state.project['Target People']}
-                        value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']}
-                      />
-
-                    <div style={{textAlign: 'right', marginLeft: 10}} className='to-go-text'>
-                        {this.state.project['People Pledged'] ? Math.max(Number(this.state.project['Target People']) - this.state.project['People Pledged'],0) : this.state.project['Target People']} more people needed
-                      </div>
-                    </div>
 
                     <Tabs
                       ref='tabs'
@@ -812,7 +812,7 @@ import fire from '../fire';
                     </Tabs>
                   </div>
                   <div className='join-container' style={{width: 350, paddingLeft: 150}}>
-                    <div style={{paddingTop: 20}}>
+                    <div style={{paddingTop: 60}}>
                       {!this.props.joined && this.props.challenge ?
                         <div>
                           <div style={{marginBottom: 10}}>

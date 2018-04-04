@@ -31,6 +31,14 @@ export default class EmailTemplateFrontPage extends React.Component {
     browserHistory.push(`/admin/emailtemplate/${id}`)
   }
 
+  handleNew = () => {
+    db.collection("emailTemplates").add({
+      html : '<html></html>'
+    }).then((docRef) => {
+      browserHistory.push(`/admin/emailtemplate/${docRef.id}`)
+    })
+  }
+
   render() {
     return (
       <div style={{display: 'flex', padding: 24}}>
