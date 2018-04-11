@@ -54,45 +54,47 @@ export default  class SignupModal extends React.Component {
   }
 
   handleCreateAccount = () => {
-    this.setState({pwned: null})
-        fire.auth().onAuthStateChanged(user => {
-          if (user) {
-            db.collection('User').doc(user.uid).set(
-              {
-                Email: user.email,
-                Name: this.state.name
+    if (!this.state.createdClicked) {
+      this.setState({pwned: null, createdClicked: true})
+          fire.auth().onAuthStateChanged(user => {
+            if (user) {
+              db.collection('User').doc(user.uid).set(
+                {
+                  Email: user.email,
+                  Name: this.state.name
+                }
+              )
+              .then(docRef =>
+                {
+                return db.collection("User").doc(user.uid).collection("public").
+                doc(user.uid).set({
+                  Name: this.state.name
+                })
               }
             )
-            .then(docRef =>
-              {
-              return db.collection("User").doc(user.uid).collection("public").
-              doc(user.uid).set({
-                Name: this.state.name
-              })
-            }
-          )
-            .then(data =>
-              {
-                this.setState({type: 'phone'})
-              })
-            .catch(error => console.log('Error', error))
-          } else {
-            // No user is signed in.
-          }
-        });
-        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            if (errorCode == 'auth/weak-password') {
-              alert('The password is too weak.');
+              .then(data =>
+                {
+                  this.setState({type: 'phone', createdClicked: false})
+                })
+              .catch(error => console.log('Error', error))
             } else {
-              alert(errorMessage);
+              // No user is signed in.
             }
-                      // ...
-          })
+          });
+          fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              if (errorCode == 'auth/weak-password') {
+                alert('The password is too weak.');
+              } else {
+                alert(errorMessage);
+              }
+                        // ...
+            })
 
-    .catch(error => console.log('Error', error))
+      .catch(error => console.log('Error', error))
+    }
 
   }
 
@@ -146,56 +148,59 @@ export default  class SignupModal extends React.Component {
   }
 
   handlePhoneAuth = () => {
-    firebase.auth().languageCode = 'en-gb'
-    const phoneTextRef = this.phoneText
+    if (!this.state.phoneClicked) {
+      this.setState({phoneClicked: true})
+      firebase.auth().languageCode = 'en-gb'
+      const phoneTextRef = this.phoneText
 
-    var phoneRaw = phoneTextRef.getValue()
-    if (phoneRaw.substring(0,1) === '0') {
-      var phoneNumber = "+44" + phoneRaw.substring(1)
-    } else {
-      var phoneNumber = phoneRaw
-    }
-    console.log(phoneNumber)
-    this.setState({phoneNumberInState: phoneNumber})
-    var appVerifier = window.recaptchaVerifier;
-    console.log(phoneNumber)
-    console.log(appVerifier)
+      var phoneRaw = phoneTextRef.getValue()
+      if (phoneRaw.substring(0,1) === '0') {
+        var phoneNumber = "+44" + phoneRaw.substring(1)
+      } else {
+        var phoneNumber = phoneRaw
+      }
+      console.log(phoneNumber)
+      this.setState({phoneNumberInState: phoneNumber})
+      var appVerifier = window.recaptchaVerifier;
+      console.log(phoneNumber)
+      console.log(appVerifier)
 
-    fire.auth().currentUser.linkWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          console.log(confirmationResult)
-          // SMS sent. Prompt user to type the code from the message, then sign the
-          // user in with confirmationResult.confirm(code).
-          window.confirmationResult = confirmationResult;
-          this.setState({type: 'enterCode'})
-        }).catch(function (error) {
-          alert(error)
-          // Error; SMS not sent
-          // ...
-        });
-
+      fire.auth().currentUser.linkWithPhoneNumber(phoneNumber, appVerifier)
+          .then((confirmationResult) => {
+            console.log(confirmationResult)
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            window.confirmationResult = confirmationResult;
+            this.setState({phoneClicked: false})
+            this.setState({type: 'enterCode'})
+          }).catch(function (error) {
+            alert(error)
+            // Error; SMS not sent
+            // ...
+          });
+      }
   }
 
   handleConfirmPhone = () => {
-    console.log(this.state.confirmationCode)
-    var credential = firebase.auth.PhoneAuthProvider.credential(window.confirmationResult.verificationId, this.state.confirmationCode);
-    fire.auth().currentUser.updatePhoneNumber(credential)
-    .then((result) => {
-        // User signed in successfully.
-        console.log(result)
-        if (this.props.onComplete) {
-          db.collection("User").doc(fire.auth().currentUser.uid).update({
-            phoneNumber: this.state.phoneNumberInState
-          })
-          .then(() => {
-            this.props.onComplete()
-          })
+      console.log(this.state.confirmationCode)
+      var credential = firebase.auth.PhoneAuthProvider.credential(window.confirmationResult.verificationId, this.state.confirmationCode);
+      fire.auth().currentUser.updatePhoneNumber(credential)
+      .then((result) => {
+          // User signed in successfully.
+          console.log(result)
+          if (this.props.onComplete) {
+            db.collection("User").doc(fire.auth().currentUser.uid).update({
+              phoneNumber: this.state.phoneNumberInState
+            })
+            .then(() => {
+              this.props.onComplete()
+            })
 
-        }
-        // ...
-      }).catch(function (error) {
-        alert(error)
-      });
+          }
+          // ...
+        }).catch(function (error) {
+          alert(error)
+        });
   }
 
   loadRecaptcha = () => {

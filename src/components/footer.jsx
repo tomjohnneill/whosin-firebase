@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
+import {Link} from 'react-router';
 import Snackbar from 'material-ui/Snackbar';
 import fire from '../fire';
 
@@ -102,9 +103,12 @@ export default class Footer extends React.Component {
             className='footer-container'
             style={{height: '311px', backgroundColor: '#F9F9F9', paddingTop: '81px',
             marginTop: 50, paddingLeft: '100px', paddingRight: '100px', display: 'flex'}}>
-            <div style={{width: '100%', maxWidth: '700px', display: 'flex', justifyContent: 'center'}} className='footer-data'>
-              <div style={{flex: 3}}>
-                <div style={{paddingBottom: '16px', textAlign: 'left'}}>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'center'}} className='footer-data'>
+              <div style={{flex: 3, maxWidth: 400}}>
+                <div style={{fontSize: '24px', fontFamily: 'Permanent Marker', color: '#E55749'}}>
+                  Who's In?
+                </div>
+                <div style={{paddingTop: 10, paddingBottom: '20px', textAlign: 'left', fontWeight: 700}}>
                   Newsletter
                 </div>
                 <TextField fullWidth={true}
@@ -119,7 +123,7 @@ export default class Footer extends React.Component {
                   key='email'
                   style={styles.textfield}/>
                 <div style={{paddingTop: 6}}>
-                We won't share this data with anyone else
+                We won't share this with anyone else
               </div>
                 <div style={{width: '100%', display: 'flex', alignItems: 'left', paddingTop: '16px'}}>
                   <RaisedButton label='Subscribe'
@@ -130,10 +134,15 @@ export default class Footer extends React.Component {
                           letterSpacing: '0.6px', fontWeight: 'bold'}}/>
                 </div>
               </div>
+              <div style={{flex: 2}}/>
               <div style={{flex: 2, marginLeft: 24, display: 'flex', justifyContent: 'center'}}>
-                <div>
-                  Contact Us: support@whosin.io
+                <div style={{width: '100%'}}>
+                  hello@whosin.io
+                  <div>
+                    <Link to='/about'>About</Link>
+                  </div>
                 </div>
+
               </div>
             </div>
 

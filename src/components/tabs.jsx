@@ -6,6 +6,7 @@ import { Link, browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Featured from './featured.jsx';
+import Snackbar from 'material-ui/Snackbar';
 import {changeImageAddress} from './desktopproject.jsx';
 import AllProjects from './allprojects.jsx';
 import MediaQuery from 'react-responsive';
@@ -100,6 +101,7 @@ export default class UserTabs extends React.Component {
     })
     .then(response => response.json())
     .then(data => {
+      this.setState({location: data.city + ', ' + data.country_name})
       if (fire.auth().currentUser) {
         var userId = fire.auth().currentUser.uid
 
@@ -136,10 +138,33 @@ export default class UserTabs extends React.Component {
     });
   }
 
+  handleCapture = () => {
+    var email = this.state.emailSignup
+    var location = this.state.location
+    db.collection("Newsletter").add({
+      email: this.state.emailSignup,
+      location: this.state.location ? this.state.location: null
+    }).then(() => {
+      this.setState({signedUp: true, emailSignup: ''})
+    })
+  }
+
+  handleRequestClose = () => {
+    this.setState({
+      signedUp: false,
+    });
+  };
+
   render () {
     console.log(this.state)
     return (
       <div>
+        <Snackbar
+          open={this.state.signedUp}
+          message="We've added you to the mailing list"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
         <MediaQuery maxDeviceWidth={700}>
           <img
             style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
@@ -150,18 +175,12 @@ export default class UserTabs extends React.Component {
           paddingLeft: '20px', paddingRight: '20px', boxSizing: 'border-box'}}>
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'
               , justifyContent: 'center', width: '300px'}}>
-              <h2 style={{color: 'white'}}>Doing good shouldn’t be hard.</h2>
+              <h2 style={{color: 'white', fontSize: '36px'}}>Get up off your ass and do something good</h2>
               <span style={{fontWeight: 'lighter', color: 'white'}}>
-                Finding the right project to get involved with isn’t easy. That’s why we built Who’s In.
+                Doing good shouldn't be hard. Find a project near you to get involved with.
 
               </span>
-              <div style={{display: 'flex', paddingTop: '30px'}}>
-                <RaisedButton   style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-                  buttonStyle={{height: '36px'}}
-                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
-                        letterSpacing: '0.6px', fontWeight: 'bold'}}
-                  onClick={() => browserHistory.push('/projects')} label='Find a project'/>
-              </div>
+
             </div>
           </div>
         </MediaQuery>
@@ -172,24 +191,22 @@ export default class UserTabs extends React.Component {
               style={{height: '90vh', width: '100%', objectFit: 'cover', position: 'relative', marginTop: '-51px'}}
               src={changeImageAddress('https://d3kkowhate9mma.cloudfront.net/important/jeremy-bishop-170994-unsplash.jpg', '2000xauto')}/>
             <div style={{position: 'absolute',top:'-51px',  height: '100%', minWidth: 350,
-              width: '30%',
-              left: '5%'
-              , background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.75), rgba(0,0,0,0))',
+              width: '100%',
+              left: 0
+              ,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             paddingLeft: '20px', paddingRight: '20px', boxSizing: 'border-box'}}>
-              <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'
-                , justifyContent: 'center', width: 350}}>
-                <h2 style={{color: 'white'}}>Doing good shouldn’t be hard.</h2>
-                <span style={{fontWeight: 'lighter', color: 'white'}}>
-                  Finding the right project to get involved with isn’t easy. That’s why we built Who’s In.
+              <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column',
+                 background: 'radial-gradient(ellipse closest-side, rgba(0,0,0,0.75), rgba(0,0,0,0))',
+                 height: 650
+                , justifyContent: 'center', width: 550}}>
+                <h2 style={{color: 'white', fontSize: '45px', marginBottom: 10}}>Get up off your ass and do something good</h2>
+                <span style={{fontWeight: 'lighter', color: 'white', fontSize: '20px', width: 400}}>
+                Doing good shouldn't be hard. Find a project near you to get involved with.
 
                 </span>
-                <div style={{display: 'flex', paddingTop: '30px'}}>
-                <RaisedButton   style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-                  buttonStyle={{height: '36px'}}
-                   labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
-                        letterSpacing: '0.6px', fontWeight: 'bold'}}
-                   onClick={() => browserHistory.push('/projects')} label='Find a project'/>
+                <div style={{paddingTop: '30px'}}>
+
                 </div>
               </div>
             </div>

@@ -8,6 +8,7 @@ import asyncComponent from './AsyncComponent'
 import Project from  './components/project.jsx'
 import EmbeddedProject from './components/embeddedproject.jsx'
 import AllProjects from './components/allprojects.jsx';
+import NewWhy from './components/newwhy.jsx';
 
 const Terms = asyncComponent(() =>
   import('./components/terms.jsx').then(module => module.default)
@@ -103,6 +104,7 @@ const rootElement = document.getElementById('root');
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/casestudy' component={CaseStudy}/>
+      <Route path='/newwhy' component={NewWhy}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>

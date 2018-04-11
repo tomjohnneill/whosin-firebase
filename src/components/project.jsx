@@ -14,6 +14,7 @@ import Edit from 'material-ui/svg-icons/image/edit';
 import DocumentTitle from 'react-document-title';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Chip from 'material-ui/Chip';
 import Drawer from 'material-ui/Drawer';
@@ -300,7 +301,7 @@ export default class Project extends React.Component {
   }
 
   addChallengeMember = () => {
-    var challengeRef = db.collection("Project").doc(this.props.project._id).collection("Challenge").doc(this.props.challenge._id)
+    var challengeRef = db.collection("Project").doc(this.props.params._id).collection("Challenge").doc(this.state.challenge._id)
     challengeRef.get().then((data) => {
       var challengeMembers = data.data().challengeMembers ? data.data().challengeMembers : []
       challengeMembers.push(fire.auth().currentUser.uid)
@@ -314,7 +315,11 @@ export default class Project extends React.Component {
       if (fire.auth().currentUser.phoneNumber) {
         if (this.state.questions) {
           browserHistory.push(window.location.href + '/questions')
-        } else {
+        }
+        else if (this.state.project['People Pledged'] >= this.state.project['Maximum People']) {
+          this.addToWaitingList()
+        }
+        else {
           this.createEngagement()
           if (this.state.challenge) {
             this.addChallengeMember()
@@ -335,12 +340,26 @@ export default class Project extends React.Component {
     }
   }
 
+  addToWaitingList = () => {
+    db.collection("Project").doc(this.state.project._id).collection("WaitingList").add({
+      user: fire.auth().currentUser.uid
+    }).then(
+      () => this.setState({waitingListAdded: true})
+    )
+  }
+
+  handleRequestClose = () => {
+    this.setState({waitingListAdded: false})
+  }
+
   onComplete = () => {
     if (this.state.conditionalStatus) {
       this.setState({conditionalOpen: true, conditionalStatus: false, modalOpen: false})
     }
     else if (this.state.questions) {
       browserHistory.push(window.location.href + '/questions')
+    } else if (this.state.project['People Pledged'] >= this.state.project['Maximum People']) {
+      this.addToWaitingList()
     } else {
       this.createEngagement()
       browserHistory.push(window.location.href + '/joined')
@@ -413,6 +432,12 @@ export default class Project extends React.Component {
 
     return (
       <div>
+        <Snackbar
+          open={this.state.waitingListAdded}
+          message="We've added you to the waiting list"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
         <div>
         {this.state.loading ?
 
@@ -527,13 +552,20 @@ export default class Project extends React.Component {
               </div>
               : null}
 
-              {this.state.project.Location ?
+              {this.state.project.Location || this.state.project.Remote ?
                 <div className='location-container' style={{display: 'flex', marginTop: 10}}>
                   <div className='location-icon'>
                     <Place color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
                   </div>
                   <div style={{textAlign: 'left'}}>
-                    {this.state.project.Location}
+                    {
+                      this.state.project.Location ?
+                      <a href={`https://www.google.com/maps/?q=${this.state.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                        {this.state.project.Location}
+                      </a>
+                      :
+                      'Remote'
+                    }
                   </div>
                 </div>
                 : null
@@ -542,7 +574,15 @@ export default class Project extends React.Component {
 
 
             <div style={{display: 'flex', justifyContent: 'center', padding: '20px 35px 20px 35px'}}>
-              {!this.state.joined && this.state.challenge ?
+              {!this.state.joined && this.state.project['People Pledged'] >= this.state.project['Maximum People']?
+                <div>
+                  <RaisedButton
+                     primary={true} fullWidth={true}
+                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
+                     label="Join Waiting List" onTouchTap={this.handleModal} />
+                 </div>
+                 :
+                !this.state.joined && this.state.challenge ?
                 <div>
                   <div style={{marginBottom: 10}}>
                   <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
@@ -552,7 +592,7 @@ export default class Project extends React.Component {
                 </div>
                 <RaisedButton
                    primary={true} fullWidth={true}
-                    labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                    labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontSize: '18px'}}
                    label='Join Now' onTouchTap={this.handleModal} />
                  </div>
                  :
@@ -562,17 +602,17 @@ export default class Project extends React.Component {
                       <div>
                   <RaisedButton
                      primary={true} fullWidth={true}
-                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                      labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold',  fontSize: '18px'}}
                      label="Join Now" onTouchTap={this.handleModal} />
                  </div> : <RaisedButton
                     primary={true} fullWidth={true}
-                     labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                     labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold',fontSize: '18px'}}
                     label='Join Now' onTouchTap={this.handleModal} />}
                    </div>
              :
              <RaisedButton
                  fullWidth={true}
-                 labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontFamily: 'Permanent Marker', fontSize: '18px'}}
+                 labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontSize: '18px'}}
                 label="I can't come" onTouchTap={this.handleUnJoin} />}
 
                   </div>

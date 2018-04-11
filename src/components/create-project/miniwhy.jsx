@@ -42,6 +42,9 @@ export default class MiniWhy extends React.Component {
     <div style={{paddingLeft: 16}}>
               * Your logo
             </div>
+            <p style={{fontWeight: 700}}>
+            We will review and approve all projects before they are live.
+            </p>
 
             <RaisedButton label='Start a Project' onClick={this.handleProject}
                 style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
@@ -54,7 +57,7 @@ export default class MiniWhy extends React.Component {
         <MediaQuery maxDeviceWidth={700}>
           <div style={{padding: 24, textAlign: 'left'}}>
             <h1 className='desktop-header'>
-              Here's what you'll need to finish
+              Here's what you'll need to get started
             </h1>
             <div style={{paddingLeft: 16}}>
               * The number of people you’re looking for <br/>
@@ -71,6 +74,9 @@ export default class MiniWhy extends React.Component {
               * Your logo
             </div>
 
+            <p style={{fontWeight: 700}}>
+            We will review and approve all projects before they are live.
+            </p>
             <RaisedButton label='Start a Project' onClick={this.handleProject}
                 style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                 buttonStyle={{height: '36px'}}

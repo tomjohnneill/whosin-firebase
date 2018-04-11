@@ -110,6 +110,10 @@ export default class ShortReview extends React.Component {
   }
 
   componentDidMount(props) {
+    db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
+      this.setState({user: doc.data()})
+    })
+
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
@@ -140,6 +144,8 @@ export default class ShortReview extends React.Component {
       Charity: this.state.charity ? this.state.charity._id : null,
       "Project Creator": this.state.project.Creator,
       User: fire.auth().currentUser.uid,
+      "User Name": this.state.user.Name,
+      "User Picture": this.state.user.Picture,
       Review: this.state.review,
       Rating: this.state.rating,
       "Project Name": this.state.project.Name,

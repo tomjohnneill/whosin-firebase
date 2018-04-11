@@ -610,20 +610,6 @@ export default class Profile extends React.Component {
                      }
                   </div>
 
-                  <div style={{paddingTop: 20, display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column'}}>
-                    <div style={styles.mobileContactDetails}>
-                      Email Address
-                      <Tick style={{height: '24.8px', float: 'right'}}/>
-                    </div>
-                    <div style={styles.mobileContactDetails}>
-                      Phone Number
-                      {this.state.user.public.Phone ?
-                      <Tick style={{height: '24.8px', float: 'right'}}/>
-                      :
-                      <Cross style={{height: 24.8, float: 'right'}}/>
-                      }
-                    </div>
-                  </div>
 
                   <div style={{paddingTop: '10px', paddingBottom: '10px',
                     borderTop: 'solid 1px #DDDDDD', marginTop: '30px', paddingLeft: '6px', textAlign: 'left',

@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const fetch = require('node-fetch')
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 let db = admin.firestore()
 
@@ -20,10 +20,10 @@ function changeImageAddress(file, size) {
 
 exports.addOneToPeople = functions.firestore
   .document('Engagement/{engagementId}')
-  .onCreate(event => {
+  .onCreate((snap, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = event.data.data();
+    var newValue = snap.data();
 
     // access a particular field as you would any JS property
     var Project = newValue.Project;
@@ -50,10 +50,10 @@ exports.addOneToPeople = functions.firestore
 
 exports.removeOneToPeople = functions.firestore
   .document('Engagement/{engagementId}')
-  .onDelete(event => {
+  .onDelete((snap, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = event.data.previous.data();
+    var newValue = snap.data();
 
     // access a particular field as you would any JS property
     var Project = newValue.Project;
@@ -76,13 +76,90 @@ exports.removeOneToPeople = functions.firestore
     return (null)
 });
 
+exports.projectApprovedEmail = functions.firestore
+  .document('Project/{projectId}')
+  .onUpdate((change, context) => {
+    // Get an object representing the document
+    // e.g. {'name': 'Marie', 'age': 66}
+    var newValue = change.after.data();
+    var previousValue = change.before.data();
+    if (newValue.Approved && !previousValue.Approved) {
+      newValue._id = change.after.id;
+      db.collection("User").doc(newValue.Creator).get().then((userDoc) => {
+        var user = userDoc.data()
+        console.log(user)
+        db.collection("emailTemplates").doc('guUfm7g6ee5dCeRwxctp').get().then((emailDoc) => {
+          var email = emailDoc.data().html
+          email = email.replace("{{projectUrl}}", `https://whosin.io/projects/p/${newValue._id}`)
+          email = email.replace(/{{ Name }}/g, user.Name.replace(/ .*/,''))
+          email = email.replace(/{{ projectName }}/g, newValue.Name)
+          let data = {
+              from: "Tom <tom@whosin.io>",
+              subject: `Your project has been approved`,
+              html: email,
+              'h:Reply-To': 'tom@whosin.io',
+              to: user.Email
+            }
+            mailgun.messages().send(data, function (error, body) {
+              console.log(body)
+            })
+
+        })
+      })
+    }
+    return (null)
+});
+
+
+exports.peopleHaveSignedUpEmail = functions.firestore
+  .document('Engagement/{engagementId}')
+  .onCreate((snap, context) => {
+    // Get an object representing the document
+    // e.g. {'name': 'Marie', 'age': 66}
+    var newValue = snap.data();
+    console.log(newValue)
+    db.collection("emailTemplates").doc('QAtE3qMFF5TJO8v0Hsjj').get().then((emailDoc) => {
+      var email = emailDoc.data().html
+      console.log(email)
+      var Project = newValue.Project;
+      db.collection("Project").doc(Project).get().then((doc) => {
+        var ProjectData = doc.data()
+        if (!ProjectData.adminReminded && ProjectData['People Pledged'] > 1) {
+          ProjectData['_id'] = doc.id
+          db.collection("User").doc(ProjectData.Creator).get().then((userDoc) => {
+            var user = userDoc.data()
+              email = email.replace("{{projectUrl}}", `https://whosin.io/projects/p/${ProjectData._id}`)
+              email = email.replace("{{adminUrl}}", `https://whosin.io/projects/p/${ProjectData._id}/admin/admin`)
+              email = email.replace("{{ projectName }}", ProjectData.Name)
+              email = email.replace(/{{ Name }}/g, newValue.Name)
+              let data = {
+                  from: "Tom <tom@whosin.io>",
+                  subject: `${ProjectData.Name}`,
+                  html: email,
+                  'h:Reply-To': 'tom@whosin.io',
+                  to: user.Email
+                }
+                mailgun.messages().send(data, function (error, body) {
+                  console.log(body)
+                  db.collection("Project").doc(Project).update({
+                    adminReminded: true
+                  })
+                })
+
+            });
+        }
+      })
+    })
+
+    return (null)
+});
 
 exports.reviewLinkEmail = functions.firestore
   .document('UserReview/{userReviewId}')
-  .onCreate(event => {
+  .onCreate((snap, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = event.data.data();
+    var newValue = snap.data();
 
     db.collection("User").doc(newValue.User).get().then((userDoc) => {
       var user = userDoc.data()
@@ -112,10 +189,10 @@ exports.reviewLinkEmail = functions.firestore
 
 exports.sendSignUpEmail = functions.firestore
   .document('Engagement/{engagementId}')
-  .onCreate(event => {
+  .onCreate((snap, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = event.data.data();
+    var newValue = snap.data();
     console.log(newValue)
     db.collection("User").doc(newValue.User).get().then((userDoc) => {
       var user = userDoc.data()
@@ -264,10 +341,10 @@ exports.reviewReminder = functions.https.onRequest((req, res) => {
 
 exports.projectCreatedAdminEmail = functions.firestore
   .document('Project/{projectId}')
-  .onCreate(event => {
-    var project = event.data.data();
+  .onCreate((snap, context) => {
+    var project = snap.data();
     var htmlString = `
-      <a href='https://console.firebase.google.com/u/0/project/whos-in-firebase/database/firestore/data/Project/${event.params.projectId}'>
+      <a href='https://console.firebase.google.com/u/0/project/whos-in-firebase/database/firestore/data/Project/${context.params.projectId}'>
       Approve link</a>
       <br></br>
       ${JSON.stringify(project, null, 2)}
@@ -328,31 +405,44 @@ if (functions.config().environment === 'staging') {
 
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
-exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onWrite(event => {
+exports.addProjectToSearch = functions.firestore.document('Project/{projectId}').onWrite((change, context) => {
     // Get the note document
-    if (event.data.exists) {
-      var project = event.data.data()
+    var project
+    if (change.after) {
+      project = change.after.data()
     } else {
-      var project = event.data.previous.data()
+      project = change.data()
     }
-
-    project._id = event.params.projectId
+    project._id = context.params.projectId
 
     // Add an 'objectID' field which Algolia requires
-    project.objectID = event.params.projectId;
+    project.objectID = context.params.projectId;
 
     // Write to the algolia index
     const index = client.initIndex(ALGOLIA_INDEX_NAME);
     return index.saveObject(project);
 });
 
-exports.addCharityToSearch = functions.firestore.document('Charity/{charityId}').onCreate(event => {
+exports.removeProjectFromSearch = functions.firestore.document('Project/{projectId}').onDelete((snap, context) => {
     // Get the note document
-    const charity = event.data.data();
-    charity._id  = event.params.charityId;
+    var project = snap.data()
+    project._id = context.params.projectId
 
     // Add an 'objectID' field which Algolia requires
-    charity.objectID = event.params.charityId;
+    project.objectID = context.params.projectId;
+
+    // Write to the algolia index
+    const index = client.initIndex(ALGOLIA_INDEX_NAME);
+    return index.saveObject(project);
+});
+
+exports.addCharityToSearch = functions.firestore.document('Charity/{charityId}').onCreate((snap, context) => {
+    // Get the note document
+    const charity = snap.data();
+    charity._id  = context.params.charityId;
+
+    // Add an 'objectID' field which Algolia requires
+    charity.objectID = context.params.charityId;
 
     // Write to the algolia index
     const index = client.initIndex(SECOND_ALGOLIA_INDEX_NAME);

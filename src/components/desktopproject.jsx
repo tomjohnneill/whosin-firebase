@@ -18,6 +18,7 @@ import ShowChart from 'material-ui/svg-icons/editor/show-chart';
 import SignupModal from './signupmodal.jsx';
 import JoiningModal from './joiningmodal.jsx';
 import Loading from './loading.jsx';
+import Snackbar from 'material-ui/Snackbar';
 import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
@@ -354,6 +355,18 @@ import fire from '../fire';
       this.forceUpdate()
     }
 
+    addToWaitingList = () => {
+      db.collection("Project").doc(this.props.project._id).collection("WaitingList").add({
+        user: fire.auth().currentUser.uid
+      }).then(
+        () => this.setState({waitingListAdded: true})
+      )
+    }
+
+    handleRequestClose = () => {
+      this.setState({waitingListAdded: false})
+    }
+
     createEngagement = () => {
 
       console.log(this.props.project)
@@ -414,7 +427,11 @@ import fire from '../fire';
         if (fire.auth().currentUser.phoneNumber) {
           if (this.props.questions) {
             browserHistory.push(window.location.href + '/questions')
-          } else {
+          }
+          else if (this.props.project['People Pledged'] >= this.props.project['Maximum People']) {
+            this.addToWaitingList()
+          }
+          else {
             this.createEngagement()
             if (this.props.challenge) {
               this.addChallengeMember()
@@ -488,6 +505,8 @@ import fire from '../fire';
       }
       else if (this.props.questions) {
         browserHistory.push(window.location.href + '/questions')
+      } else if (this.props.project['People Pledged'] >= this.props.project['Maximum People']) {
+        this.addToWaitingList()
       } else {
         this.createEngagement()
         browserHistory.push(window.location.href + '/joined')
@@ -577,7 +596,12 @@ import fire from '../fire';
 
       return (
         <div>
-
+          <Snackbar
+            open={this.state.waitingListAdded}
+            message="We've added you to the waiting list"
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
           {this.state.loading ?
               <Loading />
            :
@@ -593,11 +617,13 @@ import fire from '../fire';
                     border: '3px solid #E55749', fontWeight: 700
                   , height: 150, width: 150, display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
-                  background: `linear-gradient( 0deg, #E55749, #E55749 ${this.state.project['People Pledged'] === null ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%,
-                  white ${this.state.project['People Pledged'] === null ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%, white 100%)`,
+                  background: `linear-gradient( 0deg, #E55749, #E55749 ${this.state.project['People Pledged'] === undefined ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%,
+                  white ${this.state.project['People Pledged'] === undefined ? 0 : (this.state.project['People Pledged']/this.state.project['Target People'] * 100)}%, white 100%)`,
                   top: 375, zIndex: 3}}>
-                  <span style={{backgroundColor: 'rgba(255,255,255,0.8)'}}>
-                    {this.state.project['Target People'] - this.state.project['People Pledged']} more <br/> people needed
+                  <span style={{backgroundColor: 'rgba(255,255,255,1)', padding: 4, borderRadius: 4}}>
+                    { this.state.project['People Pledged'] === undefined ?
+                      0 :
+                      this.state.project['People Pledged']}/{this.state.project['Target People']} people
                   </span>
                 </div>
                 {this.state.dropzoneHover && fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid  ?
@@ -703,14 +729,19 @@ import fire from '../fire';
                       : null}
 
 
-                      {this.state.project.Location ?
+                      {this.state.project.Location || this.state.project.Remote ?
                         <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
                           <div className='location-icon'>
                             <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
                           </div>
-                          <a href={`https://www.google.com/maps/?q=${this.state.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
-                            {this.state.project.Location}
-                          </a>
+                          {
+                            this.state.project.Location ?
+                            <a href={`https://www.google.com/maps/?q=${this.state.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                              {this.state.project.Location}
+                            </a>
+                            :
+                            'Remote'
+                          }
                         </div>
                         : null
                       }
@@ -735,7 +766,7 @@ import fire from '../fire';
                         <CardText  children = {
                             <div>
 
-                              <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '26px'}}
+                              <div style={{marginBottom: '30px', fontSize: '16px'}}
                         className='story-text'
                          dangerouslySetInnerHTML={this.descriptionMarkup()}/>
 
@@ -813,7 +844,15 @@ import fire from '../fire';
                   </div>
                   <div className='join-container' style={{width: 350, paddingLeft: 150}}>
                     <div style={{paddingTop: 60}}>
-                      {!this.props.joined && this.props.challenge ?
+                      {!this.props.joined && this.props.project['People Pledged'] >= this.props.project['Maximum People'] ?
+                        <div>
+                          <RaisedButton
+                             primary={true} fullWidth={true}
+                              labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
+                             label="Join Waiting List" onTouchTap={this.handleModal} />
+                         </div>
+                         :
+                        !this.props.joined && this.props.challenge ?
                         <div>
                           <div style={{marginBottom: 10}}>
                           <span style={{fontWeight: 700, fontSize: '18px', display: 'inline-block', width: '100%'}}>
@@ -844,7 +883,7 @@ import fire from '../fire';
                      <RaisedButton
                          fullWidth={true}
                          labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
-                        label="I can't come" onTouchTap={this.handleUnJoin} />}
+                        label="I can't come anymore" onTouchTap={this.handleUnJoin} />}
                       </div>
                       <div>
 

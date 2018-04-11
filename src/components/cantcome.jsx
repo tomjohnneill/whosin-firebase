@@ -138,7 +138,7 @@ export class YouMightLike extends React.Component {
 
                       <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <div style={styles.number}>
-                          {project['End Date'] ? dateDiffInDays(new Date(),project['End Date']) : 10}
+                          {project['End Time'] ? dateDiffInDays(new Date(),project['End Time']) : 10}
                         </div>
                         <div style={{fontWeight: 'lighter', marginLeft: '6px'}}>
                           days to go...

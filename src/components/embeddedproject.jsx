@@ -137,14 +137,21 @@ export default class EmbeddedProject extends React.Component {
                 </div>
                 : null}
                 <div>
-                  {this.state.project.Location ?
+                  {this.state.project.Location || this.state.project.Remote ?
                     <div className='location-container'
                       style={{alignItems: 'center', display: 'flex', marginTop: 6}}>
                       <div className='location-icon'>
                         <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
                       </div>
                       <div style={{textAlign: 'left', fontSize: '12px'}}>
-                        {this.state.project.Location}
+                        {
+                          this.state.project.Location ?
+
+                            this.state.project.Location
+
+                          :
+                          'Remote'
+                        }
                       </div>
                     </div>
                     : null

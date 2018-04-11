@@ -41,6 +41,7 @@ export default class EmailTemplateBuilder extends React.Component {
           db.collection("emailTemplates").doc(this.props.params.templateId).update({
             html: html,
             design: JSON.stringify(design),
+            name: this.state.name,
             mergeTags: this.state.mergeTags,
           })
           .then(() => this.setState({name: null}) )

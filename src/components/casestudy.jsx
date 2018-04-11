@@ -26,6 +26,60 @@ function shuffle(a) {
     return a;
 }
 
+export class ProjectReviews extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  componentDidMount(props) {
+    db.collection("ProjectReview").where("Project", "==", this.props.projectId).get()
+    .then((querySnapshot) => {
+      var data = []
+      querySnapshot.forEach((doc) => {
+        var elem = doc.data()
+        elem._id = doc.id
+        data.push(elem)
+      })
+      this.setState({reviews: data})
+    })
+  }
+
+  render() {
+    return (
+      <div style={{textAlign: 'left', paddingLeft: 100, paddingRight: 100}}>
+        {this.state.reviews && this.state.reviews.length > 0 ?
+          <div>
+            <h2 style={{fontSize: '32px'}}>What did people think?</h2>
+              <Masonry
+                breakpointCols={3}
+                style={{paddingLeft: 30}}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column">
+            {this.state.reviews.map((review) => (
+
+                <div style={{display: 'flex'}}>
+                  <div style={{borderRadius: '50%', display: 'flex',
+                    fontWeight: 700,
+                    alignItems: 'center', justifyContent: 'center'}}>
+                    {review.Rating}
+                  </div>
+                  <div style={{padding: 16}}>
+                    {review.Review}
+                  </div>
+                </div>
+
+            ))}
+            </Masonry>
+          </div>
+          :
+          null
+        }
+      </div>
+    )
+  }
+}
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -146,8 +200,10 @@ export default class CaseStudy extends React.Component {
       var project = doc.data()
       project._id = doc.id
       this.setState({loading: false, project: project, charity: {}})
-      this.getTweets('#thamescleanup')
-      this.getInstas('#thamescleanup')
+      if (project.Hashtag) {
+        this.getTweets(project.Hashtag)
+        this.getInstas(project.Hashtag)
+      }
       if (project.Charity) {
         if (fire.auth().currentUser) {
           db.collection("Charity").doc(project.Charity)
@@ -332,8 +388,11 @@ export default class CaseStudy extends React.Component {
                   </div>
                 </div>
 
+              <ProjectReviews projectId={this.state.project._id} />
+
+              {this.state.project.Hashtag ?
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
-                  <h2 style={{fontSize: '32px'}}>What did people think?</h2>
+                  <h2 style={{fontSize: '32px'}}>What did people say about it?</h2>
 
 
 
@@ -376,9 +435,11 @@ export default class CaseStudy extends React.Component {
                           }
                     </Masonry>
                 </div>
+                : null}
 
+                {this.state.project.Hashtag ?
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
-                  <h2 style={{fontSize: '32px'}}>Lies, damned lies and...</h2>
+                  <h2 style={{fontSize: '32px'}}>How many people were interested?</h2>
                   <div style={{height: 400, fontWeight: 700, fontSize: '24px', textAlign: 'center',
                        background: 'linear-gradient(to bottom right, rgba(101, 161, 231,1), rgba(101, 161, 231,0.8))',
                        color: 'rgba(255,255,255,0.9)', display: 'flex', borderRadius: 4}}>
@@ -419,6 +480,7 @@ export default class CaseStudy extends React.Component {
 
                   </div>
                 </div>
+                : null}
 
                 {this.state.project.Charity ?
                   <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
