@@ -30,6 +30,7 @@ import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral, CalendarIcon, Place, Clock, World} from './icons.jsx';
 import {MyMapComponent} from './desktopproject.jsx';
+import BottomNavigationExampleSimple from './bottomnav.jsx'
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -456,25 +457,14 @@ export default class Project extends React.Component {
           </MediaQuery>
 
           <MediaQuery maxDeviceWidth = {700}>
+              {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                <BottomNavigationExampleSimple />
+                :
+                null
+              }
             <img className='mobile-cover-image' src={changeImageAddress(this.state.project['Featured Image'], '500xauto')}
               style={{height: '222px', width: '100%', objectFit: 'cover'}}/>
-              {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
-                <div style={{display: 'flex', float: 'right'}}>
-                  <FlatButton
-                    secondary={true}
-                    style={{marginRight: 20}}
-                    label='Admin View' labelStyle={{textTransform: 'none', fontWeight: 700, padding: '10px', fontSize: '16px'}}
-                      onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/admin')}
-                       />
-                 <FlatButton
-                   secondary={true}
-                   style={{marginRight: 20}}
-                   label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
-                     onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/editproject')}
-                      />
-               </div>
-                 : null
-               }
+
             <div style={{padding: '20px 35px 20px 35px'}} className='mobile-project-container'>
 
               <p className='mobile-project-title'
@@ -613,7 +603,7 @@ export default class Project extends React.Component {
              <RaisedButton
                  fullWidth={true}
                  labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontSize: '18px'}}
-                label="I can't come" onTouchTap={this.handleUnJoin} />}
+                label="I can't come anymore" onTouchTap={this.handleUnJoin} />}
 
                   </div>
                   <div style={{position: 'sticky'}}>

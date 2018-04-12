@@ -5,6 +5,7 @@ import Loading from './loading.jsx';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Avatar from 'material-ui/Avatar';
+import {yellow500} from 'material-ui/styles/colors'
 import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import {Link, browserHistory} from 'react-router';
 import Divider from 'material-ui/Divider';
@@ -17,6 +18,48 @@ import FontIcon from 'material-ui/FontIcon';
 import {changeImageAddress} from './desktopproject.jsx';
 
 let db = fire.firestore()
+
+const styles = {
+  badRating : {
+    borderRadius: '50%',
+    border: '2px solid rgb(182,48,43)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(182,48,43)'
+  },
+  middleRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + yellow500,
+    color: 'inherit',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: yellow500
+  },
+  goodRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + 'rgb(59,158,116)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(59,158,116)'
+  }
+}
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -58,15 +101,24 @@ export class ProjectReviews extends React.Component {
                 columnClassName="my-masonry-grid_column">
             {this.state.reviews.map((review) => (
 
-                <div style={{display: 'flex'}}>
-                  <div style={{borderRadius: '50%', display: 'flex',
-                    fontWeight: 700,
-                    alignItems: 'center', justifyContent: 'center'}}>
+                <div style={{maxWidth: '90%',
+                    display: 'flex', padding: 16,
+                  border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
+                  <div
+                    style={
+                      review.Rating < 3 ? styles.badRating :
+                      review.Rating > 3 ? styles.goodRating : styles.middleRating
+                    }
+                    >
                     {review.Rating}
                   </div>
-                  <div style={{padding: 16}}>
+                  <div style={{paddingLeft: 16, flex: 1}}>
                     {review.Review}
+                    <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
+                      {review['User Name'] ? review['User Name'] : null}
+                    </p>
                   </div>
+
                 </div>
 
             ))}
@@ -141,7 +193,7 @@ export default class CaseStudy extends React.Component {
   }
 
   getInstas = (hashtag) => {
-    fetch(`https://www.instagram.com/explore/tags/${hashtag.substring(1)}/?__a=1`)
+    fetch(`https://www.instagram.com/explore/tags/${hashtag}/?__a=1`)
     .then(response => response.json())
     .then(data => {
       console.log(data)

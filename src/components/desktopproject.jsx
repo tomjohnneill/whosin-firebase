@@ -596,6 +596,7 @@ import fire from '../fire';
 
       return (
         <div>
+
           <Snackbar
             open={this.state.waitingListAdded}
             message="We've added you to the waiting list"
@@ -649,7 +650,6 @@ import fire from '../fire';
                              />
                        <FlatButton
                          secondary={true}
-                         style={{marginRight: 20}}
                          label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
                            onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/editproject')}
                             />
@@ -939,6 +939,7 @@ import fire from '../fire';
 
             </div>
       }
+
     </div>
       )
     }

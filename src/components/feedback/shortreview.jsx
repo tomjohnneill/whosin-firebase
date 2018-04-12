@@ -110,9 +110,12 @@ export default class ShortReview extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
-      this.setState({user: doc.data()})
-    })
+    if (fire.auth().currentUser) {
+      db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
+        this.setState({user: doc.data()})
+      })
+    }
+
 
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
@@ -173,7 +176,7 @@ export default class ShortReview extends React.Component {
 
   render() {
     return (
-      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
+      <div style={{display: 'flex', minHeight: 700,flexDirection: 'column', alignItems: 'center', width: '100%'}}>
         <div style={{width: '100%', boxSizing: 'border-box', padding: 24, maxWidth: '500px', textAlign: 'left'}}>
           <h2 style={{marginBottom: 20}}>
             Was it worth it?
