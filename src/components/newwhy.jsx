@@ -1,6 +1,6 @@
 import React from 'react'
 import MediaQuery from 'react-responsive';
-import {World, Person2, Person3, Person1, Jenga, Ass, Muscle, ReviewIcon, Engagement, Robot, Friends, Subscribers, Admin, ShareOnSocial, Reviews, SocialMedia} from './icons.jsx';
+import {ReviewIcon, Engagement, Robot, CaseStudy, Jenga,  CriticalMass, Friends, Subscribers, Admin, ShareOnSocial, Reviews, SocialMedia} from './icons.jsx';
 import {grey200, grey500, red500, red100, orange500, orange100, yellow500,
   yellow100, limeA200, limeA700, green300} from 'material-ui/styles/colors';
 import ShortReview from './feedback/shortreview.jsx';
@@ -104,20 +104,20 @@ const styles = {
     fontSize: '24px'
   },
   aboutLeft: {
-    width: '50%',
+    width: '60%',
     marginRight: 50,
     paddingLeft: 20,
     paddingRight:20,
     boxSizing: 'border-box'
   },
   bigIcon: {
-    width: '50%',
+    width: '40%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   },
   aboutRight: {
-    width: '50%',
+    width: '60%',
     marginLeft: 50,
     paddingLeft: 20,
     paddingRight:20,
@@ -147,7 +147,7 @@ export default class NewWhy extends React.Component {
 
         <MediaQuery minDeviceWidth={700}>
           <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100}}>
-            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+            <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   Find new people, better engage your existing supporters
@@ -161,7 +161,7 @@ export default class NewWhy extends React.Component {
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
                 <div>
-                  <Engagement style={{height: 300}} color={'#484848'}/>
+                  <Engagement style={{height: 200}} color={'#484848'}/>
                 </div>
               </div>
             </div>
@@ -204,7 +204,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <Robot style={{height: 300}} color={'rgb(255,255,255)'}/>
+                  <Robot style={{height: 200}} color={'rgb(255,255,255)'}/>
                 </div>
               </div>
 
@@ -216,7 +216,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <Friends style={{height: 300}} color={'white'}/>
+                  <Friends style={{height: 200}} color={'#484848'}/>
                 </div>
               </div>
 
@@ -238,8 +238,10 @@ export default class NewWhy extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#3B9E74', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
-            <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+          <div style={{backgroundColor: '#3B9E74', height: 450,
+            width: '100%', boxSizing: 'border-box',
+            color: 'white', paddingLeft: 100, paddingRight: 100}}>
+            <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
                   Get subscribers
@@ -252,7 +254,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <Subscribers style={{height: 300}} color={'white'}/>
+                  <Subscribers style={{height: 200}} color={'white'}/>
                 </div>
               </div>
             </div>
@@ -264,7 +266,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <Admin style={{height: 300}} color={'#484848'}/>
+                  <Admin style={{height: 200}} color={'#484848'}/>
                 </div>
               </div>
 
@@ -305,7 +307,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <ShareOnSocial style={{height: 300}} color={'white'}/>
+                  <ShareOnSocial style={{height: 200}} color={'white'}/>
                 </div>
               </div>
 
@@ -318,7 +320,7 @@ export default class NewWhy extends React.Component {
 
               <div style={styles.bigIcon}>
                 <div>
-                  <Reviews style={{height: 300}} color={'rgb(255,255,255)'}/>
+                  <Reviews style={{height: 200}} color={'rgb(255,255,255)'}/>
                 </div>
               </div>
 
@@ -355,7 +357,7 @@ export default class NewWhy extends React.Component {
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
                 <div>
-                  <SocialMedia style={{height: 300}} color={'#484848'}/>
+                  <SocialMedia style={{height: 200}} color={'#484848'}/>
                 </div>
               </div>
             </div>
@@ -365,7 +367,7 @@ export default class NewWhy extends React.Component {
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.bigIcon}>
                 <div>
-                  See an example
+                  <CaseStudy style={{height: 200}} color={'white'}/>
                 </div>
               </div>
               <div style={styles.aboutRight}>
@@ -454,7 +456,7 @@ export default class NewWhy extends React.Component {
             <div style={{ alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileBigIcon}>
                 <div>
-                  <Robot style={{height: 300}} color={'white'}/>
+                  <Robot style={{height: 200}} color={'white'}/>
                 </div>
               </div>
 
@@ -498,7 +500,7 @@ export default class NewWhy extends React.Component {
             <div style={{ alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileBigIcon}>
                 <div>
-                  <Subscribers style={{height: 300}} color={'white'}/>
+                  <Subscribers style={{height: 200}} color={'white'}/>
                 </div>
               </div>
               <div style={styles.mobileAbout}>
@@ -539,7 +541,7 @@ export default class NewWhy extends React.Component {
 
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <div>
-                <ShareOnSocial style={{height: 300}} color={'white'}/>
+                <ShareOnSocial style={{height: 200}} color={'white'}/>
               </div>
             </div>
             <div style={{height: 50}}/>
@@ -566,7 +568,7 @@ export default class NewWhy extends React.Component {
             <div style={{height: 50}}/>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <div>
-                <Reviews style={{height: 300}} color={'white'}/>
+                <Reviews style={{height: 200}} color={'white'}/>
               </div>
             </div>
             <div style={{height: 50}}/>
@@ -591,7 +593,7 @@ export default class NewWhy extends React.Component {
           <div style={{backgroundColor: 'white', padding: 24}}>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <div>
-                <SocialMedia style={{height: 300}} color={'#484848'}/>
+                <SocialMedia style={{height: 200}} color={'#484848'}/>
               </div>
             </div>
             <div style={{height: 50}}/>
@@ -616,7 +618,7 @@ export default class NewWhy extends React.Component {
             <div style={{height: 50}}/>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <div>
-                <Engagement style={{height: 300}} color={'#484848'}/>
+                <CaseStudy style={{height: 200}} color={'white'}/>
               </div>
             </div>
             <div style={{height: 50}}/>
