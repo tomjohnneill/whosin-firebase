@@ -265,6 +265,108 @@ export class RecentCharityReviews extends React.Component {
   }
 }
 
+
+export class CharitySubscribe extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {modalOpen: false}
+  }
+
+  componentDidMount(props) {
+    if (fire.auth().currentUser) {
+      db.collection("Charity").doc(this.props.charityId)
+        .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
+          if (doc.exists) {
+            this.setState({subscribed: true})
+          } else {
+            this.setState({subscribed: false})
+          }
+        })
+    }
+
+    fire.auth().onAuthStateChanged((user) => {
+      if (user === null) {
+
+      } else {
+        console.log('registering user as logged in')
+        db.collection("Charity").doc(this.props.charityId)
+          .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
+            console.log(doc)
+            if (doc.exists) {
+              this.setState({subscribed: true})
+            } else {
+              this.setState({subscribed: false})
+            }
+          })
+      }
+    })
+  }
+
+
+  subscribeUser = () => {
+    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
+      var user = userDoc.data()
+      db.collection("Charity").doc(this.props.charityId)
+      .collection("Subscribers").doc(fire.auth().currentUser.uid).set({
+        "Email": user.Email,
+        "Name": user.Name
+      })
+      .then(() => this.setState({subscribed: true}))
+    })
+  }
+
+  unsubscribeUser = () => {
+    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
+      var user = userDoc.data()
+      db.collection("Charity").doc(this.props.charityId)
+      .collection("Subscribers").doc(fire.auth().currentUser.uid).delete().then(() => {
+        console.log('subscriber deleted')
+        this.setState({subscribed: false})
+      }).catch(error => console.log('error', error))
+    })
+  }
+
+  handleSubscribe = () => {
+    if (fire.auth().currentUser) {
+      this.subscribeUser()
+    } else {
+      this.setState({modalOpen: true})
+    }
+  }
+
+
+    handleModalChangeOpen = (e) => {
+      this.setState({modalOpen: false})
+    }
+
+  render() {
+    return (
+      <div>
+        {this.state.subscribed ?
+          <RaisedButton
+            label='Unsubscribe'
+
+            icon={<Social/>}
+            onClick={this.unsubscribeUser}
+            />
+          :
+
+        <RaisedButton
+          label='Subscribe'
+          labelStyle={{fontWeight: 700}}
+          icon={<Social/>}
+          onClick={this.handleSubscribe}
+          secondary={true}/>
+      }
+      <SignupModal
+        open={this.state.modalOpen}
+          changeOpen={this.handleModalChangeOpen}
+        onComplete={this.subscribeUser}/>
+      </div>
+    )
+  }
+}
+
 export default class CharityProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -283,36 +385,6 @@ export default class CharityProfile extends React.Component {
       charity['_id'] = doc.id
       this.setState({charity: charity, loading: false})
     })
-
-    if (fire.auth().currentUser) {
-      db.collection("Charity").doc(this.props.params.charityId)
-        .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
-          if (doc.exists) {
-            this.setState({subscribed: true})
-          } else {
-            this.setState({subscribed: false})
-          }
-        })
-    }
-
-    fire.auth().onAuthStateChanged((user) => {
-      if (user === null) {
-
-      } else {
-        console.log('registering user as logged in')
-        db.collection("Charity").doc(this.props.params.charityId)
-          .collection("Subscribers").doc(fire.auth().currentUser.uid).get().then((doc) => {
-            console.log(doc)
-            if (doc.exists) {
-              this.setState({subscribed: true})
-            } else {
-              this.setState({subscribed: false})
-            }
-          })
-    }
-  })
-
-
   }
 
   handleChange = (value) => {
@@ -378,40 +450,6 @@ export default class CharityProfile extends React.Component {
     this.setState({selected: value})
   }
 
-  subscribeUser = () => {
-    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
-      var user = userDoc.data()
-      db.collection("Charity").doc(this.props.params.charityId)
-      .collection("Subscribers").doc(fire.auth().currentUser.uid).set({
-        "Email": user.Email,
-        "Name": user.Name
-      })
-      .then(() => this.setState({subscribed: true}))
-    })
-  }
-
-  unsubscribeUser = () => {
-    db.collection("User").doc(fire.auth().currentUser.uid).get().then((userDoc) => {
-      var user = userDoc.data()
-      db.collection("Charity").doc(this.props.params.charityId)
-      .collection("Subscribers").doc(fire.auth().currentUser.uid).delete().then(() => {
-        console.log('subscriber deleted')
-        this.setState({subscribed: false})
-      }).catch(error => console.log('error', error))
-    })
-  }
-
-  handleSubscribe = () => {
-    if (fire.auth().currentUser) {
-      this.subscribeUser()
-    } else {
-      this.setState({modalOpen: true})
-    }
-  }
-
-  handleModalChangeOpen = (e) => {
-    this.setState({modalOpen: false})
-  }
 
   render() {
     console.log(this.state.subscribed)
@@ -478,28 +516,8 @@ export default class CharityProfile extends React.Component {
                     </div>
 
                     <div style={{paddingTop: 16}}>
-                      {this.state.subscribed ?
-                        <RaisedButton
-                          label='Unsubscribe'
-
-                          icon={<Social/>}
-                          onClick={this.unsubscribeUser}
-                          />
-                        :
-
-                      <RaisedButton
-                        label='Subscribe'
-                        labelStyle={{fontWeight: 700}}
-                        icon={<Social/>}
-                        onClick={this.handleSubscribe}
-                        secondary={true}/>
-                    }
+                      <CharitySubscribe charityId={this.props.params.charityId}/>
                     </div>
-                    <SignupModal
-                      open={this.state.modalOpen}
-                      changeOpen={this.handleModalChangeOpen}
-                    onComplete={this.subscribeUser}/>
-
                   </div>
 
                 </div>
@@ -599,29 +617,8 @@ export default class CharityProfile extends React.Component {
                     : null}
                   </div>
                   <div style={{paddingTop: 16}}>
-                    {this.state.subscribed ?
-                      <RaisedButton
-                        label='Unsubscribe'
-
-                        icon={<Social/>}
-                        onClick={this.unsubscribeUser}
-                        />
-                      :
-
-                    <RaisedButton
-                      label='Subscribe'
-                      labelStyle={{fontWeight: 700}}
-                      icon={<Social/>}
-                      onClick={this.handleSubscribe}
-                      secondary={true}/>
-                  }
+                    <CharitySubscribe charityId={this.props.params.charityId}/>
                   </div>
-                  <div style={{width: '90vw'}}>
-                  <SignupModal
-                    open={this.state.modalOpen}
-                    changeOpen={this.handleModalChangeOpen}
-                  onComplete={this.subscribeUser}/>
-                </div>
                 </div>
 
 

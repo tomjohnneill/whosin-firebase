@@ -76,7 +76,7 @@ service cloud.firestore {
 
       match /private/{privateId} {
 
-        allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/Project/$(privateId)).data.Creator == request.auth.uid;
         allow write: if request.resource.data.User == request.auth.uid;
       }
     }

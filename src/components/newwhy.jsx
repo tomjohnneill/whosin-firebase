@@ -378,7 +378,7 @@ export default class NewWhy extends React.Component {
                 <div className='description-summary' style={styles.ticSummary}>
                   After the project, we group together all the reviews people have left you, all the social media posts, the “Who’s In” panel, and what you wrote about the event.
                   <br/><br/>
-                  You can use the page to advertise future projects, or maybe event to show your current or future donors the impact your projects are making.
+                  You can use the page to advertise future projects, or show your current or future donors the impact your projects are making.
 
                 </div>
               </div>
@@ -432,10 +432,10 @@ export default class NewWhy extends React.Component {
 
           <div style={{backgroundColor: '#E55749', padding: 24,
               width: '100%', boxSizing: 'border-box', color: 'white'}}>
-            <div style={{ alignItems: 'center', height: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileBigIcon}>
                 <div>
-                  <Jenga style={{height: 300}} color={'white'}/>
+                  <Jenga style={{height: 200}} color={'white'}/>
                 </div>
               </div>
 
@@ -453,7 +453,7 @@ export default class NewWhy extends React.Component {
           </div>
 
           <div style={{backgroundColor: '#65A1e7', color: 'white',padding: 24}}>
-            <div style={{ alignItems: 'center', height: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileBigIcon}>
                 <div>
                   <Robot style={{height: 200}} color={'white'}/>
@@ -469,13 +469,13 @@ export default class NewWhy extends React.Component {
                   Everyone who signs up is required to verify that they’re a real person, with a working phone.
                 </div>
               </div>
-
+              <div style={{height: 50}}/>
             </div>
           </div>
 
           <div style={{backgroundColor: 'white', padding:24}}>
             <div style={{height: 50}}/>
-            <div style={{alignItems: 'center', height: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%'}}>
 
               <div style={styles.mobileAbout}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
@@ -497,7 +497,7 @@ export default class NewWhy extends React.Component {
           </div>
 
           <div style={{backgroundColor: '#3B9E74',color: 'white', padding: 24}}>
-            <div style={{ alignItems: 'center', height: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%'}}>
               <div style={styles.mobileBigIcon}>
                 <div>
                   <Subscribers style={{height: 200}} color={'white'}/>
@@ -513,13 +513,13 @@ export default class NewWhy extends React.Component {
                 </div>
               </div>
 
-
+              <div style={{height: 50}}/>
             </div>
           </div>
 
           <div style={{backgroundColor: 'white', padding:24}}>
             <div style={{height: 50}}/>
-            <div style={{alignItems: 'center', height: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%'}}>
 
               <div style={styles.mobileAbout}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
@@ -632,7 +632,7 @@ export default class NewWhy extends React.Component {
                 <div className='description-summary' style={styles.ticSummaryLight}>
                   After the project, we group together all the reviews people have left you, all the social media posts, the “Who’s In” panel, and what you wrote about the event.
                   <br/><br/>
-                  You can use the page to advertise future projects, or maybe event to show your current or future donors the impact your projects are making.
+                  You can use the page to advertise future projects, or to show your current or future donors the impact your projects are making.
                 </div>
               </div>
             </div>

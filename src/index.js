@@ -8,7 +8,6 @@ import asyncComponent from './AsyncComponent'
 import Project from  './components/project.jsx'
 import EmbeddedProject from './components/embeddedproject.jsx'
 import AllProjects from './components/allprojects.jsx';
-import NewWhy from './components/newwhy.jsx';
 
 const Terms = asyncComponent(() =>
   import('./components/terms.jsx').then(module => module.default)
@@ -44,7 +43,7 @@ const ProjectJoined = asyncComponent(() =>
   import('./components/projectjoined.jsx').then(module => module.default)
 )
 const Why = asyncComponent(() =>
-  import('./components/why.jsx').then(module => module.default)
+  import('./components/newwhy.jsx').then(module => module.default)
 )
 const EditProfile = asyncComponent(() =>
   import('./components/editprofile.jsx').then(module => module.default)
@@ -89,7 +88,12 @@ const ImageCrop = asyncComponent(() =>
 const CaseStudy = asyncComponent(() =>
     import('./components/casestudy.jsx').then(module => module.default)
 )
-
+const GoodThanks = asyncComponent(() =>
+    import('./components/feedback/goodthanks.jsx').then(module => module.default)
+)
+const Sorry = asyncComponent(() =>
+    import('./components/feedback/sorry.jsx').then(module => module.default)
+)
 
 const rootElement = document.getElementById('root');
 
@@ -104,7 +108,6 @@ const rootElement = document.getElementById('root');
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/casestudy' component={CaseStudy}/>
-      <Route path='/newwhy' component={NewWhy}/>
       <Route path='/about' component={About}/>
       <Route path='/projects' component={AllProjects}/>
       <Route path='/profile/edit' component={EditProfile}/>
@@ -124,6 +127,8 @@ const rootElement = document.getElementById('root');
       <Route path='/projects/:pledge/:_id/review/project' component={ReviewOverview}/>
       <Route path='/projects/:pledge/:_id/review/project/long' component={ProjectReview}/>
       <Route path='/projects/:pledge/:_id/review/project/short' component={ShortReview}/>
+      <Route path='/projects/:pledge/:_id/review/good-thanks' component={GoodThanks}/>
+      <Route path='/projects/:pledge/:_id/review/sorry' component={Sorry}/>
       <Route path='/projects/:Name/:_id/review/:userId' component={VolunteerStars}/>
       <Route path='/projects/:pledge/:_id/joined' component={ProjectJoined}/>
       <Route path='/projects/:pledge/:_id/declined' component={CantCome}/>

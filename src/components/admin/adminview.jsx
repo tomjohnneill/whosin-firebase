@@ -19,6 +19,7 @@ import Chip from 'material-ui/Chip';
 import UploadPhoto from '../create-project/uploadphoto.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import Loading from '../loading.jsx';
+import PrivateFeedback from './feedback.jsx';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import fire from '../../fire';
@@ -331,6 +332,7 @@ class ReviewComponent extends React.Component {
     console.log(this.state)
     return (
       <div>
+        {!this.state.reviewAdded && !this.props.existingReview ?
         <div style={{display: 'flex', paddingLeft: 16, paddingBottom: 16, paddingRight: 16, position: 'relative'}}>
 
             <div style={{width: 'auto', marginRight: 24}}>
@@ -399,13 +401,8 @@ class ReviewComponent extends React.Component {
 
 
           </div>
-
-          {this.state.reviewAdded || this.props.existingReview ?
-          <div style={{boxSizing: 'border-box', position: 'absolute', height: 210,
-            width: '100%', backgroundColor: 'rgba(247,247,247,0.7)', zIndex: 4, bottom: 0}}/>
-          :
-          null
-        }
+        :
+        null}
         </div>
     )
   }
@@ -1084,6 +1081,14 @@ export default class AdminView extends React.Component {
                 buttonStyle={this.state.selected === 'editproject' ? styles.selectedTab : styles.tab}
              value="editproject">
              <EditProjectForm projectId={this.props.params._id}/>
+          </Tab>
+
+          <Tab label="Private Feedback"
+            style={{width: 'auto', fontSize: '16px'}}
+              onTouchTap={this.changeAnchorEl.bind(this, 'privatefeedback')}
+                buttonStyle={this.state.selected === 'privatefeedback' ? styles.selectedTab : styles.tab}
+             value="privatefeedback">
+             <PrivateFeedback projectId={this.props.params._id}/>
           </Tab>
 
         </Tabs>

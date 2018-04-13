@@ -116,6 +116,16 @@ export default class ShortReview extends React.Component {
       })
     }
 
+    fire.auth().onAuthStateChanged((user) => {
+      if (user === null) {
+
+      } else {
+        db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
+          this.setState({user: doc.data()})
+        })
+      }
+    })
+
 
     db.collection("Project").doc(this.props.params._id).get().then((doc) => {
       var project = doc.data()
@@ -148,7 +158,7 @@ export default class ShortReview extends React.Component {
       "Project Creator": this.state.project.Creator,
       User: fire.auth().currentUser.uid,
       "User Name": this.state.user.Name,
-      "User Picture": this.state.user.Picture,
+      "User Picture": this.state.user.Picture ? this.state.user.Picture : null,
       Review: this.state.review,
       Rating: this.state.rating,
       "Project Name": this.state.project.Name,
@@ -166,7 +176,14 @@ export default class ShortReview extends React.Component {
           Feedback: this.state.private,
           User: fire.auth().currentUser.uid
         })
-        .then(() => browserHistory.push(window.location.pathname + '/thanks'))
+        .then(() => {
+          if (this.state.rating > 3) {
+            browserHistory.push(window.location.pathname.replace('/project/short', '/good-thanks'))
+          } else {
+            browserHistory.push(window.location.pathname.replace('/project/short', '/sorry'))
+          }
+
+        })
         .catch(error => console.log(error))
 
     })
