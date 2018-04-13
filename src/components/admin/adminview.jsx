@@ -21,6 +21,8 @@ import Snackbar from 'material-ui/Snackbar';
 import Loading from '../loading.jsx';
 import PrivateFeedback from './feedback.jsx';
 import ReactQuill from 'react-quill';
+import FileDownload from 'material-ui/svg-icons/file/file-download';
+import {CSVLink} from 'react-csv';
 import 'react-quill/dist/quill.snow.css';
 import fire from '../../fire';
 
@@ -898,21 +900,28 @@ export default class AdminView extends React.Component {
   componentDidMount(props) {
     db.collection("Engagement").where("Project", "==", this.props.params._id).get().then((querySnapshot) => {
       var data = []
+      var csvData = []
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
         var elem = doc.data()
+        var csvItem = {}
         elem['_id'] = doc.id
         console.log('Engagement Id', doc.id)
         db.collection("Engagement").doc(doc.id).collection("Private")
           .doc(this.props.params._id).get().then((privateData) => {
           console.log(privateData.data())
           if (privateData.data()) {
+              csvItem.Location = privateData.data().Location
+              csvItem.Email = privateData.data().Email
+              csvItem.Name = privateData.data().Name
               elem.Location = privateData.data().Location
               elem.Email = privateData.data().Email
               elem.Name = privateData.data().Name
             }
             data.push(elem)
-            this.setState({engagements: data})
+            csvData.push(csvItem)
+            console.log(csvData)
+            this.setState({engagements: data, csvData: csvData})
         })
         .catch(error => console.log('Error', error))
 
@@ -1003,7 +1012,18 @@ export default class AdminView extends React.Component {
                   <h2 style={{fontWeight: 200, fontSize: '30px', textAlign: 'left'}}>
                     Attending ({this.state.engagements.length ? this.state.engagements.length : null})
                   </h2>
+                  <CSVLink
+                    filename={"my-volunteers.csv"}
+                    target=""
+                    rel='noopener'
+                    data={this.state.csvData ? this.state.csvData : [{"data": "empty"}]}>
+                      <RaisedButton label='Download data'
+                        secondary={true}
+                        labelStyle={{fontWeight: 700, textTransform: 'none'}}
+                        icon={<FileDownload/>}/>
 
+
+                  </CSVLink>
               {this.state.engagements && this.state.engagements.length > 0
                ? this.state.engagements.map((eng) => (
                 <List style={{textAlign: 'left', backgroundColor: 'white'}}>

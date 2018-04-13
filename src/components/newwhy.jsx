@@ -340,7 +340,8 @@ export default class NewWhy extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100,
+          boxSizing: 'border-box', width: '100%'}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>

@@ -146,7 +146,8 @@ export default class About extends React.Component {
       <DocumentTitle title='About'/>
 
         <MediaQuery minDeviceWidth={700}>
-          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100,
+          boxSizing: 'border-box', width: '100%'}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
@@ -215,7 +216,8 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: 'white', height: 450,color: 'inherit', paddingLeft: 100, paddingRight: 100}}>
+          <div style={{backgroundColor: 'white', height: 450, paddingLeft: 100, paddingRight: 100,
+          boxSizing: 'border-box', width: '100%'}}>
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
 
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%'}}>
@@ -254,7 +256,10 @@ export default class About extends React.Component {
             </div>
           </div>
 
-          <div style={{backgroundColor: '#3B9E74', height: 450,color: 'white', paddingLeft: 100, paddingRight: 100}}>
+
+            <div style={{backgroundColor: '#3B9E74', height: 450, paddingLeft: 100, paddingRight: 100,
+            boxSizing: 'border-box', width: '100%'}}>
+             
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>

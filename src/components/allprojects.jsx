@@ -210,6 +210,7 @@ export default class AllProjects extends React.Component {
 
   componentDidMount(props) {
     const client = algoliasearch('52RYQZ0NQK', 'b10f7cdebfc189fc6f889dbd0d3ffec2');
+    console.log('Process.env.react_app_environment:', process.env)
     if (process.env.REACT_APP_ENVIRONMENT === "staging" || process.env.NODE_ENV === 'development') {
       var index = client.initIndex('staging_projects');
     } else {
