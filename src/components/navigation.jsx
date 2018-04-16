@@ -292,6 +292,12 @@ export default class Navigation extends React.Component {
                                   </div>
                                   <div style={{
                                     cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
+                                    onTouchTap={() => browserHistory.push('/groups')}
+                                    >
+                                    Groups
+                                  </div>
+                                  <div style={{
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
                                     onTouchTap={() => browserHistory.push('/projects')}
                                     >
                                     Projects

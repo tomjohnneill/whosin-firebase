@@ -176,33 +176,36 @@ export default class GroupList extends React.Component {
                 Groups you belong to
               </h2>
 
-          <div style={{display: 'flex', flexWrap: 'wrap'}}>
+          <div >
             {this.state.groups ?
-              <div>
+              <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 <MediaQuery minDeviceWidth={700}>
-                  {this.state.groups.map((group) => (
-                    <Link style={{height: 150, width: '45%', margin: 20, boxSizing: 'border-box'}}
-                      to={`/groups/${group._id}`}>
-                      <div style={{width: '100%', height: 150, border: 'solid 1px #979797', borderRadius: 4,
-                          cursor: 'pointer', boxSizing: 'border-box'}}>
-                        {group['Featured Image'] ?
-                          <img src={group['Featured Image']}
-                            style={{height: '70%', width: '100%', marginBottom: '-6px', objectFit: 'cover'}}
-                            />
-                          :
-                          <div style={{width: '100%', height: '70%', display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'}}>
-                            <World style={{height: '70%'}} color={'#484848'}/>
+                  <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                    {this.state.groups.map((group) => (
+                      <Link style={{display: 'inline-block', height: 150, width: 460,
+                        margin: 20, boxSizing: 'border-box'}}
+                        to={`/groups/${group._id}`}>
+                        <div style={{width: '100%', height: 150, border: 'solid 1px #979797', borderRadius: 4,
+                            cursor: 'pointer', boxSizing: 'border-box'}}>
+                          {group['Featured Image'] ?
+                            <img src={group['Featured Image']}
+                              style={{height: '70%', width: '100%', marginBottom: '-6px', objectFit: 'cover'}}
+                              />
+                            :
+                            <div style={{width: '100%', height: '70%', display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'}}>
+                              <World style={{height: '70%'}} color={'#484848'}/>
+                            </div>
+                          }
+                          <div style={{height: '30%', alignItems: 'center', display: 'flex',
+                              backgroundColor: 'rgb(248,248,248)', borderRadius: 4}}>
+                            <b style={{paddingLeft: 16}}>{group.Name}</b>
                           </div>
-                        }
-                        <div style={{height: '30%', alignItems: 'center', display: 'flex',
-                            backgroundColor: 'rgb(248,248,248)', borderRadius: 4}}>
-                          <b style={{paddingLeft: 16}}>{group.Name}</b>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  </div>
                 </MediaQuery>
                 <MediaQuery maxDeviceWidth={700}>
                   {this.state.groups.map((group) => (
