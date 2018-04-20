@@ -430,6 +430,9 @@ export default class Project extends React.Component {
   }
 
   render () {
+
+
+
     console.log(this.state)
     if (this.state.loading) {
       return (
@@ -442,6 +445,10 @@ export default class Project extends React.Component {
         </div>
       )
     } else {
+      var required = this.state.project['People Pledged'] ?
+      Math.max(Number(this.state.project['Target People']) - this.state.project['People Pledged'],0)
+      : this.state.project['Target People']
+
       return (
 
       <div>
@@ -520,7 +527,7 @@ export default class Project extends React.Component {
                 min={0} max={this.state.project['Target People']}
                 value={this.state.project['People Pledged'] === null ? 0 : this.state.project['People Pledged']} />
               <div style={{textAlign: 'right', paddingTop: 6}} className='to-go-text'>
-                {this.state.project['People Pledged'] ? Math.max(Number(this.state.project['Target People']) - this.state.project['People Pledged'],0) : this.state.project['Target People']} more people needed
+                {required} more {required === 1 ? 'person' : 'people'} needed
               </div>
             </div>
 
