@@ -11,6 +11,7 @@ import {List, ListItem} from 'material-ui/List';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
+import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import Loading from '../loading.jsx';
 import {changeImageAddress} from '../desktopproject.jsx';
@@ -209,6 +210,7 @@ export default class GroupList extends React.Component {
     return (
       <div style={{display: 'flex', flexDirection: 'column', width: '100%',
         alignItems: 'center', justifyContent: 'center'}}>
+        <DocumentTitle title='Groups'/>
         <div style={{maxWidth: 1000, width: '100%', paddingTop: 26}}>
           <h2 style={{
               paddingLeft: 16, paddingRight: 16, boxSizing: 'border-box', paddingBottom: 16,

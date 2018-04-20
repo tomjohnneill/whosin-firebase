@@ -23,6 +23,7 @@ import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
+import GroupSignUp from './groups/groupsignup.jsx';
 import {withScriptjs,  withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import fire from '../fire';
 
@@ -613,6 +614,21 @@ import fire from '../fire';
                   style={{height: '400px', width: '100%', position: 'relative',
                     objectPosition: this.state.project.imageY ? `50% ${this.state.project.imageY}`  : '50% 50%'
                   , objectFit: 'cover'}}/>
+
+                {this.props.params.groupId ?
+                  <div
+                    style={{
+                    position: 'absolute', right: 125, boxSizing: 'border-box',
+                      borderRadius: '50%',
+                        border: '3px solid #E55749', fontWeight: 700
+                      , height: 300, width: 300, display: 'flex',
+                      top: 300,
+                      alignItems: 'center', justifyContent: 'center'
+                    }}
+                    >
+                    <GroupSignUp projectId={this.props.params._id} groupId={this.props.params.groupId}/>
+                  </div>
+                  :
                 <div style={{position: 'absolute', right: 200, boxSizing: 'border-box',
                   borderRadius: '50%',
                     border: '3px solid #E55749', fontWeight: 700
@@ -627,6 +643,8 @@ import fire from '../fire';
                       this.state.project['People Pledged']}/{this.state.project['Target People']} people
                   </span>
                 </div>
+                }
+
                 {this.state.dropzoneHover && fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid  ?
                     <RaisedButton label='Change Crop'
                       style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
@@ -844,7 +862,10 @@ import fire from '../fire';
                   </div>
                   <div className='join-container' style={{width: 350, paddingLeft: 150}}>
                     <div style={{paddingTop: 60}}>
-                      {!this.props.joined && this.props.project['People Pledged'] >= this.props.project['Maximum People'] ?
+                      {this.props.params.groupId ?
+                        <div style={{height: 50}}/>
+                        :
+                        !this.props.joined && this.props.project['People Pledged'] >= this.props.project['Maximum People'] ?
                         <div>
                           <RaisedButton
                              primary={true} fullWidth={true}

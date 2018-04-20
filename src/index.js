@@ -127,8 +127,8 @@ const rootElement = document.getElementById('root');
       <Route path='/embed/:_id' component={EmbeddedProject}/>
       <Route path='/groups' component={GroupList}/>
       <Route path='/groups/:groupId' component={GroupPage}/>
-      <Route path='/project/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
+      <Route path='/projects/:pledge/:_id/group/:groupId' component={Project}/>
       <Route path='/projects/:pledge/:_id/crop-edit' component={ImageCrop}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/admin/:adminTab' component={AdminView}/>

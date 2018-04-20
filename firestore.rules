@@ -43,6 +43,11 @@ service cloud.firestore {
        	allow read: if true;
         allow write: if true;
        }
+
+       match /Projects/{projectId} {
+       	allow read: if true;
+        allow write: if true;
+       }
      }
 
      match /Charity/{charity} {

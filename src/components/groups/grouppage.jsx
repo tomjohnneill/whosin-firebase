@@ -4,7 +4,7 @@ import {changeImageAddress} from '../desktopproject.jsx';
 import Avatar from 'material-ui/Avatar';
 import {Link, browserHistory} from 'react-router';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import {World} from '../icons.jsx';
+import {CalendarIcon, Place, Clock, World, Tick} from '../icons.jsx';
 import EmbeddedProject from '../embeddedproject.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import Masonry from 'react-masonry-css';
@@ -12,6 +12,7 @@ import CloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import CircularProgress from 'material-ui/CircularProgress';
 import {grey500} from 'material-ui/styles/colors';
 import DocumentTitle from 'react-document-title';
+import Divider from 'material-ui/Divider';
 import Dropzone from 'react-dropzone';
 import fire from '../../fire';
 
@@ -127,6 +128,145 @@ export class GroupReviews extends React.Component {
   }
 }
 
+export class UpcomingProjects extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  componentDidMount(props) {
+    db.collection("Group").doc(this.props.groupId).collection("Projects").get()
+    .then((querySnapshot) => {
+      let data = []
+      querySnapshot.forEach((doc) => {
+        let elem = doc.data()
+
+        db.collection("Project").doc(doc.id).get().then((project) => {
+          var projectData = project.data()
+          elem.project = projectData
+          data.push(elem)
+          this.setState({projects: data})
+        })
+
+      })
+
+    })
+  }
+
+  render() {
+    console.log(this.state.projects)
+    if (this.state.projects) {
+      return (
+        <div>
+          <h1 className='desktop-header' style={{marginTop: 16}}>
+            Potential Projects</h1>
+          {
+            this.state.projects.map((project) => (
+              <div>
+                {project.project ?
+                  <Link to={`/projects/p/${project.project._id}/group/${this.props.groupId}`}>
+                    <div style={{border: '1px solid rgb(221, 221, 221)', borderRadius: 6}}>
+                      <div style={{display: 'flex'}}>
+                        <img src={changeImageAddress(project.project['Featured Image'], '500xauto')}
+                          style={{width: '25%', height: 180, objectFit: 'cover'}}/>
+                        <div style={{width: '75%', fontSize: '18px', fontWeight: 200, paddingLeft: 16,
+                        paddingTop: 10}}>
+                          <div style={{fontWeight: 700, fontSize: '26px'}}>
+                            {project.project.Name}
+                          </div>
+                          <div>
+
+                            <span style={{paddingRight: 16}}>
+                              Would go (2)
+                            </span>
+                            <span style={{paddingRight: 16}}>
+                              Can't go (2)
+                            </span>
+                            <span style={{paddingRight: 16}}>
+                              Not replied (2)
+                            </span>
+                          </div>
+                          <div className='going'
+                            style={{display: 'flex', paddingTop: 10, paddingBottom: 10}}>
+                            <Avatar/>
+                            <Avatar/>
+                            <Avatar/>
+                          </div>
+                          <div>
+                            <span style={{paddingRight: 16}}>
+                              Target (2)
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div style={{
+                        backgroundColor: 'rgba(250,250,250,0.8)', display: 'flex', padding: 16,
+                        textAlign: 'left'}}
+                        className='datetime-container'>
+                        {project.project['Start Time'] ?
+                        <div className='date-container' style={{display: 'flex', minWidth: 160}}>
+                          <div className='date-icon'>
+                            <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                          </div>
+                          <div>
+                            {project.project['Start Time'].toLocaleString('en-gb',
+                              {weekday: 'long', month: 'long', day: 'numeric'})}
+                          </div>
+                        </div>
+                        : null}
+                        {project.project['Start Time'] ?
+                        <div className='time-container' style={{display: 'flex', marginLeft: 24, minWidth: 140}}>
+                          <div className='time-icon'>
+                            <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                          </div>
+                          <div >
+                            {project.project['Start Time'].toLocaleString('en-gb',
+                              {hour: '2-digit', minute: '2-digit'})} -
+                              {project.project['End Time'].toLocaleString('en-gb',
+                                {hour: '2-digit', minute: '2-digit'})}
+                          </div>
+                        </div>
+                        : null}
+
+
+                        {project.project.Location || project.project.Remote ?
+                          <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
+                            <div className='location-icon'>
+                              <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                            </div>
+                            {
+                              project.project.Location ?
+                              <a href={`https://www.google.com/maps/?q=${project.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                                {project.project.Location}
+                              </a>
+                              :
+                              'Remote'
+                            }
+                          </div>
+                          : null
+                        }
+                      </div>
+                    </div>
+                    <Divider style={{marginTop: 20, marginBottom: 20}}/>
+                  </Link>
+                  :
+                  null
+                }
+              </div>
+            ))
+          }
+        </div>
+      )
+    }
+    else {
+      return (
+        null
+      )
+    }
+  }
+}
+
 export class GroupProjects extends React.Component {
   constructor(props) {
     super(props);
@@ -156,6 +296,8 @@ export class GroupProjects extends React.Component {
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
+          <h1 className='desktop-header' style={{marginTop: 16}}>
+            Previous Projects</h1>
           <Masonry
             breakpointCols={2}
             className="my-masonry-grid"
@@ -516,6 +658,7 @@ export default class GroupPage extends React.Component {
                             buttonStyle={this.state.selected === 'projects' ? styles.selectedTab : styles.tab}
                             value="projects">
                              <div>
+                               <UpcomingProjects groupId={this.props.params.groupId}/>
                                {this.state.members ?
                                  <GroupProjects members={this.state.members}/>
                                  :
