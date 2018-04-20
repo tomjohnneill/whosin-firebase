@@ -467,7 +467,7 @@ export default class CharityProfile extends React.Component {
                   {this.state.charity['Featured Image'] ?
                     <img className='charity-logo-in-header'
                       src={changeImageAddress(this.state.charity['Featured Image'], '500xauto')}
-                      style={{borderRadius: '50%', height: 222, width: 222, margin: 20}}/>
+                      style={{borderRadius: '6px', height: 'auto', width: 222, margin: 20}}/>
                     :
                     <div style={{margin: 20, height: 222, width: 222, borderRadius: '50%', backgroundColor: 'rgba(216,216,216,0.2)',
                         display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -568,7 +568,7 @@ export default class CharityProfile extends React.Component {
                     {this.state.charity['Featured Image'] ?
                       <img className='charity-logo-in-header'
                         src={changeImageAddress(this.state.charity['Featured Image'], '500xauto')}
-                        style={{borderRadius: '50%', height: 222, margin: 20, width: 222}}/>
+                        style={{borderRadius: '6px', height: 'auto', width: 222, margin: 20}}/>
                       :
                       <div style={{height: 222, width: 222, borderRadius: '50%', backgroundColor: 'rgba(216,216,216,0.2)',
                             margin: 20, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

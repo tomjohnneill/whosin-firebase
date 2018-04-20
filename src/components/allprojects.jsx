@@ -216,6 +216,7 @@ export default class AllProjects extends React.Component {
     } else {
       var index = client.initIndex('projects');
     }
+    console.log(index)
     var query = ''
     index
         .search({
@@ -225,7 +226,18 @@ export default class AllProjects extends React.Component {
         .then(responses => {
             // Response from Algolia:
             // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
-            this.setState({projects: responses.hits, loading: false});
+            let upcoming = []
+            let successful = []
+            responses.hits.forEach((hit) => {
+              if (hit['End Time'] && new Date(hit['End Time']) > new Date()) {
+                upcoming.push(hit)
+              } else {
+                successful.push(hit)
+              }
+            })
+            this.setState({projects: responses.hits,
+              upcoming: upcoming, successful: successful,
+              loading: false});
         });
 
 
@@ -245,7 +257,18 @@ export default class AllProjects extends React.Component {
         .then(responses => {
             // Response from Algolia:
             // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
-            this.setState({projects: responses.hits});
+            let upcoming = []
+            let successful = []
+            responses.hits.forEach((hit) => {
+              if (hit['End Time'] && new Date(hit['End Time']) > new Date()) {
+                upcoming.push(hit)
+              } else {
+                successful.push(hit)
+              }
+            })
+            this.setState({projects: responses.hits,
+              upcoming: upcoming, successful: successful,
+              loading: false});
         });
   }
 
@@ -277,7 +300,7 @@ export default class AllProjects extends React.Component {
         <div>
           <MediaQuery minDeviceWidth={700}>
             <h1 className='desktop-header' style={{paddingLeft: '100px', marginTop: 16}}>
-              All Projects</h1>
+              Upcoming Projects</h1>
             {this.state.loading ?
               <Loading/>
               :
@@ -288,7 +311,7 @@ export default class AllProjects extends React.Component {
                 style={{paddingRight: 100, paddingLeft: 100}}
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column">
-                {this.state.projects.map((project) => (
+                {this.state.upcoming.map((project) => (
                   <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
                     <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
                   </div>
@@ -299,13 +322,31 @@ export default class AllProjects extends React.Component {
               null
             }
             <RegisterInterest />
+              <h1 className='desktop-header' style={{paddingLeft: '100px', marginTop: 30}}>
+                Successful Projects</h1>
+          {
+              this.state.successful ?
+              <Masonry
+                breakpointCols={3}
+                style={{paddingRight: 100, paddingLeft: 100}}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column">
+                {this.state.successful.map((project) => (
+                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+                    <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
+                  </div>
+                ))}
+              </Masonry>
+              :
+              null
+            }
           </MediaQuery>
           <MediaQuery maxDeviceWidth={700}>
 
                     <div style={{textAlign: 'left', paddingLeft: '18px', paddingRight: '18px', paddingBottom: '64px'}}>
                       <Subheader style={{fontSize: '25px', letterSpacing: '-0.6px', lineHeight: '30px', color: '#484848',
                       fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px'}}>
-                        All Projects
+                        Upcoming Projects
                       </Subheader>
                       {this.state.loading ?
                         <Loading/>
@@ -313,7 +354,7 @@ export default class AllProjects extends React.Component {
                         this.state.projects ?
                         <div style={{display: 'flex', flexWrap: 'wrap',
                         textAlign: 'left'}}>
-                          {this.state.projects.map((project) => (
+                          {this.state.upcoming.map((project) => (
                             <div style={{paddingTop: 10, paddingBottom: 10, width: '100%', boxSizing: 'border-box'}}>
                               <EmbeddedProject noLogo={true}
                                 project={project}

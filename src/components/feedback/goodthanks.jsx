@@ -38,7 +38,18 @@ export default class GoodThanks extends React.Component {
         .then(responses => {
             // Response from Algolia:
             // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
-            this.setState({projects: responses.hits, loading: false});
+            let upcoming = []
+            let successful = []
+            responses.hits.forEach((hit) => {
+              if (hit['End Time'] && new Date(hit['End Time']) > new Date()) {
+                upcoming.push(hit)
+              } else {
+                successful.push(hit)
+              }
+            })
+            this.setState({projects: responses.hits,
+              upcoming: upcoming, successful: successful,
+              loading: false});
         });
   }
 
@@ -89,7 +100,7 @@ export default class GoodThanks extends React.Component {
                   breakpointCols={2}
                   className="my-masonry-grid"
                   columnClassName="my-masonry-grid_column">
-                  {this.state.projects.map((project) => (
+                  {this.state.upcoming.map((project) => (
                     <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
                       <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
                     </div>
@@ -114,7 +125,7 @@ export default class GoodThanks extends React.Component {
                           this.state.projects ?
                           <div style={{display: 'flex', flexWrap: 'wrap',
                           textAlign: 'left'}}>
-                            {this.state.projects.map((project) => (
+                            {this.state.upcoming.map((project) => (
                               <div style={{paddingTop: 10, paddingBottom: 10, width: '100%', boxSizing: 'border-box'}}>
                                 <EmbeddedProject noLogo={true}
                                   project={project}

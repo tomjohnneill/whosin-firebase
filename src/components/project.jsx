@@ -31,6 +31,7 @@ import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral, CalendarIcon, Place, Clock, World} from './icons.jsx';
 import {MyMapComponent} from './desktopproject.jsx';
 import BottomNavigationExampleSimple from './bottomnav.jsx'
+import CaseStudy from './casestudy.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -430,8 +431,19 @@ export default class Project extends React.Component {
 
   render () {
     console.log(this.state)
+    if (this.state.loading) {
+      return (
+        <Loading/>
+      )
+    } else if (this.state.project['End Time'] < new Date()) {
+      return (
+        <div>
+          <CaseStudy projectId={this.state.project._id}/>
+        </div>
+      )
+    } else {
+      return (
 
-    return (
       <div>
         <Snackbar
           open={this.state.waitingListAdded}
@@ -683,6 +695,7 @@ export default class Project extends React.Component {
     </div>
 
       </div>
-    )
+      )
+    }
   }
 }

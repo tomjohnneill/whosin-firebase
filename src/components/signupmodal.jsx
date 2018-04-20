@@ -401,7 +401,6 @@ export default  class SignupModal extends React.Component {
                     Or switch to <b onTouchTap={this.handleSwitchType} style={{cursor: 'pointer',color: '#E55749'}}>
                     {this.state.type === 'login' ? 'Sign up' : 'Login'}</b>
                   </div>
-                  <div onClick={() => this.setState({type: 'phone'})}>Phone auth</div>
             </span>
             :
             this.state.type === 'phone' ?
@@ -591,7 +590,6 @@ export default  class SignupModal extends React.Component {
                   Or switch to <b onTouchTap={this.handleSwitchType} style={{cursor: 'pointer',color: '#E55749'}}>
                   {this.state.type === 'login' ? 'Sign up' : 'Login'}</b>
 
-                <div onClick={() => this.setState({type: 'phone'})}>Phone auth</div>
                 </div>
 
           </span>

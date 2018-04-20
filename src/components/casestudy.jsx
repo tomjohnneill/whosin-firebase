@@ -90,43 +90,82 @@ export class ProjectReviews extends React.Component {
 
   render() {
     return (
-      <div style={{textAlign: 'left', paddingLeft: 100, paddingRight: 100}}>
-        {this.state.reviews && this.state.reviews.length > 0 ?
-          <div>
-            <h2 style={{fontSize: '32px'}}>What did people think?</h2>
-              <Masonry
-                breakpointCols={3}
-                style={{paddingLeft: 30}}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
-            {this.state.reviews.map((review) => (
+      <div>
+        <MediaQuery minDeviceWidth={700}>
+          <div style={{textAlign: 'left', paddingLeft: 100, paddingRight: 100}}>
+            {this.state.reviews && this.state.reviews.length > 0 ?
+              <div>
+                <h2 style={{fontSize: '32px'}}>What did people think?</h2>
+                  <Masonry
+                    breakpointCols={3}
+                    style={{paddingLeft: 30}}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column">
+                {this.state.reviews.map((review) => (
 
-                <div style={{maxWidth: '90%',
-                    display: 'flex', padding: 16,
-                  border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
-                  <div
-                    style={
-                      review.Rating < 3 ? styles.badRating :
-                      review.Rating > 3 ? styles.goodRating : styles.middleRating
-                    }
-                    >
-                    {review.Rating}
-                  </div>
-                  <div style={{paddingLeft: 16, flex: 1}}>
-                    {review.Review}
-                    <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
-                      {review['User Name'] ? review['User Name'] : null}
-                    </p>
-                  </div>
+                    <div style={{maxWidth: '90%',
+                        display: 'flex', padding: 16,
+                      border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
+                      <div
+                        style={
+                          review.Rating < 3 ? styles.badRating :
+                          review.Rating > 3 ? styles.goodRating : styles.middleRating
+                        }
+                        >
+                        {review.Rating}
+                      </div>
+                      <div style={{paddingLeft: 16, flex: 1}}>
+                        {review.Review}
+                        <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
+                          {review['User Name'] ? review['User Name'] : null}
+                        </p>
+                      </div>
 
-                </div>
+                    </div>
 
-            ))}
-            </Masonry>
+                ))}
+                </Masonry>
+              </div>
+              :
+              null
+            }
           </div>
-          :
-          null
-        }
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
+          <div style={{textAlign: 'left', padding: 16}}>
+            {this.state.reviews && this.state.reviews.length > 0 ?
+              <div>
+                <h2 style={{fontSize: '32px'}}>What did people think?</h2>
+
+                {this.state.reviews.map((review) => (
+
+                    <div style={{width: '100%',
+                        display: 'flex', padding: 16, boxSizing: 'border-box',
+                      border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
+                      <div
+                        style={
+                          review.Rating < 3 ? styles.badRating :
+                          review.Rating > 3 ? styles.goodRating : styles.middleRating
+                        }
+                        >
+                        {review.Rating}
+                      </div>
+                      <div style={{paddingLeft: 16, flex: 1}}>
+                        {review.Review}
+                        <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
+                          {review['User Name'] ? review['User Name'] : null}
+                        </p>
+                      </div>
+
+                    </div>
+
+                ))}
+              </div>
+              :
+              null
+            }
+          </div>
+        </MediaQuery>
       </div>
     )
   }
@@ -247,8 +286,8 @@ export default class CaseStudy extends React.Component {
       localStorage.removeItem('project')
     }
 
-    db.collection("Project").doc(this.props.location.query.project ?
-      this.props.location.query.project : this.props.params._id).get().then((doc) => {
+    db.collection("Project").doc(this.props.location && this.props.location.query.project ?
+      this.props.location.query.project : this.props.projectId).get().then((doc) => {
       var project = doc.data()
       project._id = doc.id
       this.setState({loading: false, project: project, charity: {}})
@@ -313,32 +352,17 @@ export default class CaseStudy extends React.Component {
           <Loading/>
           :
           <div>
+            <img
+              src={changeImageAddress(this.state.project['Featured Image'], '1500xauto')}
+              style={{height: '50vh', width: '100%', position: 'relative',
+                objectPosition: this.state.project.imageY ? `50% ${this.state.project.imageY}`  : '50% 50%'
+              , objectFit: 'cover'}}/>
             <MediaQuery minDeviceWidth={700}>
-              <img
-                src={changeImageAddress(this.state.project['Featured Image'], '1500xauto')}
-                style={{height: '400px', width: '100%', position: 'relative',
-                  objectPosition: this.state.project.imageY ? `50% ${this.state.project.imageY}`  : '50% 50%'
-                , objectFit: 'cover'}}/>
+
                 <div className='container' style={{width: '100%', paddingRight: 100, paddingTop: 30,
                     paddingLeft: 100, display: 'flex', boxSizing: 'border-box'}}>
                   <div className='story-etc' style={{flex: 1}}>
-                    {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
-                      <div style={{display: 'flex', float: 'right'}}>
-                        <FlatButton
-                          secondary={true}
-                          style={{marginRight: 20}}
-                          label='Admin View' labelStyle={{textTransform: 'none', fontWeight: 700, padding: '10px', fontSize: '16px'}}
-                            onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/admin')}
-                             />
-                       <FlatButton
-                         secondary={true}
-                         style={{marginRight: 20}}
-                         label='Edit Project' labelStyle={{textTransform: 'none', padding: '10px', fontWeight: 700,  fontSize: '16px'}}
-                           onTouchTap={() => browserHistory.push(window.location.pathname + '/admin/editproject')}
-                            />
-                     </div>
-                       : null
-                     }
+
                     <p className='mobile-project-title'
                       style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left',
                       margin: 0}}>
@@ -426,7 +450,102 @@ export default class CaseStudy extends React.Component {
                     </div>
                   </div>
                 </div>
+              </MediaQuery>
+              <MediaQuery maxDeviceWidth={700}>
+                <div style={{padding: '20px 35px 20px 35px'}} className='mobile-project-container'>
 
+                  <p className='mobile-project-title'
+                    style={{fontSize: '32px', fontWeight: 'bold', textAlign: 'left',
+                    margin: 0}}>
+                    {this.state.project.Name}
+                  </p>
+
+                  {this.state.project.Charity ?
+                    <Link  className='charity-link' to={`/charity/${this.state.charity._id}`}>
+                      <div className='charity-link-content'
+                         style={{display: 'flex', marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                        <div style={{marginRight: 10}} className='charity-icon'>
+                          {this.state.charity['Featured Image'] ?
+                            <img src={changeImageAddress(this.state.charity['Featured Image'], '50xauto')}
+                              style={{height: 25, width: 25, borderRadius: '50%', objectFit: 'cover'}}/>
+                            :
+                            <World style={{height: 25, width: 25}} color={'#484848'}/>
+                            }
+                        </div>
+                        <p className='charity-name' style={{margin: 0, fontSize: '14px'}}>
+                            {this.state.charity.Name}
+                        </p>
+                      </div>
+                    </Link>
+                    :
+                    <Link  className='charity-link' to={`/profile/${this.state.project.Creator}`}>
+                      <div className='charity-link-content'
+                         style={{display: 'flex', textAlign: 'left',
+                            marginTop: 6, alignItems: 'center', color: '#65A1e7'}}>
+                        <div style={{marginRight: 10}} className='charity-icon'>
+                          <Avatar>{this.state.creator ? this.state.creator.Name.substring(0,1) : null}</Avatar>
+                        </div>
+                        <p className='charity-name' style={{margin: 0, fontSize: '14px',
+                        textAlign: 'left'}}>
+                            {this.state.creator ? this.state.creator.Name : null}
+                        </p>
+                      </div>
+                    </Link>
+                  }
+                </div>
+
+
+                <div style={{backgroundColor: 'rgba(216,216,216,0.2)', padding: '20px 35px 20px 35px', textAlign: 'left'}}
+                  className='datetime-container'>
+
+                  {this.state.project['Start Time'] ?
+                  <div className='date-container' style={{display: 'flex'}}>
+                    <div className='date-icon'>
+                      <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                    </div>
+                    <div>
+                      {this.state.project['Start Time'].toLocaleString('en-gb',
+                        {weekday: 'long', month: 'long', day: 'numeric'})}
+                    </div>
+                  </div>
+                  : null}
+
+                  {this.state.project['Start Time'] ?
+                  <div className='time-container' style={{display: 'flex', marginTop: 10}}>
+                    <div className='time-icon'>
+                      <Clock color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                    </div>
+                    <div >
+                      {this.state.project['Start Time'].toLocaleString('en-gb',
+                        {hour: '2-digit', minute: '2-digit'})} -
+                        {this.state.project['End Time'].toLocaleString('en-gb',
+                          {hour: '2-digit', minute: '2-digit'})}
+                    </div>
+                  </div>
+                  : null}
+
+                  {this.state.project.Location || this.state.project.Remote ?
+                    <div className='location-container' style={{display: 'flex', marginTop: 10}}>
+                      <div className='location-icon'>
+                        <Place color={'black'} style={{height: 20, width: 20, marginRight: 16}}/>
+                      </div>
+                      <div style={{textAlign: 'left'}}>
+                        {
+                          this.state.project.Location ?
+                          <a href={`https://www.google.com/maps/?q=${this.state.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                            {this.state.project.Location}
+                          </a>
+                          :
+                          'Remote'
+                        }
+                      </div>
+                    </div>
+                    : null
+                  }
+                </div>
+
+              </MediaQuery>
+              <MediaQuery minDeviceWidth={700}>
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', display: 'flex'}}>
                   <div style={{flex:2, marginRight: 100}}>
                     <h2 style={{fontSize: '32px'}}>What happened?</h2>
@@ -439,9 +558,25 @@ export default class CaseStudy extends React.Component {
                     <WhosIn project={this.state.project}/>
                   </div>
                 </div>
+              </MediaQuery>
+              <MediaQuery maxDeviceWidth={700}>
+                <div style={{padding: 16, textAlign: 'left'}}>
+                  <div>
+                    <h2 style={{fontSize: '32px'}}>What happened?</h2>
+                      <div style={{marginBottom: '30px', fontSize: '16px', lineHeight: '22px'}}
+                        className='story-text'
+                         dangerouslySetInnerHTML={this.descriptionMarkup()}/>
+                      </div>
+                  <div style={{flex: 1}}>
+                    <h2 style={{fontSize: '32px'}}>Who was in?</h2>
+                    <WhosIn project={this.state.project}/>
+                  </div>
+                </div>
+              </MediaQuery>
 
               <ProjectReviews projectId={this.state.project._id} />
 
+              <MediaQuery minDeviceWidth={700}>
               {this.state.project.Hashtag ?
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
                   <h2 style={{fontSize: '32px'}}>What did people say about it?</h2>
@@ -488,6 +623,53 @@ export default class CaseStudy extends React.Component {
                     </Masonry>
                 </div>
                 : null}
+              </MediaQuery>
+              <MediaQuery maxDeviceWidth={700}>
+                {this.state.project.Hashtag ?
+                  <div style={{padding: 16, textAlign: 'left', marginTop: 20}}>
+                    <h2 style={{fontSize: '32px'}}>What did people say about it?</h2>
+
+
+
+                      <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                            {this.state.socials ?
+                              this.state.socials.map((media) => (
+
+
+                                  <div style={{margin:20}}>
+                                    {media.node ?
+                                      <ErrorBoundary>
+                                        <InstagramEmbed
+                                            url={'https://instagr.am/p/' + media.node.shortcode}
+                                            maxWidth={320}
+                                            style={{width: 320}}
+                                            hideCaption={false}
+                                            containerTagName='div'
+                                            protocol=''
+                                            onLoading={() => {}}
+                                            onSuccess={() => {}}
+                                            onAfterRender={() => {}}
+                                            onFailure={() => {}}
+                                            />
+                                        </ErrorBoundary>
+                                        :
+                                        <div style={{maxWidth: 320}}>
+                                          <TwitterTweetEmbed
+                                            style={{width: 320}}
+                                            tweetId={media.id_str}
+                                          />
+                                      </div>
+                                    }
+                                  </div>
+                                ))
+                              :
+                              null
+                            }
+                        </div>
+                  </div>
+                  : null}
+              </MediaQuery>
+              <MediaQuery minDeviceWidth={700}>
 
                 {this.state.project.Hashtag ?
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
