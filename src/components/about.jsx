@@ -258,8 +258,8 @@ export default class About extends React.Component {
 
 
             <div style={{backgroundColor: '#3B9E74', height: 450, paddingLeft: 100, paddingRight: 100,
-            boxSizing: 'border-box', width: '100%'}}>
-             
+            boxSizing: 'border-box', width: '100%', color: 'white'}}>
+
             <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
               <div style={styles.aboutLeft}>
                 <div className='tongue-in-cheek-header' style={styles.ticHeader}>
