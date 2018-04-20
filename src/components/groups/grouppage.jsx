@@ -155,20 +155,33 @@ export class GroupProjects extends React.Component {
 
     return (
       <div>
-        <Masonry
-          breakpointCols={2}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column">
+        <MediaQuery minDeviceWidth={700}>
+          <Masonry
+            breakpointCols={2}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column">
+            {projectArray ?
+              projectArray.map((project) => (
+              <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+                <EmbeddedProject style={{position: 'relative'}}
+                  noLogo={true} projectId={project.Project}/>
+              </div>
+            ))
+            : null
+            }
+          </Masonry>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={700}>
           {projectArray ?
             projectArray.map((project) => (
-            <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+            <div style={{padding: 16, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
               <EmbeddedProject style={{position: 'relative'}}
                 noLogo={true} projectId={project.Project}/>
             </div>
           ))
           : null
           }
-        </Masonry>
+        </MediaQuery>
       </div>
     )
   }
@@ -295,6 +308,11 @@ export default class GroupPage extends React.Component {
     if (fire.auth().currentUser) {
       db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
         var userName = doc.data().Name.replace(/ .*/,'')
+        var updateString = "members." + fire.auth().currentUser.uid
+        console.log(updateString)
+        db.collection("Group").doc(this.props.params.groupId).update({
+          [updateString] : true
+        })
         db.collection("Group").doc(this.props.params.groupId).collection("Members")
         .doc(fire.auth().currentUser.uid).set({
           Name: userName

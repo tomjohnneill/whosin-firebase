@@ -13,6 +13,7 @@ import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
 import MediaQuery from 'react-responsive';
 import Loading from '../loading.jsx';
+import {changeImageAddress} from '../desktopproject.jsx';
 import fire from '../../fire';
 
 let db = fire.firestore()
@@ -51,15 +52,38 @@ export default class GroupList extends React.Component {
   }
 
   componentDidMount(props) {
-    db.collection("Group").get().then((querySnapshot) => {
-      var data = []
-      querySnapshot.forEach((doc) => {
-        var elem = doc.data()
-        elem._id = doc.id
-        data.push(elem)
+    if (fire.auth().currentUser) {
+      db.collection("Group").where("members." + fire.auth().currentUser.uid, "==", true)
+      .get().then((querySnapshot) => {
+        var data = []
+        querySnapshot.forEach((doc) => {
+          var elem = doc.data()
+          elem._id = doc.id
+          data.push(elem)
+        })
+        this.setState({groups: data})
       })
-      this.setState({groups: data})
+    } else {
+      this.setState({groups: []})
+    }
+
+    fire.auth().onAuthStateChanged((user) => {
+      if (user === null) {
+        this.setState({groups: []})
+      } else {
+        db.collection("Group").where("members." + fire.auth().currentUser.uid, "==", true)
+        .get().then((querySnapshot) => {
+          var data = []
+          querySnapshot.forEach((doc) => {
+            var elem = doc.data()
+            elem._id = doc.id
+            data.push(elem)
+          })
+          this.setState({groups: data})
+        })
+      }
     })
+    console.log(this.state.groups)
   }
 
   handleCreateGroup = () => {
@@ -119,25 +143,42 @@ export default class GroupList extends React.Component {
   }
 
   handleSaveGroup = () => {
-    db.collection("Group").doc(this.state.groupId).set({
-      Creator: fire.auth().currentUser.uid,
-      Name: this.state.groupName
-    })
+    if (fire.auth().currentUser) {
+      var updateString = "members." + fire.auth().currentUser.uid
+      db.collection("Group").doc(this.state.groupId).set({
+        Creator: fire.auth().currentUser.uid,
+        Name: this.state.groupName,
 
-    if (this.state.users && this.state.users.length) {
-      var batch = db.batch();
-
-      this.state.users.forEach((user) => {
-        var memberRef = db.collection("Group").doc(this.state.groupId).collection("Members").doc(user.id)
-        batch.set(memberRef, {
-          Name: user.Name,
-          'Volunteer Picture': user['Volunteer Picture'] ? user['Volunteer Picture'] : null
+      }).then(() => {
+        db.collection("Group").doc(this.state.groupId).update({
+          [updateString] : true
         })
       })
-      batch.commit().then(() => {})
+
+      db.collection("User").doc(fire.auth().currentUser.uid).get().then((doc) => {
+        var userName = doc.data().Name.replace(/ .*/,'')
+        var users = this.state.users
+        users.push({
+          id: fire.auth().currentUser.uid,
+          Name: userName
+        })
+        var batch = db.batch();
+
+        users.forEach((user) => {
+          var memberRef = db.collection("Group").doc(this.state.groupId).collection("Members").doc(user.id)
+          batch.set(memberRef, {
+            Name: user.Name,
+            'Volunteer Picture': user['Volunteer Picture'] ? user['Volunteer Picture'] : null
+          })
+        })
+        batch.commit().then(() => {
+            browserHistory.push(`/groups/${this.state.groupId}`)
+        })
+      })
+
+
     }
 
-    browserHistory.push(`/groups/${this.state.groupId}`)
 
   }
 
@@ -174,6 +215,17 @@ export default class GroupList extends React.Component {
               marginBottom: 0,
                 textAlign: 'left', width: '100%', borderBottom: '1px solid #DDDDDD'}}>
                 Groups you belong to
+                <div className='create-group'
+                  style={{float: 'right'}}
+                  >
+                  <RaisedButton
+                    onClick={this.handleCreateGroup}
+                    labelStyle={styles.buttonLabel}
+                    icon={<Add/>}
+                    secondary={true}
+                    label='Create New Group'
+                    />
+                </div>
               </h2>
 
           <div >
@@ -188,7 +240,7 @@ export default class GroupList extends React.Component {
                         <div style={{width: '100%', height: 150, border: 'solid 1px #979797', borderRadius: 4,
                             cursor: 'pointer', boxSizing: 'border-box'}}>
                           {group['Featured Image'] ?
-                            <img src={group['Featured Image']}
+                            <img src={changeImageAddress(group['Featured Image'], '500xauto')}
                               style={{height: '70%', width: '100%', marginBottom: '-6px', objectFit: 'cover'}}
                               />
                             :
@@ -242,15 +294,7 @@ export default class GroupList extends React.Component {
             }
           </div>
         </div>
-      <div className='create-group'>
-        <RaisedButton
-          onClick={this.handleCreateGroup}
-          labelStyle={styles.buttonLabel}
-          icon={<Add/>}
-          secondary={true}
-          label='Create New Group'
-          />
-      </div>
+
       <Dialog
         modal={false}
         open={this.state.createOpen}
