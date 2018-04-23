@@ -156,6 +156,10 @@ export class UpcomingProjects extends React.Component {
   render() {
     console.log(this.state.projects)
     if (this.state.projects) {
+
+      var projectArray = Object.values(this.state.projects)
+      console.log(projectArray)
+
       return (
         <div>
           <h1 className='desktop-header' style={{marginTop: 16}}>
