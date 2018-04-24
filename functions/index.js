@@ -266,16 +266,17 @@ exports.getTwitterKey = functions.https.onRequest((req, res) => {
 })
 
 exports.checkForUpcoming = functions.https.onRequest((req, res) => {
-    var dateObj = new Date(Date.now() + 86400000 /2)
+    var dateObj = new Date(Date.now() + 86400000)
     db.collection("emailTemplates").doc('UiHoAj6WOBDEO949x1Vn').get().then((emailDoc) => {
       db.collection("Project").where("Start Time", "<", dateObj).get().then((querySnapshot) => {
         querySnapshot.forEach((project) => {
           db.collection("Engagement").where("Project", "==", project.id).get().then((engSnapshot) => {
             engSnapshot.forEach((engagement) => {
-              if (!engagement.data().reminded) {
+              if (!engagement.data().reminded && project.data()['Start Time'] > new Date(Date.now())) {
                 db.collection("User").doc(engagement.data().User).get().then((userDoc) => {
                   var ProjectData = project.data()
                   ProjectData['_id'] = project.id
+                  var userData = userDoc.data()
                   console.log(ProjectData.Name)
                   let email = emailDoc.data().html
                   email = email.replace("{{%20projectUrl }}", `https://whosin.io/projects/${encodeURIComponent(ProjectData.Name)}/${ProjectData._id}`)
@@ -283,11 +284,18 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
                   email = email.replace("{{ imageUrl }}", ProjectData['Featured Image'])
                   email = email.replace("{{ startTime }}", ProjectData['Start Time'] ? ProjectData['Start Time'].toLocaleString() : null)
                   email = email.replace("{{ location }}", ProjectData['Location'])
+                  email = email.replace("{{ firstName }}", userData['Name'].replace(/ .*/,''))
+                  if (ProjectData['Charity Data']) {
+                    email = email.replace("{{ organisation }}", ProjectData['Charity Data'])
+                  } else {
+                    email = email.replace("by {{ organisation }} ", '')
+                  }
+                  email = email.replace("{{ endTime }}", ProjectData['End Time'] ? ProjectData['End Time'].toLocaleString() : null)
                   let data = {
-                      from: "Who's In? Reminder <alerts@whosin.io>",
+                      from: "Who's In? Reminder <tom@whosin.io>",
                       subject: `${ProjectData.Name}`,
                       html: email,
-                      'h:Reply-To': 'alerts@whosin.io',
+                      'h:Reply-To': 'tom@whosin.io',
                       to: userDoc.data().Email
                     }
                     mailgun.messages().send(data, function (error, body) {
@@ -461,7 +469,7 @@ function buildHtmlWithProject (post, id) {
       <meta property="twitter:title" content="${post.Name}">
       <meta property="og:type" content="article" />
       <meta property="og:description" content="${post.Sumary ? post.Summary : post.Description}" />
-      <meta property="og:image" content="${post['Featured Image']}" />
+      <meta property="og:image" content="${changeImageAddress(post['Featured Image'], '750xauto')}" />
       <meta name="twitter:card" content="summary" />
       <link rel="icon" href="https://example.com/favicon.png">
       </head><body>

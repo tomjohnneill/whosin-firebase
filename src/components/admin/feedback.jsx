@@ -21,7 +21,9 @@ export default class PrivateFeedback extends React.Component {
         db.collection("ProjectReview").doc(doc.id).collection("private").doc(this.props.projectId).get()
         .then((feedbackDoc) => {
           let docData = feedbackDoc.data()
-          feedbacks.push({_id: doc.id, feedback : docData.Feedback})
+          if (docData) {
+            feedbacks.push({_id: doc.id, feedback : docData.Feedback})
+          }
         })
       })
       this.setState({reviewIds: data, feedbacks: feedbacks})

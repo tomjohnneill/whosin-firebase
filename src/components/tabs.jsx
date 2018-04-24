@@ -9,6 +9,7 @@ import Featured from './featured.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import {changeImageAddress} from './desktopproject.jsx';
 import AllProjects from './allprojects.jsx';
+import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import fire from '../fire';
 
@@ -159,6 +160,7 @@ export default class UserTabs extends React.Component {
     console.log(this.state)
     return (
       <div>
+        <DocumentTitle title="Who's In?"/>
         <Snackbar
           open={this.state.signedUp}
           message="We've added you to the mailing list"
