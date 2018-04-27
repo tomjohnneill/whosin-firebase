@@ -18,6 +18,7 @@ import {Link, browserHistory} from 'react-router';
 import Loading from './loading.jsx';
 import SignupModal from './signupmodal.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
+import {ProjectReviewComponent} from './casestudy.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -240,20 +241,7 @@ export class RecentCharityReviews extends React.Component {
       <div>
         {
           this.state.reviews && this.state.reviews.length > 0 ? this.state.reviews.map((review) => (
-            <Link to={`/projects/p/${review.Project}`}>
-              <div key={review._id} style={{display: 'flex', alignItems: 'center', paddingTop: 10, paddingBottom: 10}}>
-                {
-                  review['User Picture'] ?
-                  <img className='user-picture' style={{borderRadius: '50%', padding: 10, height: 70, width: 70, boxSizing: 'border-box'}}
-                    src={changeImageAddress(review['User Picture'], '250xauto')}/>
-                  : null
-                }
-
-                <div className='review-body' style={{fontSize:'20px', fontWeight: 200}}>
-                  {review.Review}
-                </div>
-              </div>
-            </Link>
+            <ProjectReviewComponent review={review}/>
           ))
           :
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: 60, backgroundColor: 'rgb(247,247,247)'}}>

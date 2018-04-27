@@ -14,6 +14,13 @@ export const Cross = (props) => (
   </svg>
 )
 
+export const CleanTick = (props) => (
+  <svg style={props.style} fill={props.color} version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100">
+
+    <path d="M50,2C23.5,2,2,23.5,2,50c0,26.5,21.5,48,48,48s48-21.5,48-48C98,23.5,76.5,2,50,2z M74.7,38.4L46.5,66.7  c-0.9,0.9-2.2,1.5-3.5,1.5s-2.6-0.5-3.5-1.5L25.3,52.5c-2-2-2-5.1,0-7.1c2-2,5.1-2,7.1,0l10.6,10.6l24.7-24.7c2-2,5.1-2,7.1,0  C76.7,33.3,76.7,36.4,74.7,38.4z"></path>
+  </svg>
+)
+
 export const Spiral = (props) => (
   <svg style={props.style} fill="#E55749" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100">
 

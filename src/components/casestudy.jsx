@@ -69,6 +69,56 @@ function shuffle(a) {
     return a;
 }
 
+export class ProjectReviewComponent extends React.Component {
+  render() {
+    return (
+      <div>
+        <MediaQuery minDeviceWidth={700}>
+          <div style={{maxWidth: '90%',
+              display: 'flex', padding: 16,
+            border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
+            <div
+              style={
+                this.props.review.Rating < 3 ? styles.badRating :
+                this.props.review.Rating > 3 ? styles.goodRating : styles.middleRating
+              }
+              >
+              {this.props.review.Rating}
+            </div>
+            <div style={{paddingLeft: 16, flex: 1}}>
+              {this.props.review.Review}
+              <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
+                {this.props.review['User Name'] ? this.props.review['User Name'] : null}
+              </p>
+            </div>
+          </div>
+        </MediaQuery>
+        <MediaQuery  maxDeviceWidth={700}>
+          <div style={{width: '100%',
+              display: 'flex', padding: 16, boxSizing: 'border-box',
+            border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
+            <div
+              style={
+                this.props.review.Rating < 3 ? styles.badRating :
+                this.props.review.Rating > 3 ? styles.goodRating : styles.middleRating
+              }
+              >
+              {this.props.review.Rating}
+            </div>
+            <div style={{paddingLeft: 16, flex: 1}}>
+              {this.props.review.Review}
+              <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
+                {this.props.review['User Name'] ? this.props.review['User Name'] : null}
+              </p>
+            </div>
+
+          </div>
+        </MediaQuery>
+      </div>
+    )
+  }
+}
+
 export class ProjectReviews extends React.Component {
   constructor(props) {
     super(props);
@@ -102,26 +152,8 @@ export class ProjectReviews extends React.Component {
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column">
                 {this.state.reviews.map((review) => (
+                  <ProjectReviewComponent review={review}/>
 
-                    <div style={{maxWidth: '90%',
-                        display: 'flex', padding: 16,
-                      border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
-                      <div
-                        style={
-                          review.Rating < 3 ? styles.badRating :
-                          review.Rating > 3 ? styles.goodRating : styles.middleRating
-                        }
-                        >
-                        {review.Rating}
-                      </div>
-                      <div style={{paddingLeft: 16, flex: 1}}>
-                        {review.Review}
-                        <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
-                          {review['User Name'] ? review['User Name'] : null}
-                        </p>
-                      </div>
-
-                    </div>
 
                 ))}
                 </Masonry>
@@ -139,25 +171,7 @@ export class ProjectReviews extends React.Component {
 
                 {this.state.reviews.map((review) => (
 
-                    <div style={{width: '100%',
-                        display: 'flex', padding: 16, boxSizing: 'border-box',
-                      border: 'solid 1px #979797', borderRadius: 4, marginTop: 10}}>
-                      <div
-                        style={
-                          review.Rating < 3 ? styles.badRating :
-                          review.Rating > 3 ? styles.goodRating : styles.middleRating
-                        }
-                        >
-                        {review.Rating}
-                      </div>
-                      <div style={{paddingLeft: 16, flex: 1}}>
-                        {review.Review}
-                        <p style={{marginTop: 6, marginBottom: 0, fontWeight: 700, fontSize: '12px'}}>
-                          {review['User Name'] ? review['User Name'] : null}
-                        </p>
-                      </div>
-
-                    </div>
+                  <ProjectReviewComponent review={review}/>
 
                 ))}
               </div>
@@ -237,7 +251,7 @@ export default class CaseStudy extends React.Component {
     .then(data => {
       console.log(data)
       this.setState({instas: data.graphql.hashtag.edge_hashtag_to_media.edges})
-      var edges = data.graphql.hashtag.edge_hashtag_to_top_posts.edges
+      var edges = data.graphql.hashtag.edge_hashtag_to_media.edges
       var instagramLikes = 0
       var instagramComments = 0
       var instagramFollowers = 0

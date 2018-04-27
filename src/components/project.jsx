@@ -190,6 +190,14 @@ export default class Project extends React.Component {
             this.setState({ charity: charity, loading: false})
           })
           .catch(error => console.log('Error', error))
+        db.collection("ProjectReview").where("Charity", "==", project.Charity.toString()).get()
+        .then((querySnapshotReviews) => {
+          let data = []
+          querySnapshotReviews.forEach((doc) => {
+            data.push(doc.data())
+          })
+          this.setState({projectReviews: data})
+        })
       } else {
         db.collection("User").doc(project.Creator).collection("public").doc(project.Creator).get().then((userDoc) => {
           var creator = userDoc.data()
@@ -469,6 +477,7 @@ export default class Project extends React.Component {
             <DesktopProject params={this.props.params} project={this.state.project}
               joined={this.state.joined}
               creator={this.state.creator}
+              projectReviews={this.state.projectReviews}
               challengeExists={this.state.challengeExists}
               challenge = {this.state.challenge}
               challengeUser={this.state.challengeUser}

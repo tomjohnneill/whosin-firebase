@@ -10,6 +10,7 @@ import MediaQuery from 'react-responsive';
 import {  browserHistory } from 'react-router';
 import Dialog from 'material-ui/Dialog';
 import {Card, CardHeader} from 'material-ui/Card';
+import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
@@ -21,6 +22,7 @@ import Snackbar from 'material-ui/Snackbar';
 import Loading from '../loading.jsx';
 import PrivateFeedback from './feedback.jsx';
 import ReactQuill from 'react-quill';
+import {CleanTick, Cross} from '../icons.jsx';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import {CSVLink} from 'react-csv';
 import 'react-quill/dist/quill.snow.css';
@@ -306,7 +308,9 @@ class ReviewComponent extends React.Component {
   }
 
   handleRating = (rating) => {
-    this.setState({rating: rating})
+    if (this.state.turnedUp !== false) {
+      this.setState({rating: rating})
+    }
   }
 
   handleSetAdditional = (e) => {
@@ -317,17 +321,21 @@ class ReviewComponent extends React.Component {
     var body = {
       Project: this.props.projectId,
       User: this.props.eng.User,
-      Rating: this.state.rating,
+      Rating: this.state.turnedUp === false ? 1 : this.state.rating,
       "Turned Up" : this.state.turnedUp === undefined ? true : this.state.turnedUp,
       "Charity Number": this.props.eng['Charity Number'] ? this.props.eng['Charity Number'] : null,
       "Project Name": this.props.eng['Project Name'],
-      Review: this.state.review,
+      Review: this.state.turnedUp === false ? 'Did not turn up' : this.state.review,
       Organiser: this.state.organiser,
       created : new Date ()
     }
     db.collection("UserReview").add(body).then((doc) => {
       this.setState({reviewAdded: true})
     })
+  }
+
+  handleTurnedUp = (bool) => {
+    this.setState({turnedUp : bool})
   }
 
   render() {
@@ -341,7 +349,17 @@ class ReviewComponent extends React.Component {
               <h2 style={styles.reviewHeader}>
                 Turned Up?
               </h2>
-              Up and down
+              <IconButton
+                onClick={() => this.handleTurnedUp(true)}
+                 style={{padding: 0}} iconStyle={{height: 40}}>
+                <CleanTick color={this.state.turnedUp === false ? grey200 : 'rgb(59,158,116)'}/>
+              </IconButton>
+              <IconButton
+                onClick={() => this.handleTurnedUp(false)}
+                style={{padding: 0}} iconStyle={{height: 38}}>
+                  <Cross color={this.state.turnedUp === true ? grey200 : 'rgb(182,48,43)'}/>
+              </IconButton>
+
             </div>
 
             <div style={{flex: 1}}>
@@ -349,12 +367,15 @@ class ReviewComponent extends React.Component {
                 Review
               </h2>
               <TextField
-                inputStyle={{borderRadius: '6px', border: '1px solid ' + grey500,
+                inputStyle={{
+                  backgroundColor: this.state.turnedUp === false ? grey200 : 'inherit',
+                  borderRadius: '6px', border: '1px solid ' + grey500,
                   paddingLeft: '12px',  boxSizing: 'border-box'}}
                 underlineShow={false}
                 hintText={`This will be shared publicly on ${this.props.eng['Name'] ? this.props.eng['Name'].replace(/ .*/,'') : "this person"}'s profile.`}
                 multiLine={true}
                 fullWidth={true}
+                disabled={this.state.turnedUp === false}
                 value={this.state.review}
                 onChange={this.handleSetAdditional}
                 rows={4}
@@ -371,7 +392,7 @@ class ReviewComponent extends React.Component {
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     marginLeft: 20, marginRight: 20, marginTop: 20}}>
                   <span onTouchTap={() => this.handleRating(1)}
-                      style={this.state.rating > 3 ? styles.goodRating : this.state.rating === 3 ? styles.middleRating : this.state.rating < 3 ? styles.badRating :  styles.circle}>
+                      style={this.state.rating > 3 ? styles.goodRating : this.state.rating === 3 ? styles.middleRating : this.state.rating < 3 ? styles.badRating  : this.state.turnedUp === false ? styles.badRating : styles.circle}>
                     1
                   </span>
                   <span onTouchTap={() => this.handleRating(2)}

@@ -23,6 +23,7 @@ import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
+import {ProjectReviewComponent} from './casestudy.jsx';
 import {withScriptjs,  withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import fire from '../fire';
 
@@ -339,6 +340,7 @@ import fire from '../fire';
           project['End Time'] = new Date(project['End Time'])
         }
         this.setState({project: nextProps.project})
+        this.setState({projectReviews: nextProps.projectReviews})
         this.setState({charity: nextProps.charity, creator: nextProps.creator})
       }
     }
@@ -776,6 +778,23 @@ import fire from '../fire';
 
                         </CardText>
                       </Tab>
+                      {this.state.projectReviews ?
+                        <Tab
+                          value='reviews'
+                          style={{width: 'auto'}}
+                          buttonStyle={this.state.selected === 'reviews' ? styles.selectedTab : styles.tab}
+                          onTouchTap={this.changeAnchorEl}
+                          label='Previous Reviews'>
+                          <div style={{padding: 16}}>
+                            {this.state.projectReviews.map((review) => (
+                              <ProjectReviewComponent review={review}/>
+                            ))}
+                          </div>
+                        </Tab>
+                        :
+                        null
+                      }
+
                       {this.state.project.Charity ?
                       <Tab
                         value='aboutus'

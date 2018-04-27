@@ -3,6 +3,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MediaQuery from 'react-responsive';
 import {Link} from 'react-router';
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import fire from '../fire';
 
@@ -68,6 +70,9 @@ const styles = {
     fontSize: '18px'
   }
 }
+
+
+  const style = {margin: 5};
 
 export default class Footer extends React.Component {
   constructor(props) {
@@ -138,8 +143,34 @@ export default class Footer extends React.Component {
               <div style={{flex: 2, marginLeft: 24, display: 'flex', justifyContent: 'center'}}>
                 <div style={{width: '100%'}}>
                   hello@whosin.io
-                  <div>
-                    <Link to='/about'>About</Link>
+                  <div style={{display: 'block'}}>
+                    <Link style={{width: '100%', display: 'block'}} to='/about'>About</Link>
+                    <Link style={{width: '100%', display: 'block'}} to='/why'>Why Start a Project?</Link>
+                    <Link style={{width: '100%', display: 'block'}} to='/terms'>Terms</Link>
+                    <div style={{display: 'flex'}}>
+                        <a style={{padding: 10}} href={`https://www.facebook.com/whosin.io/`}>
+                          <span style={styles.contactIcon}>
+                            <Avatar
+                              icon={<FontIcon className="fab fa-facebook-f fa-2x" />}
+                              color={'white'}
+                              backgroundColor={'#3b5998'}
+                              size={50}
+                              style={style}
+                            />
+                        </span>
+                      </a>
+                      <a style={{padding: 10}} href={`https://www.instagram.com/whosin.io/`}>
+                      <span style={styles.contactIcon}>
+                        <Avatar
+                          icon={<FontIcon className="fab fa-instagram fa-2x" />}
+                          color={'white'}
+                          backgroundColor={'#fb3958'}
+                          size={50}
+                          style={style}
+                        />
+                      </span>
+                    </a>
+                    </div>
                   </div>
                 </div>
 
