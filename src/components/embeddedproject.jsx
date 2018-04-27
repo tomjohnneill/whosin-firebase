@@ -3,9 +3,64 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router';
 import {changeImageAddress} from './desktopproject.jsx';
 import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
+import {yellow500, grey200, grey500} from 'material-ui/styles/colors'
 import fire from '../fire';
 
 let db = fire.firestore()
+
+const styles = {
+  circle : {
+    borderRadius: '50%',
+    border: '2px solid ' + grey200,
+    color: grey500,
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  badRating : {
+    borderRadius: '50%',
+    border: '2px solid rgb(182,48,43)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(182,48,43)'
+  },
+  middleRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + yellow500,
+    color: 'inherit',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: yellow500
+  },
+  goodRating : {
+    borderRadius: '50%',
+    border: '2px solid ' + 'rgb(59,158,116)',
+    color: 'white',
+    width: 36,
+    fontWeight: 700,
+    height: 36,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(59,158,116)'
+  }
+}
 
 export default class EmbeddedProject extends React.Component {
   constructor(props) {
@@ -29,6 +84,14 @@ export default class EmbeddedProject extends React.Component {
             charity._id = charityDoc.id
             this.setState({ project: project, charity: charity, loading: false})
           })
+          db.collection("ProjectReview").where("Project", "==", project._id).get()
+          .then((querySnapshotReviews) => {
+            let data = []
+            querySnapshotReviews.forEach((doc) => {
+              data.push(doc.data())
+            })
+            this.setState({projectReviews: data})
+          })
           .catch(error => console.log('Error', error))
       }
     } else {
@@ -42,6 +105,14 @@ export default class EmbeddedProject extends React.Component {
               charity._id = charityDoc.id
               this.setState({ charity: charity})
             })
+          db.collection("ProjectReview").where("Project", "==", project._id).get()
+          .then((querySnapshotReviews) => {
+            let data = []
+            querySnapshotReviews.forEach((doc) => {
+              data.push(doc.data())
+            })
+            this.setState({projectReviews: data})
+          })
             .catch(error => console.log('Error', error))
         }
       })
@@ -66,13 +137,33 @@ export default class EmbeddedProject extends React.Component {
             charity._id = charityDoc.id
             this.setState({ project: project, charity: charity, loading: false})
           })
+          db.collection("ProjectReview").where("Project", "==", project._id).get()
+          .then((querySnapshotReviews) => {
+            let data = []
+            querySnapshotReviews.forEach((doc) => {
+              data.push(doc.data())
+            })
+            this.setState({projectReviews: data})
+          })
           .catch(error => console.log('Error', error))
         }
     }
   }
 
   render() {
+    var average = null
+    if (this.state.projectReviews) {
+      var reviews = this.state.projectReviews
+      var total = 0
+      var count = 0
+      reviews.forEach((review) => {
+        total += review.Rating
+        count += 1
+      })
+      average = count === 0 ? null : Math.round(total/count,1)
+    }
     console.log(this.state.project)
+    console.log(average)
     return (
       <div>
         {this.state.loading ?
@@ -157,6 +248,35 @@ export default class EmbeddedProject extends React.Component {
                     : null
                   }
                 </div>
+
+                {average !== null ?
+                <div style={{textAlign: 'left', paddingTop: 10}}>
+                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      paddingLeft: 16, paddingRight: 16}}>
+                    <span onTouchTap={() => this.handleRating(1)}
+                        style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : average < 3 ? styles.badRating :  styles.circle}>
+                      1
+                    </span>
+                    <span onTouchTap={() => this.handleRating(2)}
+                        style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : average === 2 ? styles.badRating :  styles.circle}>
+                      2
+                    </span>
+                    <span onTouchTap={() => this.handleRating(3)}
+                        style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : styles.circle}>
+                      3
+                    </span>
+                    <span onTouchTap={() => this.handleRating(4)}
+                        style={average > 3 ? styles.goodRating : styles.circle}>
+                      4
+                    </span>
+                    <span onTouchTap={() => this.handleRating(5)}
+                      style={average === 5 ? styles.goodRating : styles.circle}>
+                      5
+                    </span>
+                  </div>
+                </div>
+                :
+                null}
 
                 {(this.props.location && this.props.location.query.noLogo) || this.props.noLogo ? null :
                 <div style={{display: 'flex'}}>
