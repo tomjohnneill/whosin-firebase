@@ -100,6 +100,16 @@ const NewsletterData = asyncComponent(() =>
 )
 
 
+const GroupPage = asyncComponent(() =>
+    import('./components/groups/grouppage.jsx').then(module => module.default)
+)
+const GroupList = asyncComponent(() =>
+    import('./components/groups/grouplist.jsx').then(module => module.default)
+)
+const CreateGroup = asyncComponent(() =>
+    import('./components/groups/newgroup.jsx').then(module => module.default)
+)
+
 const rootElement = document.getElementById('root');
 
   render(<Router onUpdate={() => window.scrollTo(0, 0)} history={ browserHistory }>
@@ -124,8 +134,11 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/3' component={Story}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/embed/:_id' component={EmbeddedProject}/>
-      <Route path='/project/' component={Project}/>
+      <Route path='/groups' component={GroupList}/>
+      <Route path='/groups/create' component={CreateGroup}/>
+      <Route path='/groups/:groupId' component={GroupPage}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
+      <Route path='/projects/:pledge/:_id/group/:groupId' component={Project}/>
       <Route path='/projects/:pledge/:_id/crop-edit' component={ImageCrop}/>
       <Route path='/projects/:pledge/:_id/admin' component={AdminView}/>
       <Route path='/projects/:pledge/:_id/admin/:adminTab' component={AdminView}/>

@@ -70,7 +70,7 @@ export default class EmbeddedProject extends React.Component {
 
   componentDidMount(props) {
     var projectId = this.props.params && this.props.params._id ? this.props.params._id : this.props.projectId
-
+    console.log(projectId)
     if (this.props.project) {
       let project = this.props.project
       if (typeof project['Start Time'] === 'string') {
@@ -147,6 +147,17 @@ export default class EmbeddedProject extends React.Component {
           })
           .catch(error => console.log('Error', error))
         }
+        this.setState({project: nextProps.project, loading: false})
+
+        if (project.Charity) {
+          db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
+              var charity = charityDoc.data() ? charityDoc.data() : {}
+              charity._id = charityDoc.id
+              this.setState({ project: project, charity: charity, loading: false})
+            })
+            .catch(error => console.log('Error', error))
+          }
+      }
     }
     else {
       let project = this.props.project
