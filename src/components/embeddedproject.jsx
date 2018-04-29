@@ -157,7 +157,7 @@ export default class EmbeddedProject extends React.Component {
             })
             .catch(error => console.log('Error', error))
           }
-      }
+
     }
     else {
       let project = this.props.project
