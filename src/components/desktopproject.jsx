@@ -24,6 +24,7 @@ import Share from './share.jsx'
 import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
 import GroupSignUp from './groups/groupsignup.jsx';
+import Suggest from './groups/suggest.jsx';
 import {withScriptjs,  withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import fire from '../fire';
 
@@ -905,6 +906,9 @@ import fire from '../fire';
                          fullWidth={true}
                          labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold'}}
                         label="I can't come anymore" onTouchTap={this.handleUnJoin} />}
+
+                        <Suggest projectId={this.props.project._id}/>
+
                       </div>
                       <div>
 
@@ -916,15 +920,7 @@ import fire from '../fire';
 
 
                       </li>
-                      <ConditionalModal
-                        _id={this.props.params._id}
-                        challengeExists={this.props.challengeExists}
-                        onConditionalComplete={() => this.setState({challengeExists: true})}
-                        title={this.props.params.project}
-                        project = {this.state.project ? this.state.project : null}
-                          open={this.state.conditionalOpen}
-                          changeOpen={this.handleConditionalChangeOpen}
-                          />
+
                     </div>
 
                   </div>

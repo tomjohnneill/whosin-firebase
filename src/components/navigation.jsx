@@ -398,6 +398,7 @@ export default class Navigation extends React.Component {
             <MenuItem onClick={() => this.goToAndClose('/about')}>About</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
+            <MenuItem onClick={() => this.goToAndClose('/groups')}>Groups</MenuItem>
             <MenuItem onClick={() => this.goToAndClose('/create-project/0')}>Start a project</MenuItem>
             <MenuItem onClick={this.handleSignOut}>
               Sign out</MenuItem>

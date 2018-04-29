@@ -14,7 +14,9 @@ import Avatar from 'material-ui/Avatar';
 import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
 import Loading from '../loading.jsx';
+import {grey500, grey100, amber500} from 'material-ui/styles/colors';
 import {changeImageAddress} from '../desktopproject.jsx';
+import SignupModal from '../signupmodal.jsx';
 import fire from '../../fire';
 
 let db = fire.firestore()
@@ -49,7 +51,7 @@ const styles = {
 export default class GroupList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {createOpen: false, users: []}
+    this.state = {modalOpen: false, createOpen: false, users: []}
   }
 
   componentDidMount(props) {
@@ -85,6 +87,10 @@ export default class GroupList extends React.Component {
       }
     })
     console.log(this.state.groups)
+  }
+
+  handleMobileCreateGroup = () => {
+    browserHistory.push('/groups/create')
   }
 
   handleCreateGroup = () => {
@@ -187,6 +193,10 @@ export default class GroupList extends React.Component {
     this.setState({groupName: nv})
   }
 
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
   render() {
     console.log(this.state.whosinPeople)
     if (this.state.whosinPeople) {
@@ -212,6 +222,7 @@ export default class GroupList extends React.Component {
         alignItems: 'center', justifyContent: 'center'}}>
         <DocumentTitle title='Groups'/>
         <div style={{maxWidth: 1000, width: '100%', paddingTop: 26}}>
+          <MediaQuery minDeviceWidth={700}>
           <h2 style={{
               paddingLeft: 16, paddingRight: 16, boxSizing: 'border-box', paddingBottom: 16,
               marginBottom: 0,
@@ -221,18 +232,47 @@ export default class GroupList extends React.Component {
                   style={{float: 'right'}}
                   >
                   <RaisedButton
-                    onClick={this.handleCreateGroup}
+                    onClick={fire.auth().currentUser ? this.handleCreateGroup
+                      : () => this.setState({modalOpen: true})}
                     labelStyle={styles.buttonLabel}
                     icon={<Add/>}
                     secondary={true}
                     label='Create New Group'
                     />
+                    <SignupModal
+                      open={this.state.modalOpen}
+                      changeOpen={this.handleModalChangeOpen}
+                    onComplete={this.handleCreateGroup}/>
                 </div>
               </h2>
+            </MediaQuery>
+          <MediaQuery maxDeviceWidth={700}>
+            <h2 style={{
+                paddingLeft: 16, paddingRight: 16, boxSizing: 'border-box', paddingBottom: 16,
+                marginBottom: 0,
+                  textAlign: 'left', width: '100%'}}>
+                  Groups you belong to
+                </h2>
+                <div className='create-group'
+                  style={{display: 'flex', alignItems: 'left', paddingLeft: 20, paddingBottom: 20}}
+                  >
+                  <RaisedButton
+                    onClick={this.handleMobileCreateGroup}
+                    labelStyle={styles.buttonLabel}
+                    icon={<Add/>}
+                    secondary={true}
+                    label='Create New Group'
+                    />
+                    <SignupModal
+                      open={this.state.modalOpen}
+                      changeOpen={this.handleModalChangeOpen}
+                    onComplete={this.handleMobileCreateGroup}/>
+                </div>
+          </MediaQuery>
 
           <div >
             {this.state.groups ?
-              <div style={{display: 'flex', flexWrap: 'wrap'}}>
+              <div style={{display: 'flex', flexWrap: 'wrap', width: '100%'}}>
                 <MediaQuery minDeviceWidth={700}>
                   <div style={{display: 'flex', flexWrap: 'wrap'}}>
                     {this.state.groups.map((group) => (
@@ -263,7 +303,7 @@ export default class GroupList extends React.Component {
                 </MediaQuery>
                 <MediaQuery maxDeviceWidth={700}>
                   {this.state.groups.map((group) => (
-                    <Link style={{height: 150, display: 'block',
+                    <Link style={{height: 150, display: 'block', width: '100%',
                        margin: '20px', boxSizing: 'border-box'}}
                       to={`/groups/${group._id}`}>
                       <div style={{width: '100%', height: 150,
@@ -295,6 +335,31 @@ export default class GroupList extends React.Component {
             </div>
             }
           </div>
+          {
+            this.state.groups && this.state.groups.length === 0 ?
+              <div style={{margin: 20,background: grey100,
+                textAlign: 'left', padding: 16}}>
+                <div style={{fontWeight: 700}}>Doesn't look like you belong to any groups yet.</div>
+                <br/>
+                <br/>
+                <div>
+                  <i>Here's what will happen if you make one:</i>
+                  <ul style={{listStyleType: 'circle', paddingLeft: 16}}>
+                    <li style={{listStyleType: 'circle'}}>
+                      You can suggest projects to your friends
+                    </li>
+                    <li style={{listStyleType: 'circle'}}>
+                      They'll tell you if they're interested
+                    </li>
+                    <li style={{listStyleType: 'circle'}}>
+                      You can sign them up as soon as you think enough people are going
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              :
+              null
+          }
         </div>
 
       <Dialog

@@ -101,6 +101,9 @@ const GroupPage = asyncComponent(() =>
 const GroupList = asyncComponent(() =>
     import('./components/groups/grouplist.jsx').then(module => module.default)
 )
+const CreateGroup = asyncComponent(() =>
+    import('./components/groups/newgroup.jsx').then(module => module.default)
+)
 
 const rootElement = document.getElementById('root');
 
@@ -126,6 +129,7 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/embed/:_id' component={EmbeddedProject}/>
       <Route path='/groups' component={GroupList}/>
+      <Route path='/groups/create' component={CreateGroup}/>
       <Route path='/groups/:groupId' component={GroupPage}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/group/:groupId' component={Project}/>

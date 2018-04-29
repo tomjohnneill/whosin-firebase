@@ -30,6 +30,7 @@ import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral, CalendarIcon, Place, Clock, World} from './icons.jsx';
 import {MyMapComponent} from './desktopproject.jsx';
+import Suggest from './groups/suggest.jsx';
 import BottomNavigationExampleSimple from './bottomnav.jsx'
 import fire from '../fire';
 
@@ -605,6 +606,12 @@ export default class Project extends React.Component {
                  labelStyle={{letterSpacing: '0.6px', fontWeight: 'bold', fontSize: '18px'}}
                 label="I can't come anymore" onTouchTap={this.handleUnJoin} />}
 
+
+
+                  </div>
+
+                  <div style={{paddingLeft: 16, paddingRight: 16}}>
+                    <Suggest projectId={this.props.params._id}/>
                   </div>
                   <div style={{position: 'sticky'}}>
                     <SignupModal
@@ -651,15 +658,7 @@ export default class Project extends React.Component {
               <li>
 
                 <WhosIn project={this.state.project}/>
-                  <ConditionalModal
-                    _id={this.props.location.query.project ? this.props.location.query.project : this.props.params._id}
-                    title={this.props.params.project}
-                    onConditionalComplete={() => this.setState({challengeExists: true})}
-                    project = {this.state.project ? this.state.project : null}
-                      open={this.state.conditionalOpen}
-                      challengeExists={this.state.challengeExists}
-                      changeOpen={this.handleConditionalChangeOpen}
-                      />
+                  
               </li>
             </div>
 

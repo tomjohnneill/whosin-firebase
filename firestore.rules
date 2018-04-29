@@ -65,7 +65,7 @@ service cloud.firestore {
 
    match /Engagement/{engagement} {
       allow read: if true;
-      allow create: if request.resource.data.User == request.auth.uid;
+      allow create: if true;
       allow delete: if resource.data.User == request.auth.uid;
       allow update: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid;
 

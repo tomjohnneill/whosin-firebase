@@ -4,15 +4,18 @@ import {changeImageAddress} from '../desktopproject.jsx';
 import Avatar from 'material-ui/Avatar';
 import {Link, browserHistory} from 'react-router';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import {CalendarIcon, Place, Clock, World, Tick} from '../icons.jsx';
+import {CalendarIcon, Place, Clock, World, Tick, Cross, CleanTick} from '../icons.jsx';
 import EmbeddedProject from '../embeddedproject.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import Masonry from 'react-masonry-css';
 import CloudUpload from 'material-ui/svg-icons/file/cloud-upload';
+import Star from 'material-ui/svg-icons/toggle/star';
 import CircularProgress from 'material-ui/CircularProgress';
-import {grey500} from 'material-ui/styles/colors';
+import {grey500, grey200, amber500} from 'material-ui/styles/colors';
 import DocumentTitle from 'react-document-title';
 import Divider from 'material-ui/Divider';
+import SignupModal from '../signupmodal.jsx';
 import Dropzone from 'react-dropzone';
 import fire from '../../fire';
 
@@ -95,14 +98,14 @@ export class GroupReviews extends React.Component {
         {this.state.reviews ? this.state.reviews.map((project) => (
           <div>
             <Link to={'/projects/' + project['Project Name'] +'/' + project.Project}>
-              <div style={{display: 'flex', padding: 30, textAlign: 'left', borderBottom: '1px solid #DDDDDD'}}>
+              <div style={{display: 'flex', padding: 20, textAlign: 'left', borderBottom: '1px solid #DDDDDD'}}>
                 <div>
                   {project['Charity Picture'] ?
                   <img
                     src={changeImageAddress(project['Charity Picture'], '250xauto')}
-                    style={{borderRadius: '50%', height: 57, width: 57}} className='logo'/>
+                    style={{borderRadius: '50%', height: 30, width: 30}} className='logo'/>
                     :
-                  <World style={{height: 57, width: 57}} color={'#484848'}/>
+                  <World style={{height: 30, width: 30}} color={'#484848'}/>
                   }
                   <div className='charity-name' style={{paddingTop: 6, fontSize: '12px'}}>
                     {project['Charity Name']}
@@ -111,7 +114,7 @@ export class GroupReviews extends React.Component {
 
                 <div className='review-detail-container' style={{display: 'flex',
                   flexDirection: 'column', justifyContent: 'space-between',
-                  paddingLeft: 40}}>
+                  paddingLeft: 20}}>
                   <div className='review-content' style={{fontSize: '15px', paddingBottom: 20}}>
                     {project['Review']}
                   </div>
@@ -123,6 +126,134 @@ export class GroupReviews extends React.Component {
             </Link>
           </div>
         )) : null}
+      </div>
+    )
+  }
+}
+
+class InterestedAvatars extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {selected: 'interested'}
+  }
+
+  render() {
+    console.log(this.props.members)
+    console.log(this.props.Interested)
+
+    var interested = []
+    var notInterested = []
+    var notReplied = []
+    this.props.members.map((member) => {
+      if (this.props.Interested[member._id] === true) {
+        interested.push(member)
+      } else if (this.props.Interested[member._id] === false) {
+        notInterested.push(member)
+      } else {
+        notReplied.push(member)
+      }
+    })
+
+
+    return (
+      <div>
+          <div style={{display: 'flex'}}>
+
+            <span style={{paddingRight: 16, cursor: 'pointer',
+              color: this.state.selected === 'interested' ? '#65A1e7' : 'inherit'}}
+              onClick={() => this.setState({selected: 'interested'})}
+              >
+              Interested ({interested ? interested.length : 0})
+            </span>
+            <span style={{paddingRight: 16, cursor: 'pointer',
+              color: this.state.selected === 'not-interested' ? '#65A1e7' : 'inherit'}}
+              onClick={() => this.setState({selected: 'not-interested'})}
+              >
+              Not Interested ({notInterested ? notInterested.length : 0})
+            </span>
+            <span style={{paddingRight: 16, cursor: 'pointer',
+              color: this.state.selected === 'not-replied' ? '#65A1e7' : 'inherit'}}
+              onClick={() => this.setState({selected: 'not-replied'})}
+              >
+              Not Replied ({notReplied ? notReplied.length : 0})
+            </span>
+          </div>
+          <div className='going'
+
+            style={{display: 'flex', paddingTop: 10, paddingBottom: 10,
+
+            display: this.state.selected === 'interested' ? 'inherit' : 'none'}}>
+            {
+              interested.map((eng) => (
+                eng['Volunteer Picture'] ?
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar src={changeImageAddress(eng['Volunteer Picture'], '40xauto')}
+                      />
+                  </IconButton>
+                </Link>
+                :
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>
+                  </IconButton>
+                </Link>
+                  ))
+
+
+            }
+          </div>
+          <div className='going'
+
+            style={{display: 'flex', paddingTop: 10, paddingBottom: 10,
+              color: this.state.selected === 'not-interested' ? '#65A1e7' : 'inherit',
+              display: this.state.selected === 'not-interested' ? 'inherit' : 'none'
+            }}>
+            {
+              notInterested.map((eng) => (
+                eng['Volunteer Picture'] ?
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar src={changeImageAddress(eng['Volunteer Picture'], '40xauto')}
+                      />
+                  </IconButton>
+                </Link>
+                :
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>
+                  </IconButton>
+                </Link>
+                  ))
+
+
+            }
+          </div>
+          <div className='going'
+
+            style={{display: 'flex', paddingTop: 10, paddingBottom: 10,
+              color: this.state.selected === 'not-replied' ? '#65A1e7' : 'inherit',
+            display: this.state.selected === 'not-replied' ? 'inherit' : 'none'}}>
+            {
+              notReplied.map((eng) => (
+                eng['Volunteer Picture'] ?
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar src={changeImageAddress(eng['Volunteer Picture'], '40xauto')}
+                      />
+                  </IconButton>
+                </Link>
+                :
+                <Link to={`/profile/${eng._id}`}>
+                  <IconButton tooltip={eng.Name} style={{padding: 0}}>
+                    <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>
+                  </IconButton>
+                </Link>
+                  ))
+
+
+            }
+          </div>
       </div>
     )
   }
@@ -143,13 +274,84 @@ export class UpcomingProjects extends React.Component {
 
         db.collection("Project").doc(doc.id).get().then((project) => {
           var projectData = project.data()
+          projectData._id = doc.id
           elem.project = projectData
-          data.push(elem)
+          if (new Date(projectData['End Time']) > new Date()) {
+            data.push(elem)
+          }
           this.setState({projects: data})
         })
-
+        console.log(this.state.projects)
       })
 
+    })
+
+  }
+
+  handleTick = (_id) => {
+    var projects = this.state.projects
+    let updatedProjects = []
+
+    projects.forEach((project) => {
+      if (project.project._id === _id) {
+        console.log('Set as Interested')
+        project.Interested = {}
+        project.Interested[fire.auth().currentUser.uid] = true
+      }
+      updatedProjects.push(project)
+    })
+    this.setState({
+        projects: updatedProjects
+    })
+    db.collection("Group").doc(this.props.groupId).collection("Projects")
+    .doc(_id).update({
+        ['Interested.' + fire.auth().currentUser.uid]: true
+    })
+  }
+
+  handleCross = (_id) => {
+    console.log(this.props.groupId)
+    console.log(_id)
+    var projects = this.state.projects
+    let updatedProjects = []
+
+    projects.forEach((project) => {
+      if (project.project._id === _id) {
+        console.log('Set as Interested')
+        project.Interested = {}
+        project.Interested[fire.auth().currentUser.uid] = false
+      }
+      updatedProjects.push(project)
+    })
+    this.setState({
+        projects: updatedProjects
+    })
+    db.collection("Group").doc(this.props.groupId).collection("Projects")
+    .doc(_id).update({
+        ['Interested.' + fire.auth().currentUser.uid]: false
+    })
+  }
+
+  handleGroupSignUp = (project) => {
+    this.props.members.forEach((member) => {
+      db.collection("Engagement").where("Project", "==", project._id)
+      .where("User", "==", member._id).get().then((querySnapshot) => {
+        if (querySnapshot.size === 0) {
+          db.collection("Engagement").add({
+            "Project": project._id,
+            "Project Name": project.Name,
+            "User": member._id,
+            "Name": member.Name.replace(/ .*/,''),
+            "Project Photo": project['Featured Image'],
+            "Charity":project['Charity Name'] ? project['Charity Name'] : null,
+            "Charity Number": project.Charity ? project.Charity : null,
+            "Volunteer Picture": member.Picture ? member.Picture : null,
+            "Location": member.Location && member.privacy && member.privacy.Location
+                ? member.Location : null,
+            "created": new Date()
+          })
+        }
+      })
     })
   }
 
@@ -160,106 +362,291 @@ export class UpcomingProjects extends React.Component {
       var projectArray = Object.values(this.state.projects)
       console.log(projectArray)
 
+
+
       return (
         <div>
-          <h1 className='desktop-header' style={{marginTop: 16}}>
-            Potential Projects</h1>
-          {
-            this.state.projects.map((project) => (
-              <div>
-                {project.project ?
-                  <Link to={`/projects/p/${project.project._id}/group/${this.props.groupId}`}>
-                    <div style={{border: '1px solid rgb(221, 221, 221)', borderRadius: 6}}>
-                      <div style={{display: 'flex'}}>
-                        <img src={changeImageAddress(project.project['Featured Image'], '500xauto')}
-                          style={{width: '25%', height: 180, objectFit: 'cover'}}/>
-                        <div style={{width: '75%', fontSize: '18px', fontWeight: 200, paddingLeft: 16,
-                        paddingTop: 10}}>
-                          <div style={{fontWeight: 700, fontSize: '26px'}}>
-                            {project.project.Name}
-                          </div>
-                          <div>
-
-                            <span style={{paddingRight: 16}}>
-                              Would go (2)
-                            </span>
-                            <span style={{paddingRight: 16}}>
-                              Can't go (2)
-                            </span>
-                            <span style={{paddingRight: 16}}>
-                              Not replied (2)
-                            </span>
-                          </div>
-                          <div className='going'
-                            style={{display: 'flex', paddingTop: 10, paddingBottom: 10}}>
-                            <Avatar/>
-                            <Avatar/>
-                            <Avatar/>
-                          </div>
-                          <div>
-                            <span style={{paddingRight: 16}}>
-                              Target (2)
-                            </span>
-                          </div>
-                        </div>
-
-                      </div>
-                      <div style={{
-                        backgroundColor: 'rgba(250,250,250,0.8)', display: 'flex', padding: 16,
-                        textAlign: 'left'}}
-                        className='datetime-container'>
-                        {project.project['Start Time'] ?
-                        <div className='date-container' style={{display: 'flex', minWidth: 160}}>
-                          <div className='date-icon'>
-                            <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
-                          </div>
-                          <div>
-                            {project.project['Start Time'].toLocaleString('en-gb',
-                              {weekday: 'long', month: 'long', day: 'numeric'})}
-                          </div>
-                        </div>
-                        : null}
-                        {project.project['Start Time'] ?
-                        <div className='time-container' style={{display: 'flex', marginLeft: 24, minWidth: 140}}>
-                          <div className='time-icon'>
-                            <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
-                          </div>
-                          <div >
-                            {project.project['Start Time'].toLocaleString('en-gb',
-                              {hour: '2-digit', minute: '2-digit'})} -
-                              {project.project['End Time'].toLocaleString('en-gb',
-                                {hour: '2-digit', minute: '2-digit'})}
-                          </div>
-                        </div>
-                        : null}
-
-
-                        {project.project.Location || project.project.Remote ?
-                          <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
-                            <div className='location-icon'>
-                              <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+          <MediaQuery minDeviceWidth={700}>
+            <h1 className='desktop-header' style={{marginTop: 16}}>
+              Potential Projects</h1>
+            {
+              this.state.projects.map((project) => (
+                <div>
+                  {project.project ?
+                    <div>
+                      <div style={{border: '1px solid rgb(221, 221, 221)', borderRadius: 6}}>
+                        <div style={{display: 'flex'}}>
+                          <Link to={`/projects/p/${project.project._id}`}>
+                            <img src={changeImageAddress(project.project['Featured Image'], '500xauto')}
+                              style={{flex: 1, height: 180, width: 250, objectFit: 'cover'}}/>
+                          </Link>
+                          <div style={{flex: 3, fontSize: '18px', fontWeight: 200, paddingLeft: 16,
+                          paddingTop: 10}}>
+                            <div style={{fontWeight: 700, fontSize: '26px'}}>
+                              {project.project.Name}
                             </div>
-                            {
-                              project.project.Location ?
-                              <a href={`https://www.google.com/maps/?q=${project.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
-                                {project.project.Location}
-                              </a>
-                              :
-                              'Remote'
+                            <InterestedAvatars members={this.props.members}
+                              Interested={project.Interested}/>
+                          </div>
+                          <div style={{width: 170}}>
+                            <div style={{flex: 3,textAlign: 'center', fontSize: '18px', boxSizing: 'border-box',
+                              fontWeight: 200,
+                            paddingTop: 45.2, paddingBottom: 10}}>
+                              Are you interested?
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                              <IconButton style={{padding: 0}}
+                                onClick={() => this.handleTick(project.project._id)}
+                                >
+                                <CleanTick
+                                  color={project.Interested && fire.auth().currentUser &&
+                                    project.Interested[fire.auth().currentUser.uid] === false ?
+                                    grey200 : '#3B9E74'
+                                  }
+                                  />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => this.handleCross(project.project._id)}
+                                 style={{padding: 0, marginLeft: 20}}>
+                                <Cross
+                                  color={project.Interested && fire.auth().currentUser &&
+                                    project.Interested[fire.auth().currentUser.uid] === true ?
+                                    grey200 : 'rgb(182,48,43)'
+                                  }
+                                  />
+                              </IconButton>
+                            </div>
+                          </div>
+
+                        </div>
+                        <Link to={`/projects/p/${project.project._id}`}>
+                          <div style={{
+                            backgroundColor: 'rgba(250,250,250,0.8)', display: 'flex', padding: 16,
+                            textAlign: 'left'}}
+                            className='datetime-container'>
+                            {project.project['Start Time'] ?
+                            <div className='date-container' style={{display: 'flex', minWidth: 160}}>
+                              <div className='date-icon'>
+                                <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                              </div>
+                              <div>
+                                {project.project['Start Time'].toLocaleString('en-gb',
+                                  {weekday: 'long', month: 'long', day: 'numeric'})}
+                              </div>
+                            </div>
+                            : null}
+                            {project.project['Start Time'] ?
+                            <div className='time-container' style={{display: 'flex', marginLeft: 24, minWidth: 140}}>
+                              <div className='time-icon'>
+                                <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                              </div>
+                              <div >
+                                {project.project['Start Time'].toLocaleString('en-gb',
+                                  {hour: '2-digit', minute: '2-digit'})} -
+                                  {project.project['End Time'].toLocaleString('en-gb',
+                                    {hour: '2-digit', minute: '2-digit'})}
+                              </div>
+                            </div>
+                            : null}
+
+
+                            {project.project.Location || project.project.Remote ?
+                              <div className='location-container' style={{display: 'flex', marginLeft: 24}}>
+                                <div className='location-icon'>
+                                  <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                                </div>
+                                {
+                                  project.project.Location ?
+                                  <a href={`https://www.google.com/maps/?q=${project.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                                    {project.project.Location}
+                                  </a>
+                                  :
+                                  'Remote'
+                                }
+                              </div>
+                              : null
                             }
                           </div>
-                          : null
+                        </Link>
+                        {project.Leader && project.Leader[fire.auth().currentUser.uid] ?
+                          <div style={{backgroundColor: '#e1f5fe', color: '#0288d1', padding: 16}}>
+                            <div style={{display: 'flex'}}>
+                              <Star color={'#0288d1'} style={{marginRight: 10}}/>
+                              Since you're the project leader, you get to make the decisions
+
+
+                            </div>
+                            <div style={{fontWeight: 700, paddingLeft: 34,
+                                paddingTop: 20,
+                                  display: 'block'}}>
+                              <div style={{paddingBottom: 20}}>
+                                When you're ready you can add everyone who's said they're interested.
+                              </div>
+                              <RaisedButton
+                                onClick={() => this.handleGroupSignUp(project.project)}
+                                labelStyle={{fontWeight: 700, letterSpacing: 0.6}}
+                                  label="We're ready, sign us up"/>
+                            </div>
+                          </div>
+                          :
+                          null
                         }
+
+
+
                       </div>
-                    </div>
-                    <Divider style={{marginTop: 20, marginBottom: 20}}/>
-                  </Link>
-                  :
-                  null
-                }
-              </div>
-            ))
-          }
+                      <Divider style={{marginTop: 20, marginBottom: 20}}/>
+                      </div>
+                    :
+                    null
+                  }
+                </div>
+              ))
+            }
+          </MediaQuery>
+          <MediaQuery maxDeviceWidth={700}>
+            {
+              this.state.projects.map((project) => (
+                <div>
+                  {project.project ?
+                    <div>
+                      <div style={{border: '1px solid rgb(221, 221, 221)', borderRadius: 6}}>
+                        <Link to={`/projects/p/${project.project._id}`}>
+                          <img src={changeImageAddress(project.project['Featured Image'], '500xauto')}
+                            style={{width: '100%', height: 180, objectFit: 'cover'}}/>
+                        </Link>
+                        <div style={{fontWeight: 700, fontSize: '26px', padding: 10, textAlign: 'left'}}>
+                          {project.project.Name}
+                        </div>
+                        <div style={{flex: 3, fontSize: '18px', fontWeight: 200, paddingLeft: 10,
+                        paddingTop: 10, textAlign:'left'}}>
+
+                        <InterestedAvatars members={this.props.members}
+                          Interested={project.Interested}/>
+                        </div>
+                        <div style={{display: 'flex'}}>
+
+
+                          <div style={{width: '100%', paddingLeft: 10, textAlign: 'left'}}>
+                            <div style={{flex: 3, fontSize: '18px', boxSizing: 'border-box',
+                              fontWeight: 200,
+                            paddingTop: 16, paddingBottom: 10}}>
+                              Are you interested?
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            paddingBottom: 10}}>
+                              <IconButton style={{padding: 0}}
+                                onClick={() => this.handleTick(project.project._id)}
+                                >
+                                <CleanTick
+                                  color={project.Interested && fire.auth().currentUser &&
+                                    project.Interested[fire.auth().currentUser.uid] === false ?
+                                    grey200 : '#3B9E74'
+                                  }
+                                  />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => this.handleCross(project.project._id)}
+                                 style={{padding: 0, marginLeft: 20}}>
+                                <Cross
+                                  color={project.Interested && fire.auth().currentUser &&
+                                    project.Interested[fire.auth().currentUser.uid] === true ?
+                                    grey200 : 'rgb(182,48,43)'
+                                  }
+                                  />
+                              </IconButton>
+                            </div>
+                          </div>
+
+                        </div>
+                        <Link to={`/projects/p/${project.project._id}`}>
+                          <div style={{
+                            backgroundColor: 'rgba(250,250,250,0.8)',  paddingLeft: 10,
+                            paddingTop: 20, paddingBottom: 20,
+                            textAlign: 'center'}}
+                            className='datetime-container'>
+                            {project.project['Start Time'] ?
+                            <div className='date-container' style={{display: 'flex', minWidth: 160}}>
+                              <div className='date-icon'>
+                                <CalendarIcon color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                              </div>
+                              <div>
+                                {project.project['Start Time'].toLocaleString('en-gb',
+                                  {weekday: 'long', month: 'long', day: 'numeric'})}
+                              </div>
+                            </div>
+                            : null}
+                            {project.project['Start Time'] ?
+                            <div className='time-container' style={{paddingTop: 6, display: 'flex',  minWidth: 140}}>
+                              <div className='time-icon'>
+                                <Clock color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                              </div>
+                              <div >
+                                {project.project['Start Time'].toLocaleString('en-gb',
+                                  {hour: '2-digit', minute: '2-digit'})} -
+                                  {project.project['End Time'].toLocaleString('en-gb',
+                                    {hour: '2-digit', minute: '2-digit'})}
+                              </div>
+                            </div>
+                            : null}
+
+
+                            {project.project.Location || project.project.Remote ?
+                              <div className='location-container' style={{paddingTop: 6,display: 'flex'}}>
+                                <div className='location-icon'>
+                                  <Place color={'black'} style={{height: 20, width: 20, marginRight: 10}}/>
+                                </div>
+                                {
+                                  project.project.Location ?
+                                  <a href={`https://www.google.com/maps/?q=${project.project.Location}`} target='_blank' rel='noopener' style={{color: '#65A1e7', textAlign: 'left'}}>
+                                    {project.project.Location}
+                                  </a>
+                                  :
+                                  'Remote'
+                                }
+                              </div>
+                              : null
+                            }
+                          </div>
+                        </Link>
+                        {project.Leader && project.Leader[fire.auth().currentUser.uid] ?
+                          <div style={{backgroundColor: '#e1f5fe', color: '#0288d1',
+                            textAlign: 'left', padding: 16}}>
+                            <div style={{display: 'flex'}}>
+                              <Star color={'#0288d1'} style={{marginRight: 10}}/>
+                              Since you're the project leader, you get to make the decisions
+
+
+                            </div>
+                            <div style={{fontWeight: 700, paddingLeft: 24,
+                                paddingTop: 20,
+                                  display: 'block'}}>
+                              <div style={{paddingBottom: 20}}>
+                                When you're ready you can add everyone who's said they're interested.
+                              </div>
+                              <RaisedButton
+                                onClick={() => this.handleGroupSignUp(project.project)}
+                                labelStyle={{fontWeight: 700, letterSpacing: 0.6}}
+                                  label="We're ready, sign us up"/>
+                            </div>
+                          </div>
+                          :
+                          null
+                        }
+
+
+
+                      </div>
+                      <Divider style={{marginTop: 20, marginBottom: 20}}/>
+                      </div>
+                    :
+                    null
+                  }
+                </div>
+              ))
+            }
+          </MediaQuery>
+
         </div>
       )
     }
@@ -275,20 +662,29 @@ export class GroupProjects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
+    console.log(this.props)
   }
 
   componentDidMount(props) {
-    var data = this.props.members
+    db.collection("Group").doc(this.props.groupId).collection("Projects").get()
+    .then((querySnapshot) => {
+      let data = []
+      querySnapshot.forEach((doc) => {
+        let elem = doc.data()
 
-    var projects = {}
-    data.forEach((member) => {
-      db.collection("Engagement").where("User", "==", member._id).get()
-      .then((engSnapshot) => {
-        engSnapshot.forEach((doc) => {
-          projects[doc.id] = doc.data()
-          this.setState({projects: projects})
+        db.collection("Project").doc(doc.id).get().then((project) => {
+          var projectData = project.data()
+          elem.project = projectData
+          if (new Date(projectData['End Time']) < new Date()) {
+            data.push(elem)
+
+          }
+
+          this.setState({projects: data})
         })
+        console.log(this.state.projects)
       })
+
     })
   }
 
@@ -310,7 +706,7 @@ export class GroupProjects extends React.Component {
               projectArray.map((project) => (
               <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
                 <EmbeddedProject style={{position: 'relative'}}
-                  noLogo={true} projectId={project.Project}/>
+                  noLogo={true} projectId={project.project._id}/>
               </div>
             ))
             : null
@@ -322,7 +718,7 @@ export class GroupProjects extends React.Component {
             projectArray.map((project) => (
             <div style={{padding: 16, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
               <EmbeddedProject style={{position: 'relative'}}
-                noLogo={true} projectId={project.Project}/>
+                noLogo={true} projectId={project.project._id}/>
             </div>
           ))
           : null
@@ -374,7 +770,8 @@ export class GroupMembers extends React.Component {
 export default class GroupPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {userIsMember: false, selected: 'projects', inkBarLeft: 20.2}
+    this.state = {userIsMember: false, selected: 'projects', inkBarLeft: 20.2,
+    modalOpen: false}
   }
 
   componentDidMount(props) {
@@ -481,6 +878,12 @@ export default class GroupPage extends React.Component {
 
     }
   }
+
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
+
 
   render() {
     var imageUrl
@@ -643,12 +1046,18 @@ export default class GroupPage extends React.Component {
                       <RaisedButton
                         labelStyle={styles.buttonLabel}
                         primary={true}
-                        onClick={this.handleJoinGroup}
+                        onClick={
+                          fire.auth().currentUser ?
+                          this.handleJoinGroup : () => this.setState({modalOpen: true})}
                         label='Join Group'/>
                     }
+                    <SignupModal
+                      open={this.state.modalOpen}
+                      changeOpen={this.handleModalChangeOpen}
+                    onComplete={this.handleJoinGroup}/>
                   </div>
                   <div style={{display: 'flex', flexWrap: 'wrap'}}>
-                    <div style={{minWidth: 500, width: '60%', marginRight: 100}}>
+                    <div style={{minWidth: 500, width: '70%', marginRight: 100}}>
                       <Tabs
                           tabItemContainerStyle={{height: '60px', backgroundColor: 'white', borderBottom: '1px solid #DDDDDD'}}
                           value={this.props.params.tab}
@@ -661,27 +1070,23 @@ export default class GroupPage extends React.Component {
                             onTouchTap={this.changeAnchorEl}
                             buttonStyle={this.state.selected === 'projects' ? styles.selectedTab : styles.tab}
                             value="projects">
+                            {this.state.members ?
                              <div>
-                               <UpcomingProjects groupId={this.props.params.groupId}/>
-                               {this.state.members ?
-                                 <GroupProjects members={this.state.members}/>
-                                 :
-                                 null
-                               }
+                               <UpcomingProjects members={this.state.members}
+                                 groupId={this.props.params.groupId}/>
+
+                                 <GroupProjects groupId={this.props.params.groupId}
+                                    members={this.state.members}/>
+
                              </div>
+                             :
+                             null
+                           }
                           </Tab>
-                          <Tab label="About"
-                            style={{width: 'auto', fontSize: '16px'}}
-                            onTouchTap={this.changeAnchorEl}
-                            buttonStyle={this.state.selected === 'about' ? styles.selectedTab : styles.tab}
-                            value="about">
-                             <div>
-                               La la la
-                             </div>
-                           </Tab>
+
                       </Tabs>
                     </div>
-                    <div style={{minWidth: 350, flex: 1}}>
+                    <div style={{minWidth: 250, flex: 1}}>
                       <div style={{paddingLeft: 16, borderBottom: '1px solid #DDDDDD', height: 60,
                             display: 'flex', alignItems: 'center', textAlign: 'left'}}>
                         <b>Reviews</b>
@@ -721,8 +1126,25 @@ export default class GroupPage extends React.Component {
                     <RaisedButton
                       labelStyle={styles.buttonLabel}
                       primary={true}
-                      onClick={this.handleJoinGroup}
+                      onClick={fire.auth().currentUser ?
+                      this.handleJoinGroup : () => this.setState({modalOpen: true})}
                       label='Join Group'/>
+                  }
+                  <SignupModal
+                    open={this.state.modalOpen}
+                    changeOpen={this.handleModalChangeOpen}
+                  onComplete={this.handleJoinGroup}/>
+                </div>
+
+                <div>
+                  <h2 style={{fontSize: '20px', textAlign: 'left'}}>
+                    Potential Projects
+                  </h2>
+                  {this.state.members ?
+                    <UpcomingProjects groupId={this.props.params.groupId}
+                      members={this.state.members}/>
+                    :
+                    null
                   }
                 </div>
 
@@ -742,7 +1164,8 @@ export default class GroupPage extends React.Component {
                     Group Projects
                   </h2>
                   {this.state.members ?
-                    <GroupProjects members={this.state.members}/>
+                    <GroupProjects groupId={this.props.params.groupId}
+                      members={this.state.members}/>
                     :
                     null
                   }
