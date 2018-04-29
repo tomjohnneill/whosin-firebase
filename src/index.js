@@ -95,6 +95,10 @@ const GoodThanks = asyncComponent(() =>
 const Sorry = asyncComponent(() =>
     import('./components/feedback/sorry.jsx').then(module => module.default)
 )
+const NewsletterData = asyncComponent(() =>
+    import('./components/admin/newsletter.jsx').then(module => module.default)
+)
+
 
 const rootElement = document.getElementById('root');
 
@@ -106,6 +110,7 @@ const rootElement = document.getElementById('root');
       <Route path='/admin/emailtemplate' component={EmailTemplateFrontPage}/>
       <Route path='/admin/emailtemplate/new' component={EmailTemplateBuilder}/>
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
+      <Route path='/admin/newsletter' component={NewsletterData}/>
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/casestudy' component={CaseStudy}/>
