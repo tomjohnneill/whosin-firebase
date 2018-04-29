@@ -38,13 +38,24 @@ export default class EmailTemplateBuilder extends React.Component {
       if (this.props.params.templateId) {
         this.editor.exportHtml(data => {
           const { design, html } = data
-          db.collection("emailTemplates").doc(this.props.params.templateId).update({
-            html: html,
-            design: JSON.stringify(design),
-            name: this.state.name,
-            mergeTags: this.state.mergeTags,
-          })
-          .then(() => this.setState({name: null}) )
+          if (this.state.name) {
+            db.collection("emailTemplates").doc(this.props.params.templateId).update({
+              html: html,
+              design: JSON.stringify(design),
+              name: this.state.name,
+              mergeTags: this.state.mergeTags,
+            }).then(() => this.setState({name: null}) )
+          } else {
+            db.collection("emailTemplates").doc(this.props.params.templateId).update({
+              html: html,
+              design: JSON.stringify(design),
+              mergeTags: this.state.mergeTags,
+            })
+            .then(() => this.setState({name: null}) )
+          }
+
+
+
       })
       } else {
         this.editor.exportHtml(data => {
