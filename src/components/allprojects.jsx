@@ -235,6 +235,7 @@ export default class AllProjects extends React.Component {
                 successful.push(hit)
               }
             })
+            console.log(responses.hits)
             this.setState({projects: responses.hits,
               upcoming: upcoming, successful: successful,
               loading: false});
@@ -276,6 +277,12 @@ export default class AllProjects extends React.Component {
     if (this.state.projects) {
       console.log(this.state.projects)
     }
+    if (this.state.upcoming) {
+      this.state.upcoming.map((project) => {
+        console.log(project)
+      })
+    }
+
     return (
       <div>
         <MediaQuery minDeviceWidth={700}>
@@ -306,17 +313,13 @@ export default class AllProjects extends React.Component {
               :
               this.state.projects ?
 
-              <Masonry
-                breakpointCols={3}
-                style={{paddingRight: 100, paddingLeft: 100}}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
+              <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: 100, paddingRight:100}}>
                 {this.state.upcoming.map((project) => (
-                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '33%', position: 'relative'}}>
                     <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
                   </div>
                 ))}
-              </Masonry>
+              </div>
 
               :
               null
@@ -326,17 +329,13 @@ export default class AllProjects extends React.Component {
                 Successful Projects</h1>
           {
               this.state.successful ?
-              <Masonry
-                breakpointCols={3}
-                style={{paddingRight: 100, paddingLeft: 100}}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
+              <div style={{display: 'flex', flexWrap: 'wrap', paddingLeft: 100, paddingRight:100}}>
                 {this.state.successful.map((project) => (
-                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '100%', position: 'relative'}}>
+                  <div style={{padding: 20, minWidth: 280, boxSizing: 'border-box', width: '33%', position: 'relative'}}>
                     <EmbeddedProject style={{position: 'relative'}} noLogo={true} project={project}/>
                   </div>
                 ))}
-              </Masonry>
+              </div>
               :
               null
             }

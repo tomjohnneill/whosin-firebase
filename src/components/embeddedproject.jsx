@@ -129,7 +129,7 @@ export default class EmbeddedProject extends React.Component {
         project['Start Time'] = new Date(project['Start Time'])
         project['End Time'] = new Date(project['End Time'])
       }
-      this.setState({project: nextProps.project, loading: false})
+      this.setState({project: project, loading: false})
 
       if (project.Charity) {
         db.collection("Charity").doc(project.Charity.toString()).get().then((charityDoc) => {
@@ -148,6 +148,14 @@ export default class EmbeddedProject extends React.Component {
           .catch(error => console.log('Error', error))
         }
     }
+    else {
+      let project = this.props.project
+      if (typeof project['Start Time'] === 'string') {
+        project['Start Time'] = new Date(project['Start Time'])
+        project['End Time'] = new Date(project['End Time'])
+      }
+      this.setState({project: project, loading: false})
+    }
   }
 
   render() {
@@ -162,8 +170,6 @@ export default class EmbeddedProject extends React.Component {
       })
       average = count === 0 ? null : Math.round(total/count,1)
     }
-    console.log(this.state.project)
-    console.log(average)
     return (
       <div>
         {this.state.loading ?
