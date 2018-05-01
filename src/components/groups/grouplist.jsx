@@ -51,7 +51,7 @@ const styles = {
 export default class GroupList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {modalOpen: false, createOpen: false, users: []}
+    this.state = {modalOpen: false, createOpen: false, users: [], emails: []}
   }
 
   componentDidMount(props) {
@@ -142,11 +142,28 @@ export default class GroupList extends React.Component {
     this.setState({users: users, searchText: ''})
   }
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      var emails = this.state.emails
+      if (!emails.includes(this.state.searchText)) {
+        emails.push(this.state.searchText)
+      }
+      this.setState({emails: emails, searchText: ''})
+    }
+  }
+
   removePerson = (userId, Name) => {
     var users = this.state.users
     var index = users.indexOf({id: userId, Name: Name})
     users.splice(index, 1)
     this.setState({users: users})
+  }
+
+  removeEmail = (email) => {
+    var emails = this.state.emails
+    var index = emails.indexOf(email)
+    emails.splice(index, 1)
+    this.setState({emails: emails})
   }
 
   handleSaveGroup = () => {
@@ -170,14 +187,24 @@ export default class GroupList extends React.Component {
           Name: userName
         })
         var batch = db.batch();
-
+        var groupRef = db.collection("Group").doc(this.state.groupId)
         users.forEach((user) => {
           var memberRef = db.collection("Group").doc(this.state.groupId).collection("Members").doc(user.id)
           batch.set(memberRef, {
             Name: user.Name,
             'Volunteer Picture': user['Volunteer Picture'] ? user['Volunteer Picture'] : null
           })
+          batch.update(groupRef, {
+            ['members.' + user.id] : true
+          })
         })
+
+        if (this.state.emails) {
+          this.state.emails.forEach((email) => {
+            batch.update(groupRef, {
+              ['invites.' + email.replace(".", "SJR2pDzRb9XHFdZ")] : true
+            })
+        })}
         batch.commit().then(() => {
             browserHistory.push(`/groups/${this.state.groupId}`)
         })
@@ -196,6 +223,8 @@ export default class GroupList extends React.Component {
   handleModalChangeOpen = (e) => {
     this.setState({modalOpen: false})
   }
+
+
 
   render() {
     console.log(this.state.whosinPeople)
@@ -257,7 +286,8 @@ export default class GroupList extends React.Component {
                   style={{display: 'flex', alignItems: 'left', paddingLeft: 20, paddingBottom: 20}}
                   >
                   <RaisedButton
-                    onClick={this.handleMobileCreateGroup}
+                    onClick={fire.auth().currentUser ? this.handleMobileCreateGroup
+                      : () => this.setState({modalOpen: true})}
                     labelStyle={styles.buttonLabel}
                     icon={<Add/>}
                     secondary={true}
@@ -385,13 +415,21 @@ export default class GroupList extends React.Component {
           Add some people you've met before
         </div>
         {
-          this.state.users && this.state.users.length > 0 ?
+          (this.state.emails && this.state.emails.length > 0) ||
+          (this.state.users && this.state.users.length > 0) ?
           <div style={{display: 'flex', flexWrap: 'wrap', paddingBottom: 10}}>
             {this.state.users.map((user) => (
-              <Chip style={{marginRight: 4, marginLeft: 4}}
+              <Chip style={{marginRight: 4, marginLeft: 4, marginTop: 2}}
                 onRequestDelete={() => this.removePerson(user.id, user.Name)}
                 >
                 {user.Name}
+              </Chip>
+            ))}
+            {this.state.emails.map((email) => (
+              <Chip style={{marginRight: 4, marginLeft: 4, marginTop: 2}}
+                onRequestDelete={() => this.removeEmail(email)}
+                >
+                {email}
               </Chip>
             ))}
           </div>
@@ -404,8 +442,9 @@ export default class GroupList extends React.Component {
           ref={el => { this.el = el; }}
           value={this.state.searchText}
           style={styles.outline}
-          hintText='Type some names'
+          hintText='Type some names or emails'
           hintStyle={styles.hintStyle}
+          onKeyPress={this.handleKeyPress}
           onChange={this.handleUpdateInput}
           inputStyle={styles.inputStyle}
           />

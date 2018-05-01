@@ -81,15 +81,15 @@ exports.projectApprovedEmail = functions.firestore
   .onUpdate((change, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = change.after.data();
-    var previousValue = change.before.data();
+    let newValue = change.after.data();
+    let previousValue = change.before.data();
     if (newValue.Approved && !previousValue.Approved) {
       newValue._id = change.after.id;
       db.collection("User").doc(newValue.Creator).get().then((userDoc) => {
-        var user = userDoc.data()
+        let user = userDoc.data()
         console.log(user)
         db.collection("emailTemplates").doc('guUfm7g6ee5dCeRwxctp').get().then((emailDoc) => {
-          var email = emailDoc.data().html
+          let email = emailDoc.data().html
           email = email.replace("{{projectUrl}}", `https://whosin.io/projects/p/${newValue._id}`)
           email = email.replace(/{{ Name }}/g, user.Name.replace(/ .*/,''))
           email = email.replace(/{{ projectName }}/g, newValue.Name)
@@ -109,6 +109,82 @@ exports.projectApprovedEmail = functions.firestore
     }
     return (null)
 });
+
+sendGroupInviteEmailToExistingUser = (key, group, uid) => {
+
+    db.collection("User").doc(key).get().then((userDoc) => {
+      let userData = userDoc.data()
+      db.collection("emailTemplates").doc("jCpsFOWCV0NRQgCcer9e").get().then((emailDoc) => {
+        let email = emailDoc.data().html
+        var namesorted =  email.replace("{{firstName}}", userData.Name.replace(/ .*/,''))
+        var groupsorted = namesorted.replace("{{ groupName }}", group.Name)
+        var urlsorted = groupsorted.replace("{{groupUrl}}", `https://whosin.io/groups/${group._id}`)
+        let data = {
+            from: "Tom <tom@whosin.io>",
+            subject: `You've been invited to join ${group.Name}`,
+            html: urlsorted,
+            'h:Reply-To': 'tom@whosin.io',
+            to: userData.Email
+          }
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body)
+          })
+      })
+  })
+  return (null)
+}
+
+sendGroupInviteEmailToEmailAddress = (emailAddress, group) => {
+  console.log(group)
+    db.collection("emailTemplates").doc("jCpsFOWCV0NRQgCcer9e").get().then((emailDoc) => {
+      let email = emailDoc.data().html
+
+      let namesorted = email.replace(" {{firstName}}", '')
+      let groupsorted = namesorted.replace("{{ groupName }}", `"${group.Name}"`)
+      let urlsorted = groupsorted.replace("{{groupUrl}}", `https://whosin.io/groups/${group._id}`)
+
+      let data = {
+          from: "Tom <tom@whosin.io>",
+          subject: `You've been invited to join ${group.Name}`,
+          html: urlsorted,
+          'h:Reply-To': 'tom@whosin.io',
+          to: emailAddress
+        }
+        mailgun.messages().send(data, function (error, body) {
+          console.log(body)
+        })
+    })
+    return (null)
+}
+
+exports.queueInviteToGroupEmails = functions.firestore
+  .document('Group/{groupId}')
+  .onWrite((change, context) => {
+    var newValue = change.after.data();
+    newValue._id = context.params.groupId
+    var previousValue = change.before.data();
+    if (!previousValue || newValue.members !== previousValue.members ) {
+      if (newValue.members) {
+        Object.keys(newValue.members).forEach((key) => {
+          if (!previousValue.members || (newValue.members[key] === true && !previousValue.members[key])) {
+            let user = key
+            sendGroupInviteEmailToExistingUser(user, newValue)
+          }
+        });
+      }
+    }
+    if (!previousValue || newValue.invites !== previousValue.invites) {
+      if (newValue.invites) {
+        Object.keys(newValue.invites).forEach((key) => {
+          if (!previousValue.invites || (newValue.invites[key] === true && !previousValue.invites[key])) {
+            let email = key
+            sendGroupInviteEmailToEmailAddress(email.replace("SJR2pDzRb9XHFdZ", "."), newValue)
+          }
+        });
+      }
+    }
+    return (null)
+  })
 
 
 exports.peopleHaveSignedUpEmail = functions.firestore

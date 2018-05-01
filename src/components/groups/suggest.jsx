@@ -70,29 +70,57 @@ export default class Suggest extends React.Component{
         <div style={{marginTop: 20, padding: 10, background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
         borderLeft: '3px solid rgb(33, 150, 243)', borderRadius: 6}}>
           <h2 style={{textAlign: 'left', marginBottom: 6,paddingLeft: 10, marginTop: 0}}>
-            Don't be lonely
+            Want to go with friends?
           </h2>
-            <SelectField
+          {
+            this.state.groups.length === 0 ?
+            <div style={{paddingTop: 10}}>
+              <RaisedButton
+                labelStyle={{fontWeight: 'bold', letterSpacing: '0.6px'}}
+                secondary={true}
+                label='Create a group'
+                onClick={() => browserHistory.push('/groups')}/>
+            </div>
+            :
+            <div>
+              <SelectField
 
-              value={this.state.value}
-              onChange={this.handleChange}
-            >
-              {
-                this.state.groups.map((group) => (
-                  <MenuItem value={group._id} primaryText={group.Name} />
-                ))
-              }
-            </SelectField>
-          <RaisedButton
-            labelStyle={{fontWeight: 'bold', letterSpacing: '0.6px'}}
-            secondary={true}
-            label='Suggest to Group'
-            onClick={this.handleSuggest}/>
+                value={this.state.value}
+                onChange={this.handleChange}
+              >
+                {
+                  this.state.groups.map((group) => (
+                    <MenuItem value={group._id} primaryText={group.Name} />
+                  ))
+                }
+              </SelectField>
+              <RaisedButton
+              labelStyle={{fontWeight: 'bold', letterSpacing: '0.6px'}}
+              secondary={true}
+              label='Suggest to Group'
+              onClick={this.handleSuggest}/>
+            </div>
+          }
+
         </div>
       )
     } else {
       return (
-        <div/>
+        <div style={{marginTop: 20, padding: 10, background: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(247, 247, 247))',
+        borderLeft: '3px solid rgb(33, 150, 243)', borderRadius: 6}}>
+          <h2 style={{textAlign: 'left', marginBottom: 6,paddingLeft: 10, marginTop: 0}}>
+            Want to go with friends?
+          </h2>
+
+            <div style={{paddingTop: 10}}>
+              <RaisedButton
+                labelStyle={{fontWeight: 'bold', letterSpacing: '0.6px'}}
+                secondary={true}
+                label='Create a group'
+                onClick={() => browserHistory.push('/groups')}/>
+            </div>
+          </div>
+
       )
     }
 

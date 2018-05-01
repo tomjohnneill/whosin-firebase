@@ -685,7 +685,7 @@ export default class CaseStudy extends React.Component {
               </MediaQuery>
               <MediaQuery minDeviceWidth={700}>
 
-                {this.state.project.Hashtag ?
+                {this.state.project.Hashtag && 1 === 2 ?
                 <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
                   <h2 style={{fontSize: '32px'}}>How many people were interested?</h2>
                   <div style={{height: 400, fontWeight: 700, fontSize: '24px', textAlign: 'center',

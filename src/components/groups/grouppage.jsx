@@ -6,6 +6,7 @@ import {Link, browserHistory} from 'react-router';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {CalendarIcon, Place, Clock, World, Tick, Cross, CleanTick} from '../icons.jsx';
 import EmbeddedProject from '../embeddedproject.jsx';
+import Share from '../share.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Masonry from 'react-masonry-css';
@@ -289,47 +290,57 @@ export class UpcomingProjects extends React.Component {
   }
 
   handleTick = (_id) => {
-    var projects = this.state.projects
-    let updatedProjects = []
+    if (fire.auth().currentUser) {
+      var projects = this.state.projects
+      let updatedProjects = []
 
-    projects.forEach((project) => {
-      if (project.project._id === _id) {
-        console.log('Set as Interested')
-        project.Interested = {}
-        project.Interested[fire.auth().currentUser.uid] = true
-      }
-      updatedProjects.push(project)
-    })
-    this.setState({
-        projects: updatedProjects
-    })
-    db.collection("Group").doc(this.props.groupId).collection("Projects")
-    .doc(_id).update({
-        ['Interested.' + fire.auth().currentUser.uid]: true
-    })
+      projects.forEach((project) => {
+        if (project.project._id === _id) {
+          console.log('Set as Interested')
+          project.Interested = {}
+          project.Interested[fire.auth().currentUser.uid] = true
+        }
+        updatedProjects.push(project)
+      })
+      this.setState({
+          projects: updatedProjects
+      })
+      db.collection("Group").doc(this.props.groupId).collection("Projects")
+      .doc(_id).update({
+          ['Interested.' + fire.auth().currentUser.uid]: true
+      })
+    }
+    else {
+      this.props.setModalOpen()
+    }
   }
 
   handleCross = (_id) => {
-    console.log(this.props.groupId)
-    console.log(_id)
-    var projects = this.state.projects
-    let updatedProjects = []
+    if (fire.auth().currentUser) {
+      console.log(this.props.groupId)
+      console.log(_id)
+      var projects = this.state.projects
+      let updatedProjects = []
 
-    projects.forEach((project) => {
-      if (project.project._id === _id) {
-        console.log('Set as Interested')
-        project.Interested = {}
-        project.Interested[fire.auth().currentUser.uid] = false
-      }
-      updatedProjects.push(project)
-    })
-    this.setState({
-        projects: updatedProjects
-    })
-    db.collection("Group").doc(this.props.groupId).collection("Projects")
-    .doc(_id).update({
-        ['Interested.' + fire.auth().currentUser.uid]: false
-    })
+      projects.forEach((project) => {
+        if (project.project._id === _id) {
+          console.log('Set as Interested')
+          project.Interested = {}
+          project.Interested[fire.auth().currentUser.uid] = false
+        }
+        updatedProjects.push(project)
+      })
+      this.setState({
+          projects: updatedProjects
+      })
+      db.collection("Group").doc(this.props.groupId).collection("Projects")
+      .doc(_id).update({
+          ['Interested.' + fire.auth().currentUser.uid]: false
+      })
+    }
+    else {
+      this.props.setModalOpen()
+    }
   }
 
   handleGroupSignUp = (project) => {
@@ -385,7 +396,9 @@ export class UpcomingProjects extends React.Component {
                             <div style={{fontWeight: 700, fontSize: '26px'}}>
                               {project.project.Name}
                             </div>
-                            <InterestedAvatars members={this.props.members}
+                            <InterestedAvatars
+                              setModalOpen={this.props.setModalOpen}
+                              members={this.props.members}
                               Interested={project.Interested}/>
                           </div>
                           <div style={{width: 170}}>
@@ -468,7 +481,7 @@ export class UpcomingProjects extends React.Component {
                             }
                           </div>
                         </Link>
-                        {project.Leader && project.Leader[fire.auth().currentUser.uid] ?
+                        {project.Leader && fire.auth().currentUser && project.Leader[fire.auth().currentUser.uid] ?
                           <div style={{backgroundColor: '#e1f5fe', color: '#0288d1', padding: 16}}>
                             <div style={{display: 'flex'}}>
                               <Star color={'#0288d1'} style={{marginRight: 10}}/>
@@ -522,6 +535,7 @@ export class UpcomingProjects extends React.Component {
                         paddingTop: 10, textAlign:'left'}}>
 
                         <InterestedAvatars members={this.props.members}
+                          setModalOpen={this.props.setModalOpen}
                           Interested={project.Interested}/>
                         </div>
                         <div style={{display: 'flex'}}>
@@ -609,7 +623,8 @@ export class UpcomingProjects extends React.Component {
                             }
                           </div>
                         </Link>
-                        {project.Leader && project.Leader[fire.auth().currentUser.uid] ?
+                        {project.Leader && fire.auth().currentUser &&
+                          project.Leader[fire.auth().currentUser.uid] ?
                           <div style={{backgroundColor: '#e1f5fe', color: '#0288d1',
                             textAlign: 'left', padding: 16}}>
                             <div style={{display: 'flex'}}>
@@ -1073,6 +1088,7 @@ export default class GroupPage extends React.Component {
                             {this.state.members ?
                              <div>
                                <UpcomingProjects members={this.state.members}
+                                 setModalOpen={() => this.setState({modalOpen: true})}
                                  groupId={this.props.params.groupId}/>
 
                                  <GroupProjects groupId={this.props.params.groupId}
@@ -1089,13 +1105,27 @@ export default class GroupPage extends React.Component {
                     <div style={{minWidth: 250, flex: 1}}>
                       <div style={{paddingLeft: 16, borderBottom: '1px solid #DDDDDD', height: 60,
                             display: 'flex', alignItems: 'center', textAlign: 'left'}}>
-                        <b>Reviews</b>
+                        <b>Invite some more people</b>
                       </div>
+                      <Share
+                        buttonClicked={() => {}}
+                        Name={this.state.Name ? this.state.Name : ''}
+                        url={window.location.href}
+                        smsbody={encodeURIComponent("Join my group on Who's In?: " + window.location.href )}
+                        emailbody={encodeURIComponent("Join my group on Who's In?: " +  window.location.href )}
+                        />
+                      <div style={{paddingLeft: 16, paddingTop: 40, borderBottom: '1px solid #DDDDDD', height: 60,
+                              display: 'flex', alignItems: 'center', textAlign: 'left'}}>
+
+
+                          <b>Reviews</b>
+                        </div>
                         {this.state.members ?
                           <GroupReviews members={this.state.members}/>
                           :
                           null
                         }
+
                       <div>
 
                       </div>
@@ -1146,6 +1176,19 @@ export default class GroupPage extends React.Component {
                     :
                     null
                   }
+                </div>
+
+                <div>
+                  <h2 style={{fontSize: '20px', textAlign: 'left'}}>
+                    Invite some more people
+                  </h2>
+                  <Share
+                    buttonClicked={() => {}}
+                    Name={this.state.Name ? this.state.Name : ''}
+                    url={window.location.href }
+                    smsbody={encodeURIComponent("Join my group on Who's In?: " + window.location.href)}
+                    emailbody={encodeURIComponent("Join my group on Who's In?: " +  window.location.href )}
+                    />
                 </div>
 
                 <div>

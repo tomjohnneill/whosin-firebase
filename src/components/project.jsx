@@ -323,7 +323,7 @@ export default class Project extends React.Component {
   handleModal = (e) => {
     console.log('handle modal fired')
     if (fire.auth().currentUser) {
-      if (fire.auth().currentUser.phoneNumber) {
+      if (fire.auth().currentUser.phoneNumber || 1 === 1) {
         if (this.state.questions) {
           browserHistory.push(window.location.href + '/questions')
         }
@@ -686,7 +686,7 @@ export default class Project extends React.Component {
               <li>
 
                 <WhosIn project={this.state.project}/>
-                  
+
               </li>
             </div>
 

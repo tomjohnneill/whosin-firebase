@@ -40,7 +40,7 @@ const styles = {
 export default class CreateGroup extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {users: [], emails: []}
   }
 
   componentDidMount(props) {
