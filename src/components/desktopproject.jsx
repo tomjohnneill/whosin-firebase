@@ -660,7 +660,7 @@ import fire from '../fire';
                     null}
                 <div className='container' style={{width: '100%', paddingRight: 100, paddingTop: 30,
                     paddingLeft: 100, display: 'flex', boxSizing: 'border-box'}}>
-                  <div className='story-etc' style={{flex: 1}}>
+                  <div className='story-etc' style={{flex: 1, width: '50%'}}>
                     {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
                       <div style={{display: 'flex', float: 'right'}}>
                         <FlatButton

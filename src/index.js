@@ -137,6 +137,7 @@ const rootElement = document.getElementById('root');
       <Route path='/groups' component={GroupList}/>
       <Route path='/groups/create' component={CreateGroup}/>
       <Route path='/groups/:groupId' component={GroupPage}/>
+      <Route path='/project/' component={Project}/>
       <Route path='/projects/:pledge/:_id' component={Project}/>
       <Route path='/projects/:pledge/:_id/group/:groupId' component={Project}/>
       <Route path='/projects/:pledge/:_id/crop-edit' component={ImageCrop}/>

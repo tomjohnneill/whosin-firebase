@@ -171,8 +171,7 @@ export default  class SignupModal extends React.Component {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
-            this.setState({phoneClicked: false})
-            this.setState({type: 'enterCode'})
+            this.setState({phoneClicked: false, type: 'enterCode'})
           }).catch(function (error) {
             alert(error)
             // Error; SMS not sent
@@ -222,6 +221,10 @@ export default  class SignupModal extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.nameInput) {
+      this.nameInput.focus()
+    }
+
     if (this.props.type !== prevProps.type) {
       this.setState({type: this.props.type})
     }
@@ -263,6 +266,7 @@ export default  class SignupModal extends React.Component {
                       inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                         paddingLeft: '12px',  boxSizing: 'border-box'}}
                       underlineShow={false}
+                      ref={input => input && input.focus()}
                       hintText={'Name'}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='name'
@@ -276,6 +280,7 @@ export default  class SignupModal extends React.Component {
                         paddingLeft: '12px',  boxSizing: 'border-box'}}
                       underlineShow={false}
                       hintText={'Email'}
+                      value={this.state.email}
                       onChange={this.handleEmail}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='email'
@@ -352,6 +357,8 @@ export default  class SignupModal extends React.Component {
                         paddingLeft: '12px',  boxSizing: 'border-box'}}
                       underlineShow={false}
                       hintText={'Email'}
+                      ref={input => input && input.focus()}
+                      value={this.state.email}
                       onChange={this.handleEmail}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='email'
@@ -427,6 +434,7 @@ export default  class SignupModal extends React.Component {
               <h2>We've sent you a code, enter it here</h2>
               <TextField style={{marginBottom: 10}}
                 value={this.state.confirmationCode}
+                ref={input => input && input.focus()}
                 key='code'
                 onChange={(e,nv) => this.setState({confirmationCode: nv})} hintText='Confirmation code'/>
 
@@ -436,6 +444,19 @@ export default  class SignupModal extends React.Component {
                 labelStyle={{ height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                      letterSpacing: '0.6px', fontWeight: 'bold'}}
                 primary={true} onClick={this.handleConfirmPhone} label='Confirm'/>
+
+
+              <div style={{paddingTop: 16}}>
+                    <b
+                    style={{cursor: 'pointer'}}
+                    onClick={
+                      () => this.setState({type: 'phone'})
+                    }
+                    >Didn't get a code?</b>
+                  </div>
+
+
+
             </div>
 
           }
@@ -483,6 +504,7 @@ export default  class SignupModal extends React.Component {
                       paddingLeft: '12px',  boxSizing: 'border-box'}}
                     underlineShow={false}
                     hintText={'Email'}
+                    value={this.state.email}
                     onChange={this.handleEmail}
                     hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                     key='email'
@@ -541,6 +563,7 @@ export default  class SignupModal extends React.Component {
                       paddingLeft: '12px',  boxSizing: 'border-box'}}
                     underlineShow={false}
                     hintText={'Email'}
+                    value={this.state.email}
                     onChange={this.handleEmail}
                     hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                     key='email'

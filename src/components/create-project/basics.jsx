@@ -35,9 +35,29 @@ const styles = {
       },
 }
 
-var categories = ['Environment', 'Refugees', 'Equality', 'Poverty', 'Education', 'Healthcare',
-                    'Disabilities', 'Young People', 'Old People', 'Isolation', 'Animals', 'Outdoor',
-                    'Mental Health']
+var categories = ["Environment",
+"Refugees",
+"Equality",
+"Poverty",
+"Education",
+"Healthcare",
+"Disabilities",
+"Young people",
+"Old people",
+"Loneliness",
+"Animals",
+"Mental Health",
+"Homelessness",
+"Democracy",
+"Technology",
+"Journalism",
+"Conservation",
+"Arts and culture",
+"Women",
+"LGBT+",
+"Human rights",
+"Justice"
+]
 
 function disableDates(date) {
 

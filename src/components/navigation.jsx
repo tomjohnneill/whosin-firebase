@@ -244,7 +244,7 @@ export default class Navigation extends React.Component {
 
   goToAndClose = (url) => {
     this.setState({drawerOpen: false})
-    browserHistory.push(url)
+
   }
 
   render() {
@@ -277,39 +277,48 @@ export default class Navigation extends React.Component {
 
                             <MediaQuery minDeviceWidth = {700}>
                               {!window.location.pathname.includes('create-project') ?
-                                <div style={{display: 'flex'}}>
-                                  <div style={{
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
-                                    onTouchTap={() => browserHistory.push('/why')}
-                                    >
-                                    Why start a project?
-                                  </div>
-                                  <div style={{
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
-                                    onTouchTap={() => browserHistory.push('/about')}
-                                    >
-                                    About
-                                  </div>
-                                  <div style={{
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
-                                    onTouchTap={() => browserHistory.push('/groups')}
-                                    >
-                                    Groups
-                                  </div>
-                                  <div style={{
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
-                                    onTouchTap={() => browserHistory.push('/projects')}
-                                    >
-                                    Projects
-                                  </div>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                  <Link style={{height: '100%'}} to='/why'>
+                                    <div style={{
+                                      cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
+                                      onTouchTap={() => browserHistory.push('/why')}
+                                      >
+                                      Why start a project?
+                                    </div>
+                                  </Link>
+                                  <Link to='/about'>
+                                    <div style={{
+                                      cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
+                                      onTouchTap={() => browserHistory.push('/about')}
+                                      >
+                                      About
+                                    </div>
+                                  </Link>
+                                  <Link to='/groups'>
+                                    <div style={{
+                                      cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
+                                      onTouchTap={() => browserHistory.push('/groups')}
+                                      >
+                                      Groups
+                                    </div>
+                                  </Link>
+                                  <Link to='/projects'>
+                                    <div style={{
+                                      cursor: 'pointer', display: 'flex', alignItems: 'center', paddingRight:25}}
+                                      onTouchTap={() => browserHistory.push('/projects')}
+                                      >
+                                      Projects
+                                    </div>
+                                  </Link>
 
-                                <RaisedButton
-                                  style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
-                                  buttonStyle={{height: '36px'}}
-                                   labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center',
-                                        letterSpacing: '0.6px', fontWeight: 'bold'}}
-                                  labelClassName
-                                   label={<span className='flexthis'>Start a Project</span>} onTouchTap={this.handleCreateProject}/>
+                                    <RaisedButton
+                                      style={{height: '36px', marginRight: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                                      buttonStyle={{height: '36px'}}
+                                       labelStyle={{height: '36px', display: 'inline-flex', alignItems: 'center',
+                                            letterSpacing: '0.6px', fontWeight: 'bold'}}
+                                      labelClassName
+                                       label={<span className='flexthis'>Start a Project</span>} onTouchTap={this.handleCreateProject}/>
+                                   
                                </div>
                                :
                                null}
@@ -395,11 +404,21 @@ export default class Navigation extends React.Component {
                 who's in?
               </span>
             </div>
-            <MenuItem onClick={() => this.goToAndClose('/about')}>About</MenuItem>
-            <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
-            <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
-            <MenuItem onClick={() => this.goToAndClose('/groups')}>Groups</MenuItem>
-            <MenuItem onClick={() => this.goToAndClose('/create-project/0')}>Start a project</MenuItem>
+            <Link to='/about'>
+              <MenuItem onClick={() => this.goToAndClose('/about')}>About</MenuItem>
+            </Link>
+            <Link to='/why'>
+              <MenuItem onClick={() => this.goToAndClose('/why')}>Why start a project?</MenuItem>
+            </Link>
+            <Link to='/projects'>
+              <MenuItem onClick={() => this.goToAndClose('/projects')}>Projects</MenuItem>
+            </Link>
+            <Link to='/groups'>
+              <MenuItem onClick={() => this.goToAndClose('/groups')}>Groups</MenuItem>
+            </Link>
+            <Link to='/create-project/0' >
+              <MenuItem onClick={this.handleCreateProject}>Start a project</MenuItem>
+            </Link>
             <MenuItem onClick={this.handleSignOut}>
               Sign out</MenuItem>
           </Drawer>

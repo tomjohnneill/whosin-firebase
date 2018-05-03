@@ -170,7 +170,8 @@ export default class OrganisationLookup extends React.Component{
         var charity = charityDoc.data()
         this.setState({
           loading: false,
-          facebook: charity.Facebook,
+          facebook: charity.Facebook && charity.Facebook.includes('https://www.facebook.com/') ?
+                charity.Facebook.replace('https://www.facebook.com/', '') : charity.Facebook,
           name: charity.Name,
           activities: charity.Description,
           website: charity.Website,
@@ -178,9 +179,10 @@ export default class OrganisationLookup extends React.Component{
           address: charity.Address,
           phone: charity.Phone,
           postcode: charity.Postcode,
-          charityNumber: charity['Charity Number'].toString(),
+          charityNumber: charity['Charity Number'] ? charity['Charity Number'].toString() : charity.id,
           instagram: charity.Instagram,
-          twitter: charity.Twitter,
+          twitter: charity.Twitter && charity.Twitter.includes('https://twitter.com/') ?
+                charity.Twitter.replace('https://twitter.com/', '') : charity.Twitter,
           loadedFromDatabase: true
         })
       })
@@ -550,7 +552,17 @@ export default class OrganisationLookup extends React.Component{
                       key='location2'
                       style={styles.whiteTextfield}/>
                     </div>
+
                   </div>
+                  <div style={{height: 20}}/>
+                  <RaisedButton label='Save and Continue'
+                    onTouchTap={this.handleNext}
+                    fullWidth={true}
+                    style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                    buttonStyle={{height: '36px'}}
+                     labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          letterSpacing: '0.6px', fontWeight: 'bold'}}
+                    />
 
                   <Dialog
                     modal={false}
@@ -833,7 +845,17 @@ export default class OrganisationLookup extends React.Component{
                       key='location2'
                       style={styles.whiteTextfield}/>
                     </div>
+
                   </div>
+                  <div style={{height: 20}}/>
+                  <RaisedButton label='Save and Continue'
+                    onTouchTap={this.handleNext}
+                    fullWidth={true}
+                    style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                    buttonStyle={{height: '36px'}}
+                     labelStyle={{height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          letterSpacing: '0.6px', fontWeight: 'bold'}}
+                    />
 
                   <Dialog
                     modal={false}

@@ -364,7 +364,37 @@ export default class AllProjects extends React.Component {
                              : null
                 }
                   <RegisterInterest />
+                    {this.state.loading ?
+                      <Loading/>
+                      :
+                      this.state.projects ?
+                      <div style={{display: 'flex', flexWrap: 'wrap',
+                      textAlign: 'left'}}>
+                        {this.state.successful.map((project) => (
+                          <div style={{paddingTop: 10, paddingBottom: 10, width: '100%', boxSizing: 'border-box'}}>
+                            <EmbeddedProject noLogo={true}
+                              project={project}
+                            />
+                          </div>
+                        ))}
                   </div>
+                  :
+                  null
+                }
+                <Divider style={{marginTop: 20}}/>
+                <h2>Get involved, start your own project</h2>
+                <div style={{height: 40, width: '100%', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center'}}>
+                    <Link to='/create-project/0'>
+                    <RaisedButton label='Start a Project'
+                      style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
+                        buttonStyle={{height: '36px'}}
+                         labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
+                              letterSpacing: '0.6px', fontWeight: 'bold'}}
+                      />
+                    </Link>
+                </div>
+              </div>
 
           </MediaQuery>
         </div>

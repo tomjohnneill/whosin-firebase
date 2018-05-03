@@ -340,7 +340,7 @@ export default class GroupList extends React.Component {
                         border: 'solid 1px #979797', borderRadius: 4,
                           cursor: 'pointer', boxSizing: 'border-box'}}>
                         {group['Featured Image'] ?
-                          <img src={group['Featured Image']}
+                          <img src={changeImageAddress(group['Featured Image'], '500xauto')}
                             style={{height: '70%', width: '100%', marginBottom: '-6px', objectFit: 'cover'}}
                             />
                           :

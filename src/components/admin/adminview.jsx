@@ -1106,9 +1106,9 @@ export default class AdminView extends React.Component {
 
           <Tab label="Leave Reviews"
             style={{width: 'auto', fontSize: '16px'}}
-              onTouchTap={this.changeAnchorEl.bind(this, 'userreview')}
-                buttonStyle={this.state.selected === 'userreview' ? styles.selectedTab : styles.tab}
-             value="userreview">
+              onTouchTap={this.changeAnchorEl.bind(this, 'leave-reviews')}
+                buttonStyle={this.state.selected === 'leave-reviews' ? styles.selectedTab : styles.tab}
+             value="leave-reviews">
              <UserReviewPage
                projectId={this.props.params._id}
 

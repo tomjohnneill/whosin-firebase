@@ -6,9 +6,21 @@ import DocumentTitle from 'react-document-title';
 import {  browserHistory } from 'react-router';
 import {orange500} from 'material-ui/styles/colors';
 import UploadPhoto from './uploadphoto.jsx';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
 import fire from '../../fire';
 
 let db = fire.firestore()
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline','strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image', 'video'],
+      ['clean']
+    ]
+  }
 
 const styles = {
   textfield: {
@@ -60,9 +72,9 @@ class StoryForm extends React.Component {
     }
   }
 
-  handleSetStory = (e) => {
-    localStorage.setItem('story', e.target.value)
-    this.setState({story: e.target.value})
+  handleSetStory = (value) => {
+    localStorage.setItem('story', value)
+    this.setState({story: value})
   }
 
   handleSetSummary = (e) => {
@@ -169,21 +181,16 @@ class StoryForm extends React.Component {
 
         <div style={{width: '100%',  paddingBottom: '32px', boxSizing: 'border-box'}}>
           <p style={styles.header}>
-            Project Description
+            Tell your story
           </p>
-          <TextField fullWidth={true}
-            inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-              paddingLeft: '12px',  boxSizing: 'border-box'}}
-            underlineShow={false}
-            hintText={'Use your project description to share more about what you’re trying to do. It’s up to you to make the case for your project.'}
-            multiLine={true}
-
+          <ReactQuill
+            style={{fontFamily: 'Nunito'}}
+            modules={modules}
             value={this.state.story}
-            onChange={this.handleSetStory}
-            rows={5}
-            hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
-            key='date'/>
+              onChange={this.handleSetStory} />
+
         </div>
+
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
             labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
@@ -208,11 +215,11 @@ export default class Story extends React.Component{
       <div>
         <MediaQuery minDeviceWidth={700}>
           <div style={{display: 'flex', paddingLeft: '100px', paddingTop: '50px'}}>
-            <div style={{width: '500px', display: 'flex'
+            <div style={{width: '750px', display: 'flex'
               , justifyContent: 'center'}} className='basics-container'>
               <StoryForm edit={this.props.edit}/>
             </div>
-            <div style={{flex: 1, boxSizing: 'border-box', paddingLeft: '100px'}} className='basics-image'>
+            <div style={{flex: 1, boxSizing: 'border-box', paddingLeft: '100px', paddingRight: '100px'}} className='basics-image'>
               <UploadPhoto changeParentState={() => this.setState({pictureUploaded: true})}/>
               <div style={{ textAlign: 'left'}}>
                 Don't have a photo to hand? We've collected some nice free ones

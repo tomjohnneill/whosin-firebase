@@ -13,9 +13,9 @@ const styles = {
     borderRadius: '50%',
     border: '2px solid ' + grey200,
     color: grey500,
-    width: 36,
+    width: 24,
     fontWeight: 700,
-    height: 36,
+    height: 24,
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -25,9 +25,9 @@ const styles = {
     borderRadius: '50%',
     border: '2px solid rgb(182,48,43)',
     color: 'white',
-    width: 36,
+    width: 24,
     fontWeight: 700,
-    height: 36,
+    height: 24,
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -38,9 +38,9 @@ const styles = {
     borderRadius: '50%',
     border: '2px solid ' + yellow500,
     color: 'inherit',
-    width: 36,
+    width: 24,
     fontWeight: 700,
-    height: 36,
+    height: 24,
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -51,9 +51,9 @@ const styles = {
     borderRadius: '50%',
     border: '2px solid ' + 'rgb(59,158,116)',
     color: 'white',
-    width: 36,
+    width: 24,
     fontWeight: 700,
-    height: 36,
+    height: 24,
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -267,26 +267,30 @@ export default class EmbeddedProject extends React.Component {
                 </div>
 
                 {average !== null ?
-                <div style={{textAlign: 'left', paddingTop: 10}}>
-                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                <div style={{display: 'flex', alignItems: 'center',
+                  justifyContent: 'space-between', textAlign: 'left', paddingTop: 16}}>
+                  <div style={{minWidth: '150px', color: '#65A1e7', textDecoration: 'underline', fontWeight: 700}}>
+                    Read all {count} reviews
+                  </div>
+                  <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       paddingLeft: 16, paddingRight: 16}}>
-                    <span onTouchTap={() => this.handleRating(1)}
+                    <span
                         style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : average < 3 ? styles.badRating :  styles.circle}>
                       1
                     </span>
-                    <span onTouchTap={() => this.handleRating(2)}
+                    <span
                         style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : average === 2 ? styles.badRating :  styles.circle}>
                       2
                     </span>
-                    <span onTouchTap={() => this.handleRating(3)}
+                    <span
                         style={average > 3 ? styles.goodRating : average === 3 ? styles.middleRating : styles.circle}>
                       3
                     </span>
-                    <span onTouchTap={() => this.handleRating(4)}
+                    <span
                         style={average > 3 ? styles.goodRating : styles.circle}>
                       4
                     </span>
-                    <span onTouchTap={() => this.handleRating(5)}
+                    <span
                       style={average === 5 ? styles.goodRating : styles.circle}>
                       5
                     </span>

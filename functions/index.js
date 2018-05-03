@@ -392,30 +392,66 @@ exports.checkForUpcoming = functions.https.onRequest((req, res) => {
 });
 
 exports.reviewReminder = functions.https.onRequest((req, res) => {
-    var dateObj = new Date(Date.now() - 86400000 /2)
-    db.collection("emailTemplates").doc('eEqHHHsWFjQc4dlK4qqU').get().then((emailDoc) => {
-      db.collection("Project").where("End Time", "<", dateObj).get().then((querySnapshot) => {
-        db.collection("User").doc()
-        querySnapshot.forEach((project) => {
-          if (!project.data().reviewReminded) {
-            var ProjectData = project.data()
-            ProjectData['_id'] = project.id
-            console.log(ProjectData.Name)
-            let email = emailDoc.data().html
-            email = email.replace("{{ projectUrl }}", `https://whosin.io/projects/${ProjectData.Name}/${ProjectData._id}`)
-            let data = {
-                from: "Who's In? Feedback <reminders@whosin.io>",
-                subject: `${ProjectData.Name}`,
-                html: email,
-                'h:Reply-To': 'reminders@whosin.io',
-                to: userDoc.data().Email
-              }
-              mailgun.messages().send(data, function (error, body) {
-                console.log(body)
+    var dateObj = new Date(Date.now())
+    db.collection("emailTemplates").doc('fQQG0fSxrpArSdEtosj4').get().then((emailDoc) => {
+      db.collection("emailTemplates").doc('FEtq5PN7FYehWIQXTusa').get().then((volunteerEmailDoc) => {
+        db.collection("Project").where("End Time", "<", dateObj).get().then((querySnapshot) => {
+
+          querySnapshot.forEach((project) => {
+            if (!project.data().reviewReminded) {
+              var ProjectData = project.data()
+              ProjectData['_id'] = project.id
+              console.log(ProjectData.Name)
+              let email = emailDoc.data().html
+              db.collection("User").doc(ProjectData.Creator).get().then((userDoc) => {
+                email = email.replace("{{reviewLink}}", `https://whosin.io/projects/p/${ProjectData._id}/admin/leave-reviews`)
+                let data = {
+                    from: "Tom <tom@whosin.io>",
+                    subject: `Feedback for ${ProjectData.Name}`,
+                    html: email,
+                    'h:Reply-To': 'tom@whosin.io',
+                    to: userDoc.data().Email
+                  }
+                  mailgun.messages().send(data, function (error, body) {
+                    console.log(body)
+                  })
               })
-          }
-          db.collection("Project").doc(project.id).update({
-            reviewReminded: true
+
+            }
+            db.collection("Project").doc(project.id).update({
+              reviewReminded: true
+            })
+
+            db.collection("Engagement").where("Project", "==", project.id).get()
+            .then((engSnapshot) => {
+                engSnapshot.forEach((eng) => {
+                  if (!eng.data().reviewReminded) {
+                    let engData = eng.data()
+                    let email = volunteerEmailDoc.data().html
+                    db.collection("User").doc(engData.User).get().then((userDoc) => {
+                      email = email.replace("{{ projectName }}", ProjectData.Name)
+                      email = email.replace(/{{ organisation }}/g, ProjectData.Charity ? ProjectData.Charity : "your last project")
+                      email = email.replace("{{reviewLink}}", `https://whosin.io/projects/p/${ProjectData._id}/review/project/short`)
+                      email = email.replace("{{imageUrl}}", ProjectData['Featured Image'])
+
+                      let data = {
+                          from: "Tom <tom@whosin.io>",
+                          subject: `Leave some feedback for ${ProjectData.Name}`,
+                          html: email,
+                          'h:Reply-To': 'reminders@whosin.io',
+                          to: userDoc.data().Email
+                        }
+                        mailgun.messages().send(data, function (error, body) {
+                          console.log(body)
+                        })
+                  })
+
+                  db.collection("Engagement").doc(eng.id).update({
+                    reviewReminded: true
+                  })
+                }
+              })
+            })
           })
         })
       })

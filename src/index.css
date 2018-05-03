@@ -20,7 +20,26 @@ body {
 }
 
 .ql-editor {
-  font-family: Nunito !important
+  font-family: Nunito !important;
+  font-size: 16px !important
+}
+
+.story-text li {
+  list-style-type: disc;
+  padding-left: 16px;
+  margin-left: 16px
+}
+
+.story-text ul {
+  margin: 0px
+}
+
+.story-text p {
+  margin: 0px
+}
+
+.story-text h2 {
+  margin: 0px
 }
 
 .react-add-to-calendar__button {
