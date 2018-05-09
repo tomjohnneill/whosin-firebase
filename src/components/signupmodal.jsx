@@ -256,7 +256,7 @@ export default  class SignupModal extends React.Component {
                 style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
 
 
-                  <Plant style={{marginBottom: '16px', height: '80px'}}/>
+                  <Plant color={"#3B9E74"} style={{marginBottom: '16px', height: '80px'}}/>
                   <div style={{paddingBottom: '16px'}}>
                     Create your Account
                   </div>
@@ -266,7 +266,7 @@ export default  class SignupModal extends React.Component {
                       inputStyle={{borderRadius: '6px', border: '1px solid #858987',
                         paddingLeft: '12px',  boxSizing: 'border-box'}}
                       underlineShow={false}
-                      ref={input => input && input.focus()}
+
                       hintText={'Name'}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       key='name'
@@ -357,7 +357,7 @@ export default  class SignupModal extends React.Component {
                         paddingLeft: '12px',  boxSizing: 'border-box'}}
                       underlineShow={false}
                       hintText={'Email'}
-                      ref={input => input && input.focus()}
+
                       value={this.state.email}
                       onChange={this.handleEmail}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
@@ -481,7 +481,7 @@ export default  class SignupModal extends React.Component {
               style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
 
 
-                <Plant style={{marginBottom: '16px', height: '80px'}}/>
+                <Plant color={"#3B9E74"} style={{marginBottom: '16px', height: '80px'}}/>
                 <div style={{paddingBottom: '16px'}}>
                   Create your Account
                 </div>

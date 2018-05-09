@@ -313,6 +313,36 @@ exports.sendSignUpEmail = functions.firestore
     return (null)
 });
 
+exports.getMeetupRSVPs = functions.https.onRequest((req, res) => {
+  fetch(`https://api.meetup.com/${req.query.group}/events/${req.query.eventId}/rsvps?key=163f53653d28356f76636170132325`)
+  .then(response => response.json())
+  .then(data => {
+    var returned = []
+    data.forEach((rsvp) => {
+      if (rsvp.response === "yes") {
+        returned.push({
+          Name: rsvp.member.name,
+          Photo: rsvp.member.photo.photo_link,
+          created: rsvp.created
+        })
+      }
+    })
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({rsvps: returned})
+  })
+})
+
+// Fix this
+
+exports.getMeetupEventInfo = functions.https.onRequest((req, res) => {
+  fetch(`https://api.meetup.com/${req.query.group}/events/${req.query.eventId}?key=163f53653d28356f76636170132325`)
+  .then(response => response.json())
+  .then(data => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({data: data})
+  })
+})
+
 exports.getTwitterKey = functions.https.onRequest((req, res) => {
   fetch('https://api.twitter.com/oauth2/token?grant_type=client_credentials', {
     headers: {
@@ -398,9 +428,11 @@ exports.reviewReminder = functions.https.onRequest((req, res) => {
         db.collection("Project").where("End Time", "<", dateObj).get().then((querySnapshot) => {
 
           querySnapshot.forEach((project) => {
-            if (!project.data().reviewReminded) {
-              var ProjectData = project.data()
-              ProjectData['_id'] = project.id
+            console.log(project.data())
+            let ProjectData = project.data()
+            ProjectData['_id'] = project.id
+            if (!ProjectData.reviewReminded && ProjectData.Approved) {
+
               console.log(ProjectData.Name)
               let email = emailDoc.data().html
               db.collection("User").doc(ProjectData.Creator).get().then((userDoc) => {
@@ -427,12 +459,13 @@ exports.reviewReminder = functions.https.onRequest((req, res) => {
                 engSnapshot.forEach((eng) => {
                   if (!eng.data().reviewReminded) {
                     let engData = eng.data()
+                    console.log(engData)
                     let email = volunteerEmailDoc.data().html
                     db.collection("User").doc(engData.User).get().then((userDoc) => {
                       email = email.replace("{{ projectName }}", ProjectData.Name)
-                      email = email.replace(/{{ organisation }}/g, ProjectData.Charity ? ProjectData.Charity : "your last project")
+                      email = email.replace(/{{ organisation }}/g, ProjectData['Charity Name'] ? ProjectData['Charity Name'] : "your last project")
                       email = email.replace("{{reviewLink}}", `https://whosin.io/projects/p/${ProjectData._id}/review/project/short`)
-                      email = email.replace("{{imageUrl}}", ProjectData['Featured Image'])
+                      email = email.replace("{{imageUrl}}", changeImageAddress(ProjectData['Featured Image'], '750xauto'))
 
                       let data = {
                           from: "Tom <tom@whosin.io>",

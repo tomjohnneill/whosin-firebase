@@ -358,6 +358,27 @@ export default class CaseStudy extends React.Component {
       this.state.project.Description.replace('<img', '<img style="width:100%;height:auto"') : this.state.project.Description}
   }
 
+  handleCopyProject = () => {
+    localStorage.setItem('story', this.state.project.Description)
+    localStorage.setItem('summary', this.state.project.Summary)
+    localStorage.setItem('title', this.state.project.Name)
+    localStorage.setItem('coverPhoto', this.state.project['Featured Image'])
+    var basics = {}
+    basics.tags = this.state.project.Tags
+    basics.max = this.state.project['Maximum People']
+    basics.min = this.state.project['Target People']
+    basics.deadline = this.state.project['Deadline']
+    localStorage.setItem('basics', JSON.stringify(basics))
+    var times = {}
+    times.address = this.state.project['Location']
+    times.Remote = this.state.project['Remote']
+    times.location = this.state.project['Geopoint']
+    times['Start Time'] = this.state.project['Start Time']
+    times['End Time'] = this.state.project['End Time']
+    localStorage.setItem('times', JSON.stringify(times))
+    browserHistory.push('/create-project/choose-type')
+  }
+
   render() {
     console.log(this.state.tweets)
     return (
@@ -758,6 +779,26 @@ export default class CaseStudy extends React.Component {
                   </div>
                   :
                   null}
+
+                  {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                    <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
+                      <h2>Running this event again? </h2>
+                      <div style={{height: 150, display: 'flex', alignItems: 'center',
+                        flexDirection: 'column', justifyContent: 'center'}}>
+
+                          <RaisedButton
+                            label='Copy Project'
+                            secondary={true}
+
+                            onClick={this.handleCopyProject}
+                            />
+                          <div style={{paddingTop: 16}}>
+                            Start a copy of this project
+                          </div>
+                      </div>
+                    </div>
+                    :
+                    null}
             </MediaQuery>
             <MediaQuery maxDeviceWidth={700}>
 

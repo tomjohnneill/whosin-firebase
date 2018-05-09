@@ -18,6 +18,7 @@
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.3",
     "react-email-editor": "^0.5.0",
+    "react-facebook-pixel": "^0.1.1",
     "react-ga": "^2.4.1",
     "react-google-maps": "^9.4.5",
     "react-iframe": "^1.1.0",

@@ -214,7 +214,7 @@ export default class UploadPhoto extends React.Component{
                                 <div>
                                   <RaisedButton label='Upload Photo'
                                     icon={<CloudUpload />}
-                                    labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
+                                    labelStyle={{textTransform: 'none', fontWeight: 700}}
                                     primary={true}
                                     />
                                   <div style={{marginTop: '20px', fontWeight: 700}}>or drag one in</div>
@@ -340,7 +340,7 @@ export default class UploadPhoto extends React.Component{
                                 <div>
                                   <RaisedButton label='Upload Photo'
                                     icon={<CloudUpload />}
-                                    labelStyle={{textTransform: 'none', fontFamily: 'Permanent Marker', fontSize: '20px'}}
+                                    labelStyle={{textTransform: 'none', fontWeight: 700}}
                                     primary={true}
                                     />
                                   <div style={{marginTop: '20px', fontWeight: 700}}>or drag one in</div>

@@ -187,7 +187,7 @@ export default class EmbeddedProject extends React.Component {
           <div/>
           :
           <div onClick={() => localStorage.setItem('project', JSON.stringify(this.state.project))} style={{backgroundColor: 'white', borderRadius: 8, overflow: 'hidden', border: '1px solid #DDDDDD', paddingBottom: 24}}>
-          <Link to={`/projects/p/${this.state.project._id}`} target="_parent">
+          <Link to={`/projects/p/${this.state.project._id}`} >
             <img src={changeImageAddress(this.state.project['Featured Image'], '500xauto')}
               style={{width: '100%', height: '170px', objectFit: 'cover'}}
               />

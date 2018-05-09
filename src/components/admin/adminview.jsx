@@ -262,11 +262,14 @@ export const PlacesWithStandaloneSearchBox = compose(
           display: 'inline-block',
           width: '100%',
           color: '#484848',
-          padding: '10px',
+          paddingTop: '10px',
+          paddingBottom: '10px',
+          paddingLeft: '12px',
+          fontFamily: 'Nunito',
           fontSize: '16px',
           boxSizing: 'border-box',
-          borderRadius: '6px',
-          border: '1px solid rgb(133, 137, 135)'
+          borderRadius: '2px',
+          border: '1px solid #aaa'
         }}
       />
     </StandaloneSearchBox>

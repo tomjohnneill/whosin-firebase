@@ -31,7 +31,10 @@ const styles = {
     margin: '0px',
     padding: '6px',
     fontWeight: 500
-  }
+  },
+  inputStyle :
+    {borderRadius: '2px', border: '1px solid #aaa',
+    paddingLeft: '12px',  boxSizing: 'border-box'}
 }
 
 export function changeImageAddress(file, size) {
@@ -49,10 +52,11 @@ class StoryForm extends React.Component {
     super(props);
     var story = localStorage.getItem('story')
     var summary = localStorage.getItem('summary')
+    var title = localStorage.getItem('title')
     this.state = {
       story: story ? story : null,
       summary: summary ? summary : null,
-      title: null
+      title: title ? title : null
     }
   }
 
@@ -115,6 +119,7 @@ class StoryForm extends React.Component {
       'End Time': endTime,
       'Tags': basics.tags,
       "Geopoint": times && times.location ? times.location : null,
+      "MeetupLink" : basics.meetup ? basics.meetup : null,
       "created": new Date()
     }
     if (localStorage.getItem('charity')) {
@@ -130,6 +135,7 @@ class StoryForm extends React.Component {
       localStorage.removeItem('basics')
       localStorage.removeItem('story')
       localStorage.removeItem('times')
+      localStorage.removeItem('summary')
       localStorage.removeItem('coverPhoto')
       localStorage.removeItem('charity')
       localStorage.removeItem('editProject')
@@ -149,8 +155,7 @@ class StoryForm extends React.Component {
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <p style={styles.header}>What is the title of your project?</p>
           <TextField fullWidth={true}
-            inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-              paddingLeft: '12px',  boxSizing: 'border-box'}}
+            inputStyle={styles.inputStyle}
             underlineShow={false}
             errorStyle={{marginTop: 6, color: orange500, textAlign: 'center'}}
             errorText={this.state.titleLengthError ? 'Your title is a bit long, could you make it shorter?' : null}
@@ -166,8 +171,7 @@ class StoryForm extends React.Component {
         <div style={{width: '100%', paddingBottom: '16px', boxSizing: 'border-box'}}>
           <p style={styles.header}>Project Summary</p>
           <TextField fullWidth={true}
-            inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-              paddingLeft: '12px',  boxSizing: 'border-box'}}
+            inputStyle={styles.inputStyle}
             underlineShow={false}
             hintText={'A tagline to use on social media etc.'}
             hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
@@ -193,12 +197,12 @@ class StoryForm extends React.Component {
 
         <RaisedButton label='Previous' backgroundColor='#C5C8C7'
             onTouchTap={this.handlePrevious}
-            labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+            labelStyle={{ color: 'white',  fontWeight: 700}}/>
         <div style={{width: '16px', display: 'inline-block'}}/>
         <RaisedButton label='Finish' backgroundColor='#E55749'
             onClick={this.handleNext}
             disabled={!this.state.story || !this.state.summary || !this.state.title || !localStorage.getItem('coverPhoto')}
-            labelStyle={{ color: 'white', fontFamily: 'Permanent Marker', fontSize: '18px', letterSpacing: '1px'}}/>
+            labelStyle={{ color: 'white', fontWeight: 700}}/>
 
 
           <div style={{height: '60px'}}/>

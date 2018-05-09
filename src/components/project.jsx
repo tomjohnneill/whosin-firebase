@@ -30,6 +30,7 @@ import {WhosIn} from './desktopproject.jsx';
 import ConditionalModal from './conditionalmodal.jsx';
 import {Spiral, CalendarIcon, Place, Clock, World} from './icons.jsx';
 import {MyMapComponent} from './desktopproject.jsx';
+import {ProjectReviewComponent} from './casestudy.jsx';
 import Suggest from './groups/suggest.jsx';
 import BottomNavigationExampleSimple from './bottomnav.jsx'
 import CaseStudy from './casestudy.jsx';
@@ -398,9 +399,9 @@ export default class Project extends React.Component {
       db.collection("Engagement").where("Project", "==", this.state.project._id)
       .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
           if (querySnapshot.size === 0) {
-            db.collection("Engagement").add(body)
-            .then(data => db.collection("Engagement").doc(data.id).
-            collection("Private").doc(this.state.project._id).
+            var engRef = db.collection("Engagement").doc()
+            engRef.set(body)
+            .then(data => engRef.collection("Private").doc(this.state.project._id).
             set({
               User: fire.auth().currentUser.uid,
               Email: doc.data().Email,
@@ -436,6 +437,12 @@ export default class Project extends React.Component {
     e.preventDefault()
     this.deleteEngagement()
     browserHistory.push(window.location.pathname + '/declined')
+  }
+
+  changeAttendees = (attendees) => {
+    var project = this.state.project
+    project['People Pledged'] = attendees
+    this.setState({project: project})
   }
 
   render () {
@@ -651,13 +658,26 @@ export default class Project extends React.Component {
                     onComplete={this.onComplete}/>
                 </div>
 
+                <h2 style={{paddingLeft: 16, textAlign: 'left'}}> What's going on?</h2>
             <div style={{padding: '20px 35px 20px 35px', textAlign: 'left'}}>
 
                  <div dangerouslySetInnerHTML={this.descriptionMarkup()}/>
 
 
             </div>
+            {this.state.projectReviews ?
 
+                <div style={{padding: 16, textAlign: 'left'}}>
+                  <h2>Previous reviews</h2>
+
+                  {this.state.projectReviews.map((review) => (
+                    <ProjectReviewComponent review={review}/>
+                  ))}
+                </div>
+
+              :
+              null
+            }
 
 
 
@@ -685,7 +705,9 @@ export default class Project extends React.Component {
               <h1 style={{fontFamily: 'Permanent Marker', textAlign: 'left'}}>Who's In?</h1>
               <li>
 
-                <WhosIn project={this.state.project}/>
+                <WhosIn
+                  setAttendeeCount={this.changeAttendees}
+                  project={this.state.project}/>
 
               </li>
             </div>

@@ -17,6 +17,7 @@ import Chip from 'material-ui/Chip';
 import Snackbar from 'material-ui/Snackbar';
 import Masonry from 'react-masonry-css';
 import Loading from './loading.jsx';
+import SignupModal from './signupmodal.jsx';
 
 import fire from '../fire';
 
@@ -82,6 +83,18 @@ export class RegisterInterest extends React.Component {
       tags: [],
       allTags: categories
     }
+  }
+
+  handleStartProject = () => {
+    if (fire.auth().currentUser) {
+      browserHistory.push('/create-project/0')
+    } else {
+      this.setState({modalOpen: true})
+    }
+  }
+
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
   }
 
   handleCapture = () => {
@@ -364,6 +377,10 @@ export default class AllProjects extends React.Component {
                              : null
                 }
                   <RegisterInterest />
+                    <Subheader style={{fontSize: '25px', letterSpacing: '-0.6px', lineHeight: '30px', color: '#484848',
+                    fontWeight: 700, marginTop: '48px', marginBottom: '24px', paddingLeft: '0px'}}>
+                      Successful Projects
+                    </Subheader>
                     {this.state.loading ?
                       <Loading/>
                       :
@@ -385,14 +402,19 @@ export default class AllProjects extends React.Component {
                 <h2>Get involved, start your own project</h2>
                 <div style={{height: 40, width: '100%', display: 'flex',
                     alignItems: 'center', justifyContent: 'center'}}>
-                    <Link to='/create-project/0'>
+
                     <RaisedButton label='Start a Project'
+                      onClick={this.handleStartProject}
                       style={{height: '36px', marginTop: '16px', boxShadow: ''}} primary={true} overlayStyle={{height: '36px'}}
                         buttonStyle={{height: '36px'}}
                          labelStyle={{height: '36px', display: 'flex', alignItems: 'center',
                               letterSpacing: '0.6px', fontWeight: 'bold'}}
                       />
-                    </Link>
+                      <SignupModal
+                        open={this.state.modalOpen}
+                        changeOpen={this.handleModalChangeOpen}
+                      />
+
                 </div>
               </div>
 

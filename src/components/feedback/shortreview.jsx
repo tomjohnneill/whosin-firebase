@@ -166,12 +166,20 @@ export default class ShortReview extends React.Component {
     }
     console.log(body)
 
-    db.collection("ProjectReview").add(body).then((docRef) => {
+    var reviewRef
+    if (!this.state.reviewRef) {
+      reviewRef = db.collection("ProjectReview").doc()
+      this.setState({reviewRef: reviewRef})
+    } else {
+      reviewRef = this.state.reviewRef
+    }
+    console.log(reviewRef)
+    reviewRef.set(body).then((docRef) => {
       console.log('project added')
-      console.log(docRef.id)
+      console.log(reviewRef.id)
       console.log(this.state.project._id)
       console.log(fire.auth().currentUser.uid)
-      db.collection("ProjectReview").doc(docRef.id).collection("private")
+      db.collection("ProjectReview").doc(reviewRef.id).collection("private")
         .doc(this.state.project._id).set({
           Feedback: this.state.private,
           User: fire.auth().currentUser.uid

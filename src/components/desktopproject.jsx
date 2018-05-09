@@ -267,6 +267,7 @@ import fire from '../fire';
     }
 
     componentDidMount(props) {
+      var attendees = 0
       db.collection("Engagement").where("Project", "==", this.props.project._id).get().then((querySnapshot) => {
         var data = []
         querySnapshot.forEach((doc) => {
@@ -276,7 +277,31 @@ import fire from '../fire';
           data.push(elem)
         });
         this.setState({engagements: data, loading: false})
+        console.log(data.length)
+        attendees += data.length
+        console.log(attendees)
       });
+
+      if (this.props.project.MeetupLink) {
+        var link = this.props.project.MeetupLink
+        link = link.replace('https://www.meetup.com/', '')
+        var pathname = link.split( '/' )
+
+        fetch(`https://us-central1-whos-in-dev.cloudfunctions.net/getMeetupRSVPs?eventId=${pathname[2]}&group=${pathname[0]}`)
+        .then(response => response.json())
+        .then(data => {
+          this.setState({meetupRSVPS: data.rsvps})
+          attendees += data.rsvps.length
+          console.log(attendees)
+          if (this.props.setAttendeeCount) {
+            this.props.setAttendeeCount(attendees)
+          }
+        })
+      }
+
+      if (this.props.setAttendeeCount) {
+        this.props.setAttendeeCount(attendees)
+      }
       }
 
     render() {
@@ -304,6 +329,28 @@ import fire from '../fire';
             ))
             :
             null}
+            {this.state.meetupRSVPS ?
+              this.state.meetupRSVPS.map((eng) => (
+
+                <ul style={{textAlign: 'left', alignItems: 'center', borderBottom: '1px solid #DDDDDD', height: '60px', fontSize: '10px', display: 'flex'}}>
+                  {eng.Photo ?
+
+                  <Avatar src={eng.Photo}/>:
+                    <Avatar>{eng['Name'] ? eng['Name'].substring(0,1) : null}</Avatar>}
+                  <div style={{flex: 2, paddingLeft: '24px',display: 'flex', alignItems: 'center'}}>
+                    <div>
+                      <b>{eng['Name']}</b> <br/>
+                    via Meetup
+                  </div>
+                  </div>
+                  <div style={{flex: 1, display: 'flex', alignItems: 'center'}}>
+                    {eng['created'] ? readableTimeDiff(new Date(), new Date(eng['created'])) : null}
+                  </div>
+                </ul>
+
+              ))
+              :
+              null}
 
         </div>
       )
@@ -393,9 +440,10 @@ import fire from '../fire';
         db.collection("Engagement").where("Project", "==", this.props.project._id)
         .where("User", "==", fire.auth().currentUser.uid).get().then((querySnapshot) => {
             if (querySnapshot.size === 0) {
-              db.collection("Engagement").add(body)
-              .then(data => db.collection("Engagement").doc(data.id).
-              collection("Private").doc(this.props.project._id).
+              var engRef = db.collection("Engagement").doc()
+
+              engRef.set(body)
+              .then(data => engRef.collection("Private").doc(this.props.project._id).
               set({
                 User: fire.auth().currentUser.uid,
                 Email: doc.data().Email,
@@ -590,6 +638,12 @@ import fire from '../fire';
       this.setState({dropzoneHover: false})
     }
 
+
+    changeAttendees = (attendees) => {
+      var project = this.state.project
+      project['People Pledged'] = attendees
+      this.setState({project: project})
+    }
 
     render () {
 
@@ -935,7 +989,9 @@ import fire from '../fire';
 
                       <li>
 
-                        <WhosIn project={this.props.project}/>
+                        <WhosIn
+                          setAttendeeCount={this.changeAttendees}
+                          project={this.props.project}/>
 
 
                       </li>

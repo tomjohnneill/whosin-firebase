@@ -10,6 +10,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {orange500} from 'material-ui/styles/colors';
 import DocumentTitle from 'react-document-title';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import Chip from 'material-ui/Chip';
 
 const styles = {
@@ -33,6 +34,9 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
       },
+      inputStyle :
+      {borderRadius: '2px', border: '1px solid #aaa',
+        paddingLeft: '12px',  boxSizing: 'border-box'}
 }
 
 var categories = ["Environment",
@@ -73,6 +77,7 @@ export class Form extends React.Component {
       searchText: '', places: [], loading: true,
       min: basics? basics.min : null,
       max: basics ? basics.max : null,
+      meetup: basics ? basics.meetup : null,
       deadline: basics? parseISOString(basics.deadline): null,
       tags: basics && basics? basics.tags: [],
       allTags: categories
@@ -82,10 +87,36 @@ export class Form extends React.Component {
 
   handleNext = (e) => {
     e.preventDefault()
-    var basics = {min: this.state.min, max: this.state.max, deadline: this.state.deadline, tags: this.state.tags}
+    var basics = {min: this.state.min, max: this.state.max, deadline: this.state.deadline, tags: this.state.tags,
+      meetup: this.state.meetup}
     var basicString = JSON.stringify(basics)
     localStorage.setItem('basics', basicString)
-    browserHistory.push('/create-project/2')
+    if (this.state.meetup) {
+      var link = this.state.meetup
+      link = link.replace('https://www.meetup.com/', '')
+      var pathname = link.split( '/' )
+      fetch(`https://us-central1-whos-in-dev.cloudfunctions.net/getMeetupEventInfo?eventId=${pathname[2]}&group=${pathname[0]}`)
+      .then(response => response.json())
+      .then(responseData => {
+        console.log(responseData)
+        var data = responseData.data
+        var times = {}
+        times['Start Time'] = new Date(data.time).toISOString()
+        times['End Time'] = new Date(data.time + data.duration).toISOString()
+        times.address = data.venue.address_1
+        times.location = {lat: data.venue.lat, lng: data.venue.lon}
+        var timeString = JSON.stringify(times)
+        localStorage.setItem('times', timeString)
+
+        localStorage.setItem('story', data.description)
+        localStorage.setItem('title', data.name)
+        browserHistory.push('/create-project/2')
+      })
+    } else {
+      browserHistory.push('/create-project/2')
+    }
+
+
   }
 
   handleSetMin = (e) => {
@@ -95,6 +126,11 @@ export class Form extends React.Component {
   handleSetMax = (e) => {
     this.setState({max: e.target.value})
   }
+
+  handleSetMeetup = (e) => {
+    this.setState({meetup: e.target.value})
+  }
+
 
   handleSetDeadline = (e, date) => {
     this.setState({deadline: date})
@@ -142,8 +178,7 @@ export class Form extends React.Component {
           <div style={{display: 'flex'}}>
           <div style={{flex: 1, paddingRight: '6px'}}>
             <TextField fullWidth={true}
-              inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                paddingLeft: '12px',  boxSizing: 'border-box'}}
+              inputStyle={styles.inputStyle}
               underlineShow={false}
               hintText={'Minimum'}
               value={this.state.min}
@@ -154,8 +189,7 @@ export class Form extends React.Component {
           </div>
           <div style={{flex: 1, paddingLeft: '6px'}}>
             <TextField fullWidth={true}
-              inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                paddingLeft: '12px',  boxSizing: 'border-box'}}
+              inputStyle={styles.inputStyle}
               underlineShow={false}
               hintText={'Maximum'}
               hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
@@ -175,8 +209,7 @@ export class Form extends React.Component {
             When is the deadline for sign ups?
           </p>
           <DatePicker
-             style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
-                 boxSizing: 'border-box'}}
+             style={styles.inputStyle}
                underlineShow={false}
                value={this.state.deadline}
                autoOk={true}
@@ -219,6 +252,28 @@ export class Form extends React.Component {
           </div>
 
         </div>
+        <Card
+          style={{border: '1px solid #aaa', borderRadius: 2, boxShadow: 'none', marginBottom: 20}}
+          >
+          <CardHeader
+            title="Advanced Settings"
+
+            actAsExpander={true}
+            showExpandableButton={true}
+          />
+          <CardText expandable={true}>
+            <div style={{fontWeight: 700, paddingBottom: 6}}>Link project to Meetup</div>
+              <TextField fullWidth={true}
+                inputStyle={styles.inputStyle}
+                underlineShow={false}
+                hintText={'Copy Meetup Event URL here'}
+                hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
+                key='meetup'
+                value={this.state.meetup}
+                onChange={this.handleSetMeetup}
+                style={styles.textfield}/>
+          </CardText>
+        </Card>
         <RaisedButton label='NEXT'
           onClick={this.handleNext}
           disabled={!this.state.deadline || !this.state.min }

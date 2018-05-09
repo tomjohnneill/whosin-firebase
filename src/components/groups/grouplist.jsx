@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import Share from '../share.jsx';
-import {World} from '../icons.jsx'
+import {World, Plant, Spiral, Muscle} from '../icons.jsx'
 import Popover from 'material-ui/Popover';
 import {List, ListItem} from 'material-ui/List';
 import AutoComplete from 'material-ui/AutoComplete';
@@ -45,6 +45,184 @@ const styles = {
     fontWeight: 700,
     paddingTop: 10,
     paddingBottom: 10
+  },
+  inkbar: {
+    height: 6,
+    marginTop: 10,
+    marginBottom: 10,
+    width: '100px',
+    backgroundColor: 'rgba(250,250,250,0.5)'
+  },
+  bigNumber: {
+    fontWeight: 700,
+    fontSize: '24px'
+  },
+  title: {
+    fontSize: '36px',
+    fontWeight: 700,
+  },
+  gifContainer: {
+    display: 'flex',
+    transition: 'all 1s',
+    height: 200,
+    alignItems: 'center',
+    color: 'white',
+    marginBottom: 20,
+    backgroundColor: '#E55749',
+    padding: 20,
+    borderRadius: 2
+  },
+  mobileGifContainer: {
+    transition: 'all 1s',
+    minHeight: 350,
+    alignItems: 'center',
+    color: 'white',
+    marginBottom: 20,
+    backgroundColor: '#E55749',
+    padding: 20,
+    borderRadius: 2
+  },
+  headerContainer: {
+    width: '60%',
+    padding: 20,
+    boxSizing: 'border-box'
+  },
+  gif: {
+    height: '100%',
+    width: 'auto',
+    maxWidth: '100%',
+    objectFit: 'cover'
+  },
+  imageBox: {
+    width: '40%',
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center'
+  },
+  mobileImageBox: {
+    width: '100%',
+    padding: 20,
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'center'
+  }
+}
+
+class NoGroups extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {stage: 3}
+  }
+
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
+
+  getContent = () => {
+    switch(this.state.stage) {
+
+        case 3 :
+        return (
+          <div >
+            <MediaQuery minDeviceWidth={700}>
+            <div style={styles.gifContainer}>
+              <div style={styles.headerContainer}>
+                <div style={styles.title}>
+                  Invite your friends to a group
+                </div>
+                <div style={styles.inkbar}/>
+              </div>
+              <div style={styles.imageBox}>
+                  <Muscle style={{height: 100}} color={'white'}/>
+              </div>
+            </div>
+            <div style={styles.gifContainer}>
+              <div style={styles.imageBox}>
+                  <Plant style={{height: 100}} color={'white'}/>
+
+              </div>
+              <div style={styles.headerContainer}>
+                  <div style={styles.title}>
+                    Suggest projects and see who's interested
+                  </div>
+                  <div style={styles.inkbar}/>
+                </div>
+            </div>
+            <div style={styles.gifContainer}>
+              <div style={styles.headerContainer}>
+                <div style={styles.title}>
+                  Drag along your friends
+                </div>
+                <div style={styles.inkbar}/>
+              </div>
+              <div style={styles.imageBox}>
+                <img style={styles.gif} src='https://blooper0223.files.wordpress.com/2016/06/anigif_enhanced-buzz-15412-1327085582-9.gif'/>
+              </div>
+            </div>
+            </MediaQuery>
+
+            <MediaQuery maxDeviceWidth={700}>
+            <div style={styles.mobileGifContainer}>
+              <div >
+                <div style={styles.title}>
+                  Invite your friends to a group
+                </div>
+                <div style={styles.inkbar}/>
+              </div>
+              <div style={styles.mobileImageBox}>
+                  <Muscle style={{height: 100}} color={'white'}/>
+              </div>
+            </div>
+            <div style={styles.mobileGifContainer}>
+
+              <div >
+                  <div style={styles.title}>
+                    Suggest projects and see who's interested
+                  </div>
+                  <div style={styles.inkbar}/>
+                </div>
+                <div style={styles.mobileImageBox}>
+                    <Plant style={{height: 100}} color={'white'}/>
+
+                </div>
+            </div>
+            <div style={styles.mobileGifContainer}>
+              <div >
+                <div style={styles.title}>
+                  Drag along your friends
+                </div>
+                <div style={styles.inkbar}/>
+              </div>
+              <div >
+                <img style={styles.gif} src='https://blooper0223.files.wordpress.com/2016/06/anigif_enhanced-buzz-15412-1327085582-9.gif'/>
+              </div>
+            </div>
+            </MediaQuery>
+            <div style={{height: 100, display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+              <RaisedButton labelStyle={{fontWeight: 700, textTransform: 'none'}}
+                secondary={true}
+                onClick={fire.auth().currentUser ? this.handleCreateGroup
+                  : () => this.setState({modalOpen: true})}
+                label='Create a Group'/>
+            </div>
+            <SignupModal
+              open={this.state.modalOpen}
+              changeOpen={this.handleModalChangeOpen}
+            onComplete={this.handleCreateGroup}/>
+          </div>
+        )
+    }
+  }
+
+
+  render() {
+    return (
+      <div>
+        {this.getContent()}
+      </div>
+    )
   }
 }
 
@@ -256,14 +434,17 @@ export default class GroupList extends React.Component {
               paddingLeft: 16, paddingRight: 16, boxSizing: 'border-box', paddingBottom: 16,
               marginBottom: 0,
                 textAlign: 'left', width: '100%', borderBottom: '1px solid #DDDDDD'}}>
-                Groups you belong to
+                Your groups
                 <div className='create-group'
                   style={{float: 'right'}}
                   >
                   <RaisedButton
+                    style={{height: 36}}
+                    buttonStyle={{display: 'flex', alignItems: 'center'}}
                     onClick={fire.auth().currentUser ? this.handleCreateGroup
                       : () => this.setState({modalOpen: true})}
                     labelStyle={styles.buttonLabel}
+                    overlayStyle={{display: 'flex', alignItems: 'center'}}
                     icon={<Add/>}
                     secondary={true}
                     label='Create New Group'
@@ -290,7 +471,9 @@ export default class GroupList extends React.Component {
                       : () => this.setState({modalOpen: true})}
                     labelStyle={styles.buttonLabel}
                     icon={<Add/>}
+                    style={{height: 36}}
                     secondary={true}
+                    overlayStyle={{display: 'flex', alignItems: 'center'}}
                     label='Create New Group'
                     />
                     <SignupModal
@@ -367,25 +550,12 @@ export default class GroupList extends React.Component {
           </div>
           {
             this.state.groups && this.state.groups.length === 0 ?
-              <div style={{margin: 20,background: grey100,
-                textAlign: 'left', padding: 16}}>
-                <div style={{fontWeight: 700}}>Doesn't look like you belong to any groups yet.</div>
-                <br/>
-                <br/>
-                <div>
-                  <i>Here's what will happen if you make one:</i>
-                  <ul style={{listStyleType: 'circle', paddingLeft: 16}}>
-                    <li style={{listStyleType: 'circle'}}>
-                      You can suggest projects to your friends
-                    </li>
-                    <li style={{listStyleType: 'circle'}}>
-                      They'll tell you if they're interested
-                    </li>
-                    <li style={{listStyleType: 'circle'}}>
-                      You can sign them up as soon as you think enough people are going
-                    </li>
-                  </ul>
-                </div>
+              <div style={{margin: 20,
+                textAlign: 'left', padding: 1}}>
+
+                  <NoGroups/>
+
+
               </div>
               :
               null

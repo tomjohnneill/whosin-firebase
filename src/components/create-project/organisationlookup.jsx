@@ -39,7 +39,10 @@ const styles = {
     margin: '0px',
     padding: '6px',
     fontWeight: 700
-  }
+  },
+  inputStyle :
+  {borderRadius: '2px', border: '1px solid #aaa',
+    paddingLeft: '12px',  boxSizing: 'border-box'}
 }
 
 function parseISOString(s) {
@@ -298,8 +301,7 @@ export default class OrganisationLookup extends React.Component{
                   </p>
                   <AutoComplete
                     fullWidth={true}
-                    inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                      paddingLeft: '12px',  boxSizing: 'border-box', height: '40px'}}
+                    inputStyle={styles.inputStyle}
                     hintText="Type your organisation name or charity number"
                     searchText={this.state.searchText}
                     underlineShow={false}
@@ -382,11 +384,10 @@ export default class OrganisationLookup extends React.Component{
 
                   <div style={{padding: '6px'}}>
                     <p style={styles.header}>
-                    Display Name
+                    Organisation Name*
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       value={this.state.name ? this.state.name : this.state.details.name}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
@@ -403,8 +404,7 @@ export default class OrganisationLookup extends React.Component{
                       Contact
                     </p>
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'phone')}
                           defaultValue={this.state.phone}
@@ -413,10 +413,9 @@ export default class OrganisationLookup extends React.Component{
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                           key='location3'
                           style={styles.whiteTextfield}/>
-
+                        <div style={{height: 6}}/>
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'address')}
                           defaultValue={this.state.address}
@@ -425,10 +424,9 @@ export default class OrganisationLookup extends React.Component{
                           hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                           key='location3'
                         style={styles.whiteTextfield}/>
-
+                      <div style={{height: 6}}/>
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'postcode')}
                           defaultValue={this.state.postcode}
@@ -446,8 +444,7 @@ export default class OrganisationLookup extends React.Component{
                       Charity Number
                       </p>
                       <TextField fullWidth={true}
-                        inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                          paddingLeft: '12px',  boxSizing: 'border-box'}}
+                        inputStyle={styles.inputStyle}
                         underlineShow={false}
                         disabled={this.state.loadedFromDatabase}
                         defaultValue={this.state.charityNumber}
@@ -461,18 +458,17 @@ export default class OrganisationLookup extends React.Component{
 
                   <div style={{padding: '6px'}}>
                     <p style={styles.header}>
-                    Charity Description
+                    What does your organisation do?*
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       defaultValue={this.state.activities}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
                       onChange={this.changeCharityInfo.bind(this, 'activities')}
                       key='activities'
-                      rows={3}
+
                       multiLine={true}
                       style={styles.whiteTextfield}/>
                   </div>
@@ -483,8 +479,7 @@ export default class OrganisationLookup extends React.Component{
                       Email
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'Email'}
                       disabled={this.state.loadedFromDatabase}
@@ -497,8 +492,7 @@ export default class OrganisationLookup extends React.Component{
                       Facebook
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'Facebook'}
                       defaultValue={this.state.facebook}
@@ -511,8 +505,7 @@ export default class OrganisationLookup extends React.Component{
                       Instagram
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'@Username'}
                       defaultValue={this.state.instagram}
@@ -527,8 +520,7 @@ export default class OrganisationLookup extends React.Component{
                         Website
                       </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       onChange={this.changeCharityInfo.bind(this, 'website')}
@@ -541,8 +533,7 @@ export default class OrganisationLookup extends React.Component{
                       Twitter
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       hintText={'@Username'}
@@ -591,8 +582,7 @@ export default class OrganisationLookup extends React.Component{
                   </p>
                   <AutoComplete
                     fullWidth={true}
-                    inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                      paddingLeft: '12px',  boxSizing: 'border-box', height: '40px'}}
+                    inputStyle={styles.inputStyle}
                     hintText="Type your organisation name"
                     searchText={this.state.searchText}
                     underlineShow={false}
@@ -675,11 +665,10 @@ export default class OrganisationLookup extends React.Component{
 
                   <div style={{padding: '6px'}}>
                     <p style={styles.header}>
-                    Display Name
+                    Organisation Name*
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       value={this.state.name ? this.state.name : this.state.details.name}
                       hintStyle={{ paddingLeft: '12px', bottom: '8px'}}
@@ -696,8 +685,7 @@ export default class OrganisationLookup extends React.Component{
                       Contact
                     </p>
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'phone')}
                           defaultValue={this.state.phone}
@@ -708,8 +696,7 @@ export default class OrganisationLookup extends React.Component{
                           style={styles.whiteTextfield}/>
 
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'address')}
                           defaultValue={this.state.address}
@@ -720,8 +707,7 @@ export default class OrganisationLookup extends React.Component{
                         style={styles.whiteTextfield}/>
 
                         <TextField fullWidth={true}
-                          inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                            paddingLeft: '12px',  boxSizing: 'border-box'}}
+                          inputStyle={styles.inputStyle}
                           underlineShow={false}
                           onChange={this.changeCharityInfo.bind(this, 'postcode')}
                           defaultValue={this.state.postcode}
@@ -739,8 +725,7 @@ export default class OrganisationLookup extends React.Component{
                       Charity Number
                       </p>
                       <TextField fullWidth={true}
-                        inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                          paddingLeft: '12px',  boxSizing: 'border-box'}}
+                        inputStyle={styles.inputStyle}
                         underlineShow={false}
                         disabled={this.state.loadedFromDatabase}
                         defaultValue={this.state.charityNumber}
@@ -754,11 +739,10 @@ export default class OrganisationLookup extends React.Component{
 
                   <div style={{padding: '6px'}}>
                     <p style={styles.header}>
-                    Charity Description
+                    What does your organisation do?*
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       defaultValue={this.state.activities}
@@ -776,8 +760,7 @@ export default class OrganisationLookup extends React.Component{
                       Email
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'Email'}
                       disabled={this.state.loadedFromDatabase}
@@ -790,8 +773,7 @@ export default class OrganisationLookup extends React.Component{
                       Facebook
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'Facebook'}
                       defaultValue={this.state.facebook}
@@ -804,8 +786,7 @@ export default class OrganisationLookup extends React.Component{
                       Instagram
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       hintText={'@Username'}
                       defaultValue={this.state.instagram}
@@ -820,8 +801,7 @@ export default class OrganisationLookup extends React.Component{
                         Website
                       </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       onChange={this.changeCharityInfo.bind(this, 'website')}
@@ -834,8 +814,7 @@ export default class OrganisationLookup extends React.Component{
                       Twitter
                     </p>
                     <TextField fullWidth={true}
-                      inputStyle={{borderRadius: '6px', border: '1px solid #858987',
-                        paddingLeft: '12px',  boxSizing: 'border-box'}}
+                      inputStyle={styles.inputStyle}
                       underlineShow={false}
                       disabled={this.state.loadedFromDatabase}
                       hintText={'@Username'}

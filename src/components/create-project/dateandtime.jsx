@@ -18,7 +18,10 @@ const styles = {
     margin: '0px',
     padding: '6px',
     fontWeight: 500
-  }
+  },
+  inputStyle :
+  {borderRadius: '2px', border: '1px solid #aaa',
+    paddingLeft: '12px',  boxSizing: 'border-box'}
 }
 
 const defaultStyles = {
@@ -233,8 +236,7 @@ class Form extends React.Component {
             </p>
 
             <DatePicker
-               style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
-                   boxSizing: 'border-box'}}
+               style={styles.inputStyle}
                    autoOk={true}
                  underlineShow={false}
                  value={this.state.startDate}
@@ -251,8 +253,7 @@ class Form extends React.Component {
                 </p>
 
                <TimePicker
-                style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
-                    boxSizing: 'border-box'}}
+                style={styles.inputStyle}
                   underlineShow={false}
                   value={this.state.startTime}
                   minutesStep={5}
@@ -271,8 +272,7 @@ class Form extends React.Component {
             </p>
 
             <DatePicker
-               style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
-                   boxSizing: 'border-box'}}
+               style={styles.inputStyle}
                  underlineShow={false}
                  autoOk={true}
                  shouldDisableDate={disableDates}
@@ -289,8 +289,7 @@ class Form extends React.Component {
                 </p>
 
                <TimePicker
-                style={{borderRadius: '6px', border: '1px solid #858987',paddingLeft: '12px',
-                    boxSizing: 'border-box'}}
+                style={styles.inputStyle}
                   underlineShow={false}
                   minutesStep={5}
                   value={this.state.endTime}

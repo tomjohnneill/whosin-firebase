@@ -11,6 +11,7 @@ import {changeImageAddress} from './desktopproject.jsx';
 import AllProjects from './allprojects.jsx';
 import DocumentTitle from 'react-document-title';
 import MediaQuery from 'react-responsive';
+import SignupModal from './signupmodal.jsx';
 import fire from '../fire';
 
 let db = fire.firestore()
@@ -156,6 +157,16 @@ export default class UserTabs extends React.Component {
     });
   };
 
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
+  handleImIn = () => {
+    if (!fire.auth().currentUser) {
+      this.setState({modalOpen: !this.state.modalOpen})
+    }
+  }
+
   render () {
     console.log(this.state)
     return (
@@ -182,7 +193,25 @@ export default class UserTabs extends React.Component {
                 Doing good shouldn't be hard. Find a project near you to get involved with.
 
               </span>
+              {
+                !fire.auth().currentUser ?
 
+              <div style={{paddingTop: 20}}>
+              <RaisedButton label="I'm In."
+                primary={true}
+                onClick={this.handleImIn}
+                labelStyle={{letterSpacing: 0.3, fontWeight: 700}}
+                />
+              <div style={{width: '80vw'}}>
+                  <SignupModal
+                    open={this.state.modalOpen}
+                    changeOpen={this.handleModalChangeOpen}
+                  />
+              </div>
+              </div>
+              :
+              null
+            }
             </div>
           </div>
         </MediaQuery>
@@ -207,6 +236,23 @@ export default class UserTabs extends React.Component {
                 Doing good shouldn't be hard. Find a project near you to get involved with.
 
                 </span>
+                {
+                  !fire.auth().currentUser ?
+
+                <div style={{paddingTop: 20}}>
+                <RaisedButton label="I'm In."
+                  primary={true}
+                  onClick={this.handleImIn}
+                  labelStyle={{letterSpacing: 0.3, fontWeight: 700}}
+                  />
+                  <SignupModal
+                    open={this.state.modalOpen}
+                    changeOpen={this.handleModalChangeOpen}
+                  />
+                </div>
+                :
+                null
+              }
                 <div style={{paddingTop: '30px'}}>
 
                 </div>
