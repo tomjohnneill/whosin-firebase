@@ -702,7 +702,9 @@ import fire from '../fire';
                 </div>
                 }
 
-                {this.state.dropzoneHover && fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid  ?
+                {this.state.dropzoneHover && fire.auth().currentUser &&
+                  (this.state.project.Admin && this.state.project.Admin[fire.auth().currentUser.uid]
+                  || this.state.project.Creator === fire.auth().currentUser.uid)  ?
                     <RaisedButton label='Change Crop'
                       style={{padding: 0, position: 'absolute', top: 'calc(50% - 20px)', right: 'calc(50% - 98px)', height: 40, zIndex: 10}}
                       labelStyle={{fontWeight: 700}}
@@ -715,7 +717,9 @@ import fire from '../fire';
                 <div className='container' style={{width: '100%', paddingRight: 100, paddingTop: 30,
                     paddingLeft: 100, display: 'flex', boxSizing: 'border-box'}}>
                   <div className='story-etc' style={{flex: 1, width: '50%'}}>
-                    {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                    {fire.auth().currentUser &&
+                      (this.state.project.Admin && this.state.project.Admin[fire.auth().currentUser.uid]
+                      || this.state.project.Creator === fire.auth().currentUser.uid) ?
                       <div style={{display: 'flex', float: 'right'}}>
                         <FlatButton
                           secondary={true}

@@ -120,7 +120,10 @@ class StoryForm extends React.Component {
       'Tags': basics.tags,
       "Geopoint": times && times.location ? times.location : null,
       "MeetupLink" : basics.meetup ? basics.meetup : null,
-      "created": new Date()
+      "created": new Date(),
+      "Admin": {
+        [fire.auth().currentUser.uid] : true
+       }
     }
     if (localStorage.getItem('charity')) {
       var charity = JSON.parse(localStorage.getItem('charity'))

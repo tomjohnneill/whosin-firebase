@@ -25,6 +25,7 @@ import ReactQuill from 'react-quill';
 import {CleanTick, Cross} from '../icons.jsx';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import {CSVLink} from 'react-csv';
+import SignupModal from '../signupmodal.jsx';
 import 'react-quill/dist/quill.snow.css';
 import fire from '../../fire';
 
@@ -437,7 +438,7 @@ class ReviewComponent extends React.Component {
 export class UserReviewPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true}
+    this.state = {loading: true, modalOpen: false}
   }
 
   componentDidMount(props) {
@@ -451,13 +452,35 @@ export class UserReviewPage extends React.Component {
     })
   }
 
+  handleModalChangeOpen = (e) => {
+    this.setState({modalOpen: false})
+  }
+
   render() {
     return (
       <div>
         <h2 style={{fontWeight: 200, fontSize: '30px', textAlign: 'left'}}>
           Reviews
         </h2>
+        {
+          !fire.auth().currentUser ?
+          <div style={{height: '100%', width: '100%', display: 'flex', alignItems: 'center',
+            justifyContent: 'center'}}>
 
+          <RaisedButton label='Log in'
+            primary={true}
+            labelStyle={{fontWeight: 700, textTransform: 'none'}}
+            onClick={() => this.setState({modalOpen: true})}
+            />
+          <SignupModal
+            open={this.state.modalOpen}
+            changeOpen={this.handleModalChangeOpen}
+          onComplete={() => {}}/>
+
+          </div>
+          :
+          null
+        }
         {this.props.engagements ?
           this.props.engagements.map((eng) => (
             <Card

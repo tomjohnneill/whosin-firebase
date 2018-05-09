@@ -3,8 +3,11 @@ service cloud.firestore {
 
     match /Project/{project} {
        allow read: if true;
-       allow update: if resource.data.Creator == request.auth.uid;
-       allow delete: if resource.data.Creator == request.auth.uid;
+       allow update: if resource.data.Creator == request.auth.uid
+       	|| (resource.data.Admin && resource.data.Admin[request.auth.uid])
+       ;
+       allow delete: if resource.data.Creator == request.auth.uid
+       || (resource.data.Admin && resource.data.Admin[request.auth.uid]);
 
       // Applies to writes to existing documents
       allow create: if request.resource.data.Creator == request.auth.uid;
@@ -67,13 +70,15 @@ service cloud.firestore {
       allow read: if true;
       allow create: if true;
       allow delete: if resource.data.User == request.auth.uid;
-      allow update: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid;
+      allow update: if get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator == request.auth.uid
+      || get(/databases/$(database)/documents/Project/$(resource.data.Project)).data.Creator.Admin[request.auth.uid];
 
 
 
       match /Private/{private} {
 
-        allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/Project/$(private)).data.Creator == request.auth.uid
+        	|| get(/databases/$(database)/documents/Project/$(private)).data.Creator.Admin[request.auth.uid];
         allow write: if request.resource.data.User == request.auth.uid;
       }
     }
@@ -94,7 +99,9 @@ service cloud.firestore {
 
       match /private/{privateId} {
 
-        allow read: if get(/databases/$(database)/documents/Project/$(privateId)).data.Creator == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/Project/$(privateId)).data.Creator == request.auth.uid
+        || get(/databases/$(database)/documents/Project/$(privateId)).data.Creator.Admin[request.auth.uid]
+        ;
         allow write: if request.resource.data.User == request.auth.uid;
       }
     }

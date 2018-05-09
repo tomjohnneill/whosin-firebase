@@ -336,8 +336,25 @@ class ProjectsOrganised extends React.Component {
   }
 
   componentDidMount(props) {
+    var data = []
     db.collection("Project").where("Creator", "==", this.props.userId).get().then((querySnapshot) => {
-      var data = []
+
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        var elem = doc.data()
+        elem['_id'] = doc.id
+        if (!elem.Charity || (fire.auth().currentUser && fire.auth().currentUser.uid === this.props.userId)) {
+          data.push(elem)
+          this.setState({projects: data, loading: false})
+        }
+      });
+      console.log(data)
+
+    })
+
+
+    db.collection("Project").where("Admin." + this.props.userId , "==", this.props.userId).get().then((querySnapshot) => {
+
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
         var elem = doc.data()

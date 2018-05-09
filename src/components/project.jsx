@@ -493,7 +493,9 @@ export default class Project extends React.Component {
           </MediaQuery>
 
           <MediaQuery maxDeviceWidth = {700}>
-              {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+              {fire.auth().currentUser &&
+                (this.state.project.Admin && this.state.project.Admin[fire.auth().currentUser.uid]
+                || this.state.project.Creator === fire.auth().currentUser.uid) ?
                 <BottomNavigationExampleSimple />
                 :
                 null

@@ -780,7 +780,10 @@ export default class CaseStudy extends React.Component {
                   :
                   null}
 
-                  {fire.auth().currentUser && this.state.project.Creator === fire.auth().currentUser.uid ?
+                  {fire.auth().currentUser &&
+                    (this.state.project.Admin && this.state.project.Admin[fire.auth().currentUser.uid]
+                    || this.state.project.Creator === fire.auth().currentUser.uid)
+                     ?
                     <div style={{paddingLeft: 100, paddingRight: 100, textAlign: 'left', marginTop: 50}}>
                       <h2>Running this event again? </h2>
                       <div style={{height: 150, display: 'flex', alignItems: 'center',
