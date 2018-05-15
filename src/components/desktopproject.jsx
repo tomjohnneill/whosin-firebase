@@ -280,9 +280,6 @@ import fire from '../fire';
         console.log(data.length)
         attendees += data.length
         console.log(attendees)
-        if (this.props.setAttendeeCount) {
-          this.props.setAttendeeCount(attendees)
-        }
       });
 
       if (this.props.project.MeetupLink) {

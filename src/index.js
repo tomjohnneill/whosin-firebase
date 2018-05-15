@@ -10,10 +10,6 @@ import Project from  './components/project.jsx'
 import EmbeddedProject from './components/embeddedproject.jsx'
 import AllProjects from './components/allprojects.jsx';
 
-
-const EmbeddedOrganisation = asyncComponent(() =>
-  import('./components/embedorganisation.jsx').then(module => module.default)
-)
 const Terms = asyncComponent(() =>
   import('./components/terms.jsx').then(module => module.default)
 )
@@ -138,7 +134,6 @@ const rootElement = document.getElementById('root');
       <Route path='/create-project/3' component={Story}/>
       <Route path='/create-project/organisation' component={OrganisationLookup}/>
       <Route path='/embed/:_id' component={EmbeddedProject}/>
-      <Route path='/embed/o/:charityId' component={EmbeddedOrganisation}/>
       <Route path='/groups' component={GroupList}/>
       <Route path='/groups/create' component={CreateGroup}/>
       <Route path='/groups/:groupId' component={GroupPage}/>

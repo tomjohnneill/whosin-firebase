@@ -18,10 +18,6 @@ import {Link, browserHistory} from 'react-router';
 import Loading from './loading.jsx';
 import SignupModal from './signupmodal.jsx';
 import CharityProjectList from './charityprojectlist.jsx';
-import IconButton from 'material-ui/IconButton';
-import Code from 'material-ui/svg-icons/action/code';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField'
 import {ProjectReviewComponent} from './casestudy.jsx';
 import fire from '../fire';
 
@@ -507,26 +503,8 @@ export default class CharityProfile extends React.Component {
                       : null}
                     </div>
 
-                    <div style={{paddingTop: 16, display: 'flex', alignItems: 'center'}}>
+                    <div style={{paddingTop: 16}}>
                       <CharitySubscribe charityId={this.props.params.charityId}/>
-                      <IconButton
-                        tooltip='Embed'
-                        onClick={() => this.setState({embedOpen: true})}
-                        style={{padding: 0, marginLeft: 30}}>
-                        <Code/>
-                      </IconButton>
-                      <Dialog
-                        onRequestClose={() => this.setState({embedOpen:false})}
-                        modal={false}
-                        open={this.state.embedOpen}
-                        >
-                        <b>Copy this code into your website</b>
-                        <TextField
-                          fullWidth={true}
-                          multiLine={true}
-                          defaultValue={`<iframe src="https://whosin.io/embed/o/${this.props.params.charityId}" style="width:100%; height:1000px; border:none"></iframe>`}
-                          />
-                      </Dialog>
                     </div>
                   </div>
 
