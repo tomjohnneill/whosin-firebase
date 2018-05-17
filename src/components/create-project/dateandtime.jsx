@@ -362,7 +362,7 @@ export default class DateAndTime extends React.Component {
             </div>
 
               <div style={{flex: 1, paddingLeft: '50px', boxSizing: 'border-box'}} className='basics-image'>
-                <img src='http://dru-cdn.zipcar.com/sites/default/files/6__milwaukeefarm_4.jpg'
+                <img src='https://dru-cdn.zipcar.com/sites/default/files/6__milwaukeefarm_4.jpg'
                   style={{width: '100%', height: '70vh', objectFit: 'cover', borderRadius: '10px'}}/>
               </div>
 
