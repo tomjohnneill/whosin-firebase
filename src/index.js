@@ -14,6 +14,9 @@ import AllProjects from './components/allprojects.jsx';
 const EmbeddedOrganisation = asyncComponent(() =>
   import('./components/embedorganisation.jsx').then(module => module.default)
 )
+const Analytics = asyncComponent(() =>
+  import('./components/admin/analytics.jsx').then(module => module.default)
+)
 const Terms = asyncComponent(() =>
   import('./components/terms.jsx').then(module => module.default)
 )
@@ -125,6 +128,7 @@ const rootElement = document.getElementById('root');
       <Route path='/admin/emailtemplate/new' component={EmailTemplateBuilder}/>
       <Route path='/admin/emailtemplate/:templateId' component={EmailTemplateBuilder}/>
       <Route path='/admin/newsletter' component={NewsletterData}/>
+      <Route path='/admin/analytics' component={Analytics}/>
       <Route path='/terms' component={Terms}/>
       <Route path='/profile' component={Profile}/>
       <Route path='/casestudy' component={CaseStudy}/>

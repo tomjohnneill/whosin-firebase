@@ -78,11 +78,11 @@ class Form extends React.Component {
     super(props);
     var times = JSON.parse(localStorage.getItem('times'))
     this.state = {
-      startDate: times? parseISOString(times['Start Time']): null,
-      endDate: times? parseISOString(times['End Time']): null,
-      startTime: times? parseISOString(times['Start Time']): null,
-      endTime: times? parseISOString(times['End Time']): null,
-      address: times ? times.address : '',
+      startDate: times && times['Start Time'] ? parseISOString(times['Start Time']): null,
+      endDate: times && times['End Time'] ? parseISOString(times['End Time']): null,
+      startTime: times && times['Start Time']? parseISOString(times['Start Time']): null,
+      endTime: times && times['End Time'] ? parseISOString(times['End Time']): null,
+      address: times && times.address ? times.address : '',
     }
   }
 

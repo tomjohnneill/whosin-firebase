@@ -173,6 +173,7 @@ export default class OrganisationLookup extends React.Component{
         var charity = charityDoc.data()
         this.setState({
           loading: false,
+          picture: charity['Featured Image'] ? charity['Featured Image'] : null,
           facebook: charity.Facebook && charity.Facebook.includes('https://www.facebook.com/') ?
                 charity.Facebook.replace('https://www.facebook.com/', '') : charity.Facebook,
           name: charity.Name,
@@ -186,7 +187,7 @@ export default class OrganisationLookup extends React.Component{
           instagram: charity.Instagram,
           twitter: charity.Twitter && charity.Twitter.includes('https://twitter.com/') ?
                 charity.Twitter.replace('https://twitter.com/', '') : charity.Twitter,
-          loadedFromDatabase: true
+          loadedFromDatabase: fire.auth().currentUser.uid === charity.Owner ? false : true
         })
       })
     } else {

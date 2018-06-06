@@ -78,7 +78,7 @@ export class Form extends React.Component {
       min: basics? basics.min : null,
       max: basics ? basics.max : null,
       meetup: basics ? basics.meetup : null,
-      deadline: basics? parseISOString(basics.deadline): null,
+      deadline: basics && basics.deadline ? parseISOString(basics.deadline): null,
       tags: basics && basics? basics.tags: [],
       allTags: categories
     }

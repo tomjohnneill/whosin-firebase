@@ -21,7 +21,6 @@ import Loading from './loading.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import {Spiral, CalendarIcon, Place, Clock, World, Tick} from './icons.jsx';
 import Share from './share.jsx'
-import ConditionalModal from './conditionalmodal.jsx';
 import {List, ListItem} from 'material-ui/List';
 import GroupSignUp from './groups/groupsignup.jsx';
 import Suggest from './groups/suggest.jsx';
@@ -516,17 +515,6 @@ import fire from '../fire';
       this.setState({joiningOpen: true})
     }
 
-    handleConditionalModal = (e) => {
-      if (localStorage.getItem('worktoolsToken')) {
-        this.setState({conditionalOpen: true})
-      } else {
-        this.setState({modalOpen: true, conditionalStatus: true})
-      }
-    }
-
-    handleConditionalChangeOpen = () => {
-      this.setState({conditionalOpen: false})
-    }
 
     handleJoiningChangeOpen = () => {
       console.log('modal change state fired for some reason')
